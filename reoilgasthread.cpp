@@ -29,6 +29,7 @@ unsigned char Flag_Whichone_Temp = 0;   //是否设置完一圈
 
 unsigned char Flag_ask_PreAndTem = 0;//每隔一段时间问一次压力传感器等设备
 unsigned char Pressure_AskNum = 1;   //问压力传感器的地址
+unsigned char Temperature_AskNum = 1;   //问温度传感器的地址
 unsigned char Fga1000_AskNum = 1;   //问fga传感器的地址
 unsigned char Flag_PreUartWrong[2] = {0};//通信故障计数
 unsigned char Flag_TemUartWrong[2] = {0};//通信故障计数
@@ -36,10 +37,10 @@ unsigned char Flag_FgaUartWrong[8] = {0};//通信故障计数
 unsigned char ReoilgasPreSta[2] = {0};//压力传感器状态    与Fga1000_485共享
 unsigned char ReoilGasFgaSta[8] = {0};//浓度传感器状态    与Fga1000_485共享
 unsigned char ReoilgasTemSta[2] = {0};//温度传感器状态    与Fga1000_485共享
-float pressure_value[8] = {0};        //压力数值
-float temperature_value[8] = {0};     //温度值
+float pressure_value[8] = {0};        //压力数值 源数据，转换后赋值给Pre
+float temperature_value[8] = {0};     //温度值 源数据，转换后赋值给Tem
 unsigned char Fga1000_Value[8] = {0}; //浓度值           与Fga1000_485共享
-unsigned char fga1000_sta[8] = {0};   //浓度传感器状态
+
 
 
 
@@ -82,10 +83,11 @@ void reoilgasthread::run()
 			msleep(200);
         }
 		Flag_ask_PreAndTem++;
-		if(Flag_ask_PreAndTem >= 5)
+		if(Flag_ask_PreAndTem >= 10)
 		{
 			if(Flag_Pressure_Transmitters_Mode == 2)//压力表无线模式
 			{
+				Flag_ask_PreAndTem = 0;
 				msleep(100);
 				Ask_Sensor();
 			}
@@ -940,13 +942,13 @@ void reoilgasthread::ask_pressure()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1700);
+		msleep(1200);
 		//读
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 		if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
 		{
-			printf("pressure duqu chenggong \n");
+			//printf("pressure duqu chenggong \n");
 			if(Pressure_AskNum == 1)
 			{
 				pressure_value[0] = RecvBuff_init[3];
@@ -979,11 +981,11 @@ void reoilgasthread::ask_pressure()
 		}
 		else //ask again
 		{
-			printf("pressure jiaoyanshibai!!\n");
+			//printf("pressure jiaoyanshibai!!\n");
 			Flag_PreUartWrong[Pressure_AskNum-1]++;
 			if(Flag_PreUartWrong[Pressure_AskNum-1] >= 3)
 			{
-				Flag_PreUartWrong[Pressure_AskNum-1] = 3;
+				Flag_PreUartWrong[Pressure_AskNum-1] = 0;
 				ReoilgasPreSta[Pressure_AskNum-1] = 0x04; //通信故障
 				Pressure_AskNum++;     //问下一个地址
 				if(Pressure_AskNum == 2)
@@ -1022,14 +1024,14 @@ void reoilgasthread::ask_fga1000()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1600);
+		msleep(1200);
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 		if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
 		{
-			printf("fga1000 duqu chenggong \n");
+			//printf("fga1000 duqu chenggong \n");
 			Flag_FgaUartWrong[Fga1000_AskNum-1] = 0;
-			fga1000_sta[Fga1000_AskNum-1] = RecvBuff_init[4];
+			ReoilGasFgaSta[Fga1000_AskNum-1] = RecvBuff_init[4];
 			if(Fga1000_AskNum <= 2)
 			{
 				if((RecvBuff_init[4]==0x03)||(RecvBuff_init[4]==0x04)||(RecvBuff_init[4]==0x05) )//如果是通讯故障/传感器故障/探测器故障
@@ -1060,11 +1062,11 @@ void reoilgasthread::ask_fga1000()
 		}
 		else //校验失败
 		{
-			printf("fga1000 jiaoiyan shibai \n");
+			//printf("fga1000 jiaoiyan shibai \n");
 			Flag_FgaUartWrong[Fga1000_AskNum-1]++;
 			if(Flag_FgaUartWrong[Fga1000_AskNum-1] >= 3)
 			{
-				Flag_FgaUartWrong[Fga1000_AskNum-1] = 3;
+				Flag_FgaUartWrong[Fga1000_AskNum-1] = 0;
 				ReoilGasFgaSta[Fga1000_AskNum-1] = 0x04;//判断为通信故障
 				Fga1000_AskNum++;
 				if(Fga1000_AskNum == 2)
@@ -1083,7 +1085,54 @@ void reoilgasthread::ask_fga1000()
 }
 void reoilgasthread::ask_temperature()
 {
-
+	unsigned char Flag_AskTem_Over = 1;
+	unsigned char SendBuff_init[8] = {0x01,0x03,0x00,0x00,0x00,0x02,0x00,0x00};
+	unsigned char RecvBuff_init[9] = {0};
+	//写  //只问一个地址0x13
+	Temperature_AskNum = 1;//只有1个温度
+	while (Flag_AskTem_Over)
+	{
+		if(Tem_tank_en == 1) //如果开启了
+		{
+			SendBuff_init[0] = Temperature_AskNum+18; //温度地址从0x13开始
+			unsigned int SCRC = 0;
+			SCRC = CRC_Test(SendBuff_init,8);
+			SendBuff_init[6] = (SCRC & 0xff00) >> 8;
+			SendBuff_init[7] = (SCRC & 0x00ff);
+			write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
+			msleep(1600);
+			len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
+			SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
+			if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
+			{
+				//printf("Temperature duqu chenggong \n");
+				ReoilgasTemSta[Temperature_AskNum-1] = 0;
+				Flag_TemUartWrong[Temperature_AskNum-1] = 0;
+				//温度读取
+				Tem[0] = 0;
+				Tem[1] = 0;
+				//温度读取
+				Temperature_AskNum++;
+				Flag_AskTem_Over = 0;//结束。退出循环
+			}
+			else //校验失败
+			{
+				//printf("Temperature jiaoiyan shibai \n");
+				Flag_TemUartWrong[Temperature_AskNum-1]++;
+				if(Flag_TemUartWrong[Temperature_AskNum-1] >= 3)
+				{
+					//温度读取
+					Tem[0] = 0;
+					Tem[1] = 0;
+					//温度读取
+					Flag_TemUartWrong[Temperature_AskNum-1] = 0;
+					ReoilgasTemSta[Temperature_AskNum-1] = 0x04;//判断为通信故障
+					Temperature_AskNum++;
+					Flag_AskTem_Over = 0;//结束。退出循环
+				}
+			}
+		}
+	}
 }
 
 //浮点数转换 485
@@ -1109,7 +1158,7 @@ void reoilgasthread::floating_point_conversion()
 	}
 	else
 	{
-		Tem[0] = 0.0000;//没有设置则数据清零      //DEBUG
+		//没有设置则数据清零      //DEBUG
 		Pre[0] = 0.0000;                         //DEBUG
 		pressure_value[0] = 0;
 		pressure_value[1] = 0;
@@ -1136,7 +1185,7 @@ void reoilgasthread::floating_point_conversion()
 		pressure_value[5] = 0;
 		pressure_value[6] = 0;
 		pressure_value[7] = 0;
-		Tem[1] = 0.0000;//没有设置则数据清零    //DEBUG
+		//没有设置则数据清零    //DEBUG
 		Pre[1] = 0.0000;                     //DEBUG
 	}
 

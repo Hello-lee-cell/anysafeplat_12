@@ -126,27 +126,27 @@ void FGA1000_485::run()
 
     while (1)
     {
+		if( (Pre_tank_en != Pre_tank_en_change) || (Pre_pipe_en != Pre_pipe_en_change))
+		{
+			Flag_StaPre_Temp[0] = 0x09;Flag_StaPre_Temp[1] = 0x09;Flag_StaPre_Temp[2] = 0x09;Flag_StaPre_Temp[3] = 0x09;
+			Pre_tank_en_change = Pre_tank_en;
+			Pre_pipe_en_change = Pre_pipe_en;
+		}
+		if(Env_Gas_en != Env_Gas_en_change)
+		{
+			Flag_StaFga_Temp[0] = 0x09;Flag_StaFga_Temp[1] = 0x09;Flag_StaFga_Temp[2] = 0x09;Flag_StaFga_Temp[3] = 0x09;
+			Flag_StaFga_Temp[4] = 0x09;Flag_StaFga_Temp[5] = 0x09;Flag_StaFga_Temp[6] = 0x09;
+			Env_Gas_en_change = Env_Gas_en;
+		}
+		if(Tem_tank_en_change != Tem_tank_en)
+		{
+			Flag_StaPre_Temp[0] = 0x09;Flag_StaPre_Temp[1] = 0x09;Flag_StaPre_Temp[2] = 0x09;Flag_StaPre_Temp[2] = 0x09;
+			Tem_tank_en_change = Tem_tank_en;
+		}
 		if((Flag_Pressure_Transmitters_Mode == 0) || (Flag_Pressure_Transmitters_Mode == 1))
 		{
 			SendDataFGA();
 			msleep(100);
-			if( (Pre_tank_en != Pre_tank_en_change) || (Pre_pipe_en != Pre_pipe_en_change))
-			{
-				Flag_StaPre_Temp[0] = 0x09;Flag_StaPre_Temp[1] = 0x09;Flag_StaPre_Temp[2] = 0x09;Flag_StaPre_Temp[3] = 0x09;
-				Pre_tank_en_change = Pre_tank_en;
-				Pre_pipe_en_change = Pre_pipe_en;
-			}
-			if(Env_Gas_en != Env_Gas_en_change)
-			{
-				Flag_StaFga_Temp[0] = 0x09;Flag_StaFga_Temp[1] = 0x09;Flag_StaFga_Temp[2] = 0x09;Flag_StaFga_Temp[3] = 0x09;
-				Flag_StaFga_Temp[4] = 0x09;Flag_StaFga_Temp[5] = 0x09;Flag_StaFga_Temp[6] = 0x09;
-				Env_Gas_en_change = Env_Gas_en;
-			}
-			if(Tem_tank_en_change != Tem_tank_en)
-			{
-				Flag_StaPre_Temp[0] = 0x09;Flag_StaPre_Temp[1] = 0x09;Flag_StaPre_Temp[2] = 0x09;Flag_StaPre_Temp[2] = 0x09;
-				Tem_tank_en_change = Tem_tank_en;
-			}
 		}
 		else if(Flag_Pressure_Transmitters_Mode == 2)//无线模式
 		{
@@ -159,9 +159,18 @@ void FGA1000_485::run()
 			Gas_Concentration_Fga[3] = Fga1000_Value[2];Gas_Concentration_Fga[4] = Fga1000_Value[3];
 			Gas_Concentration_Fga[5] = Fga1000_Value[4];Gas_Concentration_Fga[6] = Fga1000_Value[5];
 			//压力同步
-			sta_pre[0] = ReoilgasPreSta[0];sta_pre[1] = ReoilgasPreSta[1];
+			sta_pre[0] = ReoilgasPreSta[0];
+			sta_pre[1] = ReoilgasPreSta[1];
+			//温度同步
+			sta_pre[2] = ReoilgasTemSta[0];
 			//数据分析
 			sleep(1);
+			num_fga_this = Num_Fga;
+			if(num_fga_pre != num_fga_this)//传感器数目发生改变
+			{
+				empty_array();
+				num_fga_pre = num_fga_this;
+			}
 			data_processing();
 			sta_pressure();
 			//
@@ -1675,7 +1684,7 @@ void FGA1000_485::time_time()
                     flag_timeto_temp+=sta_pre[i];
                 }
             }
-            if((Tem_tank_en == 1)&&(Flag_Pressure_Transmitters_Mode == 1)&&(i == 2))
+			if((Tem_tank_en == 1)&&((Flag_Pressure_Transmitters_Mode == 1)||(Flag_Pressure_Transmitters_Mode == 2))&&(i == 2))
             {
                 if(sta_pre[i] == 0x04)
                 {

@@ -15,7 +15,7 @@
 //数据库头文件
 #include<database_set.h>
 #include<database_op.h>
-#include "protobuf/myserver_thread.h"
+#include"myserver/myserver.h"
 //char IP_DES[20] = {0};
 //main_main
 char IP_BRO[32] = {0};
@@ -215,8 +215,8 @@ int main(int argc, char *argv[])
     warn_sound_thread *write_sound = new warn_sound_thread;
 	write_sound->start();
 
-//	myserver_thread *myTCPserver = new myserver_thread;
-//	myTCPserver->start();
+	myserver *myserver_thread = new myserver;
+	myserver_thread->start();
 
     security *securitys = new security;
     QObject::connect(securitys,SIGNAL(liquid_close()),&w,SLOT(liquid_close_s()));

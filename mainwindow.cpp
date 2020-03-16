@@ -11435,6 +11435,7 @@ void MainWindow::Env_warn_pre_normal(int t)  //压力正常
     {
         ui->label_env_tankpre->setHidden(1);
         ui->label_oilgas_tankpre_2->setHidden(1);
+		//温度通信正常
         if((Flag_Pressure_Transmitters_Mode == 0)&&(Tem_tank_en == 1))
         {
             ui->label_env_tanktem->setHidden(1);
@@ -11454,6 +11455,12 @@ void MainWindow::Env_warn_pre_pre(int t)    //压力预警
         ui->label_env_tankpre->setHidden(0);
         ui->label_oilgas_tankpre_2->setHidden(1);
         ui->label_env_tankpre->setStyleSheet("border-image: url(:/picture/jinggao.png);");
+		//温度通信正常
+		if((Flag_Pressure_Transmitters_Mode == 0)&&(Tem_tank_en == 1))
+		{
+			ui->label_env_tanktem->setHidden(1);
+			ui->label_oilgas_tanktemp_2->setHidden(1);
+		}
     }
     if(t==2)
     {
@@ -11469,6 +11476,12 @@ void MainWindow::Env_warn_pre_warn(int t)  //压力报警
         ui->label_env_tankpre->setHidden(0);
         ui->label_oilgas_tankpre_2->setHidden(1);
         ui->label_env_tankpre->setStyleSheet("border-image: url(:/picture/jinggao_red.png);");
+		//温度通信正常
+		if((Flag_Pressure_Transmitters_Mode == 0)&&(Tem_tank_en == 1))
+		{
+			ui->label_env_tanktem->setHidden(1);
+			ui->label_oilgas_tanktemp_2->setHidden(1);
+		}
     }
     if(t==2)
     {
@@ -11485,6 +11498,7 @@ void MainWindow::Env_warn_pre_uart(int t)  //压力通信故障
         ui->label_oilgas_tankpre_2->setHidden(0);
         ui->label_env_tankpre->setStyleSheet("border-image: url(:/picture/jinggao_red.png);");
         ui->label_oilgas_tankpre_2->setText(QString("%1").arg("通信故障"));
+		//温度通信故障
         if((Flag_Pressure_Transmitters_Mode == 0)&&(Tem_tank_en == 1))
         {
             ui->label_env_tanktem->setHidden(0);

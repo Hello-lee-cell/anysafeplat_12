@@ -273,6 +273,7 @@ extern unsigned char Flag_Reoilgas_Pop_Sta;//在线油气回收详情页面打�
 
 //my server thread
 extern QString MyStationId; //全局变量youzhanID
+extern QString MyStationPW; //全局变量
 extern QString MyServerIp;
 extern int MyServerPort;
 extern unsigned char Flag_MyServerEn;

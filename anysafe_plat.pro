@@ -52,7 +52,9 @@ SOURCES += main.cpp\
     protobuf/pb_common.c \
     protobuf/pb_decode.c \
     protobuf/pb_encode.c \
-    protobuf/xielou.pb.c
+    protobuf/xielou.pb.c \
+    myserver/des.cpp \
+    myserver/myserver.cpp
 
 HEADERS  += mainwindow.h \
     keyboard.h \
@@ -93,7 +95,9 @@ HEADERS  += mainwindow.h \
     protobuf/pb_common.h \
     protobuf/pb_decode.h \
     protobuf/pb_encode.h \
-    protobuf/xielou.pb.h
+    protobuf/xielou.pb.h \
+    myserver/des.h \
+    myserver/myserver.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \

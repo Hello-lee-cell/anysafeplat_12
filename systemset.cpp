@@ -519,6 +519,7 @@ systemset::systemset(QWidget *parent) :
     ui->lineEdit_hubei_station_id->installEventFilter(this);
 	//服务器
 	ui->lineEdit_MyServerId->installEventFilter(this);
+	ui->lineEdit_MyServerPW->installEventFilter(this);
 	ui->lineEdit_MyServerIp->installEventFilter(this);
 	ui->lineEdit_MyServerPort->installEventFilter(this);
 
@@ -578,6 +579,7 @@ systemset::systemset(QWidget *parent) :
 	ui->lineEdit_ifisport_tcp->setText(QString::number(PORT_TCP));
 	//服务器设置
 	ui->lineEdit_MyServerId->setText(MyStationId);
+	ui->lineEdit_MyServerPW->setText(MyStationPW);
 	ui->lineEdit_MyServerIp->setText(MyServerIp);
 	ui->lineEdit_MyServerPort->setText(QString::number(MyServerPort));
 	if(Flag_MyServerEn == 1)
@@ -915,6 +917,12 @@ void systemset::on_pushButton_3_clicked()       //保存 退出
     config_tabwidget();//写入主界面显示配置
     emit hide_tablewidget(0,0);//显示主界面
     config_network_Version_write();//为了写入网络上传是否屏蔽不合格数据
+	//my服务器配置参数
+	MyStationId = ui->lineEdit_MyServerId->text();
+	MyStationPW = ui->lineEdit_MyServerPW->text();
+	MyServerIp = ui->lineEdit_MyServerIp->text();
+	MyServerPort = (ui->lineEdit_MyServerPort->text()).toInt();
+	config_MyServer_network();
 
 }
 void systemset::setok_delay10sclose()
@@ -1400,6 +1408,19 @@ bool systemset::eventFilter(QObject *watched, QEvent *event)
 			return true;
 		}
 	}
+	if(watched == ui->lineEdit_MyServerPW)
+	{
+		if(event->type() == QEvent::MouseButtonPress)
+		{
+			emit closeing_touchkey();
+			touchkey = new keyboard;
+			connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(setText_myserverpw(const QString&)));
+			connect(touchkey,SIGNAL(display_backspace()),this,SLOT(setBackspace_myserverpw()));
+			connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+			touchkey->show();
+			return true;
+		}
+	}
 	if(watched == ui->lineEdit_MyServerIp)
 	{
 		if(event->type() == QEvent::MouseButtonPress)
@@ -1656,6 +1677,10 @@ void systemset::setText_myserverid(const QString &text)
 {
 	ui->lineEdit_MyServerId->insert(text);
 }
+void systemset::setText_myserverpw(const QString &text)
+{
+	ui->lineEdit_MyServerPW->insert(text);
+}
 void systemset::setText_myserverip(const QString &text)
 {
 	ui->lineEdit_MyServerIp->insert(text);
@@ -1694,6 +1719,10 @@ void systemset::setBackspace_hubei_station_id()
 void systemset::setBackspace_myserverid()
 {
 	ui->lineEdit_MyServerId->backspace();
+}
+void systemset::setBackspace_myserverpw()
+{
+	ui->lineEdit_MyServerPW->backspace();
 }
 void systemset::setBackspace_myserverip()
 {
@@ -4809,6 +4838,29 @@ void systemset::on_toolButton_pop_show_clicked()
     }
     config_reoilgas_warnpop();
 }
+
+void systemset::on_toolButton_MyServerSwitch_clicked()
+{
+	if(Flag_MyServerEn == 1)
+	{
+		ui->toolButton_MyServerSwitch->setText("点击开启");
+		Flag_MyServerEn = 0;
+	}
+	else
+	{
+		ui->toolButton_MyServerSwitch->setText("已开启");
+		Flag_MyServerEn = 1;
+	}
+
+}
+
+void systemset::on_pushButton_U_clear_clicked()
+{
+	system("rm -r /media/sda*");
+	system("rm -r /media/sdb*");
+	system("sync");
+}
+
 /************配置信息网络上传*****************
  * id     没有用
  * jyqs   加油枪数量
@@ -4849,27 +4901,3 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 }
 
 
-void systemset::on_toolButton_MyServerSwitch_clicked()
-{
-	MyStationId = ui->lineEdit_MyServerId->text();
-	MyServerIp = ui->lineEdit_MyServerIp->text();
-	MyServerPort = (ui->lineEdit_MyServerPort->text()).toInt();
-	if(Flag_MyServerEn == 1)
-	{
-		ui->toolButton_MyServerSwitch->setText("点击开启");
-		Flag_MyServerEn = 0;
-	}
-	else
-	{
-		ui->toolButton_MyServerSwitch->setText("已开启");
-		Flag_MyServerEn = 1;
-	}
-
-}
-
-void systemset::on_pushButton_U_clear_clicked()
-{
-	system("rm -r /media/sda*");
-	system("rm -r /media/sdb*");
-	system("sync");
-}

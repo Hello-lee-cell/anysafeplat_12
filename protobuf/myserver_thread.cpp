@@ -29,13 +29,10 @@
 
 #define NoData "NULL";
 #define DATA_BUFFER_SIZE 256
-QString MyStationId = "1234565789"; //全局变量youzhanID
-QString MyServerIp = "118.178.180.140";
-int MyServerPort = 8080;     //1111 The port which is communicate with server     可设置
-unsigned char Flag_MyServerEn = 0;//使能
 
-int nsockfd_myserver;        //tcp套接字
-int sockfd_myserver;            //tcp套接字
+
+int nsockfd_myserver_thread;        //tcp套接字
+int sockfd_myserver_thread;            //tcp套接字
 
 QString MyServerIp_pre;
 int MyServerPort_pre;
@@ -82,7 +79,7 @@ void myserver_thread::tcp_client()
 
 	struct sockaddr_in sever_remote;
 	// Get the Socket file descriptor
-	if( (sockfd_myserver = socket(AF_INET, SOCK_STREAM, 0)) == -1 )
+	if( (sockfd_myserver_thread = socket(AF_INET, SOCK_STREAM, 0)) == -1 )
 	{
 		printf ("myserver Failed to obtain Socket Despcritor.\n");
 		//add_value_netinfo("HuBei TCPClient Failed to obtain Socket Despcritor");
@@ -98,27 +95,27 @@ void myserver_thread::tcp_client()
 	memset (sever_remote.sin_zero,0,8);          		// Flush the rest of struct 刷新struct的其余部分
 
 	//端口重用
-	if((setsockopt(sockfd_myserver,SOL_SOCKET,SO_REUSEADDR,&on_tcp_myserver,sizeof(on_tcp_myserver)))<0)
+	if((setsockopt(sockfd_myserver_thread,SOL_SOCKET,SO_REUSEADDR,&on_tcp_myserver,sizeof(on_tcp_myserver)))<0)
 	{
 		perror("TCPClient setsockopt failed");
 		exit(1);
 	}
 
 	bool  bDontLinger = FALSE;
-	setsockopt(sockfd_myserver,SOL_SOCKET,SO_LINGER,(const char*)&bDontLinger,sizeof(bool));//不要因为数据未发送就阻塞关闭操作
-	setsockopt(sockfd_myserver, IPPROTO_TCP, TCP_NODELAY,&on_tcp_myserver,sizeof(on_tcp_myserver));//立即发送，不沾包
+	setsockopt(sockfd_myserver_thread,SOL_SOCKET,SO_LINGER,(const char*)&bDontLinger,sizeof(bool));//不要因为数据未发送就阻塞关闭操作
+	setsockopt(sockfd_myserver_thread, IPPROTO_TCP, TCP_NODELAY,&on_tcp_myserver,sizeof(on_tcp_myserver));//立即发送，不沾包
 	//int nNetTimeout = 800;//超时时长
 	struct timeval timeout = {1,0}; //设置接收超时 1秒？第一个参数秒，第二个微秒
-	setsockopt(sockfd_myserver,SOL_SOCKET,SO_RCVTIMEO,(char *)&timeout,sizeof(struct timeval));//设置为非阻塞模式
+	setsockopt(sockfd_myserver_thread,SOL_SOCKET,SO_RCVTIMEO,(char *)&timeout,sizeof(struct timeval));//设置为非阻塞模式
 	//主动连接目标,连接不上貌似会卡在这，10秒再连一次  非阻塞模式就不会卡在这了
-	if (( nsockfd_myserver = ::connect(sockfd_myserver,(struct sockaddr *)&sever_remote,sizeof(struct sockaddr))) < 0)
+	if (( nsockfd_myserver_thread = ::connect(sockfd_myserver_thread,(struct sockaddr *)&sever_remote,sizeof(struct sockaddr))) < 0)
 	{
 		printf ("myserver TCPClient Failed to Client Port %d.\n", MyServerPort);
 		//return (0);
 
 		Flag_MyServerClient = 0;
-		close(nsockfd_myserver);
-		close(sockfd_myserver);
+		close(nsockfd_myserver_thread);
+		close(sockfd_myserver_thread);
 		add_value_netinfo("MyServer Client Failed");
 	}
 	else
@@ -126,7 +123,7 @@ void myserver_thread::tcp_client()
 		printf ("myserver TCPClient Client the Port %d sucessfully.\n", MyServerPort);
 		add_value_netinfo("MyServer TCPClient Client sucessfully");
 		Flag_MyServerClient = 1;//连接成功
-		client_keep_ali(sockfd_myserver);//tcp保活
+		client_keep_ali(sockfd_myserver_thread);//tcp保活
 	}
 	sleep(2);
 	while(1)
@@ -140,16 +137,16 @@ void myserver_thread::tcp_client()
 		{
 			if(Flag_MyServerEn == 0)
 			{
-				close(nsockfd_myserver);
-				close(sockfd_myserver);
+				close(nsockfd_myserver_thread);
+				close(sockfd_myserver_thread);
 				qDebug()<<"MyServer shut down!!";
 			}
 			if((MyServerIp_pre != MyServerIp)||(MyServerPort_pre != MyServerPort))
 			{
 				MyServerIp_pre = MyServerIp;
 				MyServerPort_pre = MyServerPort;
-				close(nsockfd_myserver);
-				close(sockfd_myserver);
+				close(nsockfd_myserver_thread);
+				close(sockfd_myserver_thread);
 				qDebug()<<"MyServer config changed!!";
 				break;
 			}
@@ -177,8 +174,8 @@ void myserver_thread::tcp_client()
 			msleep(5);
 		}
 	}
-	close(nsockfd_myserver);
-	close(sockfd_myserver);
+	close(nsockfd_myserver_thread);
+	close(sockfd_myserver_thread);
 	sleep(10);
 }
 void myserver_thread::senddata(unsigned char* send_data,int data_length)
@@ -194,7 +191,7 @@ void myserver_thread::senddata(unsigned char* send_data,int data_length)
 	}
 	printf("\n");
 
-	if((num_send = ::send(sockfd_myserver,Sdbuf_myserver, Tcp_send_count_myserver, 0)) == -1)
+	if((num_send = ::send(sockfd_myserver_thread,Sdbuf_myserver, Tcp_send_count_myserver, 0)) == -1)
 	{
 		printf("ERROR: Failed to sent string.\n");
 		Flag_MyServerClient = 0;//发送失败需要重连

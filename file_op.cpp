@@ -1985,7 +1985,8 @@ void config_MyServer_network()//服务器网络上传相关参数写入
 	file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
 	QTextStream in(&file);
 	in<<MyStationId+"\r\n";
-	in<<MyServerIp+"\r\n";//ISFS
+	in<<MyStationPW+"\r\n";
+	in<<MyServerIp+"\r\n";
 	in<<QString::number(MyServerPort)+"\r\n";
 	in<<QString::number(Flag_MyServerEn)+"\r\n";
 	file.close();
@@ -2006,6 +2007,8 @@ void init_myserver_network()//服务器网络上传相关参数读取
 	line = in.readLine();
 	MyStationId = line;
 	line = in.readLine();
+	MyStationPW = line;
+	line = in.readLine();
 	MyServerIp = line;
 	line = in.readLine();
 	MyServerPort = line.toInt();
@@ -2019,6 +2022,7 @@ void init_myserver_network()//服务器网络上传相关参数读取
 	else
 	{
 		MyStationId = "123456789";
+		MyStationPW = "1234";
 		MyServerIp = "118.178.180.140";
 		MyServerPort = 8080;
 		Flag_MyServerEn = 0;

@@ -45,19 +45,12 @@ private slots:
 	void setText_ifisport_udp(const QString& text);
     void setText_ifisport_tcp(const QString& text);
     void setText_hubei_station_id(const QString& text);
-	void setText_myserverid(const QString& text);
-	void setText_myserverip(const QString& text);
-	void setText_myserverport(const QString& text);
-
     void setBackspace_ip();
     void setBackspace_mask();
     void setBackspace_bcast();
     void setBackspace_ifisport_udp();
     void setBackspace_ifisport_tcp();
     void setBackspace_hubei_station_id();
-	void setBackspace_myserverid();
-	void setBackspace_myserverip();
-	void setBackspace_myserverport();
 
 //用户管理
     void setText_manid(const QString& text);
@@ -131,10 +124,20 @@ private slots:
     void setBackspace_area_y5();
     void setBackspace_area_y6();
     void setBackspace_yuzhi_handinput();
+	//服务器
+	void setText_myserverid(const QString& text);
+	void setText_myserverpw(const QString& text);
+	void setText_myserverip(const QString& text);
+	void setText_myserverport(const QString& text);
+	void setBackspace_myserverid();
+	void setBackspace_myserverpw();
+	void setBackspace_myserverip();
+	void setBackspace_myserverport();
 
-    void area_point_disp(unsigned char t);
+
 
     //**************added for radar*************/
+	void area_point_disp(unsigned char t);
 
     void on_comboBox_5_currentIndexChanged(int index);
 
