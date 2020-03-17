@@ -14,6 +14,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = anysafe_plat
 TEMPLATE = app
+target.path = /opt
+INSTALLS += target
 
 SOURCES += main.cpp\
         mainwindow.cpp \

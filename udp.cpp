@@ -85,7 +85,7 @@ void* talk_udp(void*)
         }
         else
         {
-			printf ("OK: Sent to all total %d bytes %d !\n",num_udprecv,PORT_UDP);
+			printf ("OK: Send to all total %d bytes %d !\n",num_udprecv,PORT_UDP);
 			for(unsigned int i = 0;i<10;i++)
 			{
 				printf("%02x ",sdbuf[i]);

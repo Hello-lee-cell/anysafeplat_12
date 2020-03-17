@@ -164,7 +164,7 @@ void FGA1000_485::run()
 			//温度同步
 			sta_pre[2] = ReoilgasTemSta[0];
 			//数据分析
-			sleep(1);
+			msleep(500);
 			num_fga_this = Num_Fga;
 			if(num_fga_pre != num_fga_this)//传感器数目发生改变
 			{
@@ -1027,10 +1027,6 @@ void FGA1000_485::read_pressure_transmitters_485()
 //浮点数转换4-20ma
 void FGA1000_485::floating_point_conversion()
 {
-    union{
-        float f;
-        char buf[4];
-    }data;
     if(Pre_tank_en == 1)
     {
 		float pre_ma1 ;
@@ -1213,12 +1209,15 @@ void FGA1000_485::sta_pressure()
     {
         if(sta_pre[0] == 0x04)
         {
-            Tem[0] = 0.0000;//通讯故障则数据清零
+			if(Flag_Pressure_Transmitters_Mode == 0)//485
+			{
+				temperature[0] = 0;
+				temperature[1] = 0;
+				temperature[2] = 0;
+				temperature[3] = 0;
+				Tem[0] = 0.0000;//通讯故障则数据清零
+			}
             Pre[0] = 0.0000;
-            temperature[0] = 0;
-            temperature[1] = 0;
-            temperature[2] = 0;
-            temperature[3] = 0;
             pressure[0] = 0;
             pressure[1] = 0;
             pressure[2] = 0;
@@ -1231,16 +1230,20 @@ void FGA1000_485::sta_pressure()
     {
         if(sta_pre[1] == 0x04)
         {
-            temperature[4] = 0;
-            temperature[5] = 0;
-            temperature[6] = 0;
-            temperature[7] = 0;
+
             pressure[4] = 0;
             pressure[5] = 0;
             pressure[6] = 0;
             pressure[7] = 0;
-            Tem[1] = 0.0000;//通讯故障则数据清零
-            Pre[1] = 0.0000;
+			Pre[1] = 0.0000;
+			if(Flag_Pressure_Transmitters_Mode == 0)//485
+			{
+				temperature[4] = 0;
+				temperature[5] = 0;
+				temperature[6] = 0;
+				temperature[7] = 0;
+				Tem[0] = 0.0000;//通讯故障则数据清零
+			}
 //            printf("****************2 wrong**********\n");
         }
     }

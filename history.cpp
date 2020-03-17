@@ -504,6 +504,28 @@ void history::on_pushButton_copy_clicked()
         csvFile_history_crash.write(strString.toUtf8());
     }
     csvFile_history_crash.close();
+	//导出表加油机详情
+	outputModel->setTable("gunwarn_details");
+	outputModel->select();
+	while(outputModel->canFetchMore())
+	{
+		outputModel->fetchMore();
+	}
+	QFile csvFile_gunwarn_details(QString("%1/His_GunWarn.csv").arg(Udisk_fullname));
+	csvFile_gunwarn_details.open(QIODevice::ReadWrite);
+	strString = QString("ID,时间,设备ID,枪号，详细报警信息\n");
+	csvFile_gunwarn_details.write(strString.toUtf8());
+	for(int i = 0;i < outputModel->rowCount();i++)
+	{
+		for(int j = 0;j < outputModel->columnCount();j++)
+		{
+			strList.insert(j,outputModel->data(outputModel->index(i,j)).toString());
+		}
+		strString = strList.join(",") + "\n";
+		strList.clear();
+		csvFile_gunwarn_details.write(strString.toUtf8());
+	}
+	csvFile_gunwarn_details.close();
 
     //
     system("sync");

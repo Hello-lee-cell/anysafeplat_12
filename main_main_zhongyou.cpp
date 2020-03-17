@@ -2204,7 +2204,7 @@ void* talk_udp_zy(void*)
 		}
 		else
 		{
-			printf ("OK: Sent to all total %d bytes !\n",num_udprecv);
+			printf ("OK: Send to all total %d bytes !\n",num_udprecv);
 			if(time_count_talk_zhongyou==1)
 			{
 				switch(count)

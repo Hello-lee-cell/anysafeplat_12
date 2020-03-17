@@ -163,9 +163,9 @@ unsigned char Num_Fga = 0;//fga传感器数目，暂时默认为1个，最多6�
 unsigned char Gas_Concentration_Fga[7] ={0x00,0x00,0x00,0x00,0x00,0x00,0x00};//fga浓度  [0]没用qqqqqqqqqlock
 unsigned char Flag_Pressure_Transmitters_Mode = 1;//压力变送器模式 0 485  1 4-20ma  2 无线模式
 
-
 int main(int argc, char *argv[])
 {
+	setvbuf(stdout, 0, _IONBF, 0);
  //   QWSServer::setBackground(QColor(0,0,0,0));  //去掉绿屏
     QApplication a(argc, argv,QApplication::GuiServer);
 //    QWSServer::setCursorVisible(false);//取消鼠标显   位置qapplication实例化之后

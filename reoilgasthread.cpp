@@ -942,7 +942,7 @@ void reoilgasthread::ask_pressure()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1200);
+		msleep(1600);
 		//读
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
@@ -1024,12 +1024,12 @@ void reoilgasthread::ask_fga1000()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1200);
+		msleep(1600);
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 		if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
 		{
-			//printf("fga1000 duqu chenggong \n");
+			printf("fga1000 duqu chenggong \n");
 			Flag_FgaUartWrong[Fga1000_AskNum-1] = 0;
 			ReoilGasFgaSta[Fga1000_AskNum-1] = RecvBuff_init[4];
 			if(Fga1000_AskNum <= 2)
@@ -1037,12 +1037,13 @@ void reoilgasthread::ask_fga1000()
 				if((RecvBuff_init[4]==0x03)||(RecvBuff_init[4]==0x04)||(RecvBuff_init[4]==0x05) )//如果是通讯故障/传感器故障/探测器故障
 				{
 					ReoilGasFgaSta[Fga1000_AskNum-1] = RecvBuff_init[4];
+					Fga1000_Value[Fga1000_AskNum-1] = 0;//数值设置为0
 				}
 				else
 				{
 					ReoilGasFgaSta[Fga1000_AskNum-1] = 0;//暂时判定为正常
-				}
-				Fga1000_Value[Fga1000_AskNum-1] = RecvBuff_init[6]*2;
+					Fga1000_Value[Fga1000_AskNum-1] = RecvBuff_init[6]*2;
+				}	
 			}
 			else
 			{
@@ -1062,12 +1063,13 @@ void reoilgasthread::ask_fga1000()
 		}
 		else //校验失败
 		{
-			//printf("fga1000 jiaoiyan shibai \n");
+			printf("fga1000 jiaoiyan shibai \n");
 			Flag_FgaUartWrong[Fga1000_AskNum-1]++;
 			if(Flag_FgaUartWrong[Fga1000_AskNum-1] >= 3)
 			{
 				Flag_FgaUartWrong[Fga1000_AskNum-1] = 0;
 				ReoilGasFgaSta[Fga1000_AskNum-1] = 0x04;//判断为通信故障
+				Fga1000_Value[Fga1000_AskNum-1] = 0;//数值设置为0
 				Fga1000_AskNum++;
 				if(Fga1000_AskNum == 2)
 				{
