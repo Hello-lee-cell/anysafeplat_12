@@ -32,6 +32,7 @@
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="styleSheet">
@@ -65,6 +66,7 @@
       <weight>75</weight>
       <italic>false</italic>
       <bold>true</bold>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="styleSheet">
@@ -99,6 +101,7 @@
      <font>
       <pointsize>16</pointsize>
       <italic>true</italic>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="focusPolicy">
@@ -134,6 +137,7 @@
      <font>
       <pointsize>18</pointsize>
       <italic>true</italic>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="focusPolicy">
@@ -165,6 +169,11 @@
       <height>61</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
     </property>
@@ -194,6 +203,11 @@
       <height>61</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
+    </property>
     <property name="focusPolicy">
      <enum>Qt::NoFocus</enum>
     </property>
@@ -213,6 +227,11 @@
       <height>25</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">border-image: url(:/picture/netcut.png);</string>
     </property>
@@ -228,6 +247,11 @@
       <width>1024</width>
       <height>768</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">border-image: url(:/picture/背景.png);</string>
@@ -250,6 +274,7 @@
       <pointsize>22</pointsize>
       <weight>75</weight>
       <bold>true</bold>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="focusPolicy">
@@ -4933,6 +4958,11 @@ border-image: url(:/picture/touming.png);
         <height>181</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -4947,6 +4977,11 @@ border-image: url(:/picture/touming.png);
          <width>110</width>
          <height>110</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/biaopan_youguanpre.png);</string>
@@ -4964,6 +4999,11 @@ border-image: url(:/picture/touming.png);
          <height>110</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/biaopan_guandaopre.png);</string>
        </property>
@@ -4980,6 +5020,11 @@ border-image: url(:/picture/touming.png);
          <height>121</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/tank_temp.png);</string>
        </property>
@@ -4995,6 +5040,11 @@ border-image: url(:/picture/touming.png);
          <width>121</width>
          <height>110</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/tank_gas.png);</string>
@@ -5017,6 +5067,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>17</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5037,6 +5088,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>17</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5057,6 +5109,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>17</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5077,6 +5130,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>17</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5095,6 +5149,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5119,6 +5174,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5143,6 +5199,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5167,6 +5224,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5193,6 +5251,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>26</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5213,6 +5272,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>26</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5233,6 +5293,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>26</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5253,6 +5314,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>26</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -5267,6 +5329,11 @@ border-image: url(:/picture/touming.png);
          <width>41</width>
          <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/jinggao.png);</string>
@@ -5284,6 +5351,11 @@ border-image: url(:/picture/touming.png);
          <height>41</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/jinggao.png);</string>
        </property>
@@ -5300,6 +5372,11 @@ border-image: url(:/picture/touming.png);
          <height>41</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/jinggao.png);</string>
        </property>
@@ -5315,6 +5392,11 @@ border-image: url(:/picture/touming.png);
          <width>41</width>
          <height>41</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/jinggao.png);</string>
@@ -5335,6 +5417,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5359,6 +5442,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5383,6 +5467,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5407,6 +5492,7 @@ border-image: url(:/picture/touming.png);
        <property name="font">
         <font>
          <pointsize>15</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -5428,6 +5514,11 @@ border-image: url(:/picture/touming.png);
          <height>111</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/touming.png);</string>
        </property>
@@ -5443,6 +5534,11 @@ border-image: url(:/picture/touming.png);
          <width>91</width>
          <height>111</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/touming.png);</string>
@@ -5460,6 +5556,11 @@ border-image: url(:/picture/touming.png);
          <height>111</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/touming.png);</string>
        </property>
@@ -5475,6 +5576,11 @@ border-image: url(:/picture/touming.png);
          <width>91</width>
          <height>111</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/touming.png);</string>
@@ -5492,6 +5598,11 @@ border-image: url(:/picture/touming.png);
         <width>1005</width>
         <height>351</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -5514,6 +5625,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_11_2">
         <property name="geometry">
          <rect>
@@ -5522,6 +5638,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -5539,6 +5660,11 @@ border-image: url(:/picture/touming.png);
           <height>151</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
         </property>
@@ -5554,6 +5680,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -5571,6 +5702,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -5586,6 +5722,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -5603,6 +5744,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -5618,6 +5764,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -5635,6 +5786,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -5650,6 +5806,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -5667,6 +5828,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -5682,6 +5848,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -5699,6 +5870,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -5714,6 +5890,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -5731,6 +5912,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -5746,6 +5932,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -5763,6 +5954,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -5779,6 +5975,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -5794,6 +5995,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -5814,6 +6020,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5835,6 +6042,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5856,6 +6064,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5877,6 +6086,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5898,6 +6108,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5919,6 +6130,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5940,6 +6152,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5961,6 +6174,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -5984,6 +6198,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6036,6 +6251,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_12_2">
         <property name="geometry">
          <rect>
@@ -6044,6 +6264,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -6061,6 +6286,11 @@ border-image: url(:/picture/touming.png);
           <height>151</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
         </property>
@@ -6076,6 +6306,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -6093,6 +6328,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -6108,6 +6348,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -6125,6 +6370,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -6140,6 +6390,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -6157,6 +6412,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -6172,6 +6432,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -6189,6 +6454,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -6204,6 +6474,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -6221,6 +6496,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -6236,6 +6516,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -6253,6 +6538,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -6268,6 +6558,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -6285,6 +6580,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -6301,6 +6601,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -6316,6 +6621,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -6336,6 +6646,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6357,6 +6668,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6378,6 +6690,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6399,6 +6712,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6420,6 +6734,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6441,6 +6756,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6462,6 +6778,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6483,6 +6800,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6506,6 +6824,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6558,6 +6877,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_dispen_1">
         <property name="geometry">
          <rect>
@@ -6566,6 +6890,11 @@ border-image: url(:/picture/touming.png);
           <width>81</width>
           <height>151</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
@@ -6583,6 +6912,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -6598,6 +6932,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -6615,6 +6954,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -6631,6 +6975,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -6646,6 +6995,11 @@ border-image: url(:/picture/touming.png);
           <width>61</width>
           <height>141</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
@@ -6669,6 +7023,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -6684,6 +7043,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -6701,6 +7065,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -6716,6 +7085,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -6733,6 +7107,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -6748,6 +7127,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -6765,6 +7149,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -6780,6 +7169,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -6800,6 +7194,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6821,6 +7216,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6839,6 +7235,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6860,6 +7257,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6878,6 +7276,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6899,6 +7298,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -6913,6 +7313,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -6930,6 +7335,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -6946,6 +7356,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -6961,6 +7376,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -6981,6 +7401,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7002,6 +7423,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7022,6 +7444,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="layoutDirection">
@@ -7077,6 +7500,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_3_2">
         <property name="geometry">
          <rect>
@@ -7085,6 +7513,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -7102,6 +7535,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -7117,6 +7555,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -7134,6 +7577,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -7149,6 +7597,11 @@ border-image: url(:/picture/touming.png);
           <width>81</width>
           <height>151</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
@@ -7166,6 +7619,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -7181,6 +7639,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -7198,6 +7661,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -7213,6 +7681,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -7230,6 +7703,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -7245,6 +7723,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -7262,6 +7745,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -7278,6 +7766,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -7293,6 +7786,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -7313,6 +7811,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7334,6 +7833,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7348,6 +7848,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -7365,6 +7870,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -7381,6 +7891,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -7396,6 +7911,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -7416,6 +7936,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7437,6 +7958,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7455,6 +7977,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7476,6 +7999,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7494,6 +8018,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7515,6 +8040,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7535,6 +8061,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7587,6 +8114,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_4_2">
         <property name="geometry">
          <rect>
@@ -7595,6 +8127,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -7612,6 +8149,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -7627,6 +8169,11 @@ border-image: url(:/picture/touming.png);
           <width>81</width>
           <height>151</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
@@ -7644,6 +8191,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -7659,6 +8211,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -7676,6 +8233,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -7691,6 +8253,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -7708,6 +8275,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -7723,6 +8295,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -7740,6 +8317,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -7755,6 +8337,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -7772,6 +8359,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -7787,6 +8379,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -7804,6 +8401,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -7819,6 +8421,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -7836,6 +8443,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -7852,6 +8464,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -7867,6 +8484,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -7887,6 +8509,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7905,6 +8528,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7926,6 +8550,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7947,6 +8572,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7965,6 +8591,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -7986,6 +8613,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8004,6 +8632,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8022,6 +8651,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8045,6 +8675,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8097,6 +8728,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_2_2">
         <property name="geometry">
          <rect>
@@ -8105,6 +8741,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -8122,6 +8763,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -8137,6 +8783,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -8154,6 +8805,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -8169,6 +8825,11 @@ border-image: url(:/picture/touming.png);
           <width>81</width>
           <height>151</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
@@ -8186,6 +8847,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -8201,6 +8867,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -8218,6 +8889,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -8233,6 +8909,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -8250,6 +8931,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -8265,6 +8951,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -8282,6 +8973,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -8298,6 +8994,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -8313,6 +9014,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -8333,6 +9039,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8354,6 +9061,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8372,6 +9080,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8393,6 +9102,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8407,6 +9117,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -8424,6 +9139,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -8440,6 +9160,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -8455,6 +9180,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -8475,6 +9205,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8496,6 +9227,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8514,6 +9246,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8535,6 +9268,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8555,6 +9289,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8607,6 +9342,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_5_2">
         <property name="geometry">
          <rect>
@@ -8615,6 +9355,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -8632,6 +9377,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -8647,6 +9397,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -8664,6 +9419,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -8679,6 +9439,11 @@ border-image: url(:/picture/touming.png);
           <width>81</width>
           <height>151</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
@@ -8696,6 +9461,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -8711,6 +9481,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -8728,6 +9503,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -8743,6 +9523,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -8760,6 +9545,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -8775,6 +9565,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -8792,6 +9587,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -8807,6 +9607,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -8824,6 +9629,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -8839,6 +9649,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -8856,6 +9671,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -8872,6 +9692,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -8887,6 +9712,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -8907,6 +9737,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8928,6 +9759,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8946,6 +9778,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8964,6 +9797,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -8985,6 +9819,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9003,6 +9838,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9024,6 +9860,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9042,6 +9879,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9065,6 +9903,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9117,6 +9956,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_7_2">
         <property name="geometry">
          <rect>
@@ -9125,6 +9969,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -9142,6 +9991,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -9157,6 +10011,11 @@ border-image: url(:/picture/touming.png);
           <width>81</width>
           <height>151</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
@@ -9174,6 +10033,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -9189,6 +10053,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -9206,6 +10075,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -9221,6 +10095,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -9238,6 +10117,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -9253,6 +10137,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -9270,6 +10159,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -9285,6 +10179,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -9302,6 +10201,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -9317,6 +10221,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -9334,6 +10243,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -9349,6 +10263,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -9366,6 +10285,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -9382,6 +10306,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -9397,6 +10326,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -9417,6 +10351,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9438,6 +10373,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9456,6 +10392,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9474,6 +10411,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9495,6 +10433,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9516,6 +10455,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9534,6 +10474,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9552,6 +10493,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9575,6 +10517,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9627,6 +10570,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_8_4">
         <property name="geometry">
          <rect>
@@ -9635,6 +10583,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -9652,6 +10605,11 @@ border-image: url(:/picture/touming.png);
           <height>151</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
         </property>
@@ -9667,6 +10625,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -9684,6 +10647,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -9699,6 +10667,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -9716,6 +10689,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -9731,6 +10709,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -9748,6 +10731,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -9763,6 +10751,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -9780,6 +10773,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -9795,6 +10793,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -9812,6 +10815,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -9827,6 +10835,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -9844,6 +10857,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -9859,6 +10877,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -9876,6 +10899,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -9892,6 +10920,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -9907,6 +10940,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -9927,6 +10965,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9948,6 +10987,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9966,6 +11006,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -9984,6 +11025,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10005,6 +11047,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10026,6 +11069,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10044,6 +11088,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10065,6 +11110,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10085,6 +11131,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10137,6 +11184,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_6_2">
         <property name="geometry">
          <rect>
@@ -10145,6 +11197,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -10162,6 +11219,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -10177,6 +11239,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -10194,6 +11261,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -10209,6 +11281,11 @@ border-image: url(:/picture/touming.png);
           <width>81</width>
           <height>151</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
@@ -10226,6 +11303,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -10241,6 +11323,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -10258,6 +11345,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -10273,6 +11365,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -10290,6 +11387,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -10305,6 +11407,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -10322,6 +11429,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -10337,6 +11449,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -10354,6 +11471,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -10369,6 +11491,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -10386,6 +11513,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -10402,6 +11534,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -10417,6 +11554,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -10437,6 +11579,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10458,6 +11601,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10476,6 +11620,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10494,6 +11639,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10512,6 +11658,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10533,6 +11680,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10554,6 +11702,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10575,6 +11724,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10595,6 +11745,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10647,6 +11798,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_9_4">
         <property name="geometry">
          <rect>
@@ -10655,6 +11811,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -10672,6 +11833,11 @@ border-image: url(:/picture/touming.png);
           <height>151</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
         </property>
@@ -10687,6 +11853,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -10704,6 +11875,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -10719,6 +11895,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -10736,6 +11917,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -10751,6 +11937,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -10768,6 +11959,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -10783,6 +11979,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -10800,6 +12001,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -10815,6 +12021,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -10832,6 +12043,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -10847,6 +12063,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -10864,6 +12085,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -10879,6 +12105,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -10896,6 +12127,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -10912,6 +12148,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -10927,6 +12168,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -10947,6 +12193,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10965,6 +12212,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -10986,6 +12234,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11004,6 +12253,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11022,6 +12272,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11040,6 +12291,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11061,6 +12313,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11082,6 +12335,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11105,6 +12359,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11157,6 +12412,11 @@ border-image: url(:/picture/touming.png);
          <height>0</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <widget class="QLabel" name="label_gun_10_2">
         <property name="geometry">
          <rect>
@@ -11165,6 +12425,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -11182,6 +12447,11 @@ border-image: url(:/picture/touming.png);
           <height>151</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/jiayouji.png);</string>
         </property>
@@ -11197,6 +12467,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -11214,6 +12489,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -11229,6 +12509,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -11246,6 +12531,11 @@ border-image: url(:/picture/touming.png);
           <height>141</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/touming.png);</string>
         </property>
@@ -11261,6 +12551,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -11278,6 +12573,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -11293,6 +12593,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -11310,6 +12615,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
         </property>
@@ -11325,6 +12635,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
@@ -11342,6 +12657,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
         </property>
@@ -11357,6 +12677,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -11374,6 +12699,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -11389,6 +12719,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_L.png);</string>
@@ -11406,6 +12741,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
         </property>
@@ -11422,6 +12762,11 @@ border-image: url(:/picture/touming.png);
           <height>25</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
+        </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_L.png);</string>
         </property>
@@ -11437,6 +12782,11 @@ border-image: url(:/picture/touming.png);
           <width>25</width>
           <height>25</height>
          </rect>
+        </property>
+        <property name="font">
+         <font>
+          <stylestrategy>PreferAntialias</stylestrategy>
+         </font>
         </property>
         <property name="styleSheet">
          <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -11457,6 +12807,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11478,6 +12829,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11499,6 +12851,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11520,6 +12873,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11541,6 +12895,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11562,6 +12917,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11583,6 +12939,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11604,6 +12961,7 @@ border-image: url(:/picture/touming.png);
         <property name="font">
          <font>
           <pointsize>13</pointsize>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11627,6 +12985,7 @@ border-image: url(:/picture/touming.png);
           <pointsize>15</pointsize>
           <weight>50</weight>
           <bold>false</bold>
+          <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
         <property name="text">
@@ -11674,6 +13033,11 @@ border-image: url(:/picture/touming.png);
         <height>181</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -11688,6 +13052,11 @@ border-image: url(:/picture/touming.png);
          <width>40</width>
          <height>35</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/gasgun_green_R.png);</string>
@@ -11705,6 +13074,11 @@ border-image: url(:/picture/touming.png);
          <height>35</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/gasgun_yello_R.png);</string>
        </property>
@@ -11721,6 +13095,11 @@ border-image: url(:/picture/touming.png);
          <height>35</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/gasgun_red_R.png);</string>
        </property>
@@ -11736,6 +13115,11 @@ border-image: url(:/picture/touming.png);
          <width>40</width>
          <height>35</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/gasgun_blue_R.png);</string>
@@ -11758,6 +13142,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>18</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11778,6 +13163,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>18</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11798,6 +13184,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>18</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11818,6 +13205,7 @@ border-image: url(:/picture/touming.png);
          <pointsize>18</pointsize>
          <weight>50</weight>
          <bold>false</bold>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11832,6 +13220,11 @@ border-image: url(:/picture/touming.png);
          <width>61</width>
          <height>111</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="focusPolicy">
         <enum>Qt::StrongFocus</enum>
@@ -11871,6 +13264,11 @@ border-image: url(:/picture/touming.png);
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">#widget_dispen_details
 {
@@ -11890,6 +13288,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>20</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11908,6 +13307,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>17</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -11929,6 +13329,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11950,6 +13351,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11971,6 +13373,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -11992,6 +13395,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12013,6 +13417,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12034,6 +13439,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12055,6 +13461,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12076,6 +13483,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12097,6 +13505,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12118,6 +13527,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12139,6 +13549,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12160,6 +13571,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12181,6 +13593,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12202,6 +13615,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12223,6 +13637,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12244,6 +13659,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12265,6 +13681,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12286,6 +13703,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12307,6 +13725,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12328,6 +13747,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12349,6 +13769,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12373,6 +13794,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12397,6 +13819,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12421,6 +13844,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12445,6 +13869,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12469,6 +13894,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12493,6 +13919,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12517,6 +13944,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12541,6 +13969,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12565,6 +13994,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12589,6 +14019,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12613,6 +14044,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12637,6 +14069,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12661,6 +14094,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12685,6 +14119,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12709,6 +14144,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12733,6 +14169,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12757,6 +14194,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12781,6 +14219,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12805,6 +14244,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12829,6 +14269,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>20</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12850,6 +14291,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12874,6 +14316,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12895,6 +14338,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12919,6 +14363,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12940,6 +14385,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -12964,6 +14410,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -12985,6 +14432,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13006,6 +14454,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13027,6 +14476,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13051,6 +14501,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13075,6 +14526,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13099,6 +14551,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13120,6 +14573,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13141,6 +14595,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13165,6 +14620,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13189,6 +14645,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13213,6 +14670,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13234,6 +14692,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13258,6 +14717,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13279,6 +14739,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13306,6 +14767,7 @@ border-image: url(:/picture/dispendetail.png);
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13335,6 +14797,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13364,6 +14827,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13393,6 +14857,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13422,6 +14887,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13451,6 +14917,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13480,6 +14947,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13509,6 +14977,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13532,6 +15001,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13553,6 +15023,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13574,6 +15045,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13598,6 +15070,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13622,6 +15095,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13646,6 +15120,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13667,6 +15142,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13688,6 +15164,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13712,6 +15189,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13733,6 +15211,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13757,6 +15236,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13778,6 +15258,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13799,6 +15280,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13823,6 +15305,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13847,6 +15330,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13871,6 +15355,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13892,6 +15377,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13913,6 +15399,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13937,6 +15424,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="text">
@@ -13958,6 +15446,7 @@ border-style:outset;</string>
        <property name="font">
         <font>
          <pointsize>13</pointsize>
+         <stylestrategy>PreferAntialias</stylestrategy>
         </font>
        </property>
        <property name="styleSheet">
@@ -13980,6 +15469,11 @@ border-style:outset;</string>
         <height>461</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <stylestrategy>PreferAntialias</stylestrategy>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">#widget_gundetail
 {
@@ -13995,6 +15489,11 @@ border-style:outset;</string>
          <height>441</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
       </widget>
       <widget class="QToolButton" name="toolButton_daydata">
        <property name="geometry">
@@ -14004,6 +15503,11 @@ border-style:outset;</string>
          <width>101</width>
          <height>51</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="text">
         <string>今日数据</string>
@@ -14018,6 +15522,11 @@ border-style:outset;</string>
          <height>51</height>
         </rect>
        </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
+       </property>
        <property name="text">
         <string>本月数据</string>
        </property>
@@ -14030,6 +15539,11 @@ border-style:outset;</string>
          <width>36</width>
          <height>36</height>
         </rect>
+       </property>
+       <property name="font">
+        <font>
+         <stylestrategy>PreferAntialias</stylestrategy>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border-image: url(:/picture/关闭.png);</string>
@@ -15328,6 +16842,11 @@ border-style:outset;</string>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
+    </property>
     <property name="text">
      <string>.</string>
     </property>
@@ -15344,6 +16863,7 @@ border-style:outset;</string>
     <property name="font">
      <font>
       <pointsize>17</pointsize>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="text">
@@ -15365,6 +16885,7 @@ border-style:outset;</string>
     <property name="font">
      <font>
       <pointsize>24</pointsize>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="styleSheet">
@@ -15387,6 +16908,7 @@ color: rgb(255, 255, 255);</string>
     <property name="font">
      <font>
       <pointsize>24</pointsize>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="styleSheet">
@@ -15406,6 +16928,11 @@ color: rgb(255, 255, 255);</string>
       <height>220</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">#widget_warn_rom
 {
@@ -15424,6 +16951,7 @@ color: rgb(255, 255, 255);</string>
      <property name="font">
       <font>
        <pointsize>14</pointsize>
+       <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
      <property name="text">
@@ -15451,6 +16979,7 @@ color: rgb(255, 255, 255);</string>
      <property name="font">
       <font>
        <pointsize>19</pointsize>
+       <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
      <property name="text">
@@ -15472,6 +17001,7 @@ color: rgb(255, 255, 255);</string>
      <property name="font">
       <font>
        <pointsize>15</pointsize>
+       <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
      <property name="text">
@@ -15486,6 +17016,11 @@ color: rgb(255, 255, 255);</string>
        <width>31</width>
        <height>31</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <stylestrategy>PreferAntialias</stylestrategy>
+      </font>
      </property>
      <property name="styleSheet">
       <string notr="true">
@@ -15505,6 +17040,11 @@ border-image: url(:/picture/jinggao.png);</string>
       <height>220</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">#widget_warn_zaixianjiance
 {
@@ -15523,6 +17063,7 @@ border-image: url(:/picture/jinggao.png);</string>
      <property name="font">
       <font>
        <pointsize>14</pointsize>
+       <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
      <property name="text">
@@ -15550,6 +17091,7 @@ border-image: url(:/picture/jinggao.png);</string>
      <property name="font">
       <font>
        <pointsize>19</pointsize>
+       <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
      <property name="text">
@@ -15571,6 +17113,7 @@ border-image: url(:/picture/jinggao.png);</string>
      <property name="font">
       <font>
        <pointsize>15</pointsize>
+       <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
      <property name="text">
@@ -15589,6 +17132,7 @@ border-image: url(:/picture/jinggao.png);</string>
      <property name="font">
       <font>
        <pointsize>15</pointsize>
+       <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
      <property name="text">
@@ -15603,6 +17147,11 @@ border-image: url(:/picture/jinggao.png);</string>
        <width>131</width>
        <height>25</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <stylestrategy>PreferAntialias</stylestrategy>
+      </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QCheckBox::indicator {width: 20px; height: 20px;}QCheckBox::indicator:checked {border-image: url(:/picture/checkbox_yes.png);}
@@ -15625,6 +17174,7 @@ border-image: url(:/picture/jinggao.png);</string>
     <property name="font">
      <font>
       <pointsize>13</pointsize>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="text">
@@ -15643,6 +17193,7 @@ border-image: url(:/picture/jinggao.png);</string>
     <property name="font">
      <font>
       <pointsize>13</pointsize>
+      <stylestrategy>PreferAntialias</stylestrategy>
      </font>
     </property>
     <property name="text">
@@ -15657,6 +17208,11 @@ border-image: url(:/picture/jinggao.png);</string>
       <width>41</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <stylestrategy>PreferAntialias</stylestrategy>
+     </font>
     </property>
     <property name="styleSheet">
      <string notr="true">border-image: url(:/picture/TouchCalibration.png);</string>

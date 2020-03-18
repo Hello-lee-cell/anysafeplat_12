@@ -20,6 +20,7 @@
 #include "fga1000_485.h"
 #include "security.h"
 #include "main_main.h"
+#include "airtightness_test.h"
 
 
 unsigned char Flag_Draw_Type = 0;       //1-12×8=96对应加油机 101油罐压力  102管线压力  103油罐温度  104油气浓度
@@ -1805,7 +1806,7 @@ void MainWindow::history_exec_creat()
 
 void MainWindow::on_pushButton_3_clicked()      //静音
 {
-    if(!flag_silent)
+	if(!flag_silent)
     {
         beep_none();
         ui->pushButton_3->setStyleSheet("border-image: url(:/picture/silent.png)");
@@ -1823,6 +1824,10 @@ void MainWindow::on_pushButton_3_clicked()      //静音
         flag_silent = 0;
         Flag_auto_silent = 0;
     }
+
+	Airtightness_Test *airtest;
+	airtest = new Airtightness_Test;
+	airtest->show();
 }
 void MainWindow::on_pushButton_2_clicked()      //联系我们
 {

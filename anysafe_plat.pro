@@ -56,7 +56,8 @@ SOURCES += main.cpp\
     protobuf/pb_encode.c \
     protobuf/xielou.pb.c \
     myserver/des.cpp \
-    myserver/myserver.cpp
+    myserver/myserver.cpp \
+    airtightness_test.cpp
 
 HEADERS  += mainwindow.h \
     keyboard.h \
@@ -99,7 +100,8 @@ HEADERS  += mainwindow.h \
     protobuf/pb_encode.h \
     protobuf/xielou.pb.h \
     myserver/des.h \
-    myserver/myserver.h
+    myserver/myserver.h \
+    airtightness_test.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
@@ -108,7 +110,8 @@ FORMS    += mainwindow.ui \
     history.ui \
     systemset.ui \
     connectus.ui \
-    reoilgas_pop.ui
+    reoilgas_pop.ui \
+    airtightness_test.ui
 
 RESOURCES += \
     picture_.qrc
