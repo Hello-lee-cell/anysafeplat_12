@@ -1825,10 +1825,10 @@ void MainWindow::on_pushButton_3_clicked()      //静音
         Flag_auto_silent = 0;
     }
 
-	Airtightness_Test *airtest;
-	airtest = new Airtightness_Test;
-	airtest->setAttribute(Qt::WA_DeleteOnClose);
-	airtest->show();
+//	Airtightness_Test *airtest;
+//	airtest = new Airtightness_Test;
+//	airtest->setAttribute(Qt::WA_DeleteOnClose);
+//	airtest->show();
 }
 void MainWindow::on_pushButton_2_clicked()      //联系我们
 {
