@@ -904,7 +904,7 @@ void reoilgasthread::Ask_Sensor()
 		Pressure_AskNum = 0;
 	}
 	ask_pressure();
-	msleep(100);
+	msleep(50);
 	if(Env_Gas_en == 1)
 	{
 		Fga1000_AskNum = 1;
@@ -918,9 +918,9 @@ void reoilgasthread::Ask_Sensor()
 		Fga1000_AskNum = 0;
 	}
 	ask_fga1000();
-	msleep(100);
+	msleep(50);
 	ask_temperature();
-	msleep(100);
+	msleep(50);
 }
 void reoilgasthread::ask_pressure()
 {
@@ -1133,6 +1133,10 @@ void reoilgasthread::ask_temperature()
 					Flag_AskTem_Over = 0;//结束。退出循环
 				}
 			}
+		}
+		else
+		{
+			Flag_AskTem_Over = 0;
 		}
 	}
 }

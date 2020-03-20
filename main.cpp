@@ -215,8 +215,8 @@ int main(int argc, char *argv[])
     warn_sound_thread *write_sound = new warn_sound_thread;
 	write_sound->start();
 
-	myserver *myserver_thread = new myserver;
-	myserver_thread->start();
+	//myserver *myserver_thread = new myserver;
+	//myserver_thread->start();
 
     security *securitys = new security;
     QObject::connect(securitys,SIGNAL(liquid_close()),&w,SLOT(liquid_close_s()));

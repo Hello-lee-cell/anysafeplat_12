@@ -29,6 +29,8 @@ private:
 	Ui::Airtightness_Test *ui;
 	keyboard *touchkey;
 	bool eventFilter(QObject *, QEvent *);
+	void data_analysis();
+	void calc_pre_limit();
 
 signals:
 	void closeing_touchkey();

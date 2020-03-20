@@ -55,7 +55,7 @@
   <widget class="QWidget" name="widget_warn_man_id" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -131,7 +131,7 @@
   <widget class="QWidget" name="widget_warn_man_pw" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -207,7 +207,7 @@
   <widget class="QWidget" name="widget_warn_user_pw" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -283,7 +283,7 @@
   <widget class="QWidget" name="widget_warn_user_add" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -359,7 +359,7 @@
   <widget class="QWidget" name="widget_warn_user_del" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -435,7 +435,7 @@
   <widget class="QWidget" name="widget_warn_inputerror" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -516,7 +516,7 @@
   <widget class="QWidget" name="widget_warn_user_noexist" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -597,7 +597,7 @@
   <widget class="QWidget" name="widget_warn_poweroff" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -673,7 +673,7 @@
   <widget class="QWidget" name="widget_warn_update" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -767,7 +767,7 @@
   <widget class="QWidget" name="widget_warn_histclr" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -844,7 +844,7 @@
   <widget class="QWidget" name="widget_warn_gujian" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -1500,7 +1500,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -11339,7 +11339,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QWidget" name="widget_warn_allclean" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>
@@ -11418,7 +11418,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QWidget" name="widget_warn_ip_wrong" native="true">
    <property name="geometry">
     <rect>
-     <x>970</x>
+     <x>380</x>
      <y>170</y>
      <width>300</width>
      <height>220</height>

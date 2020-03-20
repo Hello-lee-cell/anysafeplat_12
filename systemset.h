@@ -472,6 +472,8 @@ private slots:
 
 	void on_pushButton_U_clear_clicked();
 
+	void on_pushButton_Airtighness_Test_clicked();
+
 signals:
 
     void amount_basin_reset(int t);

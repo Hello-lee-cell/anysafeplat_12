@@ -27,6 +27,8 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <QTcpSocket>
+#include "airtightness_test.h"
+
 unsigned char hang = 0;
 unsigned char lie = 0;
 
@@ -4860,6 +4862,15 @@ void systemset::on_pushButton_U_clear_clicked()
 	system("rm -r /media/sdb*");
 	system("sync");
 }
+//气密性测试流程
+void systemset::on_pushButton_Airtighness_Test_clicked()
+{
+	Airtightness_Test *airtest;
+	airtest = new Airtightness_Test;
+	airtest->setAttribute(Qt::WA_DeleteOnClose);
+	airtest->show();
+}
+
 
 /************配置信息网络上传*****************
  * id     没有用
@@ -4899,5 +4910,4 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		}
 	}
 }
-
 
