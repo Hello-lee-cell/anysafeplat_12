@@ -32,25 +32,25 @@ private:
     keyboard *touchkey;
     login *Log;
 
-    QMovie *gif_nosensor;
-    QMovie *gif_oil;
-    QMovie *gif_sensor;
-    QMovie *gif_water;
-    QMovie *gif_uart;
-    QMovie *gif_right;
-    QMovie *gif_high;
-    QMovie *gif_low;
-    QMovie *gif_presurepre;
-    QMovie *gif_presurewarn;
+//    QMovie *gif_nosensor;
+//    QMovie *gif_oil;
+//    QMovie *gif_sensor;
+//    QMovie *gif_water;
+//    QMovie *gif_uart;
+//    QMovie *gif_right;
+//    QMovie *gif_high;
+//    QMovie *gif_low;
+//    QMovie *gif_presurepre;
+//    QMovie *gif_presurewarn;
     QMovie *gif_radar;
 
-    QMovie *gif_sensor_pre;
-    QMovie *gif_uart_pre;
-    QMovie *gif_presurepre_pre;
-    QMovie *gif_presurewarn_pre;
-    QMovie *gif_right_pre;
+//    QMovie *gif_sensor_pre;
+//    QMovie *gif_uart_pre;
+//    QMovie *gif_presurepre_pre;
+//    QMovie *gif_presurewarn_pre;
+//    QMovie *gif_right_pre;
 
-    QMovie *gif_crash_warn;
+//    QMovie *gif_crash_warn;
 
     history *history_exec;
     systemset *systemset_exec;

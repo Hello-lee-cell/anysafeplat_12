@@ -9,7 +9,7 @@ connectus::connectus(QWidget *parent) :
     this->setAttribute(Qt::WA_DeleteOnClose,true);
     Flag_Timeto_CloseNeeded[0] = 1;
     setWindowFlags(Qt::Tool|Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
-    move(0,73);
+	move(0,85);
 }
 
 connectus::~connectus()

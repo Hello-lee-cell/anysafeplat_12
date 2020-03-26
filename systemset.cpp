@@ -55,6 +55,7 @@ unsigned char flag_mythread_temp = 0;   //一次写入，每个选项的检测
 
 unsigned char Mapping[96] = {0};//加油枪编号映射数组，全局变量yignshe，用于数据上传编号
 QString Mapping_Show[96] = {""};//加油枪编号映射数组，全局变量yignshe,用于显示
+QString Mapping_OilNo[96] = {""};//加油枪油品号映射数组，全局变量yingshe，用于显示抢的油品号
 //post添加
 unsigned char flag_post_Configuration = 0;//如果置1，则在设置退出时上传油气回收设置信息
 
@@ -65,7 +66,7 @@ systemset::systemset(QWidget *parent) :
     ui->setupUi(this);
     this->setAttribute(Qt::WA_DeleteOnClose,true);
     Flag_Timeto_CloseNeeded[0] = 1;
-    move(0,78);
+	move(0,85);
     ui->tabWidget_all->setStyleSheet("QTabBar::tab{max-height:33px;min-width:80px;background-color: rgb(170,170,255,255);border: 2px solid;padding:9px;}\
                                      QTabBar::tab:selected {background-color: white}\
                                      QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}");
@@ -608,36 +609,36 @@ systemset::~systemset()
 // 整体导航
 void systemset::on_tabWidget_all_currentChanged(int index)
 {
-    //index = 0     传感器设置
-    //index = 1     雷达设置
-    //index = 2     人体静电设置  安全防护
-    //index = 3     可燃气体
-    //index = 4     油气回收
-    //index = 5     网络设置
+	//index = 0     油气回收
+	//index = 1     泄漏传感器设置
+	//index = 2     雷达设置
+	//index = 3     人体静电设置  安全防护
+	//index = 4     可燃气体
+	//index = 5     网络设置
     //index = 6     其他设置：用户管理  升级 时间设置
     emit closeing_touchkey();
-    if(index == 0)
+	if(index == 1)
     {
         char IP[32] = {0};
         get_local_ip(if_name,IP);
         ui->label_14->setText(IP);
     }
-    if(index == 1)
+	if(index == 2)
     {
 
     }
-    if(index == 2)
+	if(index == 3)
     {
 
     }
-    if(index == 3)
+	if(index == 4)
     {
         //可燃气体数量初始化
         ui->comboBox_burngas->setStyleSheet("QScrollBar{ background: #F0F0F0; width:20px ;margin-top:0px;margin-bottom:0px }"
                                     "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:18px }");
         ui->comboBox_burngas->setCurrentIndex(Num_Fga-2);
     }
-    if(index == 4) //post添加
+	if(index == 0) //post添加
     {
         //post
         flag_post_Configuration = 1;
@@ -4038,7 +4039,7 @@ void systemset::on_tableView_yingshe_clicked(const QModelIndex &index)//映射�
     hang_mapping = index.row();
     lie_mapping = index.column();
     emit closeing_touchkey();
-	if(lie_mapping == 1 || lie_mapping == 2)
+	if(lie_mapping == 1 || lie_mapping == 2 || lie_mapping == 3)
     {
         touchkey = new keyboard;
         connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(set_yingshe_gun(const QString&)));
@@ -4051,10 +4052,11 @@ void systemset::tableView_yingshe_replay()//映射表绘制
 {
     model_yingshe = new QStandardItemModel();
 
-	model_yingshe->setColumnCount(3);
+	model_yingshe->setColumnCount(4);
     model_yingshe->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg("本地油枪编号"));
 	model_yingshe->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("上传油枪编号"));
 	model_yingshe->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("显示油枪编号"));
+	model_yingshe->setHeaderData(3,Qt::Horizontal,QObject::tr("%1").arg("油枪品号"));
 
 //    model->removeColumn(0);
     int i = 0;
@@ -4069,15 +4071,18 @@ void systemset::tableView_yingshe_replay()//映射表绘制
             model_yingshe->item(i_al,1)->setTextAlignment(Qt::AlignCenter);
 			model_yingshe->setItem(i_al,2,new QStandardItem(Mapping_Show[i*8+j])); //映射后的加油站油枪编号
 			model_yingshe->item(i_al,2)->setTextAlignment(Qt::AlignCenter);
+			model_yingshe->setItem(i_al,3,new QStandardItem(Mapping_OilNo[i*8+j])); //映射后的加油站油枪编号
+			model_yingshe->item(i_al,3)->setTextAlignment(Qt::AlignCenter);
             i_al++;
         }
         i++;
     }
 
     ui->tableView_yingshe->setModel(model_yingshe);
-	ui->tableView_yingshe->setColumnWidth(0,110);
-	ui->tableView_yingshe->setColumnWidth(1,110);
-	ui->tableView_yingshe->setColumnWidth(2,110);
+	ui->tableView_yingshe->setColumnWidth(0,80);
+	ui->tableView_yingshe->setColumnWidth(1,80);
+	ui->tableView_yingshe->setColumnWidth(2,80);
+	ui->tableView_yingshe->setColumnWidth(3,80);
     //on_toolButton_gunamount_enter_clicked();
 }
 void systemset::set_yingshe_gun(const QString &text)
@@ -4176,6 +4181,33 @@ void systemset::set_yingshe_gun(const QString &text)
 			this->clearFocus();
 		}
 	}
+	if(lie_mapping == 3)
+	{
+		if(Q_temp == "0")
+		{
+			if(text == "." || text == "-")
+			{
+				Q_temp = Q_temp.append(text);
+				model_yingshe->setItem(hang_mapping,lie_mapping,new QStandardItem(Q_temp));
+				model_yingshe->item(hang_mapping,lie_mapping)->setTextAlignment(Qt::AlignCenter);
+				this->clearFocus();
+			}
+			else
+			{
+				Q_temp = text;
+				model_yingshe->setItem(hang_mapping,lie_mapping,new QStandardItem(Q_temp));
+				model_yingshe->item(hang_mapping,lie_mapping)->setTextAlignment(Qt::AlignCenter);
+				this->clearFocus();
+			}
+		}
+		else
+		{
+			Q_temp.append(text);
+			model_yingshe->setItem(hang_mapping,lie_mapping,new QStandardItem(Q_temp));
+			model_yingshe->item(hang_mapping,lie_mapping)->setTextAlignment(Qt::AlignCenter);
+			this->clearFocus();
+		}
+	}
 
 }
 
@@ -4203,20 +4235,26 @@ void systemset::on_pushButtonsave_yingshe_clicked()
 {
     QModelIndex index;
 	QModelIndex index_show;
+	QModelIndex index_oilno;
     QVariant data;
 	QVariant data_show;
+	QVariant data_oilno;
     unsigned char count_temp = 0;
     for(unsigned char i = 0;i < 12;i++)
     {
         for(unsigned char j = 0;j < Amount_Gasgun[i];j++)
         {
-            index = model_yingshe->index(count_temp,1);    //oil
+			index = model_yingshe->index(count_temp,1);    //上传映射
             data = model_yingshe->data(index);
             Mapping[i*8+j] = data.toInt();
 
-			index_show = model_yingshe->index(count_temp,2);    //oil
+			index_show = model_yingshe->index(count_temp,2);    //显示映射
 			data_show = model_yingshe->data(index_show);
 			Mapping_Show[i*8+j] = data_show.toString();
+
+			index_oilno = model_yingshe->index(count_temp,3);    //油品映射
+			data_oilno = model_yingshe->data(index_oilno);
+			Mapping_OilNo[i*8+j] = data_oilno.toString();
 
 			count_temp++;
         }
@@ -4224,6 +4262,7 @@ void systemset::on_pushButtonsave_yingshe_clicked()
         {
             Mapping[i*8+j] = 0;
 			Mapping_Show[i*8+j] = "";
+			Mapping_OilNo[i*8+j] = "";
         }
     }
     emit amount_oilgas_gun_set();//重绘油枪

@@ -39,7 +39,7 @@ history::history(QWidget *parent) :
 	header->setHidden(true);// 隐藏行号
 	ui->tableView->verticalHeader()->setDefaultSectionSize(20);        //设置行间距
 	ui->tableView->verticalHeader()->setMinimumSectionSize(20);        //设置行间距
-    move(0,78);
+	move(0,85);
 
 
     //数据库表格初始化

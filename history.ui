@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>610</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,7 +50,7 @@ background-color: rgb(255, 255, 255);
    <property name="geometry">
     <rect>
      <x>9</x>
-     <y>566</y>
+     <y>580</y>
      <width>91</width>
      <height>40</height>
     </rect>
@@ -80,8 +80,8 @@ background-color: rgb(255, 255, 255);
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>570</y>
-     <width>110</width>
+     <y>580</y>
+     <width>81</width>
      <height>30</height>
     </rect>
    </property>
@@ -100,7 +100,7 @@ background-color: rgb(255, 255, 255);
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>611</height>
+     <height>631</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -643,7 +643,7 @@ background-color: rgb(255, 255, 255);
      <x>160</x>
      <y>55</y>
      <width>851</width>
-     <height>551</height>
+     <height>571</height>
     </rect>
    </property>
    <property name="font">
@@ -658,7 +658,7 @@ background-color: rgb(255, 255, 255);
      <x>160</x>
      <y>60</y>
      <width>851</width>
-     <height>551</height>
+     <height>571</height>
     </rect>
    </property>
    <property name="palette">

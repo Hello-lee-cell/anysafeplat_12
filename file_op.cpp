@@ -1457,12 +1457,14 @@ void config_mapping_write()
 {
     QString q_config;
 	QString q_config_show;
+	QString q_config_oilno;
     for(unsigned char i = 0;i < 12;i++)
     {
         for(unsigned char j = 0;j < 8;j++)
         {
             q_config.append(QString("%1\n").arg(Mapping[i*8+j]));
 			q_config_show.append(Mapping_Show[i*8+j]).append("\n");
+			q_config_oilno.append(Mapping_OilNo[i*8+j]).append("\n");
         }
     }
 
@@ -1480,9 +1482,18 @@ void config_mapping_write()
 	QTextStream in_show(&file_show);
 	in_show<<q_config_show;
 	file_show.close();
-	int fp_show = open(CONFIG_MAPPING,O_RDONLY);
+	int fp_show = open(CONFIG_MAPPING_SHOW,O_RDONLY);
 	fsync(fp_show);
 	close(fp_show);
+
+	QFile file_oilno(CONFIG_MAPPING_OILNO);
+	file_oilno.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+	QTextStream in_oilno(&file_oilno);
+	in_oilno<<q_config_oilno;
+	file_oilno.close();
+	int fp_oilno = open(CONFIG_MAPPING_OILNO,O_RDONLY);
+	fsync(fp_oilno);
+	close(fp_oilno);
 }
 
 void config_fga_accum_write(unsigned char type1,unsigned char type3)

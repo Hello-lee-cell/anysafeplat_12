@@ -1,8 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>picture/历史记录.png</file>
-        <file>picture/联系我们.png</file>
-        <file>picture/设置.png</file>
         <file>picture/登录界面.png</file>
         <file>picture/touming.png</file>
         <file>picture/sound.png</file>
@@ -10,24 +7,13 @@
         <file>picture/jinggao.png</file>
         <file>picture/历史记录导出.png</file>
         <file>picture/sensorwro.png</file>
-        <file>picture/背景.png</file>
-        <file>picture/时间背景.png</file>
         <file>picture/关闭.png</file>
         <file>picture/connectus.png</file>
-        <file>picture/uartwro.gif</file>
-        <file>picture/oilwro.gif</file>
-        <file>picture/sensorwro.gif</file>
-        <file>picture/waterwro.gif</file>
         <file>picture/netcut.png</file>
         <file>picture/warnbackground.png</file>
-        <file>picture/lowwro.gif</file>
-        <file>picture/highwro.gif</file>
         <file>picture/right.png</file>
         <file>picture/设备故障.png</file>
         <file>picture/guanji.png</file>
-        <file>picture/presurewarn.gif</file>
-        <file>picture/presurepre.gif</file>
-        <file>picture/xielou.png</file>
         <file>picture/radar.gif</file>
         <file>picture/setbeijing.png</file>
         <file>picture/pa-a2.png</file>
@@ -46,21 +32,8 @@
         <file>picture/key_shiwaibaojing.png</file>
         <file>picture/quyuauto.png</file>
         <file>picture/quyuhand.png</file>
-        <file>picture/right_pre.gif</file>
-        <file>picture/presurewarn_pre.gif</file>
-        <file>picture/presurepre_pre.gif</file>
-        <file>picture/uartwro_pre.gif</file>
-        <file>picture/sensorwro_pre.gif</file>
-        <file>picture/jiayouji.png</file>
-        <file>picture/tank_gas.png</file>
-        <file>picture/tank_temp.png</file>
-        <file>picture/biaopan_youguanpre.png</file>
         <file>picture/jinggao_red.png</file>
         <file>picture/keranqiti.png</file>
-        <file>picture/gashighwarn.png</file>
-        <file>picture/gaslowwarn.png</file>
-        <file>picture/gassensorwarn.png</file>
-        <file>picture/gasuartwarn.png</file>
         <file>picture/nosensor.png</file>
         <file>picture/dispendetail.png</file>
         <file>picture/gasgun_green_L.png</file>
@@ -73,13 +46,38 @@
         <file>picture/gasgun_yello_R.png</file>
         <file>picture/checkbox_yes.png</file>
         <file>picture/IIE.png</file>
-        <file>picture/biaopan_guandaopre.png</file>
         <file>picture/qianyoubeng.png</file>
         <file>picture/yeweiyi.png</file>
-        <file>picture/crashwarn.gif</file>
         <file>picture/crashbeijing.png</file>
-        <file>picture/nosensor.gif</file>
-        <file>picture/right.gif</file>
         <file>picture/TouchCalibration.png</file>
+        <file>picture/渗漏检测四设备状态栏.png</file>
+        <file>picture/单个系统未选中按钮/安防雷达系统未选中.png</file>
+        <file>picture/单个系统未选中按钮/安全防护系统未选中.png</file>
+        <file>picture/单个系统未选中按钮/可燃气体检测系统未选中.png</file>
+        <file>picture/单个系统未选中按钮/渗漏检测系统未选中.png</file>
+        <file>picture/单个系统未选中按钮/在线油气回收系统按钮未选中.png</file>
+        <file>picture/单个系统未选中按钮/自恢复防撞柱系统未选中.png</file>
+        <file>picture/单个系统选中/安防雷达系统选中.png</file>
+        <file>picture/单个系统选中/安全防护系统选中.png</file>
+        <file>picture/单个系统选中/可燃气体检测系统选中.png</file>
+        <file>picture/单个系统选中/渗漏检测系统选中按钮.png</file>
+        <file>picture/单个系统选中/在线油气回收系统选中.png</file>
+        <file>picture/单个系统选中/自恢复防撞柱系统选中.png</file>
+        <file>picture/底板背景图片.png</file>
+        <file>picture/历史记录n.png</file>
+        <file>picture/联系我们n.png</file>
+        <file>picture/系统设置n.png</file>
+        <file>picture/在线油气检测系统白色背景.png</file>
+        <file>picture/系统界面背景无图标无分割线.png</file>
+        <file>picture/油枪图标/加油机.png</file>
+        <file>picture/油枪图标/加油枪.png</file>
+        <file>picture/highwro.png</file>
+        <file>picture/lowwro.png</file>
+        <file>picture/oilwro.png</file>
+        <file>picture/pressurepre.png</file>
+        <file>picture/pressurewarn.png</file>
+        <file>picture/right_pre.png</file>
+        <file>picture/uartwro.png</file>
+        <file>picture/waterwro.png</file>
     </qresource>
 </RCC>

@@ -2,6 +2,7 @@
 #define CONFIG
 
 #include<qmutex.h>
+#include <QTextCodec>
 //全局变量区域
 //宏定义区域
 //油气回收
@@ -10,6 +11,7 @@
 #define CONFIG_OIL_FACTOR   "/opt/reoilgas/config_oil_factor.txt"
 #define CONFIG_MAPPING   "/opt/reoilgas/config_mapping.txt"
 #define CONFIG_MAPPING_SHOW   "/opt/reoilgas/config_mapping_show.txt"
+#define CONFIG_MAPPING_OILNO   "/opt/reoilgas/config_mapping_oilno.txt"
 
 //数据库列表名称
 #define CONTROLINFO     "controlinfo"
@@ -134,6 +136,7 @@ extern unsigned char Flag_screen_zaixian;
 extern unsigned char Flag_screen_cc;
 extern unsigned char Mapping[96];
 extern QString Mapping_Show[96];
+extern QString Mapping_OilNo[96];
 //uartthread.h
 extern unsigned char count_radar_uart;
 extern unsigned char Flag_Sound_Radar[5];

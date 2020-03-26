@@ -134,11 +134,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tabWidget->setTabEnabled(3,Flag_screen_burngas);
     ui->tabWidget->setTabEnabled(4,Flag_screen_zaixian);
     ui->tabWidget->setTabEnabled(5,Flag_screen_cc);
-	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {max-height:28px;min-width:0px;background-color: rgb(170,170,255,255);border: 2px solid;border-top-left-radius: 11px;border-top-right-radius: 11px;padding:9px;}\
-	                                QTabBar::tab:!selected {margin-top: 5px;}\
+	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {max-height:82px;min-width:147px;background-color: rgb(170,170,255,255);border: 0px solid;border-top-left-radius: 0px;border-top-right-radius: 0px;padding:0px;}\
+	                                QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
                                     QTabBar::tab:selected {background-color: white}\
-                                    QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}\
-	                                QTabBar::tab:disabled {width: 0; color: transparent;padding:0px;border: 0px solid}");
+	                                QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}\
+	                                QTabBar::tab:disabled {width: 0; height: 0; color: transparent;padding:0px;border: 0px solid}");
 
 
    //*********油气回收界面初始
@@ -249,10 +249,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->paint_area->xAxis2->setVisible(true);
     ui->paint_area->yAxis2->setVisible(true);
 
-    ui->paint_area->setBackground(QColor(152, 203, 254));    //背景色
-    ui->paint_area->xAxis->grid()->setPen(QPen(QColor(250,250,250)));   //其他网格线
-    ui->paint_area->yAxis->grid()->setPen(QPen(QColor(250,250,250)));
-    ui->paint_area->xAxis->grid()->setZeroLinePen(QPen(QColor(250,250,250)));//零线
+	ui->paint_area->setBackground(QColor(250, 250, 250));    //背景色
+	ui->paint_area->xAxis->grid()->setPen(QPen(QColor(152, 203, 254)));   //其他网格线
+	ui->paint_area->yAxis->grid()->setPen(QPen(QColor(152, 203, 254)));
+	ui->paint_area->xAxis->grid()->setZeroLinePen(QPen(QColor(152, 203, 254)));//零线
 
     QPen pen1(QColor(255,0,0));
     QPen pen2(QColor(0,104,183));
@@ -290,42 +290,43 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     ui->paint_area->addGraph();//描点图层
     //雷达<-
-    gif_right = new QMovie(":/picture/right.gif");
-    gif_uart = new QMovie(":/picture/uartwro.gif");
-    gif_oil = new QMovie(":/picture/oilwro.gif");
-    gif_water = new QMovie(":/picture/waterwro.gif");
-    gif_sensor = new QMovie(":/picture/sensorwro.gif");
-    gif_nosensor = new QMovie(":/picture/nosensor.gif");
-    gif_high = new QMovie(":/picture/highwro.gif");
-    gif_low = new QMovie(":/picture/lowwro.gif");
-    gif_presurepre = new QMovie(":/picture/presurepre.gif");
-    gif_presurewarn = new QMovie(":/picture/presurewarn.gif");
-    gif_radar = new QMovie(":/picture/radar.gif");
+//    gif_right = new QMovie(":/picture/right.gif");
+//    gif_uart = new QMovie(":/picture/uartwro.gif");
+//    gif_oil = new QMovie(":/picture/oilwro.gif");
+//    gif_water = new QMovie(":/picture/waterwro.gif");
+//    gif_sensor = new QMovie(":/picture/sensorwro.gif");
+//    gif_nosensor = new QMovie(":/picture/nosensor.gif");
+//    gif_high = new QMovie(":/picture/highwro.gif");
+//    gif_low = new QMovie(":/picture/lowwro.gif");
+//    gif_presurepre = new QMovie(":/picture/presurepre.gif");
+//    gif_presurewarn = new QMovie(":/picture/presurewarn.gif");
 
-    gif_presurepre_pre = new QMovie(":/picture/presurepre_pre.gif");
-    gif_presurewarn_pre = new QMovie(":/picture/presurewarn_pre.gif");
-    gif_right_pre = new QMovie(":/picture/right_pre.gif");
-    gif_sensor_pre = new QMovie(":/picture/sensorwro_pre.gif");
-    gif_uart_pre = new QMovie(":/picture/uartwro_pre.gif");
-    gif_crash_warn = new QMovie(":/picture/crashwarn.gif");
-    //语音文件
-    gif_right->start();
-    gif_uart->start();
-    gif_oil->start();
-    gif_water->start();
-    gif_sensor->start();
-    gif_nosensor->start();
-    gif_high->start();
-    gif_low->start();
-    gif_presurepre->start();
-    gif_presurewarn->start();
-    gif_crash_warn->start();
-    gif_presurepre_pre->start();
-    gif_presurewarn_pre->start();
-    gif_right_pre->start();
-    gif_sensor_pre->start();
-    gif_uart_pre->start();
 
+//    gif_presurepre_pre = new QMovie(":/picture/presurepre_pre.gif");
+//    gif_presurewarn_pre = new QMovie(":/picture/presurewarn_pre.gif");
+//    gif_right_pre = new QMovie(":/picture/right_pre.gif");
+//    gif_sensor_pre = new QMovie(":/picture/sensorwro_pre.gif");
+//    gif_uart_pre = new QMovie(":/picture/uartwro_pre.gif");
+//    gif_crash_warn = new QMovie(":/picture/crashwarn.gif");
+	//语音文件
+//    gif_right->start();
+//    gif_uart->start();
+//    gif_oil->start();
+//    gif_water->start();
+//    gif_sensor->start();
+//    gif_nosensor->start();
+//    gif_high->start();
+//    gif_low->start();
+//    gif_presurepre->start();
+//    gif_presurewarn->start();
+//    gif_crash_warn->start();
+//    gif_presurepre_pre->start();
+//    gif_presurewarn_pre->start();
+//    gif_right_pre->start();
+//    gif_sensor_pre->start();
+//    gif_uart_pre->start();
+
+	gif_radar = new QMovie(":/picture/radar.gif");
     gif_radar->start();
     ui->label_radar_gif->setMovie(gif_radar);
     gif_radar->stop();
@@ -392,163 +393,163 @@ MainWindow::MainWindow(QWidget *parent) :
                     switch(count_pipe)
                     {
                         case 0:
-                                ui->label_91->setMovie(gif_nosensor);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_92->setMovie(gif_nosensor);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_93->setMovie(gif_nosensor);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_94->setMovie(gif_nosensor);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_95->setMovie(gif_nosensor);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_96->setMovie(gif_nosensor);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_97->setMovie(gif_nosensor);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 1:
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_nosensor);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_93->setMovie(gif_nosensor);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_94->setMovie(gif_nosensor);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_95->setMovie(gif_nosensor);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_96->setMovie(gif_nosensor);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_97->setMovie(gif_nosensor);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 2:
 
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_right);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_93->setMovie(gif_nosensor);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_94->setMovie(gif_nosensor);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_95->setMovie(gif_nosensor);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_96->setMovie(gif_nosensor);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_97->setMovie(gif_nosensor);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 3:
 
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_right);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_93->setMovie(gif_right);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_94->setMovie(gif_nosensor);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_95->setMovie(gif_nosensor);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_96->setMovie(gif_nosensor);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_97->setMovie(gif_nosensor);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 4:
 
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_right);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_93->setMovie(gif_right);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_94->setMovie(gif_right);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_95->setMovie(gif_nosensor);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_96->setMovie(gif_nosensor);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_97->setMovie(gif_nosensor);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 5:
 
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_right);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_93->setMovie(gif_right);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_94->setMovie(gif_right);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_95->setMovie(gif_right);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_96->setMovie(gif_nosensor);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_97->setMovie(gif_nosensor);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 6:
 
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_right);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_93->setMovie(gif_right);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_94->setMovie(gif_right);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_95->setMovie(gif_right);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_96->setMovie(gif_right);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_97->setMovie(gif_nosensor);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 7:
 
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_right);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_93->setMovie(gif_right);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_94->setMovie(gif_right);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_95->setMovie(gif_right);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_96->setMovie(gif_right);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_97->setMovie(gif_right);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_98->setMovie(gif_nosensor);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 8:
-                                ui->label_91->setMovie(gif_right);
+						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_92->setMovie(gif_right);
+								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_93->setMovie(gif_right);
+								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_94->setMovie(gif_right);
+								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_95->setMovie(gif_right);
+								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_96->setMovie(gif_right);
+								ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_97->setMovie(gif_right);
+								ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_98->setMovie(gif_right);
+								ui->label_98->setStyleSheet("border-image: url(:/picture/right.png);");
 
                     }
                     break;
@@ -564,163 +565,163 @@ MainWindow::MainWindow(QWidget *parent) :
                     switch(count_dispener)
                     {
                         case 0:
-                                ui->label_81->setMovie(gif_nosensor);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_82->setMovie(gif_nosensor);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_83->setMovie(gif_nosensor);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_84->setMovie(gif_nosensor);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_85->setMovie(gif_nosensor);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_86->setMovie(gif_nosensor);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_87->setMovie(gif_nosensor);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 1:
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_nosensor);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_83->setMovie(gif_nosensor);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_84->setMovie(gif_nosensor);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_85->setMovie(gif_nosensor);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_86->setMovie(gif_nosensor);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_87->setMovie(gif_nosensor);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 2:
 
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_right);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_83->setMovie(gif_nosensor);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_84->setMovie(gif_nosensor);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_85->setMovie(gif_nosensor);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_86->setMovie(gif_nosensor);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_87->setMovie(gif_nosensor);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 3:
 
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_right);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_83->setMovie(gif_right);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_84->setMovie(gif_nosensor);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_85->setMovie(gif_nosensor);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_86->setMovie(gif_nosensor);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_87->setMovie(gif_nosensor);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 4:
 
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_right);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_83->setMovie(gif_right);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_84->setMovie(gif_right);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_85->setMovie(gif_nosensor);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_86->setMovie(gif_nosensor);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_87->setMovie(gif_nosensor);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 5:
 
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_right);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_83->setMovie(gif_right);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_84->setMovie(gif_right);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_85->setMovie(gif_right);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_86->setMovie(gif_nosensor);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_87->setMovie(gif_nosensor);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 6:
 
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_right);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_83->setMovie(gif_right);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_84->setMovie(gif_right);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_85->setMovie(gif_right);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_86->setMovie(gif_right);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_87->setMovie(gif_nosensor);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 7:
 
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_right);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_83->setMovie(gif_right);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_84->setMovie(gif_right);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_85->setMovie(gif_right);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_86->setMovie(gif_right);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_87->setMovie(gif_right);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_88->setMovie(gif_nosensor);
+								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 8:
-                                ui->label_81->setMovie(gif_right);
+						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_82->setMovie(gif_right);
+								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_83->setMovie(gif_right);
+								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_84->setMovie(gif_right);
+								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_85->setMovie(gif_right);
+								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_86->setMovie(gif_right);
+								ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_87->setMovie(gif_right);
+								ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_8->setMovie(gif_right);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
 
                     }
                     break;
@@ -736,163 +737,163 @@ MainWindow::MainWindow(QWidget *parent) :
                     switch(count_basin)
                     {
                         case 0:
-                                ui->label->setMovie(gif_nosensor);
+						        ui->label->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_2->setMovie(gif_nosensor);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_3->setMovie(gif_nosensor);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_4->setMovie(gif_nosensor);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_5->setMovie(gif_nosensor);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_6->setMovie(gif_nosensor);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_7->setMovie(gif_nosensor);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 1:
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_nosensor);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_3->setMovie(gif_nosensor);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_4->setMovie(gif_nosensor);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_5->setMovie(gif_nosensor);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_6->setMovie(gif_nosensor);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_7->setMovie(gif_nosensor);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 2:
 
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_right);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_3->setMovie(gif_nosensor);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_4->setMovie(gif_nosensor);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_5->setMovie(gif_nosensor);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_6->setMovie(gif_nosensor);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_7->setMovie(gif_nosensor);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 3:
 
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_right);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_3->setMovie(gif_right);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_4->setMovie(gif_nosensor);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_5->setMovie(gif_nosensor);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_6->setMovie(gif_nosensor);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_7->setMovie(gif_nosensor);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 4:
 
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_right);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_3->setMovie(gif_right);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_4->setMovie(gif_right);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_5->setMovie(gif_nosensor);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_6->setMovie(gif_nosensor);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_7->setMovie(gif_nosensor);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 5:
 
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_right);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_3->setMovie(gif_right);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_4->setMovie(gif_right);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_5->setMovie(gif_right);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_6->setMovie(gif_nosensor);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_7->setMovie(gif_nosensor);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 6:
 
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_right);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_3->setMovie(gif_right);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_4->setMovie(gif_right);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_5->setMovie(gif_right);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_6->setMovie(gif_right);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_7->setMovie(gif_nosensor);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 7:
 
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_right);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_3->setMovie(gif_right);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_4->setMovie(gif_right);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_5->setMovie(gif_right);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_6->setMovie(gif_right);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_7->setMovie(gif_right);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_8->setMovie(gif_nosensor);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
                                 break;
                     case 8:
-                                ui->label->setMovie(gif_right);
+						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_2->setMovie(gif_right);
+								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_3->setMovie(gif_right);
+								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_4->setMovie(gif_right);
+								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_5->setMovie(gif_right);
+								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_6->setMovie(gif_right);
+								ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_7->setMovie(gif_right);
+								ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
 
-                                ui->label_8->setMovie(gif_right);
+								ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
 
                     }
                     break;
@@ -1516,7 +1517,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	QFile config_mapping_show(CONFIG_MAPPING_SHOW);
 	if(!config_mapping_show.open(QIODevice::ReadOnly|QIODevice::Text))
 	{
-		qDebug()<<"Can't open the mapping table file!"<<endl;
+		qDebug()<<"Can't open the mappingshow table file!"<<endl;
 	}
 	QTextStream out_mapping_show(&config_mapping_show);
 	QString line_mapping_table_show;
@@ -1526,6 +1527,21 @@ MainWindow::MainWindow(QWidget *parent) :
 		Mapping_Show[i] = line_mapping_table_show;
 	}
 	config_mapping_show.close();
+
+	//油枪品号初始化
+	QFile config_mapping_oil(CONFIG_MAPPING_OILNO);
+	if(!config_mapping_oil.open(QIODevice::ReadOnly|QIODevice::Text))
+	{
+		qDebug()<<"Can't open the mappingoil table file!"<<endl;
+	}
+	QTextStream out_mapping_oil(&config_mapping_oil);
+	QString line_mapping_table_oil;
+	for(int i = 0; i < 96; i++)
+	{
+		line_mapping_table_oil = out_mapping_oil.readLine();
+		Mapping_OilNo[i] = line_mapping_table_oil;
+	}
+	config_mapping_oil.close();
 
 
     //oilgas 油因子初始化
@@ -1852,28 +1868,28 @@ void MainWindow::warn_oil_set_basin(int t)
     switch(t)
     {
         case 1 :
-                 ui->label->setMovie(gif_oil);
+		         ui->label->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 2 :
-                 ui->label_2->setMovie(gif_oil);
+		         ui->label_2->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 3 :
-                 ui->label_3->setMovie(gif_oil);
+		         ui->label_3->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 4 :
-                 ui->label_4->setMovie(gif_oil);
+		         ui->label_4->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 5 :
-                 ui->label_5->setMovie(gif_oil);
+		         ui->label_5->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 6 :
-                 ui->label_6->setMovie(gif_oil);
+		         ui->label_6->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 7 :
-                 ui->label_7->setMovie(gif_oil);
+		         ui->label_7->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 8 :
-                 ui->label_8->setMovie(gif_oil);
+		         ui->label_8->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
     }
 }
@@ -1882,28 +1898,28 @@ void MainWindow::warn_water_set_basin(int t)
     switch(t)
     {
         case 1 :
-                ui->label->setMovie(gif_water);
+		        ui->label->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                 break;
         case 2 :
-                 ui->label_2->setMovie(gif_water);
+		         ui->label_2->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 3 :
-                 ui->label_3->setMovie(gif_water);
+		         ui->label_3->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 4 :
-                 ui->label_4->setMovie(gif_water);
+		         ui->label_4->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 5 :
-                 ui->label_5->setMovie(gif_water);
+		         ui->label_5->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 6 :
-                 ui->label_6->setMovie(gif_water);
+		         ui->label_6->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 7 :
-                 ui->label_7->setMovie(gif_water);
+		         ui->label_7->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 8 :
-                 ui->label_8->setMovie(gif_water);
+		         ui->label_8->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
     }
 
@@ -1913,28 +1929,28 @@ void MainWindow::warn_sensor_set_basin(int t)
     switch(t)
     {
         case 1 :
-                 ui->label->setMovie(gif_sensor);
+		         ui->label->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 2 :
-                 ui->label_2->setMovie(gif_sensor);
+		         ui->label_2->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 3 :
-                 ui->label_3->setMovie(gif_sensor);
+		         ui->label_3->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 4 :
-                 ui->label_4->setMovie(gif_sensor);
+		         ui->label_4->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 5 :
-                 ui->label_5->setMovie(gif_sensor);
+		         ui->label_5->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 6 :
-                 ui->label_6->setMovie(gif_sensor);
+		         ui->label_6->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 7 :
-                 ui->label_7->setMovie(gif_sensor);
+		         ui->label_7->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 8 :
-                 ui->label_8->setMovie(gif_sensor);
+		         ui->label_8->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
     }
 }
@@ -1943,28 +1959,28 @@ void MainWindow::warn_uart_set_basin(int t)
     switch(t)
     {
         case 1 :
-                ui->label->setMovie(gif_uart);
+		        ui->label->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 break;
         case 2 :
-                 ui->label_2->setMovie(gif_uart);
+		         ui->label_2->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 3 :
-                 ui->label_3->setMovie(gif_uart);
+		         ui->label_3->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 4 :
-                 ui->label_4->setMovie(gif_uart);
+		         ui->label_4->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 5 :
-                 ui->label_5->setMovie(gif_uart);
+		         ui->label_5->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 6 :
-                 ui->label_6->setMovie(gif_uart);
+		         ui->label_6->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 7 :
-                 ui->label_7->setMovie(gif_uart);
+		         ui->label_7->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 8 :
-                 ui->label_8->setMovie(gif_uart);
+		         ui->label_8->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
     }
 }
@@ -1973,28 +1989,28 @@ void MainWindow::right_set_basin(int t)
     switch(t)
     {
         case 1:
-                ui->label->setMovie(gif_right);
+		        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 2:
-                ui->label_2->setMovie(gif_right);
+		        ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 3:
-                ui->label_3->setMovie(gif_right);
+		        ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 4:
-                ui->label_4->setMovie(gif_right);
+		        ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 5:
-                ui->label_5->setMovie(gif_right);
+		        ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 6:
-                ui->label_6->setMovie(gif_right);
+		        ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 7:
-                ui->label_7->setMovie(gif_right);
+		        ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 8:
-                ui->label_8->setMovie(gif_right);
+		        ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
     }
 }
@@ -2004,28 +2020,28 @@ void MainWindow::warn_oil_set_pipe(int t)
     switch(t)
     {
         case 91 :
-                 ui->label_91->setMovie(gif_oil);
+		         ui->label_91->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 92 :
-                 ui->label_92->setMovie(gif_oil);
+		         ui->label_92->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 93 :
-                 ui->label_93->setMovie(gif_oil);
+		         ui->label_93->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 94 :
-                 ui->label_94->setMovie(gif_oil);
+		         ui->label_94->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 95 :
-                 ui->label_95->setMovie(gif_oil);
+		         ui->label_95->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 96 :
-                 ui->label_96->setMovie(gif_oil);
+		         ui->label_96->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 97 :
-                 ui->label_97->setMovie(gif_oil);
+		         ui->label_97->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 98 :
-                 ui->label_98->setMovie(gif_oil);
+		         ui->label_98->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
     }
 }
@@ -2034,28 +2050,28 @@ void MainWindow::warn_water_set_pipe(int t)
     switch(t)
     {
         case 91 :
-                ui->label_91->setMovie(gif_water);
+		        ui->label_91->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                 break;
         case 92 :
-                 ui->label_92->setMovie(gif_water);
+		         ui->label_92->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 93 :
-                 ui->label_93->setMovie(gif_water);
+		         ui->label_93->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 94 :
-                 ui->label_94->setMovie(gif_water);
+		         ui->label_94->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 95 :
-                 ui->label_95->setMovie(gif_water);
+		         ui->label_95->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 96 :
-                 ui->label_96->setMovie(gif_water);
+		         ui->label_96->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 97 :
-                 ui->label_97->setMovie(gif_water);
+		         ui->label_97->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 98 :
-                 ui->label_98->setMovie(gif_water);
+		         ui->label_98->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
     }
 }
@@ -2064,28 +2080,28 @@ void MainWindow::warn_sensor_set_pipe(int t)
     switch(t)
     {
         case 91 :
-                ui->label_91->setMovie(gif_sensor);
+		        ui->label_91->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
         case 92 :
-                 ui->label_92->setMovie(gif_sensor);
+		         ui->label_92->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 93 :
-                 ui->label_93->setMovie(gif_sensor);
+		         ui->label_93->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 94 :
-                 ui->label_94->setMovie(gif_sensor);
+		         ui->label_94->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 95 :
-                 ui->label_95->setMovie(gif_sensor);
+		         ui->label_95->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 96 :
-                 ui->label_96->setMovie(gif_sensor);
+		         ui->label_96->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 97 :
-                 ui->label_97->setMovie(gif_sensor);
+		         ui->label_97->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 98 :
-                 ui->label_98->setMovie(gif_sensor);
+		         ui->label_98->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
     }
 }
@@ -2094,28 +2110,28 @@ void MainWindow::warn_uart_set_pipe(int t)
     switch(t)
     {
         case 91 :
-                ui->label_91->setMovie(gif_uart);
+		        ui->label_91->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 break;
         case 92 :
-                 ui->label_92->setMovie(gif_uart);
+		         ui->label_92->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 93 :
-                 ui->label_93->setMovie(gif_uart);
+		         ui->label_93->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 94 :
-                 ui->label_94->setMovie(gif_uart);
+		         ui->label_94->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 95 :
-                 ui->label_95->setMovie(gif_uart);
+		         ui->label_95->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 96 :
-                 ui->label_96->setMovie(gif_uart);
+		         ui->label_96->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 97 :
-                 ui->label_97->setMovie(gif_uart);
+		         ui->label_97->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 98 :
-                 ui->label_98->setMovie(gif_uart);
+		         ui->label_98->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
     }
 }
@@ -2124,28 +2140,28 @@ void MainWindow::right_set_pipe(int t)
     switch(t)
     {
         case 91 :
-                ui->label_91->setMovie(gif_right);
+		        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
                 break;
         case 92 :
-                 ui->label_92->setMovie(gif_right);
+		         ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 93 :
-                 ui->label_93->setMovie(gif_right);
+		         ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 94 :
-                 ui->label_94->setMovie(gif_right);
+		         ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 95 :
-                 ui->label_95->setMovie(gif_right);
+		         ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 96 :
-                 ui->label_96->setMovie(gif_right);
+		         ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 97 :
-                 ui->label_97->setMovie(gif_right);
+		         ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 98 :
-                 ui->label_98->setMovie(gif_right);
+		         ui->label_98->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
     }
 }
@@ -2155,28 +2171,28 @@ void MainWindow::warn_oil_set_dispener(int t)
     switch(t)
     {
         case 81 :
-                 ui->label_81->setMovie(gif_oil);
+		         ui->label_81->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 82 :
-                 ui->label_82->setMovie(gif_oil);
+		         ui->label_82->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 83 :
-                 ui->label_83->setMovie(gif_oil);
+		         ui->label_83->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 84 :
-                 ui->label_84->setMovie(gif_oil);
+		         ui->label_84->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 85 :
-                 ui->label_85->setMovie(gif_oil);
+		         ui->label_85->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 86 :
-                 ui->label_86->setMovie(gif_oil);
+		         ui->label_86->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 87 :
-                 ui->label_87->setMovie(gif_oil);
+		         ui->label_87->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 88 :
-                 ui->label_88->setMovie(gif_oil);
+		         ui->label_88->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
     }
 }
@@ -2185,28 +2201,28 @@ void MainWindow::warn_water_set_dispener(int t)
     switch(t)
     {
         case 81 :
-                 ui->label_81->setMovie(gif_water);
+		         ui->label_81->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 82 :
-                 ui->label_82->setMovie(gif_water);
+		         ui->label_82->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 83 :
-                 ui->label_83->setMovie(gif_water);
+		         ui->label_83->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 84 :
-                 ui->label_84->setMovie(gif_water);
+		         ui->label_84->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 85 :
-                 ui->label_85->setMovie(gif_water);
+		         ui->label_85->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 86 :
-                 ui->label_86->setMovie(gif_water);
+		         ui->label_86->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 87 :
-                 ui->label_87->setMovie(gif_water);
+		         ui->label_87->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 88 :
-                 ui->label_88->setMovie(gif_water);
+		         ui->label_88->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
     }
 }
@@ -2215,28 +2231,28 @@ void MainWindow::warn_sensor_set_dispener(int t)
     switch(t)
     {
         case 81 :
-                 ui->label_81->setMovie(gif_sensor);
+		         ui->label_81->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 82 :
-                 ui->label_82->setMovie(gif_sensor);
+		         ui->label_82->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 83 :
-                 ui->label_83->setMovie(gif_sensor);
+		         ui->label_83->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 84 :
-                 ui->label_84->setMovie(gif_sensor);
+		         ui->label_84->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 85 :
-                 ui->label_85->setMovie(gif_sensor);
+		         ui->label_85->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 86 :
-                 ui->label_86->setMovie(gif_sensor);
+		         ui->label_86->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 87 :
-                 ui->label_87->setMovie(gif_sensor);
+		         ui->label_87->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
         case 88 :
-                 ui->label_88->setMovie(gif_sensor);
+		         ui->label_88->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  break;
     }
 }
@@ -2245,28 +2261,28 @@ void MainWindow::warn_uart_set_dispener(int t)
     switch(t)
     {
         case 81 :
-                 ui->label_81->setMovie(gif_uart);
+		         ui->label_81->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 82 :
-                 ui->label_82->setMovie(gif_uart);
+		         ui->label_82->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 83 :
-                 ui->label_83->setMovie(gif_uart);
+		         ui->label_83->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 84 :
-                 ui->label_84->setMovie(gif_uart);
+		         ui->label_84->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 85 :
-                 ui->label_85->setMovie(gif_uart);
+		         ui->label_85->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 86 :
-                 ui->label_86->setMovie(gif_uart);
+		         ui->label_86->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 87 :
-                 ui->label_87->setMovie(gif_uart);
+		         ui->label_87->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
         case 88 :
-                 ui->label_88->setMovie(gif_uart);
+		         ui->label_88->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                  break;
     }
 }
@@ -2275,28 +2291,28 @@ void MainWindow::right_set_dispener(int t)
     switch(t)
     {
         case 81 :
-                 ui->label_81->setMovie(gif_right);
+		         ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 82 :
-                 ui->label_82->setMovie(gif_right);
+		         ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 83 :
-                 ui->label_83->setMovie(gif_right);
+		         ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 84 :
-                 ui->label_84->setMovie(gif_right);
+		         ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 85 :
-                 ui->label_85->setMovie(gif_right);
+		         ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 86 :
-                 ui->label_86->setMovie(gif_right);
+		         ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 87 :
-                 ui->label_87->setMovie(gif_right);
+		         ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
         case 88 :
-                 ui->label_88->setMovie(gif_right);
+		         ui->label_88->setStyleSheet("border-image: url(:/picture/right.png);");
                  break;
     }
 }
@@ -2306,28 +2322,28 @@ void MainWindow::warn_oil_set_tank(int t)
     switch(t)
     {
         case 71 :
-                 ui->label_71->setMovie(gif_oil);
+		         ui->label_71->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 72 :
-                 ui->label_72->setMovie(gif_oil);
+		         ui->label_72->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 73 :
-                 ui->label_73->setMovie(gif_oil);
+		         ui->label_73->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 74 :
-                 ui->label_74->setMovie(gif_oil);
+		         ui->label_74->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 75 :
-                 ui->label_75->setMovie(gif_oil);
+		         ui->label_75->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 76 :
-                 ui->label_76->setMovie(gif_oil);
+		         ui->label_76->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 77 :
-                 ui->label_77->setMovie(gif_oil);
+		         ui->label_77->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
         case 78 :
-                 ui->label_78->setMovie(gif_oil);
+		         ui->label_78->setStyleSheet("border-image: url(:/picture/oilwro.png);");
                  break;
     }
 }
@@ -2336,28 +2352,28 @@ void MainWindow::warn_water_set_tank(int t)
     switch(t)
     {
         case 71 :
-                 ui->label_71->setMovie(gif_water);
+		         ui->label_71->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 72 :
-                 ui->label_72->setMovie(gif_water);
+		         ui->label_72->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 73 :
-                 ui->label_73->setMovie(gif_water);
+		         ui->label_73->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 74 :
-                 ui->label_74->setMovie(gif_water);
+		         ui->label_74->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 75 :
-                 ui->label_75->setMovie(gif_water);
+		         ui->label_75->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 76 :
-                 ui->label_76->setMovie(gif_water);
+		         ui->label_76->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 77 :
-                 ui->label_77->setMovie(gif_water);
+		         ui->label_77->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
         case 78 :
-                 ui->label_78->setMovie(gif_water);
+		         ui->label_78->setStyleSheet("border-image: url(:/picture/waterwro.png);");
                  break;
     }
 }
@@ -2366,28 +2382,28 @@ void MainWindow::warn_high_set_tank(int t)
     switch(t)
     {
         case 71 :
-                 ui->label_71->setMovie(gif_high);
+		         ui->label_71->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
         case 72 :
-                 ui->label_72->setMovie(gif_high);
+		         ui->label_72->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
         case 73 :
-                 ui->label_73->setMovie(gif_high);
+		         ui->label_73->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
         case 74 :
-                 ui->label_74->setMovie(gif_high);
+		         ui->label_74->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
         case 75 :
-                 ui->label_75->setMovie(gif_high);
+		         ui->label_75->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
         case 76 :
-                 ui->label_76->setMovie(gif_high);
+		         ui->label_76->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
         case 77 :
-                 ui->label_77->setMovie(gif_high);
+		         ui->label_77->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
         case 78 :
-                 ui->label_78->setMovie(gif_high);
+		         ui->label_78->setStyleSheet("border-image: url(:/picture/highwro.png);");
                  break;
     }
 }
@@ -2396,28 +2412,28 @@ void MainWindow::warn_low_set_tank(int t)
     switch(t)
     {
         case 71 :
-                 ui->label_71->setMovie(gif_low);
+		         ui->label_71->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
         case 72 :
-                 ui->label_72->setMovie(gif_low);
+		         ui->label_72->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
         case 73 :
-                 ui->label_73->setMovie(gif_low);
+		         ui->label_73->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
         case 74 :
-                 ui->label_74->setMovie(gif_low);
+		         ui->label_74->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
         case 75 :
-                 ui->label_75->setMovie(gif_low);
+		         ui->label_75->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
         case 76 :
-                 ui->label_76->setMovie(gif_low);
+		         ui->label_76->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
         case 77 :
-                 ui->label_77->setMovie(gif_low);
+		         ui->label_77->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
         case 78 :
-                 ui->label_78->setMovie(gif_low);
+		         ui->label_78->setStyleSheet("border-image: url(:/picture/lowwro.png);");
                  break;
     }
 }
@@ -2426,28 +2442,28 @@ void MainWindow::warn_pre_set_tank(int t)
     switch(t)
     {
         case 71 :
-                 ui->label_71->setMovie(gif_presurepre_pre);
+		         ui->label_71->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
         case 72 :
-                 ui->label_72->setMovie(gif_presurepre_pre);
+		         ui->label_72->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
         case 73 :
-                 ui->label_73->setMovie(gif_presurepre_pre);
+		         ui->label_73->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
         case 74 :
-                 ui->label_74->setMovie(gif_presurepre_pre);
+		         ui->label_74->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
         case 75 :
-                 ui->label_75->setMovie(gif_presurepre_pre);
+		         ui->label_75->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
         case 76 :
-                 ui->label_76->setMovie(gif_presurepre_pre);
+		         ui->label_76->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
         case 77 :
-                 ui->label_77->setMovie(gif_presurepre_pre);
+		         ui->label_77->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
         case 78 :
-                 ui->label_78->setMovie(gif_presurepre_pre);
+		         ui->label_78->setStyleSheet("border-image: url(:/picture/pressurepre.png);");
                  break;
     }
 }
@@ -2456,28 +2472,28 @@ void MainWindow::warn_warn_set_tank(int t)
     switch(t)
     {
         case 71 :
-                 ui->label_71->setMovie(gif_presurewarn_pre);
+		         ui->label_71->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
         case 72 :
-                 ui->label_72->setMovie(gif_presurewarn_pre);
+		         ui->label_72->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
         case 73 :
-                 ui->label_73->setMovie(gif_presurewarn_pre);
+		         ui->label_73->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
         case 74 :
-                 ui->label_74->setMovie(gif_presurewarn_pre);
+		         ui->label_74->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
         case 75 :
-                 ui->label_75->setMovie(gif_presurewarn_pre);
+		         ui->label_75->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
         case 76 :
-                 ui->label_76->setMovie(gif_presurewarn_pre);
+		         ui->label_76->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
         case 77 :
-                 ui->label_77->setMovie(gif_presurewarn_pre);
+		         ui->label_77->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
         case 78 :
-                 ui->label_78->setMovie(gif_presurewarn_pre);
+		         ui->label_78->setStyleSheet("border-image: url(:/picture/pressurewarn.png);");
                  break;
     }
 }
@@ -2489,81 +2505,81 @@ void MainWindow::warn_sensor_set_tank(int t)
         case 71 :
                  if(Test_Method == 1)
                  {
-                     ui->label_71->setMovie(gif_sensor_pre);
+					 ui->label_71->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                  }
                  else
                  {
-                     ui->label_71->setMovie(gif_sensor);
-                 }
+					 ui->label_71->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
+				 }
                  break;
         case 72 :
                 if(Test_Method == 1)
                 {
-                    ui->label_72->setMovie(gif_sensor_pre);
+					ui->label_72->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 else
                 {
-                    ui->label_72->setMovie(gif_sensor);
+					ui->label_72->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 break;
         case 73 :
                 if(Test_Method == 1)
                 {
-                    ui->label_73->setMovie(gif_sensor_pre);
+					ui->label_73->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 else
                 {
-                    ui->label_73->setMovie(gif_sensor);
+					ui->label_73->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 break;
         case 74 :
                 if(Test_Method == 1)
                 {
-                    ui->label_74->setMovie(gif_sensor_pre);
+					ui->label_74->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 else
                 {
-                    ui->label_74->setMovie(gif_sensor);
+					ui->label_74->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 break;
         case 75 :
                 if(Test_Method == 1)
                 {
-                    ui->label_75->setMovie(gif_sensor_pre);
+					ui->label_75->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 else
                 {
-                    ui->label_75->setMovie(gif_sensor);
+					ui->label_75->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 break;
         case 76 :
                 if(Test_Method == 1)
                 {
-                    ui->label_76->setMovie(gif_sensor_pre);
+					ui->label_76->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 else
                 {
-                    ui->label_76->setMovie(gif_sensor);
+					ui->label_76->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 break;
         case 77 :
                 if(Test_Method == 1)
                 {
-                    ui->label_77->setMovie(gif_sensor_pre);
+					ui->label_77->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
         else
                 {
-                    ui->label_77->setMovie(gif_sensor);
+					ui->label_77->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 break;
         case 78 :
                 if(Test_Method == 1)
                 {
-                    ui->label_78->setMovie(gif_sensor_pre);
+					ui->label_78->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 else
                 {
-                    ui->label_78->setMovie(gif_sensor);
+					ui->label_78->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 }
                 break;
     }
@@ -2576,81 +2592,81 @@ void MainWindow::warn_uart_set_tank(int t)
         case 71 :
                 if(Test_Method == 1)
                 {
-                    ui->label_71->setMovie(gif_uart_pre);
+					ui->label_71->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_71->setMovie(gif_uart);
+					ui->label_71->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 break;
         case 72 :
                 if(Test_Method == 1)
                 {
-                    ui->label_72->setMovie(gif_uart_pre);
+					ui->label_72->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_72->setMovie(gif_uart);
+					ui->label_72->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 break;
         case 73 :
                 if(Test_Method == 1)
                 {
-                    ui->label_73->setMovie(gif_uart_pre);
+					ui->label_73->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_73->setMovie(gif_uart);
+					ui->label_73->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                }
                 break;
         case 74 :
                 if(Test_Method == 1)
                 {
-                    ui->label_74->setMovie(gif_uart_pre);
+					ui->label_74->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_74->setMovie(gif_uart);
+					ui->label_74->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 break;
          case 75 :
                 if(Test_Method == 1)
                 {
-                    ui->label_75->setMovie(gif_uart_pre);
+					ui->label_75->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_75->setMovie(gif_uart);
+					ui->label_75->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 break;
         case 76 :
                 if(Test_Method == 1)
                 {
-                    ui->label_76->setMovie(gif_uart_pre);
+					ui->label_76->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_76->setMovie(gif_uart);
+					ui->label_76->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 break;
                 case 77 :
         if(Test_Method == 1)
                 {
-                    ui->label_77->setMovie(gif_uart_pre);
+			        ui->label_77->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_77->setMovie(gif_uart);
+			        ui->label_77->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 break;
         case 78 :
                 if(Test_Method == 1)
                 {
-                    ui->label_78->setMovie(gif_uart_pre);
+					ui->label_78->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 else
                 {
-                    ui->label_78->setMovie(gif_uart);
+					ui->label_78->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 }
                 break;
     }
@@ -2663,81 +2679,81 @@ void MainWindow::right_set_tank(int t)
         case 71 :
                 if(Test_Method == 1)
                 {
-                     ui->label_71->setMovie(gif_right_pre);
+					 ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_71->setMovie(gif_right);
+					ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
         case 72 :
                 if(Test_Method == 1)
                 {
-                     ui->label_72->setMovie(gif_right_pre);
+					 ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_72->setMovie(gif_right);
+					ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
         case 73 :
                 if(Test_Method == 1)
                 {
-                     ui->label_73->setMovie(gif_right_pre);
+					 ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_73->setMovie(gif_right);
+					ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
         case 74 :
                 if(Test_Method == 1)
                 {
-                     ui->label_74->setMovie(gif_right_pre);
+					 ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_74->setMovie(gif_right);
+					ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
         case 75 :
                 if(Test_Method == 1)
                 {
-                     ui->label_75->setMovie(gif_right_pre);
+					 ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_75->setMovie(gif_right);
+					ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
         case 76 :
                 if(Test_Method == 1)
                 {
-                     ui->label_76->setMovie(gif_right_pre);
+					 ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_76->setMovie(gif_right);
+					ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
         case 77 :
                 if(Test_Method == 1)
                 {
-                     ui->label_77->setMovie(gif_right_pre);
+					 ui->label_77->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_77->setMovie(gif_right);
+					ui->label_77->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
         case 78 :
                 if(Test_Method == 1)
                 {
-                     ui->label_78->setMovie(gif_right_pre);
+					 ui->label_78->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                 else
                 {
-                    ui->label_78->setMovie(gif_right);
+					ui->label_78->setStyleSheet("border-image: url(:/picture/right.png);");
                 }
                  break;
     }
@@ -2805,110 +2821,110 @@ void MainWindow::amount_basin_setted()       //basin
     if(count_basin == 0)                                                                //if(ui->comboBox->currentText()=="1")初始化可用
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_nosensor);
-        ui->label_2->setMovie(gif_nosensor);
-        ui->label_3->setMovie(gif_nosensor);
-        ui->label_4->setMovie(gif_nosensor);
-        ui->label_5->setMovie(gif_nosensor);
-        ui->label_6->setMovie(gif_nosensor);
-        ui->label_7->setMovie(gif_nosensor);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 1)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_nosensor);
-        ui->label_3->setMovie(gif_nosensor);
-        ui->label_4->setMovie(gif_nosensor);
-        ui->label_5->setMovie(gif_nosensor);
-        ui->label_6->setMovie(gif_nosensor);
-        ui->label_7->setMovie(gif_nosensor);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 2)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_right);
-        ui->label_3->setMovie(gif_nosensor);
-        ui->label_4->setMovie(gif_nosensor);
-        ui->label_5->setMovie(gif_nosensor);
-        ui->label_6->setMovie(gif_nosensor);
-        ui->label_7->setMovie(gif_nosensor);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 3)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_right);
-        ui->label_3->setMovie(gif_right);
-        ui->label_4->setMovie(gif_nosensor);
-        ui->label_5->setMovie(gif_nosensor);
-        ui->label_6->setMovie(gif_nosensor);
-        ui->label_7->setMovie(gif_nosensor);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 4)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_right);
-        ui->label_3->setMovie(gif_right);
-        ui->label_4->setMovie(gif_right);
-        ui->label_5->setMovie(gif_nosensor);
-        ui->label_6->setMovie(gif_nosensor);
-        ui->label_7->setMovie(gif_nosensor);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 5)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_right);
-        ui->label_3->setMovie(gif_right);
-        ui->label_4->setMovie(gif_right);
-        ui->label_5->setMovie(gif_right);
-        ui->label_6->setMovie(gif_nosensor);
-        ui->label_7->setMovie(gif_nosensor);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 6)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_right);
-        ui->label_3->setMovie(gif_right);
-        ui->label_4->setMovie(gif_right);
-        ui->label_5->setMovie(gif_right);
-        ui->label_6->setMovie(gif_right);
-        ui->label_7->setMovie(gif_nosensor);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 7)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_right);
-        ui->label_3->setMovie(gif_right);
-        ui->label_4->setMovie(gif_right);
-        ui->label_5->setMovie(gif_right);
-        ui->label_6->setMovie(gif_right);
-        ui->label_7->setMovie(gif_right);
-        ui->label_8->setMovie(gif_nosensor);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_basin == 8)
     {
         config_SensorAmountChanged();
-        ui->label->setMovie(gif_right);
-        ui->label_2->setMovie(gif_right);
-        ui->label_3->setMovie(gif_right);
-        ui->label_4->setMovie(gif_right);
-        ui->label_5->setMovie(gif_right);
-        ui->label_6->setMovie(gif_right);
-        ui->label_7->setMovie(gif_right);
-        ui->label_8->setMovie(gif_right);
+		ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
     }
 
 }
@@ -2919,110 +2935,110 @@ void MainWindow::amount_pipe_setted()        //pipe
     if(count_pipe == 0)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_nosensor);
-        ui->label_92->setMovie(gif_nosensor);
-        ui->label_93->setMovie(gif_nosensor);
-        ui->label_94->setMovie(gif_nosensor);
-        ui->label_95->setMovie(gif_nosensor);
-        ui->label_96->setMovie(gif_nosensor);
-        ui->label_97->setMovie(gif_nosensor);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 1)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_nosensor);
-        ui->label_93->setMovie(gif_nosensor);
-        ui->label_94->setMovie(gif_nosensor);
-        ui->label_95->setMovie(gif_nosensor);
-        ui->label_96->setMovie(gif_nosensor);
-        ui->label_97->setMovie(gif_nosensor);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 2)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_right);
-        ui->label_93->setMovie(gif_nosensor);
-        ui->label_94->setMovie(gif_nosensor);
-        ui->label_95->setMovie(gif_nosensor);
-        ui->label_96->setMovie(gif_nosensor);
-        ui->label_97->setMovie(gif_nosensor);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 3)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_right);
-        ui->label_93->setMovie(gif_right);
-        ui->label_94->setMovie(gif_nosensor);
-        ui->label_95->setMovie(gif_nosensor);
-        ui->label_96->setMovie(gif_nosensor);
-        ui->label_97->setMovie(gif_nosensor);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 4)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_right);
-        ui->label_93->setMovie(gif_right);
-        ui->label_94->setMovie(gif_right);
-        ui->label_95->setMovie(gif_nosensor);
-        ui->label_96->setMovie(gif_nosensor);
-        ui->label_97->setMovie(gif_nosensor);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 5)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_right);
-        ui->label_93->setMovie(gif_right);
-        ui->label_94->setMovie(gif_right);
-        ui->label_95->setMovie(gif_right);
-        ui->label_96->setMovie(gif_nosensor);
-        ui->label_97->setMovie(gif_nosensor);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 6)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_right);
-        ui->label_93->setMovie(gif_right);
-        ui->label_94->setMovie(gif_right);
-        ui->label_95->setMovie(gif_right);
-        ui->label_96->setMovie(gif_right);
-        ui->label_97->setMovie(gif_nosensor);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 7)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_right);
-        ui->label_93->setMovie(gif_right);
-        ui->label_94->setMovie(gif_right);
-        ui->label_95->setMovie(gif_right);
-        ui->label_96->setMovie(gif_right);
-        ui->label_97->setMovie(gif_right);
-        ui->label_98->setMovie(gif_nosensor);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_pipe == 8)
     {
         config_SensorAmountChanged();
-        ui->label_91->setMovie(gif_right);
-        ui->label_92->setMovie(gif_right);
-        ui->label_93->setMovie(gif_right);
-        ui->label_94->setMovie(gif_right);
-        ui->label_95->setMovie(gif_right);
-        ui->label_96->setMovie(gif_right);
-        ui->label_97->setMovie(gif_right);
-        ui->label_98->setMovie(gif_right);
+		ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_98->setStyleSheet("border-image: url(:/picture/right.png);");
     }
 }
 
@@ -3032,110 +3048,110 @@ void MainWindow::amount_dispener_setted()        //dispener
     if(count_dispener == 0)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_nosensor);
-        ui->label_82->setMovie(gif_nosensor);
-        ui->label_83->setMovie(gif_nosensor);
-        ui->label_84->setMovie(gif_nosensor);
-        ui->label_85->setMovie(gif_nosensor);
-        ui->label_86->setMovie(gif_nosensor);
-        ui->label_87->setMovie(gif_nosensor);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 1)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_nosensor);
-        ui->label_83->setMovie(gif_nosensor);
-        ui->label_84->setMovie(gif_nosensor);
-        ui->label_85->setMovie(gif_nosensor);
-        ui->label_86->setMovie(gif_nosensor);
-        ui->label_87->setMovie(gif_nosensor);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 2)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_right);
-        ui->label_83->setMovie(gif_nosensor);
-        ui->label_84->setMovie(gif_nosensor);
-        ui->label_85->setMovie(gif_nosensor);
-        ui->label_86->setMovie(gif_nosensor);
-        ui->label_87->setMovie(gif_nosensor);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 3)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_right);
-        ui->label_83->setMovie(gif_right);
-        ui->label_84->setMovie(gif_nosensor);
-        ui->label_85->setMovie(gif_nosensor);
-        ui->label_86->setMovie(gif_nosensor);
-        ui->label_87->setMovie(gif_nosensor);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 4)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_right);
-        ui->label_83->setMovie(gif_right);
-        ui->label_84->setMovie(gif_right);
-        ui->label_85->setMovie(gif_nosensor);
-        ui->label_86->setMovie(gif_nosensor);
-        ui->label_87->setMovie(gif_nosensor);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 5)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_right);
-        ui->label_83->setMovie(gif_right);
-        ui->label_84->setMovie(gif_right);
-        ui->label_85->setMovie(gif_right);
-        ui->label_86->setMovie(gif_nosensor);;
-        ui->label_87->setMovie(gif_nosensor);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");;
+		ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 6)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_right);
-        ui->label_83->setMovie(gif_right);
-        ui->label_84->setMovie(gif_right);
-        ui->label_85->setMovie(gif_right);
-        ui->label_86->setMovie(gif_right);
-        ui->label_87->setMovie(gif_nosensor);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 7)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_right);
-        ui->label_83->setMovie(gif_right);
-        ui->label_84->setMovie(gif_right);
-        ui->label_85->setMovie(gif_right);
-        ui->label_86->setMovie(gif_right);
-        ui->label_87->setMovie(gif_right);
-        ui->label_88->setMovie(gif_nosensor);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
     }
     if(count_dispener == 8)
     {
         config_SensorAmountChanged();
-        ui->label_81->setMovie(gif_right);
-        ui->label_82->setMovie(gif_right);
-        ui->label_83->setMovie(gif_right);
-        ui->label_84->setMovie(gif_right);
-        ui->label_85->setMovie(gif_right);
-        ui->label_86->setMovie(gif_right);
-        ui->label_87->setMovie(gif_right);
-        ui->label_88->setMovie(gif_right);
+		ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
+		ui->label_88->setStyleSheet("border-image: url(:/picture/right.png);");
     }
 }
 
@@ -3145,14 +3161,14 @@ void MainWindow::amount_tank_setted()
     if(count_tank == 0)
     {
         config_SensorAmountChanged();
-        ui->label_71->setMovie(gif_nosensor);
-        ui->label_72->setMovie(gif_nosensor);
-        ui->label_73->setMovie(gif_nosensor);
-        ui->label_74->setMovie(gif_nosensor);
-        ui->label_75->setMovie(gif_nosensor);
-        ui->label_76->setMovie(gif_nosensor);
-        ui->label_77->setMovie(gif_nosensor);
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_71->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_72->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_73->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_74->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_75->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_76->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_77->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
         ui->label_p1->hide();
         ui->label_p2->hide();
@@ -3169,7 +3185,7 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->show();
             ui->label_p2->hide();
@@ -3183,7 +3199,7 @@ void MainWindow::amount_tank_setted()
         }
         else
         {
-            ui->label_71->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->hide();
             ui->label_p2->hide();
@@ -3196,13 +3212,13 @@ void MainWindow::amount_tank_setted()
 
         }
 
-        ui->label_72->setMovie(gif_nosensor);
-        ui->label_73->setMovie(gif_nosensor);
-        ui->label_74->setMovie(gif_nosensor);
-        ui->label_75->setMovie(gif_nosensor);
-        ui->label_76->setMovie(gif_nosensor);
-        ui->label_77->setMovie(gif_nosensor);
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_72->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_73->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_74->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_75->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_76->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_77->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
 
     }
@@ -3212,8 +3228,8 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
-            ui->label_72->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->show();
             ui->label_p2->show();
@@ -3227,8 +3243,8 @@ void MainWindow::amount_tank_setted()
         }
        else
         {
-            ui->label_71->setMovie(gif_right);
-            ui->label_72->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->hide();
             ui->label_p2->hide();
@@ -3241,12 +3257,12 @@ void MainWindow::amount_tank_setted()
 
         }
 
-        ui->label_73->setMovie(gif_nosensor);
-        ui->label_74->setMovie(gif_nosensor);
-        ui->label_75->setMovie(gif_nosensor);
-        ui->label_76->setMovie(gif_nosensor);
-        ui->label_77->setMovie(gif_nosensor);
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_73->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_74->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_75->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_76->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_77->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
 
     }
@@ -3256,9 +3272,9 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
-            ui->label_72->setMovie(gif_right_pre);
-            ui->label_73->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->show();
             ui->label_p2->show();
@@ -3272,9 +3288,9 @@ void MainWindow::amount_tank_setted()
         }
        else
         {
-            ui->label_71->setMovie(gif_right);
-            ui->label_72->setMovie(gif_right);
-            ui->label_73->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->hide();
             ui->label_p2->hide();
@@ -3287,11 +3303,11 @@ void MainWindow::amount_tank_setted()
 
         }
 
-        ui->label_74->setMovie(gif_nosensor);
-        ui->label_75->setMovie(gif_nosensor);
-        ui->label_76->setMovie(gif_nosensor);
-        ui->label_77->setMovie(gif_nosensor);
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_74->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_75->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_76->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_77->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
     }
     if(count_tank == 4)
@@ -3300,10 +3316,10 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
-            ui->label_72->setMovie(gif_right_pre);
-            ui->label_73->setMovie(gif_right_pre);
-            ui->label_74->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->show();
             ui->label_p2->show();
@@ -3317,10 +3333,10 @@ void MainWindow::amount_tank_setted()
         }
        else
         {
-            ui->label_71->setMovie(gif_right);
-            ui->label_72->setMovie(gif_right);
-            ui->label_73->setMovie(gif_right);
-            ui->label_74->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
 
             ui->label_p1->hide();
             ui->label_p2->hide();
@@ -3333,10 +3349,10 @@ void MainWindow::amount_tank_setted()
 
         }
 
-        ui->label_75->setMovie(gif_nosensor);
-        ui->label_76->setMovie(gif_nosensor);
-        ui->label_77->setMovie(gif_nosensor);
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_75->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_76->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_77->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
     }
     if(count_tank == 5)
@@ -3345,11 +3361,11 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
-            ui->label_72->setMovie(gif_right_pre);
-            ui->label_73->setMovie(gif_right_pre);
-            ui->label_74->setMovie(gif_right_pre);
-            ui->label_75->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->show();
             ui->label_p2->show();
             ui->label_p3->show();
@@ -3362,11 +3378,11 @@ void MainWindow::amount_tank_setted()
         }
        else
         {
-            ui->label_71->setMovie(gif_right);
-            ui->label_72->setMovie(gif_right);
-            ui->label_73->setMovie(gif_right);
-            ui->label_74->setMovie(gif_right);
-            ui->label_75->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->hide();
             ui->label_p2->hide();
             ui->label_p3->hide();
@@ -3378,9 +3394,9 @@ void MainWindow::amount_tank_setted()
 
         }
 
-        ui->label_76->setMovie(gif_nosensor);
-        ui->label_77->setMovie(gif_nosensor);
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_76->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_77->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
 
     }
@@ -3390,12 +3406,12 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
-            ui->label_72->setMovie(gif_right_pre);
-            ui->label_73->setMovie(gif_right_pre);
-            ui->label_74->setMovie(gif_right_pre);
-            ui->label_75->setMovie(gif_right_pre);
-            ui->label_76->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->show();
             ui->label_p2->show();
             ui->label_p3->show();
@@ -3408,12 +3424,12 @@ void MainWindow::amount_tank_setted()
         }
        else
         {
-            ui->label_71->setMovie(gif_right);
-            ui->label_72->setMovie(gif_right);
-            ui->label_73->setMovie(gif_right);
-            ui->label_74->setMovie(gif_right);
-            ui->label_75->setMovie(gif_right);
-            ui->label_76->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->hide();
             ui->label_p2->hide();
             ui->label_p3->hide();
@@ -3426,8 +3442,8 @@ void MainWindow::amount_tank_setted()
         }
 
 
-        ui->label_77->setMovie(gif_nosensor);
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_77->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
 
     }
@@ -3437,13 +3453,13 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
-            ui->label_72->setMovie(gif_right_pre);
-            ui->label_73->setMovie(gif_right_pre);
-            ui->label_74->setMovie(gif_right_pre);
-            ui->label_75->setMovie(gif_right_pre);
-            ui->label_76->setMovie(gif_right_pre);
-            ui->label_77->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_77->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->show();
             ui->label_p2->show();
             ui->label_p3->show();
@@ -3455,13 +3471,13 @@ void MainWindow::amount_tank_setted()
         }
        else
         {
-            ui->label_71->setMovie(gif_right);
-            ui->label_72->setMovie(gif_right);
-            ui->label_73->setMovie(gif_right);
-            ui->label_74->setMovie(gif_right);
-            ui->label_75->setMovie(gif_right);
-            ui->label_76->setMovie(gif_right);
-            ui->label_77->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_77->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->hide();
             ui->label_p2->hide();
             ui->label_p3->hide();
@@ -3473,7 +3489,7 @@ void MainWindow::amount_tank_setted()
 
         }
 
-        ui->label_78->setMovie(gif_nosensor);
+		ui->label_78->setStyleSheet("border-image: url(:/picture/nosensor.png);");
 
     }
 
@@ -3483,14 +3499,14 @@ void MainWindow::amount_tank_setted()
 
         if(Test_Method == 1)
         {
-            ui->label_71->setMovie(gif_right_pre);
-            ui->label_72->setMovie(gif_right_pre);
-            ui->label_73->setMovie(gif_right_pre);
-            ui->label_74->setMovie(gif_right_pre);
-            ui->label_75->setMovie(gif_right_pre);
-            ui->label_76->setMovie(gif_right_pre);
-            ui->label_77->setMovie(gif_right_pre);
-            ui->label_78->setMovie(gif_right_pre);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_77->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_78->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->show();
             ui->label_p2->show();
             ui->label_p3->show();
@@ -3503,14 +3519,14 @@ void MainWindow::amount_tank_setted()
         }
        else
         {
-            ui->label_71->setMovie(gif_right);
-            ui->label_72->setMovie(gif_right);
-            ui->label_73->setMovie(gif_right);
-            ui->label_74->setMovie(gif_right);
-            ui->label_75->setMovie(gif_right);
-            ui->label_76->setMovie(gif_right);
-            ui->label_77->setMovie(gif_right);
-            ui->label_78->setMovie(gif_right);
+			ui->label_71->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_72->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_73->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_74->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_75->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_76->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_77->setStyleSheet("border-image: url(:/picture/right.png);");
+			ui->label_78->setStyleSheet("border-image: url(:/picture/right.png);");
             ui->label_p1->hide();
             ui->label_p2->hide();
             ui->label_p3->hide();
@@ -5659,6 +5675,7 @@ void MainWindow::set_amount_oilgas_gun()
     ui->label_gun_12_8->setVisible(flag_enable[11][7]);
     ui->label_gun_12_8u->setVisible(flag_enable[11][7]);
 
+	//油枪编号映射
 	ui->label_map_0->setText((Mapping_Show[0]));
 	if(Mapping_Show[0] == ""){ui->label_map_0->setText("-1");}
 	ui->label_map_1->setText((Mapping_Show[1]));
@@ -5853,7 +5870,212 @@ void MainWindow::set_amount_oilgas_gun()
 	ui->label_map_95->setText((Mapping_Show[95]));
 	if(Mapping_Show[95] == ""){ui->label_map_95->setText("-8");}
 
+	//油品号映射
+	ui->label_OilNo_1->setText((Mapping_OilNo[0]));
+	if(Mapping_OilNo[0] == ""){ui->label_OilNo_1->setText("");}
+	ui->label_OilNo_2->setText((Mapping_OilNo[1]));
+	if(Mapping_OilNo[1] == ""){ui->label_OilNo_2->setText("");}
+	ui->label_OilNo_3->setText((Mapping_OilNo[2]));
+	if(Mapping_OilNo[2] == ""){ui->label_OilNo_3->setText("");}
+	ui->label_OilNo_4->setText((Mapping_OilNo[3]));
+	if(Mapping_OilNo[3] == ""){ui->label_OilNo_4->setText("");}
+	ui->label_OilNo_5->setText((Mapping_OilNo[4]));
+	if(Mapping_OilNo[4] == ""){ui->label_OilNo_5->setText("");}
+	ui->label_OilNo_6->setText((Mapping_OilNo[5]));
+	if(Mapping_OilNo[5] == ""){ui->label_OilNo_6->setText("");}
+	ui->label_OilNo_7->setText((Mapping_OilNo[6]));
+	if(Mapping_OilNo[6] == ""){ui->label_OilNo_7->setText("");}
+	ui->label_OilNo_8->setText((Mapping_OilNo[7]));
+	if(Mapping_OilNo[7] == ""){ui->label_OilNo_8->setText("");}
 
+	ui->label_OilNo_9->setText((Mapping_OilNo[8]));
+	if(Mapping_OilNo[8] == ""){ui->label_OilNo_9->setText("");}
+	ui->label_OilNo_10->setText((Mapping_OilNo[9]));
+	if(Mapping_OilNo[9] == ""){ui->label_OilNo_10->setText("");}
+	ui->label_OilNo_11->setText((Mapping_OilNo[10]));
+	if(Mapping_OilNo[10] == ""){ui->label_OilNo_11->setText("");}
+	ui->label_OilNo_12->setText((Mapping_OilNo[11]));
+	if(Mapping_OilNo[11] == ""){ui->label_OilNo_12->setText("");}
+	ui->label_OilNo_13->setText((Mapping_OilNo[12]));
+	if(Mapping_OilNo[12] == ""){ui->label_OilNo_13->setText("");}
+	ui->label_OilNo_14->setText((Mapping_OilNo[13]));
+	if(Mapping_OilNo[13] == ""){ui->label_OilNo_14->setText("");}
+	ui->label_OilNo_15->setText((Mapping_OilNo[14]));
+	if(Mapping_OilNo[14] == ""){ui->label_OilNo_15->setText("");}
+	ui->label_OilNo_16->setText((Mapping_OilNo[15]));
+	if(Mapping_OilNo[15] == ""){ui->label_OilNo_16->setText("");}
+
+	ui->label_OilNo_17->setText((Mapping_OilNo[16]));
+	if(Mapping_OilNo[16] == ""){ui->label_OilNo_17->setText("");}
+	ui->label_OilNo_18->setText((Mapping_OilNo[17]));
+	if(Mapping_OilNo[17] == ""){ui->label_OilNo_18->setText("");}
+	ui->label_OilNo_19->setText((Mapping_OilNo[18]));
+	if(Mapping_OilNo[18] == ""){ui->label_OilNo_19->setText("");}
+	ui->label_OilNo_20->setText((Mapping_OilNo[19]));
+	if(Mapping_OilNo[19] == ""){ui->label_OilNo_20->setText("");}
+	ui->label_OilNo_21->setText((Mapping_OilNo[20]));
+	if(Mapping_OilNo[20] == ""){ui->label_OilNo_21->setText("");}
+	ui->label_OilNo_22->setText((Mapping_OilNo[21]));
+	if(Mapping_OilNo[21] == ""){ui->label_OilNo_22->setText("");}
+	ui->label_OilNo_23->setText((Mapping_OilNo[22]));
+	if(Mapping_OilNo[22] == ""){ui->label_OilNo_23->setText("");}
+	ui->label_OilNo_24->setText((Mapping_OilNo[23]));
+	if(Mapping_OilNo[23] == ""){ui->label_OilNo_24->setText("");}
+
+	ui->label_OilNo_25->setText((Mapping_OilNo[24]));
+	if(Mapping_OilNo[24] == ""){ui->label_OilNo_25->setText("");}
+	ui->label_OilNo_26->setText((Mapping_OilNo[25]));
+	if(Mapping_OilNo[25] == ""){ui->label_OilNo_26->setText("");}
+	ui->label_OilNo_27->setText((Mapping_OilNo[26]));
+	if(Mapping_OilNo[26] == ""){ui->label_OilNo_27->setText("");}
+	ui->label_OilNo_28->setText((Mapping_OilNo[27]));
+	if(Mapping_OilNo[27] == ""){ui->label_OilNo_28->setText("");}
+	ui->label_OilNo_29->setText((Mapping_OilNo[28]));
+	if(Mapping_OilNo[28] == ""){ui->label_OilNo_29->setText("");}
+	ui->label_OilNo_30->setText((Mapping_OilNo[29]));
+	if(Mapping_OilNo[29] == ""){ui->label_OilNo_30->setText("");}
+	ui->label_OilNo_31->setText((Mapping_OilNo[30]));
+	if(Mapping_OilNo[30] == ""){ui->label_OilNo_31->setText("");}
+	ui->label_OilNo_32->setText((Mapping_OilNo[31]));
+	if(Mapping_OilNo[31] == ""){ui->label_OilNo_32->setText("");}
+
+	ui->label_OilNo_33->setText((Mapping_OilNo[32]));
+	if(Mapping_OilNo[32] == ""){ui->label_OilNo_33->setText("");}
+	ui->label_OilNo_34->setText((Mapping_OilNo[33]));
+	if(Mapping_OilNo[33] == ""){ui->label_OilNo_34->setText("");}
+	ui->label_OilNo_35->setText((Mapping_OilNo[34]));
+	if(Mapping_OilNo[34] == ""){ui->label_OilNo_35->setText("");}
+	ui->label_OilNo_36->setText((Mapping_OilNo[35]));
+	if(Mapping_OilNo[35] == ""){ui->label_OilNo_36->setText("");}
+	ui->label_OilNo_37->setText((Mapping_OilNo[36]));
+	if(Mapping_OilNo[36] == ""){ui->label_OilNo_37->setText("");}
+	ui->label_OilNo_38->setText((Mapping_OilNo[37]));
+	if(Mapping_OilNo[37] == ""){ui->label_OilNo_38->setText("");}
+	ui->label_OilNo_39->setText((Mapping_OilNo[38]));
+	if(Mapping_OilNo[38] == ""){ui->label_OilNo_39->setText("");}
+	ui->label_OilNo_40->setText((Mapping_OilNo[39]));
+	if(Mapping_OilNo[39] == ""){ui->label_OilNo_40->setText("");}
+
+	ui->label_OilNo_41->setText((Mapping_OilNo[40]));
+	if(Mapping_OilNo[40] == ""){ui->label_OilNo_41->setText("");}
+	ui->label_OilNo_42->setText((Mapping_OilNo[41]));
+	if(Mapping_OilNo[41] == ""){ui->label_OilNo_42->setText("");}
+	ui->label_OilNo_43->setText((Mapping_OilNo[42]));
+	if(Mapping_OilNo[42] == ""){ui->label_OilNo_43->setText("");}
+	ui->label_OilNo_44->setText((Mapping_OilNo[43]));
+	if(Mapping_OilNo[43] == ""){ui->label_OilNo_44->setText("");}
+	ui->label_OilNo_45->setText((Mapping_OilNo[44]));
+	if(Mapping_OilNo[44] == ""){ui->label_OilNo_45->setText("");}
+	ui->label_OilNo_46->setText((Mapping_OilNo[45]));
+	if(Mapping_OilNo[45] == ""){ui->label_OilNo_46->setText("");}
+	ui->label_OilNo_47->setText((Mapping_OilNo[46]));
+	if(Mapping_OilNo[46] == ""){ui->label_OilNo_47->setText("");}
+	ui->label_OilNo_48->setText((Mapping_OilNo[47]));
+	if(Mapping_OilNo[47] == ""){ui->label_OilNo_48->setText("");}
+
+	ui->label_OilNo_49->setText((Mapping_OilNo[48]));
+	if(Mapping_OilNo[48] == ""){ui->label_OilNo_49->setText("");}
+	ui->label_OilNo_50->setText((Mapping_OilNo[49]));
+	if(Mapping_OilNo[49] == ""){ui->label_OilNo_50->setText("");}
+	ui->label_OilNo_51->setText((Mapping_OilNo[50]));
+	if(Mapping_OilNo[50] == ""){ui->label_OilNo_51->setText("");}
+	ui->label_OilNo_52->setText((Mapping_OilNo[51]));
+	if(Mapping_OilNo[51] == ""){ui->label_OilNo_52->setText("");}
+	ui->label_OilNo_53->setText((Mapping_OilNo[52]));
+	if(Mapping_OilNo[52] == ""){ui->label_OilNo_53->setText("");}
+	ui->label_OilNo_54->setText((Mapping_OilNo[53]));
+	if(Mapping_OilNo[53] == ""){ui->label_OilNo_54->setText("");}
+	ui->label_OilNo_55->setText((Mapping_OilNo[54]));
+	if(Mapping_OilNo[54] == ""){ui->label_OilNo_55->setText("");}
+	ui->label_OilNo_56->setText((Mapping_OilNo[55]));
+	if(Mapping_OilNo[55] == ""){ui->label_OilNo_56->setText("");}
+
+	ui->label_OilNo_57->setText((Mapping_OilNo[56]));
+	if(Mapping_OilNo[56] == ""){ui->label_OilNo_57->setText("");}
+	ui->label_OilNo_58->setText((Mapping_OilNo[57]));
+	if(Mapping_OilNo[57] == ""){ui->label_OilNo_58->setText("");}
+	ui->label_OilNo_59->setText((Mapping_OilNo[58]));
+	if(Mapping_OilNo[58] == ""){ui->label_OilNo_59->setText("");}
+	ui->label_OilNo_60->setText((Mapping_OilNo[59]));
+	if(Mapping_OilNo[59] == ""){ui->label_OilNo_60->setText("");}
+	ui->label_OilNo_61->setText((Mapping_OilNo[60]));
+	if(Mapping_OilNo[60] == ""){ui->label_OilNo_61->setText("");}
+	ui->label_OilNo_62->setText((Mapping_OilNo[61]));
+	if(Mapping_OilNo[61] == ""){ui->label_OilNo_62->setText("");}
+	ui->label_OilNo_63->setText((Mapping_OilNo[62]));
+	if(Mapping_OilNo[62] == ""){ui->label_OilNo_63->setText("");}
+	ui->label_OilNo_64->setText((Mapping_OilNo[63]));
+	if(Mapping_OilNo[63] == ""){ui->label_OilNo_64->setText("");}
+
+	ui->label_OilNo_65->setText((Mapping_OilNo[64]));
+	if(Mapping_OilNo[64] == ""){ui->label_OilNo_65->setText("");}
+	ui->label_OilNo_66->setText((Mapping_OilNo[65]));
+	if(Mapping_OilNo[65] == ""){ui->label_OilNo_66->setText("");}
+	ui->label_OilNo_67->setText((Mapping_OilNo[66]));
+	if(Mapping_OilNo[66] == ""){ui->label_OilNo_67->setText("");}
+	ui->label_OilNo_68->setText((Mapping_OilNo[67]));
+	if(Mapping_OilNo[67] == ""){ui->label_OilNo_68->setText("");}
+	ui->label_OilNo_69->setText((Mapping_OilNo[68]));
+	if(Mapping_OilNo[68] == ""){ui->label_OilNo_69->setText("");}
+	ui->label_OilNo_70->setText((Mapping_OilNo[69]));
+	if(Mapping_OilNo[69] == ""){ui->label_OilNo_70->setText("");}
+	ui->label_OilNo_71->setText((Mapping_OilNo[70]));
+	if(Mapping_OilNo[70] == ""){ui->label_OilNo_71->setText("");}
+	ui->label_OilNo_72->setText((Mapping_OilNo[71]));
+	if(Mapping_OilNo[71] == ""){ui->label_OilNo_72->setText("");}
+
+	ui->label_OilNo_73->setText((Mapping_OilNo[72]));
+	if(Mapping_OilNo[72] == ""){ui->label_OilNo_73->setText("");}
+	ui->label_OilNo_74->setText((Mapping_OilNo[73]));
+	if(Mapping_OilNo[73] == ""){ui->label_OilNo_74->setText("");}
+	ui->label_OilNo_75->setText((Mapping_OilNo[74]));
+	if(Mapping_OilNo[74] == ""){ui->label_OilNo_75->setText("");}
+	ui->label_OilNo_76->setText((Mapping_OilNo[75]));
+	if(Mapping_OilNo[75] == ""){ui->label_OilNo_76->setText("");}
+	ui->label_OilNo_77->setText((Mapping_OilNo[76]));
+	if(Mapping_OilNo[76] == ""){ui->label_OilNo_77->setText("");}
+	ui->label_OilNo_78->setText((Mapping_OilNo[77]));
+	if(Mapping_OilNo[77] == ""){ui->label_OilNo_78->setText("");}
+	ui->label_OilNo_79->setText((Mapping_OilNo[78]));
+	if(Mapping_OilNo[78] == ""){ui->label_OilNo_79->setText("");}
+	ui->label_OilNo_80->setText((Mapping_OilNo[79]));
+	if(Mapping_OilNo[79] == ""){ui->label_OilNo_80->setText("");}
+
+	ui->label_OilNo_81->setText((Mapping_OilNo[80]));
+	if(Mapping_OilNo[80] == ""){ui->label_OilNo_81->setText("");}
+	ui->label_OilNo_82->setText((Mapping_OilNo[81]));
+	if(Mapping_OilNo[81] == ""){ui->label_OilNo_82->setText("");}
+	ui->label_OilNo_83->setText((Mapping_OilNo[82]));
+	if(Mapping_OilNo[82] == ""){ui->label_OilNo_83->setText("");}
+	ui->label_OilNo_84->setText((Mapping_OilNo[83]));
+	if(Mapping_OilNo[83] == ""){ui->label_OilNo_84->setText("");}
+	ui->label_OilNo_85->setText((Mapping_OilNo[84]));
+	if(Mapping_OilNo[84] == ""){ui->label_OilNo_85->setText("");}
+	ui->label_OilNo_86->setText((Mapping_OilNo[85]));
+	if(Mapping_OilNo[85] == ""){ui->label_OilNo_86->setText("");}
+	ui->label_OilNo_87->setText((Mapping_OilNo[86]));
+	if(Mapping_OilNo[86] == ""){ui->label_OilNo_87->setText("");}
+	ui->label_OilNo_88->setText((Mapping_OilNo[87]));
+	if(Mapping_OilNo[87] == ""){ui->label_OilNo_88->setText("");}
+
+	ui->label_OilNo_89->setText((Mapping_OilNo[88]));
+	if(Mapping_OilNo[88] == ""){ui->label_OilNo_89->setText("");}
+	ui->label_OilNo_90->setText((Mapping_OilNo[89]));
+	if(Mapping_OilNo[89] == ""){ui->label_OilNo_90->setText("");}
+	ui->label_OilNo_91->setText((Mapping_OilNo[90]));
+	if(Mapping_OilNo[90] == ""){ui->label_OilNo_91->setText("");}
+	ui->label_OilNo_92->setText((Mapping_OilNo[91]));
+	if(Mapping_OilNo[91] == ""){ui->label_OilNo_92->setText("");}
+	ui->label_OilNo_93->setText((Mapping_OilNo[92]));
+	if(Mapping_OilNo[92] == ""){ui->label_OilNo_93->setText("");}
+	ui->label_OilNo_94->setText((Mapping_OilNo[93]));
+	if(Mapping_OilNo[93] == ""){ui->label_OilNo_94->setText("");}
+	ui->label_OilNo_95->setText((Mapping_OilNo[94]));
+	if(Mapping_OilNo[94] == ""){ui->label_OilNo_95->setText("");}
+	ui->label_OilNo_96->setText((Mapping_OilNo[95]));
+	if(Mapping_OilNo[95] == ""){ui->label_OilNo_96->setText("");}
+
+	//油枪编号显示与否
     ui->label_map_0->setVisible(flag_enable_map[0][0]);
     ui->label_map_1->setVisible(flag_enable_map[0][1]);
     ui->label_map_2->setVisible(flag_enable_map[0][2]);
@@ -5962,6 +6184,114 @@ void MainWindow::set_amount_oilgas_gun()
     ui->label_map_94->setVisible(flag_enable_map[11][6]);
     ui->label_map_95->setVisible(flag_enable_map[11][7]);
 
+	//油枪品号显示与否
+	ui->label_OilNo_1->setVisible(flag_enable_map[0][0]);
+	ui->label_OilNo_2->setVisible(flag_enable_map[0][1]);
+	ui->label_OilNo_3->setVisible(flag_enable_map[0][2]);
+	ui->label_OilNo_4->setVisible(flag_enable_map[0][3]);
+	ui->label_OilNo_5->setVisible(flag_enable_map[0][4]);
+	ui->label_OilNo_6->setVisible(flag_enable_map[0][5]);
+	ui->label_OilNo_7->setVisible(flag_enable_map[0][6]);
+	ui->label_OilNo_8->setVisible(flag_enable_map[0][7]);
+
+	ui->label_OilNo_9->setVisible(flag_enable_map[1][0]);
+	ui->label_OilNo_10->setVisible(flag_enable_map[1][1]);
+	ui->label_OilNo_11->setVisible(flag_enable_map[1][2]);
+	ui->label_OilNo_12->setVisible(flag_enable_map[1][3]);
+	ui->label_OilNo_13->setVisible(flag_enable_map[1][4]);
+	ui->label_OilNo_14->setVisible(flag_enable_map[1][5]);
+	ui->label_OilNo_15->setVisible(flag_enable_map[1][6]);
+	ui->label_OilNo_16->setVisible(flag_enable_map[1][7]);
+
+	ui->label_OilNo_17->setVisible(flag_enable_map[2][0]);
+	ui->label_OilNo_18->setVisible(flag_enable_map[2][1]);
+	ui->label_OilNo_19->setVisible(flag_enable_map[2][2]);
+	ui->label_OilNo_20->setVisible(flag_enable_map[2][3]);
+	ui->label_OilNo_21->setVisible(flag_enable_map[2][4]);
+	ui->label_OilNo_22->setVisible(flag_enable_map[2][5]);
+	ui->label_OilNo_23->setVisible(flag_enable_map[2][6]);
+	ui->label_OilNo_24->setVisible(flag_enable_map[2][7]);
+
+	ui->label_OilNo_25->setVisible(flag_enable_map[3][0]);
+	ui->label_OilNo_26->setVisible(flag_enable_map[3][1]);
+	ui->label_OilNo_27->setVisible(flag_enable_map[3][2]);
+	ui->label_OilNo_28->setVisible(flag_enable_map[3][3]);
+	ui->label_OilNo_29->setVisible(flag_enable_map[3][4]);
+	ui->label_OilNo_30->setVisible(flag_enable_map[3][5]);
+	ui->label_OilNo_31->setVisible(flag_enable_map[3][6]);
+	ui->label_OilNo_32->setVisible(flag_enable_map[3][7]);
+
+	ui->label_OilNo_33->setVisible(flag_enable_map[4][0]);
+	ui->label_OilNo_34->setVisible(flag_enable_map[4][1]);
+	ui->label_OilNo_35->setVisible(flag_enable_map[4][2]);
+	ui->label_OilNo_36->setVisible(flag_enable_map[4][3]);
+	ui->label_OilNo_37->setVisible(flag_enable_map[4][4]);
+	ui->label_OilNo_38->setVisible(flag_enable_map[4][5]);
+	ui->label_OilNo_39->setVisible(flag_enable_map[4][6]);
+	ui->label_OilNo_40->setVisible(flag_enable_map[4][7]);
+
+	ui->label_OilNo_41->setVisible(flag_enable_map[5][0]);
+	ui->label_OilNo_42->setVisible(flag_enable_map[5][1]);
+	ui->label_OilNo_43->setVisible(flag_enable_map[5][2]);
+	ui->label_OilNo_44->setVisible(flag_enable_map[5][3]);
+	ui->label_OilNo_45->setVisible(flag_enable_map[5][4]);
+	ui->label_OilNo_46->setVisible(flag_enable_map[5][5]);
+	ui->label_OilNo_47->setVisible(flag_enable_map[5][6]);
+	ui->label_OilNo_48->setVisible(flag_enable_map[5][7]);
+
+	ui->label_OilNo_49->setVisible(flag_enable_map[6][0]);
+	ui->label_OilNo_59->setVisible(flag_enable_map[6][1]);
+	ui->label_OilNo_51->setVisible(flag_enable_map[6][2]);
+	ui->label_OilNo_52->setVisible(flag_enable_map[6][3]);
+	ui->label_OilNo_53->setVisible(flag_enable_map[6][4]);
+	ui->label_OilNo_54->setVisible(flag_enable_map[6][5]);
+	ui->label_OilNo_55->setVisible(flag_enable_map[6][6]);
+	ui->label_OilNo_56->setVisible(flag_enable_map[6][7]);
+
+	ui->label_OilNo_57->setVisible(flag_enable_map[7][0]);
+	ui->label_OilNo_58->setVisible(flag_enable_map[7][1]);
+	ui->label_OilNo_59->setVisible(flag_enable_map[7][2]);
+	ui->label_OilNo_60->setVisible(flag_enable_map[7][3]);
+	ui->label_OilNo_61->setVisible(flag_enable_map[7][4]);
+	ui->label_OilNo_62->setVisible(flag_enable_map[7][5]);
+	ui->label_OilNo_63->setVisible(flag_enable_map[7][6]);
+	ui->label_OilNo_64->setVisible(flag_enable_map[7][7]);
+
+	ui->label_OilNo_65->setVisible(flag_enable_map[8][0]);
+	ui->label_OilNo_66->setVisible(flag_enable_map[8][1]);
+	ui->label_OilNo_67->setVisible(flag_enable_map[8][2]);
+	ui->label_OilNo_68->setVisible(flag_enable_map[8][3]);
+	ui->label_OilNo_69->setVisible(flag_enable_map[8][4]);
+	ui->label_OilNo_70->setVisible(flag_enable_map[8][5]);
+	ui->label_OilNo_71->setVisible(flag_enable_map[8][6]);
+	ui->label_OilNo_72->setVisible(flag_enable_map[8][7]);
+
+	ui->label_OilNo_73->setVisible(flag_enable_map[9][0]);
+	ui->label_OilNo_74->setVisible(flag_enable_map[9][1]);
+	ui->label_OilNo_75->setVisible(flag_enable_map[9][2]);
+	ui->label_OilNo_76->setVisible(flag_enable_map[9][3]);
+	ui->label_OilNo_77->setVisible(flag_enable_map[9][4]);
+	ui->label_OilNo_78->setVisible(flag_enable_map[9][5]);
+	ui->label_OilNo_79->setVisible(flag_enable_map[9][6]);
+	ui->label_OilNo_80->setVisible(flag_enable_map[9][7]);
+
+	ui->label_OilNo_81->setVisible(flag_enable_map[10][0]);
+	ui->label_OilNo_82->setVisible(flag_enable_map[10][1]);
+	ui->label_OilNo_83->setVisible(flag_enable_map[10][2]);
+	ui->label_OilNo_84->setVisible(flag_enable_map[10][3]);
+	ui->label_OilNo_85->setVisible(flag_enable_map[10][4]);
+	ui->label_OilNo_86->setVisible(flag_enable_map[10][5]);
+	ui->label_OilNo_87->setVisible(flag_enable_map[10][6]);
+	ui->label_OilNo_88->setVisible(flag_enable_map[10][7]);
+
+	ui->label_OilNo_89->setVisible(flag_enable_map[11][0]);
+	ui->label_OilNo_90->setVisible(flag_enable_map[11][1]);
+	ui->label_OilNo_91->setVisible(flag_enable_map[11][2]);
+	ui->label_OilNo_92->setVisible(flag_enable_map[11][3]);
+	ui->label_OilNo_93->setVisible(flag_enable_map[11][4]);
+	ui->label_OilNo_94->setVisible(flag_enable_map[11][5]);
+	ui->label_OilNo_95->setVisible(flag_enable_map[11][6]);
+	ui->label_OilNo_96->setVisible(flag_enable_map[11][7]);
 
 }
 
@@ -11386,13 +11716,13 @@ void MainWindow::Env_warn_sensor_fga(int t)     //传感器故障
                 ui->label_env_tanknongdu->setStyleSheet("border-image: url(:/picture/jinggao_red.png);");
                 ui->label_oilgas_tanknongdu_2->setText(QString("%1").arg("传感器故障"));
                 break;
-        case 3: ui->label_burngas_1->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 3: ui->label_burngas_1->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
-        case 4: ui->label_burngas_2->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 4: ui->label_burngas_2->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
-        case 5: ui->label_burngas_3->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 5: ui->label_burngas_3->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
-        case 6: ui->label_burngas_4->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 6: ui->label_burngas_4->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
     }
 }
@@ -11405,13 +11735,13 @@ void MainWindow::Env_warn_uart_fga(int t)   //通信故障
                 ui->label_env_tanknongdu->setStyleSheet("border-image: url(:/picture/jinggao_red.png);");
                 ui->label_oilgas_tanknongdu_2->setText(QString("%1").arg("通信故障"));
                 break;
-        case 3: ui->label_burngas_1->setStyleSheet("border-image: url(:/picture/gasuartwarn.png);");
+	    case 3: ui->label_burngas_1->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 break;
-        case 4: ui->label_burngas_2->setStyleSheet("border-image: url(:/picture/gasuartwarn.png);");
+	    case 4: ui->label_burngas_2->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 break;
-        case 5: ui->label_burngas_3->setStyleSheet("border-image: url(:/picture/gasuartwarn.png);");
+	    case 5: ui->label_burngas_3->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 break;
-        case 6: ui->label_burngas_4->setStyleSheet("border-image: url(:/picture/gasuartwarn.png);");
+	    case 6: ui->label_burngas_4->setStyleSheet("border-image: url(:/picture/uartwro.png);");
                 break;
     }
 }
@@ -11424,13 +11754,13 @@ void MainWindow::Env_warn_sensor_de_fga(int t)  //探测器传感器故障
                 ui->label_env_tanknongdu->setStyleSheet("border-image: url(:/picture/jinggao_red.png);");
                 ui->label_oilgas_tanknongdu_2->setText(QString("%1").arg("T传感器故障"));
                 break;
-        case 3: ui->label_burngas_1->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 3: ui->label_burngas_1->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
-        case 4: ui->label_burngas_2->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 4: ui->label_burngas_2->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
-        case 5: ui->label_burngas_3->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 5: ui->label_burngas_3->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
-        case 6: ui->label_burngas_4->setStyleSheet("border-image: url(:/picture/gassensorwarn.png);");
+	    case 6: ui->label_burngas_4->setStyleSheet("border-image: url(:/picture/sensorwro.png);");
                 break;
     }
 }
@@ -12628,164 +12958,164 @@ void MainWindow::crash_column_stashow(unsigned char whichone,unsigned char sta)
     switch (whichone)
     {
     case 1:
-        if(sta == 0) ui->label_cra1->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra1->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra1->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra1->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra1->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra1->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 2:
-        if(sta == 0) ui->label_cra2->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra2->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra2->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra2->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra2->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra2->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 3:
-        if(sta == 0) ui->label_cra3->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra3->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra3->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra3->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra3->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra3->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 4:
-        if(sta == 0) ui->label_cra4->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra4->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra4->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra4->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra4->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra4->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 5:
-        if(sta == 0) ui->label_cra5->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra5->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra5->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra5->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra5->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra5->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 6:
-        if(sta == 0) ui->label_cra6->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra6->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra6->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra6->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra6->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra6->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 7:
-        if(sta == 0) ui->label_cra7->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra7->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra7->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra7->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra7->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra7->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 8:
-        if(sta == 0) ui->label_cra8->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra8->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra8->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra8->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra8->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra8->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 9:
-        if(sta == 0) ui->label_cra9->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra9->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra9->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra9->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra9->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra9->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 10:
-        if(sta == 0) ui->label_cra10->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra10->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra10->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra10->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra10->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra10->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 11:
-        if(sta == 0) ui->label_cra11->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra11->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra11->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra11->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra11->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra11->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 12:
-        if(sta == 0) ui->label_cra12->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra12->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra12->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra12->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra12->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra12->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 13:
-        if(sta == 0) ui->label_cra13->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra13->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra13->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra13->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra13->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra13->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 14:
-        if(sta == 0) ui->label_cra14->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra14->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra14->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra14->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra14->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra14->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 15:
-        if(sta == 0) ui->label_cra15->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra15->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra15->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra15->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra15->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra15->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 16:
-        if(sta == 0) ui->label_cra16->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra16->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra16->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra16->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra16->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra16->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 17:
-        if(sta == 0) ui->label_cra17->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra17->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra17->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra17->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra17->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra17->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 18:
-        if(sta == 0) ui->label_cra18->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra18->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra18->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra18->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra18->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra18->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 19:
-        if(sta == 0) ui->label_cra19->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra19->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra19->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra19->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra19->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra19->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 20:
-        if(sta == 0) ui->label_cra20->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra20->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra20->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra20->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra20->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra20->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 21:
-        if(sta == 0) ui->label_cra21->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra21->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra21->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra21->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra21->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra21->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 22:
-        if(sta == 0) ui->label_cra22->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra22->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra22->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra22->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra22->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra22->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 23:
-        if(sta == 0) ui->label_cra23->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra23->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra23->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra23->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra23->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra23->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 24:
-        if(sta == 0) ui->label_cra24->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra24->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra24->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra24->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra24->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra24->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 25:
-        if(sta == 0) ui->label_cra25->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra25->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra25->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra25->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra25->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra25->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 26:
-        if(sta == 0) ui->label_cra26->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra26->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra26->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra26->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra26->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra26->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 27:
-        if(sta == 0) ui->label_cra27->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra27->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra27->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra27->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra27->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra27->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 28:
-        if(sta == 0) ui->label_cra28->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra28->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra28->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra28->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra28->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra28->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 29:
-        if(sta == 0) ui->label_cra29->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra29->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra29->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra29->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra29->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra29->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 30:
-        if(sta == 0) ui->label_cra30->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra30->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra30->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra30->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra30->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra30->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 31:
-        if(sta == 0) ui->label_cra31->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra31->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra31->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra31->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra31->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra31->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     case 32:
-        if(sta == 0) ui->label_cra32->setMovie(gif_right);//正常
-        if(sta == 1) ui->label_cra32->setMovie(gif_crash_warn);//报警
-        if(sta == 0xff) ui->label_cra32->setMovie(gif_uart);//通信故障
+		if(sta == 0) ui->label_cra32->setStyleSheet("border-image: url(:/picture/right.png);");//正常
+		if(sta == 1) ui->label_cra32->setStyleSheet("border-image: url(:/picture/crashwarn.png);");//报警
+		if(sta == 0xff) ui->label_cra32->setStyleSheet("border-image: url(:/picture/uartwro.png);");//通信故障
         break;
     }
 }
@@ -12811,17 +13141,17 @@ void MainWindow::on_pushButton_close_warn_rom_clicked()//存储空间不足提�
 void MainWindow::hide_tablewidget(unsigned char which, unsigned char sta)
 {
     qDebug()<<"screen hide"<<which<<sta;
-    ui->tabWidget->setTabEnabled(0,Flag_screen_xielou);
-    ui->tabWidget->setTabEnabled(1,Flag_screen_radar);
-    ui->tabWidget->setTabEnabled(2,Flag_screen_safe);
-    ui->tabWidget->setTabEnabled(3,Flag_screen_burngas);
-    ui->tabWidget->setTabEnabled(4,Flag_screen_zaixian);
+	ui->tabWidget->setTabEnabled(0,Flag_screen_zaixian);
+	ui->tabWidget->setTabEnabled(1,Flag_screen_xielou);
+	ui->tabWidget->setTabEnabled(2,Flag_screen_radar);
+	ui->tabWidget->setTabEnabled(3,Flag_screen_safe);
+	ui->tabWidget->setTabEnabled(4,Flag_screen_burngas);
     ui->tabWidget->setTabEnabled(5,Flag_screen_cc);
-	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {max-height:28px;min-width:0px;background-color: rgb(170,170,255,255);border: 2px solid;border-top-left-radius: 11px;border-top-right-radius: 11px;padding:9px;}\
-	                             QTabBar::tab:!selected {margin-top: 5px;}\
-	                             QTabBar::tab:selected {background-color: white}\
-	                             QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}\
-	                             QTabBar::tab:disabled {width: 0; color: transparent;padding:0px;border: 0px solid}");
+	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {max-height:82px;min-width:147px;background-color: rgb(170,170,255,255);border: 0px solid;border-top-left-radius: 0px;border-top-right-radius: 0px;padding:0px;}\
+	                                QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
+	                                QTabBar::tab:selected {background-color: white}\
+	                                QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}\
+	                                QTabBar::tab:disabled {width: 0;height: 0; color: transparent;padding:0px;border: 0px solid}");
 }
 
 //关闭报警弹窗
