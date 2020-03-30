@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>610</height>
+    <height>623</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -104,7 +104,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -162,7 +162,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -220,7 +220,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -278,7 +278,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -336,7 +336,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -394,7 +394,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -452,7 +452,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -510,7 +510,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -568,7 +568,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -626,7 +626,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -684,7 +684,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">
@@ -742,7 +742,7 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>13</pointsize>
+         <pointsize>12</pointsize>
         </font>
        </property>
        <property name="verticalScrollBarPolicy">

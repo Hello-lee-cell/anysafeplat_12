@@ -15,6 +15,7 @@
 #include "post_webservice_hunan.h"
 #include "mytcpclient_zhongyou.h"
 #include "main_main_zhongyou.h"
+#include "myserver/myserver.h"
 
 class QLineEdit;
 namespace Ui {
@@ -63,6 +64,7 @@ private:
     //isoosi添加
     net_isoosi *thread_isoosi;
 	net_isoosi_cq *thread_isoosi_cq;
+	myserver *myserver_thread;
 private:
     Ui::MainWindow *ui;
 

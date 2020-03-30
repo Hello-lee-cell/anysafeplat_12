@@ -28,7 +28,7 @@ reoilgas_pop::reoilgas_pop(QWidget *parent) :
                                      QTabBar::tab:selected {background-color: white}\
                                      QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}");
 
-    move(0,78);
+	move(0,85);
     Flag_Reoilgas_Pop_Sta = 1;//界面打开
     model12 = new QStandardItemModel();model1 = new QStandardItemModel();model2 = new QStandardItemModel();model3 = new QStandardItemModel();
     model4 = new QStandardItemModel();model5 = new QStandardItemModel();model6 = new QStandardItemModel();model7 = new QStandardItemModel();
@@ -128,7 +128,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model1->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -173,7 +173,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model2->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -217,7 +217,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model3->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -261,7 +261,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model4->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -305,7 +305,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model5->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -349,7 +349,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model6->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -393,7 +393,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model7->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -437,7 +437,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model8->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -481,7 +481,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model9->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -525,7 +525,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model10->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -569,7 +569,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model11->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -613,7 +613,7 @@ void reoilgas_pop::select_gun_sta()
         else if(ReoilgasPop_GunSta[i*8+j] == 10){gun_sta = "通信故障";}
         gun_id = QString::number(i+1).append("-").append(QString::number(j+1));
         //qDebug()<<gun_id
-        gun_num = QString::number(Mapping[i*8+j]);
+		gun_num = Mapping_Show[i*8+j];
         if(second_column == 0)
         {
             model12->setItem(row_num, 0, new QStandardItem(gun_num));
@@ -696,12 +696,12 @@ void reoilgas_pop::show_dispener()
 void reoilgas_pop::refresh_dispener_data()
 {
     //qDebug()<<"shauxin  jiemian ";
-    if(flag_which_page == 0)
-    {
+	//if(flag_which_page == 0)
+	//{
         select_gun_sta();
-    }
-    if(flag_which_page == 1)
-    {
+		//}
+		//if(flag_which_page == 1)
+		//{
         //select_gun_wrong();  //报警记录不刷新
-    }
+		//}
 }

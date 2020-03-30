@@ -129,6 +129,7 @@ void add_value_reoilgas(int whichone_i,int whichgun_j, int howlong, int countofg
             if(speedofoil < 10)//燃油流速过慢不记录到有效数据中
             {
                 flag_state = 2;//加油机流速慢
+				//下面的有关加油机详情的故障判断仅仅是在 0  3 4 5 之间跳变，通信故障优先级最高，然后是报警，预警，最后才是他们
                 if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][1] == 2)
                 {
                     Dispener_Troubleshooting[whichone_i*8+whichgun_j][0]++;
@@ -138,15 +139,20 @@ void add_value_reoilgas(int whichone_i,int whichgun_j, int howlong, int countofg
                     Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 0;
                     Dispener_Troubleshooting[whichone_i*8+whichgun_j][1] = 2;
                 }
-                if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] >= 3)//三次报警，连续报警只报一次
+				if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] >= 5)//三次报警，连续报警只报一次
                 {
                     Flag_Show_ReoilgasPop = 3;//弹窗 加油机诊断类
                     if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0]==3)
                     {
-                        ReoilgasPop_GunSta[whichone_i*8+whichgun_j] = 5;
-                        add_value_gunwarn_details(QString::number(whichone_i*8+whichgun_j),GUN_LOW_OILSPEED);//加油枪详情
+						//只有正常情况或者其他两种故障诊断状态下才能进行跳转
+						if((ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 0)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 3)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 4))
+						{
+							ReoilgasPop_GunSta[whichone_i*8+whichgun_j] = 5;
+							add_value_gunwarn_details(QString::number(whichone_i*8+whichgun_j),GUN_LOW_OILSPEED);//加油枪详情
+						} //只有正常的时候才做判断
+
                     }
-                    Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 4;
+					Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 6;
                 }
             }
             else if((speedofgas < 1))//油气过慢只有1升
@@ -161,15 +167,20 @@ void add_value_reoilgas(int whichone_i,int whichgun_j, int howlong, int countofg
                     Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 0;
                     Dispener_Troubleshooting[whichone_i*8+whichgun_j][1] = 3;
                 }
-                if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] >= 3)//三次报警，连续报警只报一次
+				if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] >= 5)//三次报警，连续报警只报一次
                 {
                     Flag_Show_ReoilgasPop = 3;//弹窗 加油机诊断类
                     if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0]==3)
                     {
-                        ReoilgasPop_GunSta[whichone_i*8+whichgun_j] = 3;
-                        add_value_gunwarn_details(QString::number(whichone_i*8+whichgun_j),GUN_GASPUMP_WRONG);//加油枪详情
+						//只有正常情况或者其他两种故障诊断状态下才能进行跳转
+						if((ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 0)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 5)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 4))
+						{
+							ReoilgasPop_GunSta[whichone_i*8+whichgun_j] = 3;
+							add_value_gunwarn_details(QString::number(whichone_i*8+whichgun_j),GUN_GASPUMP_WRONG);//加油枪详情
+						}
+
                     }
-                    Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 4;
+					Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 6;
                 }
             }
             else if((speedofgas >= 1)&&(speedofgas < 10))//油气过慢只有1升
@@ -184,25 +195,53 @@ void add_value_reoilgas(int whichone_i,int whichgun_j, int howlong, int countofg
                     Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 0;
                     Dispener_Troubleshooting[whichone_i*8+whichgun_j][1] = 4;
                 }
-                if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] >= 3)//三次报警，连续报警只报一次
+				if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] >= 5)//三次报警，连续报警只报一次
                 {
                     Flag_Show_ReoilgasPop = 3;//弹窗 加油机诊断类
                     if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0]==3)
                     {
-                        ReoilgasPop_GunSta[whichone_i*8+whichgun_j] = 4;
-                        add_value_gunwarn_details(QString::number(whichone_i*8+whichgun_j),GUN_LOW_GASSPEED);//加油枪详情
+						//只有正常情况或者其他两种故障诊断状态下才能进行跳转
+						if((ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 0)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 3)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 5))
+						{
+							ReoilgasPop_GunSta[whichone_i*8+whichgun_j] = 4;
+							add_value_gunwarn_details(QString::number(whichone_i*8+whichgun_j),GUN_LOW_GASSPEED);//加油枪详情
+						}
+
                     }
-                    Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 4;
+					Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 6;
                 }
             }
+			else
+			{
 
+			}
             qDebug()<<"gungungun"<<Dispener_Troubleshooting[whichone_i*8+whichgun_j][0]<<Dispener_Troubleshooting[whichone_i*8+whichgun_j][1];
 
         }
         else //气液比合格
         {
-            Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 0;
-            Dispener_Troubleshooting[whichone_i*8+whichgun_j][1] = 0;
+			if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][1] != 0)
+			{
+				Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 0;
+				Dispener_Troubleshooting[whichone_i*8+whichgun_j][1] = 0;
+			}
+			else
+			{
+				Dispener_Troubleshooting[whichone_i*8+whichgun_j][0]++;
+			}
+			if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] >= 3)
+			{
+				if(Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] == 3)
+				{
+					if((ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 3)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 4)||(ReoilgasPop_GunSta[whichone_i*8+whichgun_j] == 5))
+					{
+						ReoilgasPop_GunSta[whichone_i*8+whichgun_j] = 0;
+						add_value_gunwarn_details(QString::number(whichone_i*8+whichgun_j),GUN_NORMAL);//加油枪详情
+					}
+				}
+				Dispener_Troubleshooting[whichone_i*8+whichgun_j][0] = 4;
+			}
+
 
             //获取油气流速，用来判断液阻压力是否超标
             if(whichone_i == (Far_Dispener-1))
@@ -480,7 +519,7 @@ void add_value_gunwarn_details(QString whichone,QString state)
 	{
 		gunid = QString::number(which_dis+1).append("-").append(QString::number(which_gun+1));
 	}
-	qry.prepare(QString("INSERT INTO gunwarn_details (id,time,gunid,gunnum,state) values (NULL,'%1','%2','%3','%4')").arg(current_datetime_qstr).arg(gunid).arg(Mapping_Show[which_dis*8+which_gun]).arg(state));
+	qry.prepare(QString("INSERT INTO gunwarn_details (id,time,gunid,gunnum,state) values (NULL,'%1','%2','%3','%4')").arg(current_datetime_qstr).arg(gunid).arg(Mapping_OilNo[which_dis*8+which_gun]).arg(state));
     if(!qry.exec())
     {
         qDebug()<<qry.lastError();

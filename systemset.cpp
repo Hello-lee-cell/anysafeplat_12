@@ -926,6 +926,16 @@ void systemset::on_pushButton_3_clicked()       //保存 退出
 	MyServerIp = ui->lineEdit_MyServerIp->text();
 	MyServerPort = (ui->lineEdit_MyServerPort->text()).toInt();
 	config_MyServer_network();
+	//服务器上传,每次设置都上传一次
+	QString sensor_type;
+	if(Test_Method == 0){sensor_type = "3";}//其他方法
+	else if(Test_Method == 1){sensor_type = "2";}//压力法
+	else if(Test_Method == 2){sensor_type = "1";}//液媒法
+	else if(Test_Method == 3){sensor_type = "0";}//传感器法
+	else {
+		sensor_type = "0";
+	}
+	myserver_xielouset(QString::number(count_tank),sensor_type,QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
 
 }
 void systemset::setok_delay10sclose()
@@ -4949,4 +4959,16 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		}
 	}
 }
+/*****************准备发送泄漏设置数据****************
+tank_num       油罐传感器数量
+tank_type      油罐传感器类型
+pipe_num       管线传感器数量
+dispener_num   加油机传感器数量
+basin_num      防渗池传感器数量
+**********************************************/
+void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pipe_num,QString dispener_num,QString basin_num)
+{
+	emit myserver_xielousetup(tank_num,tank_type,pipe_num,dispener_num,basin_num);
+}
+
 

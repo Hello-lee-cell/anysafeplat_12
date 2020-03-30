@@ -12,6 +12,7 @@
 #include "io_op.h"
 #include "systemset.h"
 #include "database_op.h"
+
 unsigned char FLAG_STACHANGE[50][11] = {0};//判断32个点状态是否变化
 QMutex net_data;
 unsigned char FLAG_num_net = 0;//对断网记录的状态记录次数进行标注
@@ -52,6 +53,7 @@ mythread::mythread(QObject *parent):
    semid = sem_open(SEMSIG,O_CREAT,0644,0);
    ptr = (char *)mmap(NULL,SHASIZE,PROT_READ|PROT_WRITE,MAP_SHARED,shmid,0);
    strcpy(ptr,"\0");
+
 }
 
 //压力法数值显示函数
@@ -3053,36 +3055,41 @@ void mythread::IIE_analysis()
 //当断网时对数据进行临时记录
 int mythread::net_history(int num,int sta)
 {
-    net_data.lock();//上锁
+	QString DataType;
+	QString SensorNum;
+	QString SensorType;
+	QString SensorSta;
+	QString SensorData;
+	net_data.lock();//上锁
 
-    unsigned char hubei_sta = 0;
+	unsigned char hubei_sta = 0;
 
-    QDate date = QDate::currentDate();
-    QTime time = QTime::currentTime();
-    int year = date.year();
-    int month = date.month();
-    int day = date.day();
-    int hour = time.hour();
-    int minute = time.minute();
-    int second = time.second();
-    int year1 = year/100;
-    int year2 = year%100;
-    int hex_year1 = year1+(year1/10)*6;
-    int hex_year2 = year2+(year2/10)*6;
-    int hex_month = month+(month/10)*6;
-    int hex_day = day+(day/10)*6;
-    int hex_hour = hour+ (hour/10)*6;
-    int hex_minute = minute+(minute/10)*6;
-    //printf("*****************%02x\n",hex_minute);
-    int hex_second = second+(second/10)*6;
+	QDate date = QDate::currentDate();
+	QTime time = QTime::currentTime();
+	int year = date.year();
+	int month = date.month();
+	int day = date.day();
+	int hour = time.hour();
+	int minute = time.minute();
+	int second = time.second();
+	int year1 = year/100;
+	int year2 = year%100;
+	int hex_year1 = year1+(year1/10)*6;
+	int hex_year2 = year2+(year2/10)*6;
+	int hex_month = month+(month/10)*6;
+	int hex_day = day+(day/10)*6;
+	int hex_hour = hour+ (hour/10)*6;
+	int hex_minute = minute+(minute/10)*6;
+	//printf("*****************%02x\n",hex_minute);
+	int hex_second = second+(second/10)*6;
 
-    int num1 = 0;
-    int num2 = 0;
-    int sta1 = 0;
-    int sta2 = 0;
+	int num1 = 0;
+	int num2 = 0;
+	int sta1 = 0;
+	int sta2 = 0;
 
-    if(FLAG_num_net > 49)//如果数组记录满了，
-    {
+	if(FLAG_num_net > 49)//如果数组记录满了，
+	{
 //        for(unsigned char i = 0;i<49;i++)
 //        {
 //            for(unsigned char j = 0;j<11;j++)
@@ -3090,101 +3097,153 @@ int mythread::net_history(int num,int sta)
 //                FLAG_STACHANGE[i][j] = FLAG_STACHANGE[i+1][j];
 //            }
 //        }
-        FLAG_num_net = 0;
-    }
+		FLAG_num_net = 0;
+	}
 
-    if((num>=1)&&(num<=8))//油罐
-    {
-        num1 = 0x04;
-        num2 = num;
-    }
-    if((num>=9)&&(num<=16))//管线
-    {
-        num1 = 0x03;
-        num2 = num-8;
-    }
-    if((num>=17)&&(num<=24))//人井
-    {
-        num1 = 0x02;
-        num2 = num-16;
-    }
-    if((num>=25)&&(num<=32))//加油机
-    {
-        num1 = 0x05;
-        num2 = num-24;
-    }
+	if((num>=1)&&(num<=8))//油罐
+	{
+		num1 = 0x04;
+		num2 = num;
+		DataType = "0";
+		SensorNum = QString::number(num);
+	}
+	if((num>=9)&&(num<=16))//管线
+	{
+		num1 = 0x03;
+		num2 = num-8;
+		DataType = "1";
+		SensorNum = QString::number(num-8);
+	}
+	if((num>=17)&&(num<=24))//人井
+	{
+		num1 = 0x02;
+		num2 = num-16;
+		DataType = "3";
+		SensorNum = QString::number(num-16);
+	}
+	if((num>=25)&&(num<=32))//加油机
+	{
+		num1 = 0x05;
+		num2 = num-24;
+		DataType = "2";
+		SensorNum = QString::number(num-24);
+	}
 
-    if(sta == 0) //正常
-    {
-        sta1 = 0x00;
-        sta2 = 0x00;
-        hubei_sta = 0x00;
-    }
-    if(sta == 1) //检油
-    {
-        sta1 = 0x00;
-        sta2 = 0x08;
-        hubei_sta = 0x02;
-    }
-    if(sta == 2) //检水
-    {
-        sta1 = 0x00;
-        sta2 = 0x10;
-        hubei_sta = 0x01;
-    }
-    if(sta == 3) //传感器
-    {
-        sta1 = 0x00;
-        sta2 = 0x01;
-        hubei_sta = 0x10;
-    }
-    if(sta == 4) //通信
-    {
-        sta1 = 0x00;
-        sta2 = 0x04;
-        hubei_sta = 0xff;
-    }
-    if(sta == 5) //高液位
-    {
-        sta1 = 0x00;
-        sta2 = 0x20;
-        hubei_sta = 0x03;
-    }
-    if(sta == 6) //低液位
-    {
-        sta1 = 0x00;
-        sta2 = 0x40;
-        hubei_sta = 0x04;
-    }
-    if(sta == 7) //压力预警
-    {
-        sta1 = 0x01;
-        sta2 = 0x00;
-        hubei_sta = 0x06;
-    }
-    if(sta == 8) //压力报警
-    {
-        sta1 = 0x02;
-        sta2 = 0x00;
-        hubei_sta = 0x07;
-    }
+	if(sta == 0) //正常
+	{
+		sta1 = 0x00;
+		sta2 = 0x00;
+		hubei_sta = 0x00;
+		SensorSta = "0";
+	}
+	if(sta == 1) //检油
+	{
+		sta1 = 0x00;
+		sta2 = 0x08;
+		hubei_sta = 0x02;
+		SensorSta = "1";
+	}
+	if(sta == 2) //检水
+	{
+		sta1 = 0x00;
+		sta2 = 0x10;
+		hubei_sta = 0x01;
+		SensorSta = "2";
+	}
+	if(sta == 3) //传感器
+	{
+		sta1 = 0x00;
+		sta2 = 0x01;
+		hubei_sta = 0x10;
+		SensorSta = "4";
+	}
+	if(sta == 4) //通信
+	{
+		sta1 = 0x00;
+		sta2 = 0x04;
+		hubei_sta = 0xff;
+		SensorSta = "3";
+	}
+	if(sta == 5) //高液位
+	{
+		sta1 = 0x00;
+		sta2 = 0x20;
+		hubei_sta = 0x03;
+		SensorSta = "5";
+	}
+	if(sta == 6) //低液位
+	{
+		sta1 = 0x00;
+		sta2 = 0x40;
+		hubei_sta = 0x04;
+		SensorSta = "6";
+	}
+	if(sta == 7) //压力预警
+	{
+		sta1 = 0x01;
+		sta2 = 0x00;
+		hubei_sta = 0x06;
+		SensorSta = "7";
+	}
+	if(sta == 8) //压力报警
+	{
+		sta1 = 0x02;
+		sta2 = 0x00;
+		hubei_sta = 0x07;
+		SensorSta = "8";
+	}
 
-    FLAG_STACHANGE[FLAG_num_net][0] = num1;
-    FLAG_STACHANGE[FLAG_num_net][1] = num2+16;
-    FLAG_STACHANGE[FLAG_num_net][2] = sta1;
-    FLAG_STACHANGE[FLAG_num_net][3] = sta2;
-    FLAG_STACHANGE[FLAG_num_net][4] = hex_year1;
-    FLAG_STACHANGE[FLAG_num_net][5] = hex_year2;
-    FLAG_STACHANGE[FLAG_num_net][6] = hex_month;
-    FLAG_STACHANGE[FLAG_num_net][7] = hex_day;
-    FLAG_STACHANGE[FLAG_num_net][8] = hex_hour;
-    FLAG_STACHANGE[FLAG_num_net][9] = hex_minute;
-    FLAG_STACHANGE[FLAG_num_net][10] = hex_second;
-    FLAG_num_net++;//每记录一次加1
+	FLAG_STACHANGE[FLAG_num_net][0] = num1;
+	FLAG_STACHANGE[FLAG_num_net][1] = num2+16;
+	FLAG_STACHANGE[FLAG_num_net][2] = sta1;
+	FLAG_STACHANGE[FLAG_num_net][3] = sta2;
+	FLAG_STACHANGE[FLAG_num_net][4] = hex_year1;
+	FLAG_STACHANGE[FLAG_num_net][5] = hex_year2;
+	FLAG_STACHANGE[FLAG_num_net][6] = hex_month;
+	FLAG_STACHANGE[FLAG_num_net][7] = hex_day;
+	FLAG_STACHANGE[FLAG_num_net][8] = hex_hour;
+	FLAG_STACHANGE[FLAG_num_net][9] = hex_minute;
+	FLAG_STACHANGE[FLAG_num_net][10] = hex_second;
+	FLAG_num_net++;//每记录一次加1
 
-    Warn_Data_Tcp_Send_Hb[num-1][0] = 1;
-    Warn_Data_Tcp_Send_Hb[num-1][1] = hubei_sta;
+	Warn_Data_Tcp_Send_Hb[num-1][0] = 1;
+	Warn_Data_Tcp_Send_Hb[num-1][1] = hubei_sta;
+	if(DataType == "0")
+	{
+		if(Test_Method == 0){SensorType = "3";SensorData = "N";}//其他方法
+		else if(Test_Method == 1){SensorType = "2";SensorData = QString::number(count_Pressure[num-1],'f',1);}//压力法
+		else if(Test_Method == 2){SensorType = "1";SensorData = "N";}//液媒法
+		else if(Test_Method == 3){SensorType = "0";SensorData = "N";}//传感器法
+		else {
+			SensorType = "0";
+			SensorData = "N";
+		}
+	}
+	else {
+		SensorType = "0";
+		SensorData = "N";
+	}
 
-    net_data.unlock();//解锁
-    return 0;
+	myserver_send(DataType,SensorNum,SensorType,SensorSta,SensorData);
+	net_data.unlock();//解锁
+	return 0;
+}
+/************泄漏信息服务器上传*****************
+ DataType		（上传数据类型， 0油罐、1管线、2加油机、3防渗池）
+ SensorNum      （传感器编号1~12）
+ SensorType		（传感器类型， 0传感器法、1液媒法、2压力法、3其他方法）
+ SensorSta		（传感器状态：  0 设备正常		存在类型0、1、2、3
+							  1 检油报警		存在类型0
+							  2 检水报警		存在类型0
+							  3 通信故障		存在类型0、1、2、3
+							  4 传感器故障	存在类型0、1、2、3
+							  5 高液位报警	存在类型1
+							  6 低液位报警	存在类型1
+							  7 压力预警		存在类型2
+							  8 压力报警		存在类型2			）
+SensorDate		（传感器数据，仅当传感器类型为压力法时，有压力数据，如88.8Kpa，其他情况为N）
+ * ***********************××××××*********/
+void mythread::myserver_send(QString DataType,QString SensorNum,QString SensorType,QString SensorSta,QString SensorData)
+{
+	emit myserver_send_single(DataType,SensorNum,SensorType,SensorSta,SensorData);
 }

@@ -50,7 +50,8 @@ signals:
     void warning_uart_tank(int t);     //通信故障
     void right_tank(int t);            //正常
     void set_pressure_number(); //设置屏幕参数
-
+	//服务器上传
+	void myserver_send_single(QString DataType,QString SensorNum,QString SensorType,QString SensorSta,QString SensorData);
 //    void warning_s_pipe_oil();          //0
 //    void warning_s_pipe_water();        //1
 //    void warning_s_pipe_sensor();       //2
@@ -92,6 +93,8 @@ signals:
 public slots:
  //   void readFromSharedMem();
     void Data_Display(); //压力值显示
+private:
+	void myserver_send(QString DataType,QString SensorNum,QString SensorType,QString SensorSta,QString SensorData);//服务器上传传感器状态
 
 };
 

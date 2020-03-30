@@ -515,6 +515,7 @@ private:
     QTimer *timer_doublauto_linedrw;    //双路自动设置曲线刷新
     QTimer *timer_doublhand_pointdrw;   //双路手动设置点刷新
     void network_onfigurationdata(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString yzqh);//网络发送配置信息函数
+	void myserver_xielouset(QString tank_num,QString tank_type,QString pipe_num,QString dispener_num,QString basin_num);//服务器
 signals:
     void button_sysshow();  //主界面取消自动设置按钮显示
  //   void mainwindow_radar_click();  //点击自动设置后，主界面跳转
@@ -525,7 +526,8 @@ signals:
     void setup_data(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);
 	//isoosi添加重庆
 	void setup_data_cq(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);
-
+	//服务器上传
+	void myserver_xielousetup(QString tank_num,QString tank_type,QString pipe_num,QString dispener_num,QString basin_num);
 };
 
 #endif // SYSTEMSET_H

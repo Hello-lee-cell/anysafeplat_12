@@ -51,7 +51,7 @@ unsigned char Flag_MyserverSendSuccess = 0;//发送成功置1，记录一次
 myserver::myserver(QWidget *parent) :
     QThread(parent)
 {
-
+	//this->moveToThread(this);
 }
 void myserver::run()
 {
@@ -110,7 +110,7 @@ void myserver::tcp_client()
 	setsockopt(sockfd_myserve,SOL_SOCKET,SO_LINGER,(const char*)&bDontLinger,sizeof(bool));//不要因为数据未发送就阻塞关闭操作
 	setsockopt(sockfd_myserve, IPPROTO_TCP, TCP_NODELAY,&on_myserverip,sizeof(on_myserverip));//立即发送，不沾包
 	//int nNetTimeout = 800;//超时时长
-	struct timeval timeout = {0,500000}; //设置接收超时 1秒？ 第一个参数秒，第二个微秒
+	struct timeval timeout = {0,1}; //设置接收超时 1秒？ 第一个参数秒，第二个微秒
 	setsockopt(sockfd_myserve,SOL_SOCKET,SO_RCVTIMEO,(char *)&timeout,sizeof(struct timeval));//设置为非阻塞模式
 	//主动连接目标,连接不上貌似会卡在这，10秒再连一次
 	if (( nsockfd_myserver = ::connect(sockfd_myserve,(struct sockaddr *)&sever_remote,sizeof(struct sockaddr))) < 0)
@@ -158,20 +158,20 @@ void myserver::tcp_client()
 				break;
 			}
 			qDebug()<<"MyServer ready to send!";
-			xielousta("1","1","2","0","88.8");
+			//xielousta("1","1","2","0","88.8");
 			sleep(2);
-			xielousetup("4","1","4","4","4");
-			refueling_gun_data("q0001","1.1","10.2","12.2","8.3","5.3","null");
+			//xielousetup("4","1","4","4","4");
+			//refueling_gun_data("q0001","1.1","10.2","12.2","8.3","5.3","null");
 			sleep(2);
-			 environmental_data("10","12","0","1","36.5","0");
+			 //environmental_data("10","12","0","1","36.5","0");
 			 sleep(2);
-			setup_data("0","1","2","3");
+			//setup_data("0","1","2","3");
 			sleep(2);
-			gun_warn_data("q0001-AlvAlm=0","0","0","0","0","0","0","0");
+			//gun_warn_data("q0001-AlvAlm=0","0","0","0","0","0","0","0");
 			sleep(2);
-			refueling_gun_stop("N","N","N");
+			//refueling_gun_stop("N","N","N");
 			sleep(2);
-			refueling_gun_sta("q0001-Status=0;q0003-Status=0;q0004-Status=0;q0005-Status=0");
+			//refueling_gun_sta("q0001-Status=0;q0003-Status=0;q0004-Status=0;q0005-Status=0");
 			sleep(2);
 		}
 		//如果不要该协议则退出
@@ -203,6 +203,7 @@ void myserver::client_keep_ali(int sockfd_myserve)
 //要发送的数据
 void myserver::send_tcpclient_data(QString data)
 {
+
 	unsigned int if_send = 0;
 	unsigned int sendfail_num = 0;
 	if(Flag_MyServerClientSuccess == 1)
@@ -237,7 +238,7 @@ void myserver::send_tcpclient_data(QString data)
 				}
 				else
 				{
-					msleep(100);
+					msleep(500);
 					memset(myserver_revbuf,0,sizeof(char)*128);//清零数组
 					if((MyServerRecvNum = recv(sockfd_myserve,myserver_revbuf,200,MSG_WAITALL)) <= 0)//MSG_DONTWAIT 1秒延时或者收到40个字节
 					{

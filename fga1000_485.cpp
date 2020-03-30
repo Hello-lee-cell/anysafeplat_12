@@ -1042,7 +1042,7 @@ void FGA1000_485::floating_point_conversion()
 		}
 		//Pre[0] = (pre_ma1 - 12)*625/1000;
 		//qDebug()<<"youguan"<<pre_ma1<<pressure[1]<<pressure[2]<<pressure[3]<<Pre[0];
-		if((Pre[0] < -5) || (Pre[0] > 5))
+		if((Pre[0] < -15) || (Pre[0] > 15))
 		{
 			Pre[0] = 88.88;
 		}
@@ -1076,7 +1076,7 @@ void FGA1000_485::floating_point_conversion()
 			pre_ma2 = (float(pressure[5]*65536+pressure[6]*256+pressure[7])/8388607)*20*1.2;
 			Pre[1] = (pre_ma2 - 12)*625/1000;
         }
-        if((Pre[1] < -5) || (Pre[1] > 5))
+		if((Pre[1] < -15) || (Pre[1] > 15))
         {
             Pre[1] = 88.88;
         }
@@ -1110,9 +1110,9 @@ void FGA1000_485::floating_point_conversion()
 			tem_ma = (float(temperature[1]*65536+temperature[2]*256+temperature[3])/8388607)*20*1.2;
 			Tem[0] = (((tem_ma - 4)*9.375)-50);//-50到100℃   4-20ma
         }
-        if((Tem[0] < -50) || (Tem[0] > 100))
+		if((Tem[0] < -50) || (Tem[0] > 100))
         {
-            Pre[1] = 88.88;
+			Tem[0] = 88.88;
         }
     }
     else
@@ -2929,7 +2929,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 						for(int j = 0;j < (Amount_Gasgun[i]);j++)
 						{
 							//qDebug() << i*4+j<< "!!!" << Flag_CommunicateError_Maindisp[i*4+j]<< "???";
-							if(ReoilgasPop_GunSta[i*8+j] == 10)//如果有通信故障
+							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
 								Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
@@ -2977,7 +2977,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 						for(int j = 0;j < (Amount_Gasgun[i]);j++)
 						{
 							//qDebug() << i*4+j<< "!!!" << Flag_CommunicateError_Maindisp[i*4+j]<< "???";
-							if(ReoilgasPop_GunSta[i*8+j] == 10)//如果有通信故障
+							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
 								refueling_wrongdata_cq(wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
@@ -3021,7 +3021,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 						for(int j = 0;j < (Amount_Gasgun[i]);j++)
 						{
 							//qDebug() << i*4+j<< "!!!" << Flag_CommunicateError_Maindisp[i*4+j]<< "???";
-							if(ReoilgasPop_GunSta[i*8+j] == 10)//如果有通信故障
+							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
 								Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
@@ -3065,7 +3065,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 						for(int j = 0;j < (Amount_Gasgun[i]);j++)
 						{
 							//qDebug() << i*4+j<< "!!!" << Flag_CommunicateError_Maindisp[i*4+j]<< "???";
-							if(ReoilgasPop_GunSta[i*8+j] == 10)//如果有通信故障
+							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
 								Send_Wrongsdata_HuNan(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));

@@ -438,7 +438,8 @@ void reoilgasthread::ReadDataReoilgas_Setinfo()
         if(RecvBuff_Oilgas[0] == Address_Reoilgas[Reoilgas_Version_Set_Whichone])
         {
             emit Setinfo_To_Mainwindow(RecvBuff_Oilgas[7],RecvBuff_Oilgas[8],RecvBuff_Oilgas[9],RecvBuff_Oilgas[10],RecvBuff_Oilgas[12],RecvBuff_Oilgas[15],RecvBuff_Oilgas[16],RecvBuff_Oilgas[17],RecvBuff_Oilgas[18],RecvBuff_Oilgas[20]);
-            Lock_Mode_Reoilgas.lock();
+			//qDebug()<<"receive"<<RecvBuff_Oilgas[9]<<RecvBuff_Oilgas[10];
+			Lock_Mode_Reoilgas.lock();
             Flag_SendMode_Oilgas = 1;
             Lock_Mode_Reoilgas.unlock();
         }
@@ -626,8 +627,9 @@ void reoilgasthread::SendDataReoilgas_v2()
                         SendBuff_Oilgas[10] = 0x01;     //加油枪标识
                         SendBuff_Oilgas[11] = Fueling_Factor[Which_Dispener_i][Which_GasCtrler_j*2];     //油量校正因子
                         SendBuff_Oilgas[12] = (int)(Fueling_Factor[Which_Dispener_i][Which_GasCtrler_j*2]*100)%100;//油量校正因子
-                        SendBuff_Oilgas[13] = Gas_Factor[Which_Dispener_i][Which_GasCtrler_j*2];     //气量校正因子
-                        SendBuff_Oilgas[14] = (int)(Gas_Factor[Which_Dispener_i][Which_GasCtrler_j*2]*100)%100;    //气量校正因子
+						SendBuff_Oilgas[13] = Gas_Factor[Which_Dispener_i][Which_GasCtrler_j*2];     //气量校正因子
+						SendBuff_Oilgas[14] = (int)(Gas_Factor[Which_Dispener_i][Which_GasCtrler_j*2]*100)%100;    //气量校正因子
+						//qDebug()<<"send "<<SendBuff_Oilgas[13]<<SendBuff_Oilgas[14];
                         SendBuff_Oilgas[15] = 0x00;     //关枪继电器
                         SendBuff_Oilgas[16] = Flag_Delay_State[Which_Dispener_i][Which_GasCtrler_j*2];     //关枪继电器         //目前未使用
                         if(Flag_Gun_off == 0)//未开启关枪功能

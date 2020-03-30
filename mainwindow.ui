@@ -10470,6 +10470,24 @@ border-image: url(:/picture/在线油气检测系统白色背景.png);
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
+      <zorder>frame_6</zorder>
+      <zorder>label_env_tankpre</zorder>
+      <zorder>label_env_pipepre</zorder>
+      <zorder>label_env_tanktem</zorder>
+      <zorder>label_env_tanknongdu</zorder>
+      <zorder>toolButton_detail_tankpre</zorder>
+      <zorder>toolButton_detail_pipepre</zorder>
+      <zorder>toolButton_detail_tanktempr</zorder>
+      <zorder>toolButton_detail_gasvalue</zorder>
+      <zorder>toolButton</zorder>
+      <zorder>label_oilgas_tankpre</zorder>
+      <zorder>label_oilgas_tankpre_2</zorder>
+      <zorder>label_oilgas_pipepre</zorder>
+      <zorder>label_oilgas_pipepre_2</zorder>
+      <zorder>label_oilgas_tanktemp</zorder>
+      <zorder>label_oilgas_tanknongdu</zorder>
+      <zorder>label_oilgas_tanknongdu_2</zorder>
+      <zorder>label_oilgas_tanktemp_2</zorder>
      </widget>
     </widget>
     <widget class="QWidget" name="tab">
