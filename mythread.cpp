@@ -5,7 +5,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "net_tcpclient_hb.h"
+#include "network/net_tcpclient_hb.h"
 #include "keyboard.h"
 #include "config.h"      //OIL_BASIN[]   PIPE[]  TANK[]  DISPENER[]
 #include "mainwindow.h"

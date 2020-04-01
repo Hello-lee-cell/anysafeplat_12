@@ -6,6 +6,8 @@
 
 #include"warn.h"
 #include"keyboard.h"
+#include "airtightness_test.h"
+#include "oilgas/one_click_sync.h"
 //extern unsigned char Flag_Set_yuzhi;
 //extern unsigned char Flag_pre_mode;
 
@@ -474,6 +476,10 @@ private slots:
 
 	void on_pushButton_Airtighness_Test_clicked();
 
+	void on_pushButton_sync_clicked();
+	//同步带屏气液比采集器的脉冲当量
+	void sync_factor_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2);
+
 signals:
 
     void amount_basin_reset(int t);
@@ -528,6 +534,9 @@ signals:
 	void setup_data_cq(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);
 	//服务器上传
 	void myserver_xielousetup(QString tank_num,QString tank_type,QString pipe_num,QString dispener_num,QString basin_num);
+	//同步带屏气液比采集器脉冲当量
+	void signal_sync_factor_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2);
+
 };
 
 #endif // SYSTEMSET_H

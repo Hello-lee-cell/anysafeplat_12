@@ -107,6 +107,7 @@ void Airtightness_Test::setBackspace_OilGasSpace()
 
 Airtightness_Test::~Airtightness_Test()
 {
+	delete time_500ms;
 	delete ui;
 }
 

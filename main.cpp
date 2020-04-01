@@ -3,10 +3,10 @@
 #include <QWSServer>
 #include <unistd.h>
 #include <stdio.h>
-#include "net_tcpclient_hb.h"
+#include "network/net_tcpclient_hb.h"
 #include "keyboard.h"
 #include "mythread.h"
-#include "main_main.h"
+#include "network/main_main.h"
 #include "uartthread.h"
 #include "warn_sound_thread.h"
 #include "security.h"

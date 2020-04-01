@@ -281,6 +281,9 @@ extern QString MyServerIp;
 extern int MyServerPort;
 extern unsigned char Flag_MyServerEn;
 //void Sencor_Handle(int signo);
+
+//one_click_sync
+extern unsigned char Flag_WaitSync;//等待数据同步，阻断正常的问询进程，全局变量
 #endif // CONFIG
 
 //传感器法  sensor   液媒法  liquid  压力法   pressure

@@ -57,23 +57,24 @@ void reoilgasthread::run()
     fd_uart_reoilgas = open(REOILGAS_SERI,O_RDWR|O_NOCTTY);
     ret_uart_reoilgas = set_port_attr(fd_uart_reoilgas,B9600,8,"1",'N',0,0);
     sleep(1);
-	if(Flag_Reoilgas_Version == 3)
+	if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))
 	{
 		D433T3D_init();//无线模块初始化
 	}
 	gpio_low(1,22); //m1
-	gpio_high(1,23); //m0
+	//gpio_high(1,23); //m0
+	gpio_low(1,23); //m0
 	sleep(1);
 	//数据分析
 
-    while(1)
+	while(1)   //1：旧型号采集器 有线； 2：带调节阀的气液比采集器一代，有线  3：带调节阀的采集器无线 4：带屏幕的采集器，有线  5：带屏幕的采集器无线
     {
         if(Flag_Reoilgas_Version == 1)
         {
 			msleep(100);
             SendDataReoilgas();
         }
-		else if((Flag_Reoilgas_Version == 2)||(Flag_Reoilgas_Version == 3))//有线无线气液比采集器
+		else if((Flag_Reoilgas_Version == 2)||(Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//有线无线气液比采集器
         {
 			msleep(100);
             SendDataReoilgas_v2();
@@ -91,6 +92,10 @@ void reoilgasthread::run()
 				msleep(100);
 				Ask_Sensor();
 			}
+		}
+		if(Flag_WaitSync == 1) //如果需要同步数据
+		{
+			sync_data();
 		}
 //		msleep(500);
 //		Ask_Sensor();
@@ -442,7 +447,20 @@ void reoilgasthread::ReadDataReoilgas_Setinfo()
 			Lock_Mode_Reoilgas.lock();
             Flag_SendMode_Oilgas = 1;
             Lock_Mode_Reoilgas.unlock();
-        }
+			//带屏幕无线气液比采集器读取设置
+			if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))
+			{
+				unsigned int i = (RecvBuff_Oilgas[0]-161)/4;
+				unsigned int j = (RecvBuff_Oilgas[0]-161)%4;
+				Fueling_Factor[i][j*2] = float(RecvBuff_Oilgas[7])+float(RecvBuff_Oilgas[8])/100;
+				Gas_Factor[i][j*2] = float(RecvBuff_Oilgas[9])+float(RecvBuff_Oilgas[10])/100;
+				Fueling_Factor[i][j*2+1] = float(RecvBuff_Oilgas[15])+float(RecvBuff_Oilgas[16])/100;
+				Gas_Factor[i][j*2+1] = float(RecvBuff_Oilgas[17])+float(RecvBuff_Oilgas[18])/100;
+				qDebug()<<Fueling_Factor[i][j*2] <<Gas_Factor[i][j*2] <<Fueling_Factor[i][j*2+1] <<Gas_Factor[i][j*2+1];
+				emit reflash_setinfo();
+
+			}
+		}
         else
         {
             emit Setinfo_To_Mainwindow(0,0,0,0,0,0,0,0,0,0);
@@ -542,9 +560,9 @@ void reoilgasthread::SendDataReoilgas_v2()
 //                        printf("%02x ",SendBuff_Oilgas[i]); //DEBUG
 //                    }
 //                    printf("ask oilgas!\n");
-					if(Flag_Reoilgas_Version == 3) //无线
+					if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 					{
-						msleep(1600);
+						msleep(1000);
 					}
 					else
 					{
@@ -568,9 +586,9 @@ void reoilgasthread::SendDataReoilgas_v2()
                     SendBuff_Oilgas[6] = (SCRC & 0xff00) >> 8;
                     SendBuff_Oilgas[7] = (SCRC & 0x00ff);
                     write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
-					if(Flag_Reoilgas_Version == 3) //无线
+					if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 					{
-						msleep(1600);
+						msleep(1000);
 					}
 					else
 					{
@@ -669,9 +687,9 @@ void reoilgasthread::SendDataReoilgas_v2()
                         write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
                         Flag_Whichone_Temp = Flag_Whichone;
 
-						if(Flag_Reoilgas_Version == 3) //无线
+						if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 						{
-							msleep(2000);
+							msleep(1700);
 						}
 						else
 						{
@@ -746,9 +764,9 @@ void reoilgasthread::SendDataReoilgas_v2()
                     SendBuff_Oilgas[6] = (SCRC & 0xff00) >> 8;
                     SendBuff_Oilgas[7] = (SCRC & 0x00ff);
                     write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
-					if(Flag_Reoilgas_Version == 3) //无线
+					if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 					{
-						msleep(1600);
+						msleep(1200);
 					}
 					else
 					{
@@ -944,7 +962,7 @@ void reoilgasthread::ask_pressure()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1600);
+		msleep(1000);
 		//读
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
@@ -1026,7 +1044,7 @@ void reoilgasthread::ask_fga1000()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1600);
+		msleep(1000);
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 		if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
@@ -1104,7 +1122,7 @@ void reoilgasthread::ask_temperature()
 			SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 			SendBuff_init[7] = (SCRC & 0x00ff);
 			write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-			msleep(1600);
+			msleep(1000);
 			len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 			SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 			if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
@@ -1224,6 +1242,96 @@ void reoilgasthread::D433T3D_init()
 	gpio_low(1,22); //m1
 	gpio_high(1,23); //m0
 }
+
+/**************同步带屏气液比采集器脉冲当量**************
+
+ * *********************************/
+void reoilgasthread::sync_data()
+{
+	unsigned int loop = 0;
+	unsigned int loop_num = 0;
+	unsigned int which_add = 0;
+	for(unsigned int i = 0;i<Amount_Dispener;i++)
+	{
+		if(Amount_Gasgun[i]%2==0)
+		{
+			which_add = Amount_Gasgun[i]/2;
+		}
+		else
+		{
+			which_add = Amount_Gasgun[i]/2+1;
+		}
+		for(unsigned int j=0;j<which_add;j++)
+		{
+			qDebug()<<"ask tongbutongbutongbu";
+			unsigned char SendBuff_Oilgas[8];
+			SendBuff_Oilgas[0] = Address_Reoilgas[i*4+j];
+			SendBuff_Oilgas[1] = 0x03;
+			SendBuff_Oilgas[2] = 0x00;
+			SendBuff_Oilgas[3] = 0xC8;
+			SendBuff_Oilgas[4] = 0x00;
+			SendBuff_Oilgas[5] = 0x09;
+			unsigned int SCRC = 0;
+			SCRC = CRC_Test(SendBuff_Oilgas,8);
+			SendBuff_Oilgas[6] = (SCRC & 0xff00) >> 8;
+			SendBuff_Oilgas[7] = (SCRC & 0x00ff);
+			loop = 1;
+			while(loop)
+			{
+				//问同步信息
+				write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
+				if(Flag_Reoilgas_Version == 5) //无线
+				{
+					msleep(1800);
+				}
+				else
+				{
+					msleep(800);
+				}
+				qDebug()<<"ask!!!!!!!!!!!!"<<Address_Reoilgas[i*4+j];
+				//读取同步信息
+				len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_Oilgas,sizeof(RecvBuff_Oilgas));
+				SCRC = CRC_Test(RecvBuff_Oilgas,len_uart_reoilgas);
+				if((RecvBuff_Oilgas[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_Oilgas[len_uart_reoilgas-1] == (SCRC & 0x00ff)))
+				{
+					//debug_read++;
+					if(RecvBuff_Oilgas[0] == Address_Reoilgas[i*4+j])
+					{
+						unsigned int i = (RecvBuff_Oilgas[0]-161)/4;
+						unsigned int j = (RecvBuff_Oilgas[0]-161)%4;
+						Fueling_Factor[i][j*2] = float(RecvBuff_Oilgas[7])+float(RecvBuff_Oilgas[8])/100;
+						Gas_Factor[i][j*2] = float(RecvBuff_Oilgas[9])+float(RecvBuff_Oilgas[10])/100;
+						Fueling_Factor[i][j*2+1] = float(RecvBuff_Oilgas[15])+float(RecvBuff_Oilgas[16])/100;
+						Gas_Factor[i][j*2+1] = float(RecvBuff_Oilgas[17])+float(RecvBuff_Oilgas[18])/100;
+						qDebug()<<Fueling_Factor[i][j*2] <<Gas_Factor[i][j*2] <<Fueling_Factor[i][j*2+1] <<Gas_Factor[i][j*2+1];
+						//同步界面是在systemset类创建的，所以要先把信号发送到systemset，然后发送到one_click_sync
+						emit signal_sync_data(i,j,float(RecvBuff_Oilgas[7])+float(RecvBuff_Oilgas[8])/100,float(RecvBuff_Oilgas[9])+float(RecvBuff_Oilgas[10])/100,
+						                          float(RecvBuff_Oilgas[15])+float(RecvBuff_Oilgas[16])/100,float(RecvBuff_Oilgas[17])+float(RecvBuff_Oilgas[18])/100);
+						emit reflash_setinfo();//记录到文件
+						loop = 0;
+					}
+					else
+					{
+						loop_num++;
+					}
+				}
+				else
+				{
+					loop_num++;
+				}
+				if(loop_num >= 4)
+				{
+					loop_num = 0;
+					loop = 0;
+					emit signal_sync_data(i,j,256,256,256,256);
+					qDebug()<<"no receive!!!!!!!!!!!!!!!!!!!!!!";
+				}
+			}
+		}
+	}
+	Flag_WaitSync = 0; //结束同步
+}
+
 /**************网络相关******************
  * id      未使用
  * jyjid   加油机编号   填充到数组中记得减1

@@ -23,11 +23,8 @@ SOURCES += main.cpp\
     warn.cpp \
     login.cpp \
     history.cpp \
-    main_main.cpp \
-    ip_op.cpp \
     serial.cpp \
     mythread.cpp \
-    udp.cpp \
     io_op.cpp \
     systemset.cpp \
     file_op.cpp \
@@ -37,19 +34,10 @@ SOURCES += main.cpp\
     warn_sound_thread.cpp \
     database_op.cpp \
     radar_485.cpp \
-    reoilgasthread.cpp \
     myqsqlrelationmodel_centerdisp.cpp \
-    fga1000_485.cpp \
     security.cpp \
-    post_webservice.cpp \
-    net_isoosi.cpp \
-    net_tcpclient_hb.cpp \
     timer_pop.cpp \
     reoilgas_pop.cpp \
-    net_isoosi_cq.cpp \
-    post_webservice_hunan.cpp \
-    main_main_zhongyou.cpp \
-    mytcpclient_zhongyou.cpp \
     protobuf/myserver_thread.cpp \
     protobuf/pb_common.c \
     protobuf/pb_decode.c \
@@ -57,7 +45,21 @@ SOURCES += main.cpp\
     protobuf/xielou.pb.c \
     myserver/des.cpp \
     myserver/myserver.cpp \
-    airtightness_test.cpp
+    airtightness_test.cpp \
+    timer_thread.cpp \
+    oilgas/fga1000_485.cpp \
+    oilgas/reoilgasthread.cpp \
+    network/ip_op.cpp \
+    network/main_main.cpp \
+    network/main_main_zhongyou.cpp \
+    network/mytcpclient_zhongyou.cpp \
+    network/net_isoosi.cpp \
+    network/net_isoosi_cq.cpp \
+    network/net_tcpclient_hb.cpp \
+    network/post_webservice.cpp \
+    network/post_webservice_hunan.cpp \
+    network/udp.cpp \
+    oilgas/one_click_sync.cpp
 
 HEADERS  += mainwindow.h \
     keyboard.h \
@@ -65,11 +67,8 @@ HEADERS  += mainwindow.h \
     login.h \
     history.h \
     config.h \
-    main_main.h \
-    ip_op.h \
     serial.h \
     mythread.h \
-    udp.h \
     io_op.h \
     systemset.h \
     file_op.h \
@@ -80,19 +79,10 @@ HEADERS  += mainwindow.h \
     warn_sound_thread.h \
     database_set.h \
     database_op.h \
-    reoilgasthread.h \
     myqsqlrelationmodel_centerdisp.h \
-    fga1000_485.h \
     security.h \
-    post_webservice.h \
-    net_isoosi.h \
-    net_tcpclient_hb.h \
     timer_pop.h \
     reoilgas_pop.h \
-    net_isoosi_cq.h \
-    post_webservice_hunan.h \
-    main_main_zhongyou.h \
-    mytcpclient_zhongyou.h \
     protobuf/myserver_thread.h \
     protobuf/pb.h \
     protobuf/pb_common.h \
@@ -101,7 +91,21 @@ HEADERS  += mainwindow.h \
     protobuf/xielou.pb.h \
     myserver/des.h \
     myserver/myserver.h \
-    airtightness_test.h
+    airtightness_test.h \
+    timer_thread.h \
+    oilgas/fga1000_485.h \
+    oilgas/reoilgasthread.h \
+    network/ip_op.h \
+    network/main_main.h \
+    network/main_main_zhongyou.h \
+    network/mytcpclient_zhongyou.h \
+    network/net_isoosi.h \
+    network/net_isoosi_cq.h \
+    network/net_tcpclient_hb.h \
+    network/post_webservice.h \
+    network/post_webservice_hunan.h \
+    network/udp.h \
+    oilgas/one_click_sync.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
@@ -111,7 +115,8 @@ FORMS    += mainwindow.ui \
     systemset.ui \
     connectus.ui \
     reoilgas_pop.ui \
-    airtightness_test.ui
+    airtightness_test.ui \
+    oilgas/one_click_sync.ui
 
 RESOURCES += \
     picture_.qrc

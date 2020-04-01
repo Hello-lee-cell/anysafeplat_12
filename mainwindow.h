@@ -8,14 +8,16 @@
 #include "connectus.h"
 #include "uartthread.h"
 #include "history.h"
-#include "post_webservice.h"
-#include "net_isoosi.h"
+#include "network/post_webservice.h"
+#include "network/net_isoosi.h"
 #include "reoilgas_pop.h"
-#include "net_isoosi_cq.h"
-#include "post_webservice_hunan.h"
-#include "mytcpclient_zhongyou.h"
-#include "main_main_zhongyou.h"
+#include "network/net_isoosi_cq.h"
+#include "network/post_webservice_hunan.h"
+#include "network/mytcpclient_zhongyou.h"
+#include "network/main_main_zhongyou.h"
 #include "myserver/myserver.h"
+#include "oilgas/reoilgasthread.h"
+#include "oilgas/fga1000_485.h"
 
 class QLineEdit;
 namespace Ui {
@@ -57,6 +59,8 @@ private:
     systemset *systemset_exec;
     connectus *connectus_show;
     reoilgas_pop *reoilgas_pop_exec;
+	reoilgasthread *uart_reoilgas;
+	FGA1000_485 *uart_fga;
 
     //post添加
     post_webservice *post_message;

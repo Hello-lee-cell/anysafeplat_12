@@ -104,11 +104,16 @@ unsigned char Pre_tank_en_change = 0;//如果设置改变  要及时发信号标
 unsigned char Pre_pipe_en_change = 0;
 unsigned char Env_Gas_en_change = 0;
 unsigned char Tem_tank_en_change = 0;
+unsigned char flag_pre_version = 0;//压力表版本
 
 FGA1000_485::FGA1000_485(QObject *parent):
     QThread(parent)
 {
-
+//	QTimer *time_timeout = new QTimer;
+//	time_timeout->setInterval(1000);
+//	time_timeout->start();
+//	time_timeout->moveToThread(this);
+//	connect(time_timeout,SIGNAL(timeout()),this,SLOT(time_time()));
 }
 
 void FGA1000_485::run()
@@ -123,14 +128,16 @@ void FGA1000_485::run()
     Pre_pipe_en_change = Pre_pipe_en;
     Env_Gas_en_change = Env_Gas_en;
     Tem_tank_en_change = Tem_tank_en;
+	flag_pre_version = Flag_Pressure_Transmitters_Mode;
 
     while (1)
     {
-		if( (Pre_tank_en != Pre_tank_en_change) || (Pre_pipe_en != Pre_pipe_en_change))
+		if( (Pre_tank_en != Pre_tank_en_change) || (Pre_pipe_en != Pre_pipe_en_change)||(flag_pre_version != Flag_Pressure_Transmitters_Mode))
 		{
 			Flag_StaPre_Temp[0] = 0x09;Flag_StaPre_Temp[1] = 0x09;Flag_StaPre_Temp[2] = 0x09;Flag_StaPre_Temp[3] = 0x09;
 			Pre_tank_en_change = Pre_tank_en;
 			Pre_pipe_en_change = Pre_pipe_en;
+			flag_pre_version = Flag_Pressure_Transmitters_Mode;
 		}
 		if(Env_Gas_en != Env_Gas_en_change)
 		{
@@ -138,10 +145,11 @@ void FGA1000_485::run()
 			Flag_StaFga_Temp[4] = 0x09;Flag_StaFga_Temp[5] = 0x09;Flag_StaFga_Temp[6] = 0x09;
 			Env_Gas_en_change = Env_Gas_en;
 		}
-		if(Tem_tank_en_change != Tem_tank_en)
+		if((Tem_tank_en_change != Tem_tank_en)||(flag_pre_version != Flag_Pressure_Transmitters_Mode))
 		{
 			Flag_StaPre_Temp[0] = 0x09;Flag_StaPre_Temp[1] = 0x09;Flag_StaPre_Temp[2] = 0x09;Flag_StaPre_Temp[2] = 0x09;
 			Tem_tank_en_change = Tem_tank_en;
+			flag_pre_version = Flag_Pressure_Transmitters_Mode;
 		}
 		if((Flag_Pressure_Transmitters_Mode == 0) || (Flag_Pressure_Transmitters_Mode == 1))
 		{
@@ -175,6 +183,7 @@ void FGA1000_485::run()
 			sta_pressure();
 			//
 		}
+		//this->exec();
     }
 }
 
@@ -1042,7 +1051,7 @@ void FGA1000_485::floating_point_conversion()
 		}
 		//Pre[0] = (pre_ma1 - 12)*625/1000;
 		//qDebug()<<"youguan"<<pre_ma1<<pressure[1]<<pressure[2]<<pressure[3]<<Pre[0];
-		if((Pre[0] < -15) || (Pre[0] > 15))
+		if((Pre[0] < -20) || (Pre[0] > 20))
 		{
 			Pre[0] = 88.88;
 		}
@@ -1076,7 +1085,7 @@ void FGA1000_485::floating_point_conversion()
 			pre_ma2 = (float(pressure[5]*65536+pressure[6]*256+pressure[7])/8388607)*20*1.2;
 			Pre[1] = (pre_ma2 - 12)*625/1000;
         }
-		if((Pre[1] < -15) || (Pre[1] > 15))
+		if((Pre[1] < -20) || (Pre[1] > 20))
         {
             Pre[1] = 88.88;
         }
@@ -1261,12 +1270,13 @@ void FGA1000_485::time_time()
     unsigned int time_m = date_time.toString("mm").toInt();
     unsigned int time_s = date_time.toString("ss").toInt();
     unsigned char flag_day_over = 0;
+	//qDebug()<<time_m<<time_s<<"^^^^^^^^^^^^^^^^^^^^^^^^";
     //post添加
     QString postdata_tank;
     QString postdata_pipe;
     QString postdata_xieyou;//卸油浓度
     QString postdata_hcnd;//后处理浓度
-    if((time_h == 1)&&(time_m == 0)&&(time_s == 0))//每天早上一点
+	if((time_h == 0)&&(time_m == 30)&&(time_s == 0))//每天早上一点
     {
         flag_day_over = 1;
         day_over = 1;//调试用
@@ -1713,7 +1723,7 @@ void FGA1000_485::time_time()
         }
         Flag_Timeto_CloseNeeded[3] = flag_timeto_temp;
         //显示信号
-        emit data_show();
+		emit data_show();
 
         flag_day_over = 0;
         day_over = 0; //调试用

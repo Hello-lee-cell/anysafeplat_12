@@ -15,9 +15,9 @@
 #include <sys/ioctl.h>
 #include <net/if.h>
 #include <math.h>//abs
-#include <udp.h>
+#include <network/udp.h>
 #include <config.h>
-#include <ip_op.h>
+#include <network/ip_op.h>
 #include <serial.h>
 #include <uart_main.h>
 #include <file_op.h>

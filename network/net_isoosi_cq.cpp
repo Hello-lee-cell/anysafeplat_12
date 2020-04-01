@@ -259,7 +259,7 @@ void net_isoosi_cq::send_tcpclient_data(QString data)
                 }
                 else
                 {
-                    msleep(50);
+					msleep(50);
                     memset(isoosi_revbuf_cq,0,sizeof(char)*128);//清零数组
 					if((num_recv_cq = recv(sockfd_cq,isoosi_revbuf_cq,101,MSG_WAITALL)) <= 0)//MSG_DONTWAIT 1秒延时或者收到89个字节
                     {

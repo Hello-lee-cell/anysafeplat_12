@@ -24,9 +24,29 @@ history::history(QWidget *parent) :
   //  setAttribute(Qt::WA_TranslucentBackground,true);    //窗体透明
     setWindowFlags(Qt::Tool|Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
 
-    ui->tabWidget->setStyleSheet("QTabBar::tab{max-height:33px;min-width:130px;background-color: rgb(170,170,255,255);border: 2px solid;padding:9px;}\
-                                  QTabBar::tab:selected {background-color: white}\
-                                  QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}");
+//	if(Flag_screen_zaixian == 1){on_pushButton_gasre_oilgun_clicked();}
+//	else if(Flag_screen_xielou == 1){on_pushButton_xielou_warn_clicked();}
+//	else if(Flag_screen_radar == 1){on_pushButton_radar_clicked();}
+//	else if((Flag_screen_safe==1)||(Flag_screen_burngas==1)){on_pushButton_jingdian_clicked();}
+//	else if(Flag_screen_burngas == 1){on_pushButton_gaswarn_clicked();}
+
+	ui->tabWidget->setTabEnabled(0,Flag_screen_zaixian);
+	ui->tabWidget->setTabEnabled(1,Flag_screen_xielou);
+	ui->tabWidget->setTabEnabled(2,Flag_screen_radar);
+	if((Flag_screen_safe==0)&&(Flag_screen_burngas==0))
+	{
+		ui->tabWidget->setTabEnabled(3,0);
+	}
+	else
+	{
+		ui->tabWidget->setTabEnabled(3,1);
+	}
+	ui->tabWidget->setTabEnabled(4,Flag_screen_burngas);
+	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {min-height:40px;max-width:150px;background-color: rgb(170,170,255,255);border: 1px solid;padding:4px;}\
+	                             QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
+	                             QTabBar::tab:selected {background-color: white}\
+	                             QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}\
+	                             QTabBar::tab:disabled {width: 0; height: 0; color: transparent;padding:0px;border: 0px solid}");
 
 
 	ui->tableView->verticalScrollBar()->setStyleSheet( "QScrollBar:vertical{ background: #F0F0F0; width:30px ;margin-top:0px;margin-bottom:0px }"
@@ -52,39 +72,37 @@ history::history(QWidget *parent) :
     connect(this,SIGNAL(export_noU()),this,SLOT(disp_noU()));
 
     //筛选时间控件初始化
-    ui->dateEdit_from->setDate(QDate::currentDate().addDays(-1));
-    ui->dateEdit_to->setDate(QDate::currentDate());
+	ui->dateEdit_from->setDate(QDate::currentDate().addDays(-1));
+	ui->dateEdit_to->setDate(QDate::currentDate());
 //    ui->timeEdit_from->setTime(QTime::currentTime());
-    ui->timeEdit_to->setTime(QTime::currentTime());
-    on_pushButton_xielou_warn_clicked();
+	ui->timeEdit_to->setTime(QTime::currentTime());
+	ui->widget_conditional_query->setHidden(1);
 
-    which_guncheckbox_show();
-    ui->widget_conditional_query->setHidden(1);
+	//获取剩余内存
+	QString mem_used;
+	QString mem_all;
+	QString mem_available;
+	QString mem_percentage;
+	QProcess mem_process;
+	mem_process.start("df /opt");
+	mem_process.waitForFinished();
+	QByteArray mem_output = mem_process.readAllStandardOutput();
 
-    //获取剩余内存
-    QString mem_used;
-    QString mem_all;
-    QString mem_available;
-    QString mem_percentage;
-    QProcess mem_process;
-    mem_process.start("df /opt");
-    mem_process.waitForFinished();
-    QByteArray mem_output = mem_process.readAllStandardOutput();
+	QString str_output = mem_output;
+	qDebug() << str_output.toUtf8();
+	str_output.replace(QRegExp("[\\s]+"), " ");  //把所有的多余的空格转为一个空格
+	mem_all = str_output.section(' ', 8, 8);       //
+	mem_used = str_output.section(' ', 9, 9);
+	mem_available = str_output.section(' ', 10, 10);
+	mem_percentage = str_output.section(' ', 11, 11);
+	mem_used = mem_used.left(mem_used.length() - 3);//变为M字节
+	mem_available = mem_available.left(mem_available.length() - 3);//变为M字节
+	mem_used.append("M");
+	mem_available.append("M");
+	qDebug()<<mem_all<<mem_used<<mem_available<<mem_percentage;
+	QString mem_sta = "已用: "+mem_used+"\r\n"+"可用: "+mem_available+"\n"+"使用率: "+mem_percentage ;
+	ui->label_mem->setText(mem_sta);
 
-    QString str_output = mem_output;
-    qDebug() << str_output.toUtf8();
-    str_output.replace(QRegExp("[\\s]+"), " ");  //把所有的多余的空格转为一个空格
-    mem_all = str_output.section(' ', 8, 8);       //
-    mem_used = str_output.section(' ', 9, 9);
-    mem_available = str_output.section(' ', 10, 10);
-    mem_percentage = str_output.section(' ', 11, 11);
-    mem_used = mem_used.left(mem_used.length() - 3);//变为M字节
-    mem_available = mem_available.left(mem_available.length() - 3);//变为M字节
-    mem_used.append("M");
-    mem_available.append("M");
-    qDebug()<<mem_all<<mem_used<<mem_available<<mem_percentage;
-    QString mem_sta = "已用: "+mem_used+"\r\n"+"可用: "+mem_available+"\n"+"使用率: "+mem_percentage ;
-    ui->label_mem->setText(mem_sta);
 }
 
 history::~history()
@@ -574,20 +592,20 @@ void history::on_pushButton_radar_clicked()     //雷达入侵记录
 
 void history::on_tabWidget_currentChanged(int index)        //导航
 {
-    ui->widget_conditional_query->setHidden(1);//隐藏加油枪条件查询信息
-    switch (index)
-    {
-        case 0: on_pushButton_xielou_warn_clicked();
-                break;
-        case 1: on_pushButton_radar_clicked();
-                break;
-        case 2: on_pushButton_jingdian_clicked();
-                break;
-        case 3: on_pushButton_gaswarn_clicked();
-                break;
-        case 4: on_pushButton_gasre_oilgun_clicked();
-                break;
-    }
+//	ui->widget_conditional_query->setHidden(1);//隐藏加油枪条件查询信息
+//    switch (index)
+//    {
+//        case 0: on_pushButton_xielou_warn_clicked();
+//                break;
+//        case 1: on_pushButton_radar_clicked();
+//                break;
+//        case 2: on_pushButton_jingdian_clicked();
+//                break;
+//        case 3: on_pushButton_gaswarn_clicked();
+//                break;
+//        case 4: on_pushButton_gasre_oilgun_clicked();
+//                break;
+//    }
 }
 
 void history::on_pushButton_gaswarn_clicked()       //可燃气体
@@ -719,6 +737,7 @@ void history::on_pushButton_gasre_warn_clicked() //报警信息
 //条件查询按钮
 void history::on_pushButton_conditional_query_clicked()
 {
+	which_guncheckbox_show();
     ui->widget_conditional_query->setHidden(0);
     ui->pushButton_conditional_query->setStyleSheet("background-color: rgb(250,250,250)");
     ui->pushButton_gasre_huanjing->setStyleSheet("background-color: rgb(60,164,252)");

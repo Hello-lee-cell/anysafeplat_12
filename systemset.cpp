@@ -10,10 +10,10 @@
 
 #include"serial.h"
 #include"mainwindow.h"
-#include"main_main.h"
+#include"network/main_main.h"
 #include"config.h"
 #include"file_op.h"
-#include"ip_op.h"
+#include"network/ip_op.h"
 #include"mythread.h"
 #include"warn.h"
 #include"keyboard.h"
@@ -27,7 +27,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <QTcpSocket>
-#include "airtightness_test.h"
+
 
 unsigned char hang = 0;
 unsigned char lie = 0;
@@ -602,6 +602,8 @@ systemset::systemset(QWidget *parent) :
 
 systemset::~systemset()
 {
+	//airtest->close();
+	//sync->close();
     delete ui;
 }
 
@@ -3872,7 +3874,15 @@ void systemset::on_toolButton_reoilgas_setask_clicked()
 
 void systemset::Setinfo_Recv_FromMainwindow(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned char e, unsigned char f, unsigned char g, unsigned char h, unsigned char i, unsigned char j)
 {
-    ui->label_reoilgas_setdisp->setText(QString("%1.%2-%3.%4-%5  %6.%7-%8.%9-%10").arg(a).arg(b).arg(c).arg(d).arg(e).arg(f).arg(g).arg(h).arg(i).arg(j));
+	//ui->label_reoilgas_setdisp->setText(QString("%1.%2-%3.%4-%5  %6.%7-%8.%9-%10").arg(a).arg(b).arg(c).arg(d).arg(e).arg(f).arg(g).arg(h).arg(i).arg(j));
+	ui->label_reoilgas_setdisp->setText(QString::number((float(a)+float(b)/100),'f',2).append("-"). append(QString::number((float(c)+float(d)/100),'f',2)).append("-").append(QString::number(e)).append("  ")
+	                                    .append(QString::number((float(f)+float(g)/100),'f',2)).append("-").append(QString::number((float(h)+float(i)/100),'f',2)).append("-").append(QString::number(j)));
+	if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))
+	{
+		//写入文本
+		config_reoilgas_gasdetail_write();
+		config_reoilgas_oildetail_write();
+	}
 }
 
 void systemset::setText_pv(const QString &text) //pv正压开启压力设置
@@ -4919,7 +4929,19 @@ void systemset::on_pushButton_Airtighness_Test_clicked()
 	airtest->setAttribute(Qt::WA_DeleteOnClose);
 	airtest->show();
 }
-
+//带屏采集器一键同步功能
+void systemset::on_pushButton_sync_clicked()
+{
+	One_click_sync *sync;
+	sync = new One_click_sync;
+	sync->setAttribute(Qt::WA_DeleteOnClose);
+	connect(this,SIGNAL(signal_sync_factor_data(uint,uint,float,float,float,float)),sync,SLOT(receive_factor_data(uint,uint,float,float,float,float)));
+	sync->show();
+}
+void systemset::sync_factor_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2)
+{
+	emit signal_sync_factor_data(idi,idj,oil_factor1,gas_factor1,oil_factor2,gas_factor2);
+}
 
 /************配置信息网络上传*****************
  * id     没有用
@@ -4959,6 +4981,7 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		}
 	}
 }
+
 /*****************准备发送泄漏设置数据****************
 tank_num       油罐传感器数量
 tank_type      油罐传感器类型
@@ -4970,5 +4993,6 @@ void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pi
 {
 	emit myserver_xielousetup(tank_num,tank_type,pipe_num,dispener_num,basin_num);
 }
+
 
 

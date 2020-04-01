@@ -7,21 +7,20 @@
 #include <QDialog>
 #include <QFile>
 #include <QDebug>
-
 #include "config.h"
 #include "file_op.h"
 #include "io_op.h"
-#include "udp.h"
+#include "network/udp.h"
 #include "serial.h"
 #include "radar_485.h"
 #include "mythread.h"
 #include "database_op.h"
-#include "reoilgasthread.h"
-#include "fga1000_485.h"
 #include "security.h"
-#include "main_main.h"
+#include "network/main_main.h"
 #include "airtightness_test.h"
 #include <QElapsedTimer>
+#include <timer_thread.h>
+#include "oilgas/one_click_sync.h"
 
 unsigned char Flag_Draw_Type = 0;       //1-12×8=96对应加油机 101油罐压力  102管线压力  103油罐温度  104油气浓度
 unsigned char flag_exchange_history = 0;
@@ -75,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	system("touch /opt/TouchCalibration");
 	system("sync");
 	ui->label_touch_calibration->setHidden(0);
+
     /****需要创建共享内训，所以放在首位，防止ask690读取不到******/
     mythread *warn;
     warn = new mythread;
@@ -111,22 +111,17 @@ MainWindow::MainWindow(QWidget *parent) :
     warn->start();
     qDebug()<<"my thread is start!";
     /******************涉及共享内存*************************/
-//    Log = new login;
-//    connect(this,SIGNAL(closeing_login()),Log,SLOT(on_pushButton_2_clicked()));
-//    Log->show();
-//    Log->close();
-
 
     ui->label_delay_jilu->setHidden(1);
-
+	//时间显示
     timer_lcd = new QTimer();
     timer_lcd->setInterval(1000);
-    timer_lcd->start();
-    connect(timer_lcd,SIGNAL(timeout()),this,SLOT(Timerout_lcd()));
+	timer_lcd->start();
+	connect(timer_lcd,SIGNAL(timeout()),this,SLOT(Timerout_lcd()));
     //防止时间卡顿，增加了一个单独的槽函数处理每秒的函数
     connect(this,SIGNAL(time_out_slotfunction_s(QDateTime)),this,SLOT(time_out_slotfunction(QDateTime)));
 
-    //初始化界面显示，隐藏一部分
+	//初始化界面显示，隐藏一部分
     init_tabwidget();
 	ui->tabWidget->setTabEnabled(0,Flag_screen_zaixian);
 	ui->tabWidget->setTabEnabled(1,Flag_screen_xielou);
@@ -138,99 +133,706 @@ MainWindow::MainWindow(QWidget *parent) :
 	                                QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
                                     QTabBar::tab:selected {background-color: white}\
 	                                QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}\
-	                                QTabBar::tab:disabled {width: 0; height: 0; color: transparent;padding:0px;border: 0px solid}");
+	                             QTabBar::tab:disabled {width: 0; height: 0; color: transparent;padding:0px;border: 0px solid}");
+
+/*********************************************
+	gif_right = new QMovie(":/picture/right.gif");
+	gif_uart = new QMovie(":/picture/uartwro.gif");
+	gif_oil = new QMovie(":/picture/oilwro.gif");
+	gif_water = new QMovie(":/picture/waterwro.gif");
+	gif_sensor = new QMovie(":/picture/sensorwro.gif");
+	gif_nosensor = new QMovie(":/picture/nosensor.gif");
+	gif_high = new QMovie(":/picture/highwro.gif");
+	gif_low = new QMovie(":/picture/lowwro.gif");
+	gif_presurepre = new QMovie(":/picture/presurepre.gif");
+	gif_presurewarn = new QMovie(":/picture/presurewarn.gif");
 
 
-   //*********油气回收界面初始
-    ui->widget_gundetail->setHidden(1);
+	gif_presurepre_pre = new QMovie(":/picture/presurepre_pre.gif");
+	gif_presurewarn_pre = new QMovie(":/picture/presurewarn_pre.gif");
+	gif_right_pre = new QMovie(":/picture/right_pre.gif");
+	gif_sensor_pre = new QMovie(":/picture/sensorwro_pre.gif");
+	gif_uart_pre = new QMovie(":/picture/uartwro_pre.gif");
+	gif_crash_warn = new QMovie(":/picture/crashwarn.gif");
+	语音文件
+			gif_right->start();
+	gif_uart->start();
+	gif_oil->start();
+	gif_water->start();
+	gif_sensor->start();
+	gif_nosensor->start();
+	gif_high->start();
+	gif_low->start();
+	gif_presurepre->start();
+	gif_presurewarn->start();
+	gif_crash_warn->start();
+	gif_presurepre_pre->start();
+	gif_presurewarn_pre->start();
+	gif_right_pre->start();
+	gif_sensor_pre->start();
+	gif_uart_pre->start();
+********************************/
 
-    ui->label_env_tankpre->setHidden(1);
-    ui->label_env_pipepre->setHidden(1);
-    ui->label_env_tanktem->setHidden(1);
-    ui->label_env_tanknongdu->setHidden(1);
-    ui->label_oilgas_tankpre_2->setHidden(1);
-    ui->label_oilgas_pipepre_2->setHidden(1);
-    ui->label_oilgas_tanktemp_2->setHidden(1);
-    ui->label_oilgas_tanknongdu_2->setHidden(1);
+	gif_radar = new QMovie(":/picture/radar.gif");
+	gif_radar->start();
+	ui->label_radar_gif->setMovie(gif_radar);
+	gif_radar->stop();
 
-    ui->label_gun_1_1u->setHidden(1);
-    ui->label_gun_1_2u->setHidden(1);
-    ui->label_gun_1_3u->setHidden(1);
-    ui->label_gun_1_4u->setHidden(1);
-    ui->label_gun_1_5u->setHidden(1);
-    ui->label_gun_1_6u->setHidden(1);
-    ui->label_gun_2_1u->setHidden(1);
-    ui->label_gun_2_2u->setHidden(1);
-    ui->label_gun_2_3u->setHidden(1);
-    ui->label_gun_2_4u->setHidden(1);
-    ui->label_gun_2_5u->setHidden(1);
-    ui->label_gun_2_6u->setHidden(1);
-    ui->label_gun_3_1u->setHidden(1);
-    ui->label_gun_3_2u->setHidden(1);
-    ui->label_gun_3_3u->setHidden(1);
-    ui->label_gun_3_4u->setHidden(1);
-    ui->label_gun_3_5u->setHidden(1);
-    ui->label_gun_3_6u->setHidden(1);
-    ui->label_gun_4_1u->setHidden(1);
-    ui->label_gun_4_2u->setHidden(1);
-    ui->label_gun_4_3u->setHidden(1);
-    ui->label_gun_4_4u->setHidden(1);
-    ui->label_gun_4_5u->setHidden(1);
-    ui->label_gun_4_6u->setHidden(1);
-    ui->label_gun_5_1u->setHidden(1);
-    ui->label_gun_5_2u->setHidden(1);
-    ui->label_gun_5_3u->setHidden(1);
-    ui->label_gun_5_4u->setHidden(1);
-    ui->label_gun_5_5u->setHidden(1);
-    ui->label_gun_5_6u->setHidden(1);
-    ui->label_gun_6_1u->setHidden(1);
-    ui->label_gun_6_2u->setHidden(1);
-    ui->label_gun_6_3u->setHidden(1);
-    ui->label_gun_6_4u->setHidden(1);
-    ui->label_gun_6_5u->setHidden(1);
-    ui->label_gun_6_6u->setHidden(1);
-    ui->label_gun_7_1u->setHidden(1);
-    ui->label_gun_7_2u->setHidden(1);
-    ui->label_gun_7_3u->setHidden(1);
-    ui->label_gun_7_4u->setHidden(1);
-    ui->label_gun_7_5u->setHidden(1);
-    ui->label_gun_7_6u->setHidden(1);
-    ui->label_gun_8_1u->setHidden(1);
-    ui->label_gun_8_2u->setHidden(1);
-    ui->label_gun_8_3u->setHidden(1);
-    ui->label_gun_8_4u->setHidden(1);
-    ui->label_gun_8_5u->setHidden(1);
-    ui->label_gun_8_6u->setHidden(1);
-    ui->label_gun_9_1u->setHidden(1);
-    ui->label_gun_9_2u->setHidden(1);
-    ui->label_gun_9_3u->setHidden(1);
-    ui->label_gun_9_4u->setHidden(1);
-    ui->label_gun_9_5u->setHidden(1);
-    ui->label_gun_9_6u->setHidden(1);
-    ui->label_gun_10_1u->setHidden(1);
-    ui->label_gun_10_2u->setHidden(1);
-    ui->label_gun_10_3u->setHidden(1);
-    ui->label_gun_10_4u->setHidden(1);
-    ui->label_gun_10_5u->setHidden(1);
-    ui->label_gun_10_6u->setHidden(1);
-    ui->label_gun_11_1u->setHidden(1);
-    ui->label_gun_11_2u->setHidden(1);
-    ui->label_gun_11_3u->setHidden(1);
-    ui->label_gun_11_4u->setHidden(1);
-    ui->label_gun_11_5u->setHidden(1);
-    ui->label_gun_11_6u->setHidden(1);
-    ui->label_gun_12_1u->setHidden(1);
-    ui->label_gun_12_2u->setHidden(1);
-    ui->label_gun_12_3u->setHidden(1);
-    ui->label_gun_12_4u->setHidden(1);
-    ui->label_gun_12_5u->setHidden(1);
-    ui->label_gun_12_6u->setHidden(1);
+//************************泄漏初始化*begin*****************************//
+	int i = 6;  //设备数目初始化使用  //之前是5，改为6加了一个压力法显示模式位
+	QFile config("/opt/config.txt");
+	if(!config.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config file!"<<endl;
+	}
+	QTextStream in(&config);
+	QString line;
+	while(i)
+	{
+		line = in.readLine();
+		QByteArray num_config = line.toLatin1();
+		char *mm = num_config.data();
+		unsigned char j;
+		switch(i)
+		{
+		case 1:j = mm[0] - 48;
+			if (j == 0 || j == 1)
+			{
+				Flag_pre_mode = j;
+			}
+			else
+			{
+				Flag_pre_mode = 125;
+			}
+			break;
 
-//*********added for radar****/
+		case 2: j = mm[0] - 48;
+			if(j <= 3)
+			{
+				Test_Method = mm[0] - 48;
+			}
+			else
+			{
+				Test_Method = 0x03;
+			}
+			break;
+		case 6: j = mm[0] - 48;
+			if(j <= 8)
+			{
+				count_tank = mm[0]-48;
+			}
+			else
+			{
+				count_tank = 0;
+			}
+
+			break;
+		case 5: j = mm[0] - 48;
+			if(j <= 8)
+			{
+				count_pipe = mm[0]-48;
+			}
+			else
+			{
+				count_pipe = 0;
+			}
+			switch(count_pipe)
+			{
+			case 0:
+				ui->label_91->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 1:
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 2:
+
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 3:
+
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 4:
+
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 5:
+
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 6:
+
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 7:
+
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 8:
+				ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_98->setStyleSheet("border-image: url(:/picture/right.png);");
+
+			}
+			break;
+		case 4: j = mm[0] - 48;
+			if(j <=8)
+			{
+				count_dispener = mm[0]-48;
+			}
+			else
+			{
+				count_dispener = 0;
+			}
+			switch(count_dispener)
+			{
+			case 0:
+				ui->label_81->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 1:
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 2:
+
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 3:
+
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 4:
+
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 5:
+
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 6:
+
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 7:
+
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 8:
+				ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
+
+			}
+			break;
+		case 3: j = mm[0] - 48;
+			if(j <= 8)
+			{
+				count_basin = mm[0]-48;
+			}
+			else
+			{
+				count_basin = 0;
+			}
+			switch(count_basin)
+			{
+			case 0:
+				ui->label->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 1:
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 2:
+
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 3:
+
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 4:
+
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 5:
+
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 6:
+
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 7:
+
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
+				break;
+			case 8:
+				ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
+
+				ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
+
+			}
+			break;
+
+		}
+		i--;
+		if(i == 0)
+		{
+			amount_tank_setted();
+		}
+	}
+	config.close();
+//************************泄漏初始化*end*****************************//
+
+//*********************安全防护设备初始化*begin**************************//
+	QFile config_jingdian("/opt/jingdian/config_jingdian.txt");
+	if(!config_jingdian.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"Can't open config_jingdian file!"<<endl;
+	}
+	QTextStream in_jingdian(&config_jingdian);
+	QString line_jingdian;
+	line_jingdian = in_jingdian.readLine();
+	QByteArray read_config_jingdian = line_jingdian.toLatin1();
+	char *read_data_jingdian = read_config_jingdian.data();
+	Flag_xieyou = atoi(read_data_jingdian);//使能
+	config_jingdian.close();
+
+	QFile config_IIE("/opt/jingdian/config_IIE.txt");
+	if(!config_IIE.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"Can't open config_IIE file!"<<endl;
+	}
+	QTextStream in_IIE(&config_IIE);
+	QString line_IIE;
+	line_IIE = in_IIE.readLine();
+	QByteArray read_config_IIE = line_IIE.toLatin1();
+	char *read_data_IIE = read_config_IIE.data();
+	Flag_IIE = atoi(read_data_IIE);//使能
+	config_IIE.close();
+	if(Flag_IIE == 0)
+	{
+		ui->label_IIE_work->setText("设备关闭");
+		ui->label_IIE_tongxinguzhang->setHidden(1);//隐藏设备故障
+	}
+	else
+	{
+		ui->label_IIE_work->setText("设备开启");
+		ui->label_IIE_tongxinguzhang->setHidden(1);//隐藏设备故障
+	}
+
+	//潜油泵，液位仪，防撞柱设备初始化
+	QFile config_security("/opt/jingdian/config_security.txt");
+	if(!config_security.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config file!"<<endl;
+	}
+	QTextStream in_security(&config_security);
+	QString line_security;
+	line_security = in_security.readLine();
+	Flag_Enable_liqiud = line_security.toInt();
+	line_security = in_security.readLine();
+	Flag_Enable_pump = line_security.toInt();
+	line_security = in_security.readLine();
+	Num_Crash_Column = line_security.toInt();
+	config_security.close();
+//*********************安全防护设备初始化*end**************************//
+
+//*********************防撞柱初始化*begin**************************//
+	crash_column_reset();//防撞柱数量重绘制
+	ui->label_cra1->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra2->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra3->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra4->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra5->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra6->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra7->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra8->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra9->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra10->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra11->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra12->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra13->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra14->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra15->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra16->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra17->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra18->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra19->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra20->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra21->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra22->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra23->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra24->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra25->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra26->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra27->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra28->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra29->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra30->setStyleSheet("border-image: url(:/picture/right.png);");
+	ui->label_cra31->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra32->setStyleSheet("border-image: url(:/picture/right.png);");
+//*********************防撞柱初始化*end**************************//
+
+//***********************************added for radar**************************************/
     ui->toolButton_syssetshow->setHidden(1);
     timer_drw = new QTimer();
     timer_drw->setInterval(300);
-    connect(timer_drw,SIGNAL(timeout()),this,SLOT(area_pointdrw()));
+	connect(timer_drw,SIGNAL(timeout()),this,SLOT(area_pointdrw()));
     ui->paint_area->xAxis->setRange(-25,25);
     ui->paint_area->yAxis->setRange(0,50);
 
@@ -289,1173 +891,479 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     }
     ui->paint_area->addGraph();//描点图层
-    //雷达<-
-//    gif_right = new QMovie(":/picture/right.gif");
-//    gif_uart = new QMovie(":/picture/uartwro.gif");
-//    gif_oil = new QMovie(":/picture/oilwro.gif");
-//    gif_water = new QMovie(":/picture/waterwro.gif");
-//    gif_sensor = new QMovie(":/picture/sensorwro.gif");
-//    gif_nosensor = new QMovie(":/picture/nosensor.gif");
-//    gif_high = new QMovie(":/picture/highwro.gif");
-//    gif_low = new QMovie(":/picture/lowwro.gif");
-//    gif_presurepre = new QMovie(":/picture/presurepre.gif");
-//    gif_presurewarn = new QMovie(":/picture/presurewarn.gif");
-
-
-//    gif_presurepre_pre = new QMovie(":/picture/presurepre_pre.gif");
-//    gif_presurewarn_pre = new QMovie(":/picture/presurewarn_pre.gif");
-//    gif_right_pre = new QMovie(":/picture/right_pre.gif");
-//    gif_sensor_pre = new QMovie(":/picture/sensorwro_pre.gif");
-//    gif_uart_pre = new QMovie(":/picture/uartwro_pre.gif");
-//    gif_crash_warn = new QMovie(":/picture/crashwarn.gif");
-	//语音文件
-//    gif_right->start();
-//    gif_uart->start();
-//    gif_oil->start();
-//    gif_water->start();
-//    gif_sensor->start();
-//    gif_nosensor->start();
-//    gif_high->start();
-//    gif_low->start();
-//    gif_presurepre->start();
-//    gif_presurewarn->start();
-//    gif_crash_warn->start();
-//    gif_presurepre_pre->start();
-//    gif_presurewarn_pre->start();
-//    gif_right_pre->start();
-//    gif_sensor_pre->start();
-//    gif_uart_pre->start();
-
-	gif_radar = new QMovie(":/picture/radar.gif");
-    gif_radar->start();
-    ui->label_radar_gif->setMovie(gif_radar);
-    gif_radar->stop();
-
-
-    int i = 6;  //设备数目初始化使用  //之前是5，改为6加了一个压力法显示模式位
-
-    QFile config("/opt/config.txt");
-    if(!config.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config file!"<<endl;
-    }
-    QTextStream in(&config);
-    QString line;
-    while(i)
-    {
-        line = in.readLine();
-        QByteArray num_config = line.toLatin1();
-        char *mm = num_config.data();
-        unsigned char j;
-        switch(i)
-        {
-            case 1:j = mm[0] - 48;
-                    if (j == 0 || j == 1)
-                    {
-                        Flag_pre_mode = j;
-                    }
-                    else
-                    {
-                        Flag_pre_mode = 125;
-                    }
-                    break;
-
-            case 2: j = mm[0] - 48;
-                    if(j <= 3)
-                    {
-                        Test_Method = mm[0] - 48;
-                    }
-                    else
-                    {
-                        Test_Method = 0x03;
-                    }
-                    break;
-            case 6: j = mm[0] - 48;
-                    if(j <= 8)
-                    {
-                        count_tank = mm[0]-48;
-                    }
-                    else
-                    {
-                        count_tank = 0;
-                    }
-
-                    break;
-            case 5: j = mm[0] - 48;
-                    if(j <= 8)
-                    {
-                        count_pipe = mm[0]-48;
-                    }
-                    else
-                    {
-                        count_pipe = 0;
-                    }
-                    switch(count_pipe)
-                    {
-                        case 0:
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 1:
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 2:
-
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 3:
-
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 4:
-
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 5:
-
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 6:
-
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 7:
-
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 8:
-						        ui->label_91->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_92->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_93->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_94->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_95->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_96->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_97->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_98->setStyleSheet("border-image: url(:/picture/right.png);");
-
-                    }
-                    break;
-            case 4: j = mm[0] - 48;
-                    if(j <=8)
-                    {
-                        count_dispener = mm[0]-48;
-                    }
-                    else
-                    {
-                        count_dispener = 0;
-                    }
-                    switch(count_dispener)
-                    {
-                        case 0:
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 1:
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 2:
-
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 3:
-
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 4:
-
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 5:
-
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 6:
-
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 7:
-
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_88->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 8:
-						        ui->label_81->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_82->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_83->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_84->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_85->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_86->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_87->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
-
-                    }
-                    break;
-            case 3: j = mm[0] - 48;
-                    if(j <= 8)
-                    {
-                        count_basin = mm[0]-48;
-                    }
-                    else
-                    {
-                        count_basin = 0;
-                    }
-                    switch(count_basin)
-                    {
-                        case 0:
-						        ui->label->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 1:
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 2:
-
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 3:
-
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 4:
-
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 5:
-
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 6:
-
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 7:
-
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/nosensor.png);");
-                                break;
-                    case 8:
-						        ui->label->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_2->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_3->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_4->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_5->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_6->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_7->setStyleSheet("border-image: url(:/picture/right.png);");
-
-								ui->label_8->setStyleSheet("border-image: url(:/picture/right.png);");
-
-                    }
-                    break;
-
-        }
-        i--;
-        if(i == 0)
-        {
-            amount_tank_setted();
-        }
-    }
-    config.close();
-
-
-    //安全防护设备初始化
-    QFile config_jingdian("/opt/jingdian/config_jingdian.txt");
-    if(!config_jingdian.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() <<"Can't open config_jingdian file!"<<endl;
-    }
-    QTextStream in_jingdian(&config_jingdian);
-    QString line_jingdian;
-    line_jingdian = in_jingdian.readLine();
-    QByteArray read_config_jingdian = line_jingdian.toLatin1();
-    char *read_data_jingdian = read_config_jingdian.data();
-    Flag_xieyou = atoi(read_data_jingdian);//使能
-    config_jingdian.close();
-
-    QFile config_IIE("/opt/jingdian/config_IIE.txt");
-    if(!config_IIE.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() <<"Can't open config_IIE file!"<<endl;
-    }
-    QTextStream in_IIE(&config_IIE);
-    QString line_IIE;
-    line_IIE = in_IIE.readLine();
-    QByteArray read_config_IIE = line_IIE.toLatin1();
-    char *read_data_IIE = read_config_IIE.data();
-    Flag_IIE = atoi(read_data_IIE);//使能
-    config_IIE.close();
-    if(Flag_IIE == 0)
-    {
-        ui->label_IIE_work->setText("设备关闭");
-        ui->label_IIE_tongxinguzhang->setHidden(1);//隐藏设备故障
-    }
-    else
-    {
-        ui->label_IIE_work->setText("设备开启");
-        ui->label_IIE_tongxinguzhang->setHidden(1);//隐藏设备故障
-    }
-
-    //潜油泵，液位仪，防撞柱设备初始化
-    QFile config_security("/opt/jingdian/config_security.txt");
-    if(!config_security.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config file!"<<endl;
-    }
-    QTextStream in_security(&config_security);
-    QString line_security;
-    line_security = in_security.readLine();
-    Flag_Enable_liqiud = line_security.toInt();
-    line_security = in_security.readLine();
-    Flag_Enable_pump = line_security.toInt();
-    line_security = in_security.readLine();
-    Num_Crash_Column = line_security.toInt();
-    config_security.close();
-
-    crash_column_reset();//防撞柱数量重绘制
-    ui->label_cra1->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra2->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra3->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra4->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra5->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra6->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra7->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra8->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra9->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra10->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra11->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra12->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra13->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra14->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra15->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra16->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra17->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra18->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra19->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra20->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra21->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra22->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra23->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra24->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra25->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra26->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra27->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra28->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra29->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra30->setStyleSheet("border-image: url(:/picture/right.png);");
-    ui->label_cra31->setStyleSheet("border-image: url(:/picture/right.png);");ui->label_cra32->setStyleSheet("border-image: url(:/picture/right.png);");
-
-    //******added for radar***/
-
-    //智能设置初始化
-    QFile config_radar_zn("/opt/radar/config_zn.txt");
-    if(!config_radar_zn.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_zn file!"<<endl;
-    }
-    QTextStream out_radar_zn(&config_radar_zn);
-    QString line_radar_zn;
-    uchar i_ra = 14;
-    while(i_ra)
-    {
-        line_radar_zn = out_radar_zn.readLine();
-        QByteArray radar_time_config = line_radar_zn.toLatin1();
-        char *ra = radar_time_config.data();
-        switch(i_ra)
-        {
-            case 1:Flag_sensitivity = ra[0] - 48;        //灵敏度
-                    break;
-            case 2:Flag_area_ctrl[3] = ra[0] -48;        //4#防区使能
-                    break;
-            case 3:Flag_area_ctrl[2] = ra[0] -48;        //3#防区使能
-                    break;
-            case 4:Flag_area_ctrl[1] = ra[0] -48;        //2#防区使能
-                    break;
-            case 5:Flag_area_ctrl[0] = ra[0] -48;       //1#防区使能
-                    break;
-            case 6: Flag_outdoor_warn = ra[0] - 48;       //室外报警使能
-                    break;
-            case 7: if(!ra[1])  //报警延长设置    s
-                    {
-                        Warn_delay_s = ra[0] - 48;
-                    }
-                    else
-                    {
-                        Warn_delay_s = ((ra[0]-48)*10 + (ra[1]-48));
-                    }
-                    break;
-            case 8: if(!ra[1])  //报警延长设置    m
-                    {
-                        Warn_delay_m = ra[0] - 48;
-                    }
-                    else
-                    {
-                        Warn_delay_m = ((ra[0]-48)*10 + (ra[1]-48));
-                    }
-                    break;
-            case 9: if(!ra[1])  //自动取消静音时间  m
-                    {
-                        Silent_time_m = ra[0] - 48;
-                    }
-                    else
-                    {
-                        Silent_time_m = ((ra[0]-48)*10 + (ra[1]-48));
-                    }
-                    break;
-            case 10: Silent_time_h = ra[0] - 48;     //自动取消静音时间  h
-                    break;
-            case 11: if(!ra[1])  //关闭时间  m
-                    {
-                        Stop_time_m = ra[0] - 48;
-                    }
-                    else
-                    {
-                        Stop_time_m = ((ra[0]-48)*10 + (ra[1]-48));
-                    }
-                    break;
-            case 12: if(!ra[1])      //关闭时间  h
-                    {
-                        Stop_time_h = ra[0] - 48;
-                    }
-                    else
-                    {
-                        Stop_time_h = ((ra[0]-48)*10 + (ra[1]-48));
-                    }
-                    break;
-            case 13: if(!ra[1])      //开启时间 m
-                    {
-                        Start_time_m = ra[0] - 48;
-                    }
-                    else
-                    {
-                        Start_time_m = ((ra[0]-48)*10 + (ra[1]-48));
-                    }
-                    break;
-            case 14: if(!ra[1])      //开启时间 h
-                    {
-                        Start_time_h = ra[0] - 48;
-                    }
-                    else
-                    {
-                        Start_time_h = ((ra[0]-48)*10 + (ra[1]-48));
-                    }
-                    break;
-        }
-        i_ra--;
-    }
-    config_radar_zn.close();
-    //区域设置初始化
-    //区域1
-    QFile config_radar_area1("/opt/radar/boundary_machine1_area1.txt");
-    if(!config_radar_area1.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_area1 file!"<<endl;
-    }
-    QTextStream out_radar_area1(&config_radar_area1);
-    QString line_radar_area1;
-    uchar i_area = 12;
-    while(i_area)
-    {
-        line_radar_area1 = out_radar_area1.readLine();
-        QByteArray radar_area1_config = line_radar_area1.toLatin1();
-        char *ra = radar_area1_config.data();
-        switch(i_area)
-        {
-            case 12:
-                    Master_Boundary_Point_Disp[0][0][0][1] = atoi(ra);
-                    break;
-            case 11:
-                    Master_Boundary_Point_Disp[0][0][0][0] = atoi(ra);
-                    break;
-            case 10:
-                    Master_Boundary_Point_Disp[0][0][1][1] = atoi(ra);
-                    break;
-            case 9:
-                    Master_Boundary_Point_Disp[0][0][1][0] = atoi(ra);
-                    break;
-            case 8:
-                    Master_Boundary_Point_Disp[0][0][2][1] = atoi(ra);
-                    break;
-            case 7:
-                    Master_Boundary_Point_Disp[0][0][2][0] = atoi(ra);
-                    break;
-            case 6:
-                    Master_Boundary_Point_Disp[0][0][3][1] = atoi(ra);
-                    break;
-            case 5:
-                    Master_Boundary_Point_Disp[0][0][3][0] = atoi(ra);
-                    break;
-            case 4:
-                    Master_Boundary_Point_Disp[0][0][4][1] = atoi(ra);
-                    break;
-            case 3:
-                    Master_Boundary_Point_Disp[0][0][4][0] = atoi(ra);
-                    break;
-            case 2:
-                    Master_Boundary_Point_Disp[0][0][5][1] = atoi(ra);
-                    break;
-            case 1:
-                    Master_Boundary_Point_Disp[0][0][5][0] = atoi(ra);
-                    break;
-        }
-        i_area--;
-    }
-    config_radar_area1.close();
-    //区域二
-    QFile config_radar_area2("/opt/radar/boundary_machine1_area2.txt");
-    if(!config_radar_area2.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_area2 file!"<<endl;
-    }
-    QTextStream out_radar_area2(&config_radar_area2);
-    QString line_radar_area2;
-    uchar i_area2 = 12;
-    while(i_area2)
-    {
-        line_radar_area2 = out_radar_area2.readLine();
-        QByteArray radar_area2_config = line_radar_area2.toLatin1();
-        char *ra = radar_area2_config.data();
-        switch(i_area2)
-        {
-            case 12:
-                    Master_Boundary_Point_Disp[0][1][0][1] = atoi(ra);
-                    break;
-            case 11:
-                    Master_Boundary_Point_Disp[0][1][0][0] = atoi(ra);
-                    break;
-            case 10:
-                    Master_Boundary_Point_Disp[0][1][1][1] = atoi(ra);
-                    break;
-            case 9:
-                    Master_Boundary_Point_Disp[0][1][1][0] = atoi(ra);
-                    break;
-            case 8:
-                    Master_Boundary_Point_Disp[0][1][2][1] = atoi(ra);
-                    break;
-            case 7:
-                    Master_Boundary_Point_Disp[0][1][2][0] = atoi(ra);
-                    break;
-            case 6:
-                    Master_Boundary_Point_Disp[0][1][3][1] = atoi(ra);
-                    break;
-            case 5:
-                    Master_Boundary_Point_Disp[0][1][3][0] = atoi(ra);
-                    break;
-            case 4:
-                    Master_Boundary_Point_Disp[0][1][4][1] = atoi(ra);
-                    break;
-            case 3:
-                    Master_Boundary_Point_Disp[0][1][4][0] = atoi(ra);
-                    break;
-            case 2:
-                    Master_Boundary_Point_Disp[0][1][5][1] = atoi(ra);
-                    break;
-            case 1:
-                    Master_Boundary_Point_Disp[0][1][5][0] = atoi(ra);
-                    break;
-        }
-        i_area2--;
-    }
-    config_radar_area2.close();
-
-    //区域三
-    QFile config_radar_area3("/opt/radar/boundary_machine1_area3.txt");
-    if(!config_radar_area3.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_area3 file!"<<endl;
-    }
-    QTextStream out_radar_area3(&config_radar_area3);
-    QString line_radar_area3;
-    uchar i_area3 = 12;
-    while(i_area3)
-    {
-        line_radar_area3 = out_radar_area3.readLine();
-        QByteArray radar_area3_config = line_radar_area3.toLatin1();
-        char *ra = radar_area3_config.data();
-        switch(i_area3)
-        {
-            case 12:
-                    Master_Boundary_Point_Disp[0][2][0][1] = atoi(ra);
-                    break;
-            case 11:
-                    Master_Boundary_Point_Disp[0][2][0][0] = atoi(ra);
-                    break;
-            case 10:
-                    Master_Boundary_Point_Disp[0][2][1][1] = atoi(ra);
-                    break;
-            case 9:
-                    Master_Boundary_Point_Disp[0][2][1][0] = atoi(ra);
-                    break;
-            case 8:
-                    Master_Boundary_Point_Disp[0][2][2][1] = atoi(ra);
-                    break;
-            case 7:
-                    Master_Boundary_Point_Disp[0][2][2][0] = atoi(ra);
-                    break;
-            case 6:
-                    Master_Boundary_Point_Disp[0][2][3][1] = atoi(ra);
-                    break;
-            case 5:
-                    Master_Boundary_Point_Disp[0][2][3][0] = atoi(ra);
-                    break;
-            case 4:
-                    Master_Boundary_Point_Disp[0][2][4][1] = atoi(ra);
-                    break;
-            case 3:
-                    Master_Boundary_Point_Disp[0][2][4][0] = atoi(ra);
-                    break;
-            case 2:
-                    Master_Boundary_Point_Disp[0][2][5][1] = atoi(ra);
-                    break;
-            case 1:
-                    Master_Boundary_Point_Disp[0][2][5][0] = atoi(ra);
-                    break;
-        }
-        i_area3--;
-    }
-    config_radar_area3.close();
-    //区域四
-    QFile config_radar_area4("/opt/radar/boundary_machine1_area4.txt");
-    if(!config_radar_area4.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_area4 file!"<<endl;
-    }
-    QTextStream out_radar_area4(&config_radar_area4);
-    QString line_radar_area4;
-    uchar i_area4 = 12;
-    while(i_area4)
-    {
-        line_radar_area4 = out_radar_area4.readLine();
-        QByteArray radar_area4_config = line_radar_area4.toLatin1();
-        char *ra = radar_area4_config.data();
-        switch(i_area4)
-        {
-            case 12:
-                    Master_Boundary_Point_Disp[0][3][0][1] = atoi(ra);
-                    break;
-            case 11:
-                    Master_Boundary_Point_Disp[0][3][0][0] = atoi(ra);
-                    break;
-            case 10:
-                    Master_Boundary_Point_Disp[0][3][1][1] = atoi(ra);
-                    break;
-            case 9:
-                    Master_Boundary_Point_Disp[0][3][1][0] = atoi(ra);
-                    break;
-            case 8:
-                    Master_Boundary_Point_Disp[0][3][2][1] = atoi(ra);
-                    break;
-            case 7:
-                    Master_Boundary_Point_Disp[0][3][2][0] = atoi(ra);
-                    break;
-            case 6:
-                    Master_Boundary_Point_Disp[0][3][3][1] = atoi(ra);
-                    break;
-            case 5:
-                    Master_Boundary_Point_Disp[0][3][3][0] = atoi(ra);
-                    break;
-            case 4:
-                    Master_Boundary_Point_Disp[0][3][4][1] = atoi(ra);
-                    break;
-            case 3:
-                    Master_Boundary_Point_Disp[0][3][4][0] = atoi(ra);
-                    break;
-            case 2:
-                    Master_Boundary_Point_Disp[0][3][5][1] = atoi(ra);
-                    break;
-            case 1:
-                    Master_Boundary_Point_Disp[0][3][5][0] = atoi(ra);
-                    break;
-        }
-        i_area4--;
-    }
-    config_radar_area4.close();
-    //区域五
-    QFile config_radar_area5("/opt/radar/boundary_machine1_area5.txt");
-    if(!config_radar_area5.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_area5 file!"<<endl;
-    }
-    QTextStream out_radar_area5(&config_radar_area5);
-    QString line_radar_area5;
-    uchar i_area5 = 12;
-    while(i_area5)
-    {
-        line_radar_area5 = out_radar_area5.readLine();
-        QByteArray radar_area5_config = line_radar_area5.toLatin1();
-        char *ra = radar_area5_config.data();
-        switch(i_area5)
-        {
-            case 12:
-                    Master_Boundary_Point_Disp[0][4][0][1] = atoi(ra);
-                    break;
-            case 11:
-                    Master_Boundary_Point_Disp[0][4][0][0] = atoi(ra);
-                    break;
-            case 10:
-                    Master_Boundary_Point_Disp[0][4][1][1] = atoi(ra);
-                    break;
-            case 9:
-                    Master_Boundary_Point_Disp[0][4][1][0] = atoi(ra);
-                    break;
-            case 8:
-                    Master_Boundary_Point_Disp[0][4][2][1] = atoi(ra);
-                    break;
-            case 7:
-                    Master_Boundary_Point_Disp[0][4][2][0] = atoi(ra);
-                    break;
-            case 6:
-                    Master_Boundary_Point_Disp[0][4][3][1] = atoi(ra);
-                    break;
-            case 5:
-                    Master_Boundary_Point_Disp[0][4][3][0] = atoi(ra);
-                    break;
-            case 4:
-                    Master_Boundary_Point_Disp[0][4][4][1] = atoi(ra);
-                    break;
-            case 3:
-                    Master_Boundary_Point_Disp[0][4][4][0] = atoi(ra);
-                    break;
-            case 2:
-                    Master_Boundary_Point_Disp[0][4][5][1] = atoi(ra);
-                    break;
-            case 1:
-                    Master_Boundary_Point_Disp[0][4][5][0] = atoi(ra);
-                    break;
-        }
-        i_area5--;
-    }
-    config_radar_area5.close();
-    //区域六
-    QFile config_radar_area6("/opt/radar/boundary_machine1_area6.txt");
-    if(!config_radar_area6.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_area6 file!"<<endl;
-    }
-    QTextStream out_radar_area6(&config_radar_area6);
-    QString line_radar_area6;
-    uchar i_area6 = 12;
-    while(i_area6)
-    {
-        line_radar_area6 = out_radar_area6.readLine();
-        QByteArray radar_area6_config = line_radar_area6.toLatin1();
-        char *ra = radar_area6_config.data();
-        switch(i_area6)
-        {
-            case 12:
-                    Master_Boundary_Point_Disp[0][5][0][1] = atoi(ra);
-                    break;
-            case 11:
-                    Master_Boundary_Point_Disp[0][5][0][0] = atoi(ra);
-                    break;
-            case 10:
-                    Master_Boundary_Point_Disp[0][5][1][1] = atoi(ra);
-                    break;
-            case 9:
-                    Master_Boundary_Point_Disp[0][5][1][0] = atoi(ra);
-                    break;
-            case 8:
-                    Master_Boundary_Point_Disp[0][5][2][1] = atoi(ra);
-                    break;
-            case 7:
-                    Master_Boundary_Point_Disp[0][5][2][0] = atoi(ra);
-                    break;
-            case 6:
-                    Master_Boundary_Point_Disp[0][5][3][1] = atoi(ra);
-                    break;
-            case 5:
-                    Master_Boundary_Point_Disp[0][5][3][0] = atoi(ra);
-                    break;
-            case 4:
-                    Master_Boundary_Point_Disp[0][5][4][1] = atoi(ra);
-                    break;
-            case 3:
-                    Master_Boundary_Point_Disp[0][5][4][0] = atoi(ra);
-                    break;
-            case 2:
-                    Master_Boundary_Point_Disp[0][5][5][1] = atoi(ra);
-                    break;
-            case 1:
-                    Master_Boundary_Point_Disp[0][5][5][0] = atoi(ra);
-                    break;
-        }
-        i_area6--;
-    }
-    config_radar_area6.close();
-
-    area_painted();
-
-
-    //雷达背景曲线初始化
-    QFile config_radar_backgroud("/opt/radar/backgroundvalue_machine1.txt");
-    if(!config_radar_backgroud.open(QIODevice::ReadOnly|QIODevice::Text))
-    {
-        qDebug()<<"Can't open the config_radar_background file!"<<endl;
-    }
-    QTextStream out_radar_backgroud(&config_radar_backgroud);
-    QString line_radar_backgroud;
-    unsigned int i_backgroud = 0;
-    unsigned char j_backgroud = 0;
-    line_radar_backgroud = out_radar_backgroud.readLine();
-    while(i_backgroud < 180)
-    {
-        line_radar_backgroud = out_radar_backgroud.readLine();
-        QByteArray radar_backgroud_config = line_radar_backgroud.toLatin1();
-        char *ra = radar_backgroud_config.data();
-        Master_Back_Groud_Value[0][i_backgroud][j_backgroud] = atoi(ra);
-
-
-        j_backgroud++;
-        if(j_backgroud > 1)
-        {
-            j_backgroud = 0;
-            i_backgroud++;
-        }
-    }
-    config_radar_backgroud.close();
-
-//Uart线程:雷达
-    uart_run = new uartthread();
-    connect(uart_run,SIGNAL(warn_to_mainwindowstatelabel()),this,SLOT(label_state_setted()));
-    uart_run->start();
-    on_toolButton_radar1_clicked(); //待完善，需删除
-        //******added for radar***/<-
-//油气回收初始化数据
-
+	//智能设置初始化
+	QFile config_radar_zn("/opt/radar/config_zn.txt");
+	if(!config_radar_zn.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_zn file!"<<endl;
+	}
+	QTextStream out_radar_zn(&config_radar_zn);
+	QString line_radar_zn;
+	uchar i_ra = 14;
+	while(i_ra)
+	{
+		line_radar_zn = out_radar_zn.readLine();
+		QByteArray radar_time_config = line_radar_zn.toLatin1();
+		char *ra = radar_time_config.data();
+		switch(i_ra)
+		{
+		    case 1:Flag_sensitivity = ra[0] - 48;        //灵敏度
+			        break;
+		    case 2:Flag_area_ctrl[3] = ra[0] -48;        //4#防区使能
+			        break;
+		    case 3:Flag_area_ctrl[2] = ra[0] -48;        //3#防区使能
+			        break;
+		    case 4:Flag_area_ctrl[1] = ra[0] -48;        //2#防区使能
+			        break;
+		    case 5:Flag_area_ctrl[0] = ra[0] -48;       //1#防区使能
+			        break;
+		    case 6: Flag_outdoor_warn = ra[0] - 48;       //室外报警使能
+			        break;
+		    case 7: if(!ra[1])  //报警延长设置    s
+			        {
+				        Warn_delay_s = ra[0] - 48;
+			        }
+			        else
+			        {
+				        Warn_delay_s = ((ra[0]-48)*10 + (ra[1]-48));
+			        }
+			        break;
+		    case 8: if(!ra[1])  //报警延长设置    m
+			        {
+				        Warn_delay_m = ra[0] - 48;
+			        }
+			        else
+			        {
+				        Warn_delay_m = ((ra[0]-48)*10 + (ra[1]-48));
+			        }
+			        break;
+		    case 9: if(!ra[1])  //自动取消静音时间  m
+			        {
+				        Silent_time_m = ra[0] - 48;
+			        }
+			        else
+			        {
+				        Silent_time_m = ((ra[0]-48)*10 + (ra[1]-48));
+			        }
+			        break;
+		    case 10: Silent_time_h = ra[0] - 48;     //自动取消静音时间  h
+			        break;
+		    case 11: if(!ra[1])  //关闭时间  m
+			        {
+				        Stop_time_m = ra[0] - 48;
+			        }
+			        else
+			        {
+				        Stop_time_m = ((ra[0]-48)*10 + (ra[1]-48));
+			        }
+			        break;
+		    case 12: if(!ra[1])      //关闭时间  h
+			        {
+				        Stop_time_h = ra[0] - 48;
+			        }
+			        else
+			        {
+				        Stop_time_h = ((ra[0]-48)*10 + (ra[1]-48));
+			        }
+			        break;
+		    case 13: if(!ra[1])      //开启时间 m
+			        {
+				        Start_time_m = ra[0] - 48;
+			        }
+			        else
+			        {
+				        Start_time_m = ((ra[0]-48)*10 + (ra[1]-48));
+			        }
+			        break;
+		    case 14: if(!ra[1])      //开启时间 h
+			        {
+				        Start_time_h = ra[0] - 48;
+			        }
+			        else
+			        {
+				        Start_time_h = ((ra[0]-48)*10 + (ra[1]-48));
+			        }
+			        break;
+		}
+		i_ra--;
+	}
+	config_radar_zn.close();
+	//区域设置初始化
+	//区域1
+	QFile config_radar_area1("/opt/radar/boundary_machine1_area1.txt");
+	if(!config_radar_area1.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_area1 file!"<<endl;
+	}
+	QTextStream out_radar_area1(&config_radar_area1);
+	QString line_radar_area1;
+	uchar i_area = 12;
+	while(i_area)
+	{
+		line_radar_area1 = out_radar_area1.readLine();
+		QByteArray radar_area1_config = line_radar_area1.toLatin1();
+		char *ra = radar_area1_config.data();
+		switch(i_area)
+		{
+		    case 12:
+			        Master_Boundary_Point_Disp[0][0][0][1] = atoi(ra);
+			        break;
+		    case 11:
+			        Master_Boundary_Point_Disp[0][0][0][0] = atoi(ra);
+			        break;
+		    case 10:
+			        Master_Boundary_Point_Disp[0][0][1][1] = atoi(ra);
+			        break;
+		    case 9:
+			        Master_Boundary_Point_Disp[0][0][1][0] = atoi(ra);
+			        break;
+		    case 8:
+			        Master_Boundary_Point_Disp[0][0][2][1] = atoi(ra);
+			        break;
+		    case 7:
+			        Master_Boundary_Point_Disp[0][0][2][0] = atoi(ra);
+			        break;
+		    case 6:
+			        Master_Boundary_Point_Disp[0][0][3][1] = atoi(ra);
+			        break;
+		    case 5:
+			        Master_Boundary_Point_Disp[0][0][3][0] = atoi(ra);
+			        break;
+		    case 4:
+			        Master_Boundary_Point_Disp[0][0][4][1] = atoi(ra);
+			        break;
+		    case 3:
+			        Master_Boundary_Point_Disp[0][0][4][0] = atoi(ra);
+			        break;
+		    case 2:
+			        Master_Boundary_Point_Disp[0][0][5][1] = atoi(ra);
+			        break;
+		    case 1:
+			        Master_Boundary_Point_Disp[0][0][5][0] = atoi(ra);
+			        break;
+		}
+		i_area--;
+	}
+	config_radar_area1.close();
+	//区域二
+	QFile config_radar_area2("/opt/radar/boundary_machine1_area2.txt");
+	if(!config_radar_area2.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_area2 file!"<<endl;
+	}
+	QTextStream out_radar_area2(&config_radar_area2);
+	QString line_radar_area2;
+	uchar i_area2 = 12;
+	while(i_area2)
+	{
+		line_radar_area2 = out_radar_area2.readLine();
+		QByteArray radar_area2_config = line_radar_area2.toLatin1();
+		char *ra = radar_area2_config.data();
+		switch(i_area2)
+		{
+		    case 12:
+			        Master_Boundary_Point_Disp[0][1][0][1] = atoi(ra);
+			        break;
+		    case 11:
+			        Master_Boundary_Point_Disp[0][1][0][0] = atoi(ra);
+			        break;
+		    case 10:
+			        Master_Boundary_Point_Disp[0][1][1][1] = atoi(ra);
+			        break;
+		    case 9:
+			        Master_Boundary_Point_Disp[0][1][1][0] = atoi(ra);
+			        break;
+		    case 8:
+			        Master_Boundary_Point_Disp[0][1][2][1] = atoi(ra);
+			        break;
+		    case 7:
+			        Master_Boundary_Point_Disp[0][1][2][0] = atoi(ra);
+			        break;
+		    case 6:
+			        Master_Boundary_Point_Disp[0][1][3][1] = atoi(ra);
+			        break;
+		    case 5:
+			        Master_Boundary_Point_Disp[0][1][3][0] = atoi(ra);
+			        break;
+		    case 4:
+			        Master_Boundary_Point_Disp[0][1][4][1] = atoi(ra);
+			        break;
+		    case 3:
+			        Master_Boundary_Point_Disp[0][1][4][0] = atoi(ra);
+			        break;
+		    case 2:
+			        Master_Boundary_Point_Disp[0][1][5][1] = atoi(ra);
+			        break;
+		    case 1:
+			        Master_Boundary_Point_Disp[0][1][5][0] = atoi(ra);
+			        break;
+		}
+		i_area2--;
+	}
+	config_radar_area2.close();
+
+	//区域三
+	QFile config_radar_area3("/opt/radar/boundary_machine1_area3.txt");
+	if(!config_radar_area3.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_area3 file!"<<endl;
+	}
+	QTextStream out_radar_area3(&config_radar_area3);
+	QString line_radar_area3;
+	uchar i_area3 = 12;
+	while(i_area3)
+	{
+		line_radar_area3 = out_radar_area3.readLine();
+		QByteArray radar_area3_config = line_radar_area3.toLatin1();
+		char *ra = radar_area3_config.data();
+		switch(i_area3)
+		{
+		    case 12:
+			        Master_Boundary_Point_Disp[0][2][0][1] = atoi(ra);
+			        break;
+		    case 11:
+			        Master_Boundary_Point_Disp[0][2][0][0] = atoi(ra);
+			        break;
+		    case 10:
+			        Master_Boundary_Point_Disp[0][2][1][1] = atoi(ra);
+			        break;
+		    case 9:
+			        Master_Boundary_Point_Disp[0][2][1][0] = atoi(ra);
+			        break;
+		    case 8:
+			        Master_Boundary_Point_Disp[0][2][2][1] = atoi(ra);
+			        break;
+		    case 7:
+			        Master_Boundary_Point_Disp[0][2][2][0] = atoi(ra);
+			        break;
+		    case 6:
+			        Master_Boundary_Point_Disp[0][2][3][1] = atoi(ra);
+			        break;
+		    case 5:
+			        Master_Boundary_Point_Disp[0][2][3][0] = atoi(ra);
+			        break;
+		    case 4:
+			        Master_Boundary_Point_Disp[0][2][4][1] = atoi(ra);
+			        break;
+		    case 3:
+			        Master_Boundary_Point_Disp[0][2][4][0] = atoi(ra);
+			        break;
+		    case 2:
+			        Master_Boundary_Point_Disp[0][2][5][1] = atoi(ra);
+			        break;
+		    case 1:
+			        Master_Boundary_Point_Disp[0][2][5][0] = atoi(ra);
+			        break;
+		}
+		i_area3--;
+	}
+	config_radar_area3.close();
+	//区域四
+	QFile config_radar_area4("/opt/radar/boundary_machine1_area4.txt");
+	if(!config_radar_area4.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_area4 file!"<<endl;
+	}
+	QTextStream out_radar_area4(&config_radar_area4);
+	QString line_radar_area4;
+	uchar i_area4 = 12;
+	while(i_area4)
+	{
+		line_radar_area4 = out_radar_area4.readLine();
+		QByteArray radar_area4_config = line_radar_area4.toLatin1();
+		char *ra = radar_area4_config.data();
+		switch(i_area4)
+		{
+		    case 12:
+			        Master_Boundary_Point_Disp[0][3][0][1] = atoi(ra);
+			        break;
+		    case 11:
+			        Master_Boundary_Point_Disp[0][3][0][0] = atoi(ra);
+			        break;
+		    case 10:
+			        Master_Boundary_Point_Disp[0][3][1][1] = atoi(ra);
+			        break;
+		    case 9:
+			        Master_Boundary_Point_Disp[0][3][1][0] = atoi(ra);
+			        break;
+		    case 8:
+			        Master_Boundary_Point_Disp[0][3][2][1] = atoi(ra);
+			        break;
+		    case 7:
+			        Master_Boundary_Point_Disp[0][3][2][0] = atoi(ra);
+			        break;
+		    case 6:
+			        Master_Boundary_Point_Disp[0][3][3][1] = atoi(ra);
+			        break;
+		    case 5:
+			        Master_Boundary_Point_Disp[0][3][3][0] = atoi(ra);
+			        break;
+		    case 4:
+			        Master_Boundary_Point_Disp[0][3][4][1] = atoi(ra);
+			        break;
+		    case 3:
+			        Master_Boundary_Point_Disp[0][3][4][0] = atoi(ra);
+			        break;
+		    case 2:
+			        Master_Boundary_Point_Disp[0][3][5][1] = atoi(ra);
+			        break;
+		    case 1:
+			        Master_Boundary_Point_Disp[0][3][5][0] = atoi(ra);
+			        break;
+		}
+		i_area4--;
+	}
+	config_radar_area4.close();
+	//区域五
+	QFile config_radar_area5("/opt/radar/boundary_machine1_area5.txt");
+	if(!config_radar_area5.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_area5 file!"<<endl;
+	}
+	QTextStream out_radar_area5(&config_radar_area5);
+	QString line_radar_area5;
+	uchar i_area5 = 12;
+	while(i_area5)
+	{
+		line_radar_area5 = out_radar_area5.readLine();
+		QByteArray radar_area5_config = line_radar_area5.toLatin1();
+		char *ra = radar_area5_config.data();
+		switch(i_area5)
+		{
+		    case 12:
+			        Master_Boundary_Point_Disp[0][4][0][1] = atoi(ra);
+			        break;
+		    case 11:
+			        Master_Boundary_Point_Disp[0][4][0][0] = atoi(ra);
+			        break;
+		    case 10:
+			        Master_Boundary_Point_Disp[0][4][1][1] = atoi(ra);
+			        break;
+		    case 9:
+			        Master_Boundary_Point_Disp[0][4][1][0] = atoi(ra);
+			        break;
+		    case 8:
+			        Master_Boundary_Point_Disp[0][4][2][1] = atoi(ra);
+			        break;
+		    case 7:
+			        Master_Boundary_Point_Disp[0][4][2][0] = atoi(ra);
+			        break;
+		    case 6:
+			        Master_Boundary_Point_Disp[0][4][3][1] = atoi(ra);
+			        break;
+		    case 5:
+			        Master_Boundary_Point_Disp[0][4][3][0] = atoi(ra);
+			        break;
+		    case 4:
+			        Master_Boundary_Point_Disp[0][4][4][1] = atoi(ra);
+			        break;
+		    case 3:
+			        Master_Boundary_Point_Disp[0][4][4][0] = atoi(ra);
+			        break;
+		    case 2:
+			        Master_Boundary_Point_Disp[0][4][5][1] = atoi(ra);
+			        break;
+		    case 1:
+			        Master_Boundary_Point_Disp[0][4][5][0] = atoi(ra);
+			        break;
+		}
+		i_area5--;
+	}
+	config_radar_area5.close();
+	//区域六
+	QFile config_radar_area6("/opt/radar/boundary_machine1_area6.txt");
+	if(!config_radar_area6.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_area6 file!"<<endl;
+	}
+	QTextStream out_radar_area6(&config_radar_area6);
+	QString line_radar_area6;
+	uchar i_area6 = 12;
+	while(i_area6)
+	{
+		line_radar_area6 = out_radar_area6.readLine();
+		QByteArray radar_area6_config = line_radar_area6.toLatin1();
+		char *ra = radar_area6_config.data();
+		switch(i_area6)
+		{
+		    case 12:
+			        Master_Boundary_Point_Disp[0][5][0][1] = atoi(ra);
+			        break;
+		    case 11:
+			        Master_Boundary_Point_Disp[0][5][0][0] = atoi(ra);
+			        break;
+		    case 10:
+			        Master_Boundary_Point_Disp[0][5][1][1] = atoi(ra);
+			        break;
+		    case 9:
+			        Master_Boundary_Point_Disp[0][5][1][0] = atoi(ra);
+			        break;
+		    case 8:
+			        Master_Boundary_Point_Disp[0][5][2][1] = atoi(ra);
+			        break;
+		    case 7:
+			        Master_Boundary_Point_Disp[0][5][2][0] = atoi(ra);
+			        break;
+		    case 6:
+			        Master_Boundary_Point_Disp[0][5][3][1] = atoi(ra);
+			        break;
+		    case 5:
+			        Master_Boundary_Point_Disp[0][5][3][0] = atoi(ra);
+			        break;
+		    case 4:
+			        Master_Boundary_Point_Disp[0][5][4][1] = atoi(ra);
+			        break;
+		    case 3:
+			        Master_Boundary_Point_Disp[0][5][4][0] = atoi(ra);
+			        break;
+		    case 2:
+			        Master_Boundary_Point_Disp[0][5][5][1] = atoi(ra);
+			        break;
+		    case 1:
+			        Master_Boundary_Point_Disp[0][5][5][0] = atoi(ra);
+			        break;
+		}
+		i_area6--;
+	}
+	config_radar_area6.close();
+	area_painted();
+	//雷达背景曲线初始化
+	QFile config_radar_backgroud("/opt/radar/backgroundvalue_machine1.txt");
+	if(!config_radar_backgroud.open(QIODevice::ReadOnly|QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config_radar_background file!"<<endl;
+	}
+	QTextStream out_radar_backgroud(&config_radar_backgroud);
+	QString line_radar_backgroud;
+	unsigned int i_backgroud = 0;
+	unsigned char j_backgroud = 0;
+	line_radar_backgroud = out_radar_backgroud.readLine();
+	while(i_backgroud < 180)
+	{
+		line_radar_backgroud = out_radar_backgroud.readLine();
+		QByteArray radar_backgroud_config = line_radar_backgroud.toLatin1();
+		char *ra = radar_backgroud_config.data();
+		Master_Back_Groud_Value[0][i_backgroud][j_backgroud] = atoi(ra);
+
+
+		j_backgroud++;
+		if(j_backgroud > 1)
+		{
+			j_backgroud = 0;
+			i_backgroud++;
+		}
+	}
+	config_radar_backgroud.close();
+
+	//Uart线程:雷达
+	uart_run = new uartthread();
+	connect(uart_run,SIGNAL(warn_to_mainwindowstatelabel()),this,SLOT(label_state_setted()));
+	uart_run->start();
+	on_toolButton_radar1_clicked(); //待完善，需删除
+//************************************added for radar*************************************/<-
+
+//******************************油气回收初始化*begin******************************/
+	//油气回收初始化数据
     init_Liquid_resistance();//初始化最远端加油机设备号
     init_alset();//初始化气液比相关设置
     init_Pressure_Transmitters_Mode();//初始化压力变送器型号
@@ -1464,8 +1372,148 @@ MainWindow::MainWindow(QWidget *parent) :
 	//init_xielou_network();//初始化泄漏网络上传  转移到main函数tcp创建之前
     init_reoilgas_warnpop();//弹窗设置相关读取
 	init_myserver_network();//服务器初始化
-    ui->widget_dispen_details->setHidden(1);
+	//网络相关初始化
+	QFile config_postnet(CONFIG_POSTNETWORK);
+	if(!config_postnet.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"Can't open config_pre file!"<<endl;
+	}
+	QTextStream in_postnet(&config_postnet);
+	QString line_postnet;
+	for(uchar i = 0; i < 7; i ++)
+	{
+		line_postnet = in_postnet.readLine();
+		if(i == 0)
+		{
+			Post_Address = line_postnet;
+			qDebug()<<"post address is "<<Post_Address;
+			//if(USERID_POST == ""){USERID_POST = "3501040007";}
+		}
+		if(i == 1)
+		{
+			USERID_POST = line_postnet;
+			//if(USERID_POST == ""){USERID_POST = "3501040007";}
+		}
+		if(i == 2)
+		{
+			DATAID_POST = line_postnet;
+			//if(DATAID_POST == ""){DATAID_POST = "000001";}
+		}
+		if(i == 3)
+		{
+			VERSION_POST = line_postnet;
+			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
+			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
+		}
+		if(i == 4)
+		{
+			POSTUSERNAME_HUNAN = line_postnet;
+			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
+			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
+		}
+		if(i == 5)
+		{
+			POSTPASSWORD_HUNAN = line_postnet;
+			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
+			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
+		}
+	}
+	config_postnet.close();
+	QFile if_post("/opt/reoilgas/Post_Enable");
+	if(if_post.exists())//如果存在，网络开启
+	{
+		Flag_Postsend_Enable = 1;
+	}
+	else
+	{
+		Flag_Postsend_Enable = 0;
+	}
+	Flag_Postsend_Enable = 1;//默认开启
 
+    ui->widget_dispen_details->setHidden(1);
+	//*********油气回收界面初始化
+	ui->widget_gundetail->setHidden(1);
+	ui->label_env_tankpre->setHidden(1);
+	ui->label_env_pipepre->setHidden(1);
+	ui->label_env_tanktem->setHidden(1);
+	ui->label_env_tanknongdu->setHidden(1);
+	ui->label_oilgas_tankpre_2->setHidden(1);
+	ui->label_oilgas_pipepre_2->setHidden(1);
+	ui->label_oilgas_tanktemp_2->setHidden(1);
+	ui->label_oilgas_tanknongdu_2->setHidden(1);
+
+	ui->label_gun_1_1u->setHidden(1);
+	ui->label_gun_1_2u->setHidden(1);
+	ui->label_gun_1_3u->setHidden(1);
+	ui->label_gun_1_4u->setHidden(1);
+	ui->label_gun_1_5u->setHidden(1);
+	ui->label_gun_1_6u->setHidden(1);
+	ui->label_gun_2_1u->setHidden(1);
+	ui->label_gun_2_2u->setHidden(1);
+	ui->label_gun_2_3u->setHidden(1);
+	ui->label_gun_2_4u->setHidden(1);
+	ui->label_gun_2_5u->setHidden(1);
+	ui->label_gun_2_6u->setHidden(1);
+	ui->label_gun_3_1u->setHidden(1);
+	ui->label_gun_3_2u->setHidden(1);
+	ui->label_gun_3_3u->setHidden(1);
+	ui->label_gun_3_4u->setHidden(1);
+	ui->label_gun_3_5u->setHidden(1);
+	ui->label_gun_3_6u->setHidden(1);
+	ui->label_gun_4_1u->setHidden(1);
+	ui->label_gun_4_2u->setHidden(1);
+	ui->label_gun_4_3u->setHidden(1);
+	ui->label_gun_4_4u->setHidden(1);
+	ui->label_gun_4_5u->setHidden(1);
+	ui->label_gun_4_6u->setHidden(1);
+	ui->label_gun_5_1u->setHidden(1);
+	ui->label_gun_5_2u->setHidden(1);
+	ui->label_gun_5_3u->setHidden(1);
+	ui->label_gun_5_4u->setHidden(1);
+	ui->label_gun_5_5u->setHidden(1);
+	ui->label_gun_5_6u->setHidden(1);
+	ui->label_gun_6_1u->setHidden(1);
+	ui->label_gun_6_2u->setHidden(1);
+	ui->label_gun_6_3u->setHidden(1);
+	ui->label_gun_6_4u->setHidden(1);
+	ui->label_gun_6_5u->setHidden(1);
+	ui->label_gun_6_6u->setHidden(1);
+	ui->label_gun_7_1u->setHidden(1);
+	ui->label_gun_7_2u->setHidden(1);
+	ui->label_gun_7_3u->setHidden(1);
+	ui->label_gun_7_4u->setHidden(1);
+	ui->label_gun_7_5u->setHidden(1);
+	ui->label_gun_7_6u->setHidden(1);
+	ui->label_gun_8_1u->setHidden(1);
+	ui->label_gun_8_2u->setHidden(1);
+	ui->label_gun_8_3u->setHidden(1);
+	ui->label_gun_8_4u->setHidden(1);
+	ui->label_gun_8_5u->setHidden(1);
+	ui->label_gun_8_6u->setHidden(1);
+	ui->label_gun_9_1u->setHidden(1);
+	ui->label_gun_9_2u->setHidden(1);
+	ui->label_gun_9_3u->setHidden(1);
+	ui->label_gun_9_4u->setHidden(1);
+	ui->label_gun_9_5u->setHidden(1);
+	ui->label_gun_9_6u->setHidden(1);
+	ui->label_gun_10_1u->setHidden(1);
+	ui->label_gun_10_2u->setHidden(1);
+	ui->label_gun_10_3u->setHidden(1);
+	ui->label_gun_10_4u->setHidden(1);
+	ui->label_gun_10_5u->setHidden(1);
+	ui->label_gun_10_6u->setHidden(1);
+	ui->label_gun_11_1u->setHidden(1);
+	ui->label_gun_11_2u->setHidden(1);
+	ui->label_gun_11_3u->setHidden(1);
+	ui->label_gun_11_4u->setHidden(1);
+	ui->label_gun_11_5u->setHidden(1);
+	ui->label_gun_11_6u->setHidden(1);
+	ui->label_gun_12_1u->setHidden(1);
+	ui->label_gun_12_2u->setHidden(1);
+	ui->label_gun_12_3u->setHidden(1);
+	ui->label_gun_12_4u->setHidden(1);
+	ui->label_gun_12_5u->setHidden(1);
+	ui->label_gun_12_6u->setHidden(1);
     //oilgas 数量初始化
     QFile config_amount_dispenerandgun(CONFIG_REOILGAS);
     if(!config_amount_dispenerandgun.open(QIODevice::ReadOnly|QIODevice::Text))
@@ -1604,124 +1652,62 @@ MainWindow::MainWindow(QWidget *parent) :
             file_accumto.close();
         }
     }
+	gun_state_show();
     //isoosi添加
     thread_isoosi = new net_isoosi;
-    thread_isoosi->start();
 	//isoosi添加 重庆
 	thread_isoosi_cq = new net_isoosi_cq;
-	thread_isoosi_cq->start();
 	//服务器上传泄漏数据
 	myserver_thread = new myserver;
+	//post 添加 唐山
+	post_message = new post_webservice;
+	//post 湖南
+	post_message_hunan = new post_webservice_hunan;
+	//oilgas线程
+	uart_reoilgas = new reoilgasthread();
+	//可燃气体线程
+	uart_fga = new FGA1000_485();
+
+//界面显示的一些数据
+	connect(uart_reoilgas,SIGNAL(Version_To_Mainwindow(unsigned char,unsigned char)),this,SLOT(Version_Recv_FromReoilgas(unsigned char,unsigned char)));
+	connect(uart_reoilgas,SIGNAL(Setinfo_To_Mainwindow(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)),this,SLOT(Setinfo_Recv_FromReoilgas(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)));
+	connect(uart_reoilgas,SIGNAL(Warn_UartWrong_Mainwindowdisp(unsigned char,unsigned char)),this,SLOT(Reoilgas_UartWrong_Maindisped(unsigned char,unsigned char)),Qt::DirectConnection);
+	connect(uart_reoilgas,SIGNAL(Reoilgas_Factor_Setover()),this,SLOT(Reoilgas_Factor_SettedtoSys()));
+	connect(uart_fga,SIGNAL(data_show()),this,SLOT(Disp_Reoilgas_Env()));
+	connect(uart_fga,SIGNAL(normal_fga(int)),this,SLOT(Env_warn_normal_fga(int)));
+	connect(uart_fga,SIGNAL(alarm_hig_fga(int)),this,SLOT(Env_warn_hig_fga(int)));
+	connect(uart_fga,SIGNAL(alarm_low_fga(int)),this,SLOT(Env_warn_low_fga(int)));
+	connect(uart_fga,SIGNAL(alarm_sensor_fga(int)),this,SLOT(Env_warn_sensor_fga(int)));
+	connect(uart_fga,SIGNAL(alarm_uart_fga(int)),this,SLOT(Env_warn_uart_fga(int)));
+	connect(uart_fga,SIGNAL(alarm_sensor_de_fga(int)),this,SLOT(Env_warn_sensor_de_fga(int)));
+	connect(uart_fga,SIGNAL(alarm_uart_pressure(int)),this,SLOT(Env_warn_pre_uart(int)));
+	connect(uart_fga,SIGNAL(normal_pressure(int)),this,SLOT(Env_warn_pre_normal(int)));
+	connect(uart_fga,SIGNAL(alarm_early_pre(int)),this,SLOT(Env_warn_pre_pre(int)));
+	connect(uart_fga,SIGNAL(alarm_warn_pre(int)),this,SLOT(Env_warn_pre_warn(int)));
+	connect(uart_fga,SIGNAL(alarm_tem_normal()),this,SLOT(Env_warn_normal_tem()));
+	connect(uart_fga,SIGNAL(alarm_tem_warn()),this,SLOT(Env_warn_uart_tem()));
+	connect(uart_fga,SIGNAL(init_burngas_setted(int)),this,SLOT(amount_burngas_setted(int)));
+	//connect(this,SIGNAL(Time_Fga_1s()),uart_fga,SLOT(time_time()));
+
+//发送泄漏报警数据
 	connect(warn,SIGNAL(myserver_send_single(QString,QString,QString,QString,QString)),myserver_thread,SLOT(xielousta(QString,QString,QString,QString,QString)),Qt::DirectConnection);
 
-	myserver_thread->start();
-    //post添加
-    post_message = new post_webservice;
+//发送网络故障数据
 	connect(this,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)),Qt::DirectConnection);
-
-	post_message_hunan = new post_webservice_hunan;
 	connect(this,SIGNAL(Send_Wrongsdat_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)),Qt::DirectConnection);
 	//isoosi添加 重庆
 	connect(this,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)),Qt::DirectConnection);
 
-    QFile config_postnet(CONFIG_POSTNETWORK);
-    if(!config_postnet.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        qDebug() <<"Can't open config_pre file!"<<endl;
-    }
-    QTextStream in_postnet(&config_postnet);
-    QString line_postnet;
-	for(uchar i = 0; i < 7; i ++)
-    {
-        line_postnet = in_postnet.readLine();
-		if(i == 0)
-		{
-			Post_Address = line_postnet;
-			qDebug()<<"post address is "<<Post_Address;
-			//if(USERID_POST == ""){USERID_POST = "3501040007";}
-		}
-		if(i == 1)
-        {
-            USERID_POST = line_postnet;
-            //if(USERID_POST == ""){USERID_POST = "3501040007";}
-        }
-		if(i == 2)
-        {
-            DATAID_POST = line_postnet;
-            //if(DATAID_POST == ""){DATAID_POST = "000001";}
-        }
-		if(i == 3)
-        {
-            VERSION_POST = line_postnet;
-            //if(VERSION_POST == ""){VERSION_POST = "V1.1";}
-            //if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
-        }
-		if(i == 4)
-		{
-			POSTUSERNAME_HUNAN = line_postnet;
-			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
-			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
-		}
-		if(i == 5)
-		{
-			POSTPASSWORD_HUNAN = line_postnet;
-			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
-			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
-		}
-    }
-    config_postnet.close();
-    QFile if_post("/opt/reoilgas/Post_Enable");
-    if(if_post.exists())//如果存在，网络开启
-    {
-        Flag_Postsend_Enable = 1;
-    }
-    else
-    {
-        Flag_Postsend_Enable = 0;
-    }
-    Flag_Postsend_Enable = 1;//默认开启
-
-    gun_state_show();
-    //oilgas线程
-
-    reoilgasthread *uart_reoilgas;
-    uart_reoilgas = new reoilgasthread();
-    connect(uart_reoilgas,SIGNAL(Version_To_Mainwindow(unsigned char,unsigned char)),this,SLOT(Version_Recv_FromReoilgas(unsigned char,unsigned char)));
-    connect(uart_reoilgas,SIGNAL(Setinfo_To_Mainwindow(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)),this,SLOT(Setinfo_Recv_FromReoilgas(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)));
-	connect(uart_reoilgas,SIGNAL(Warn_UartWrong_Mainwindowdisp(unsigned char,unsigned char)),this,SLOT(Reoilgas_UartWrong_Maindisped(unsigned char,unsigned char)),Qt::DirectConnection);
-    connect(uart_reoilgas,SIGNAL(Reoilgas_Factor_Setover()),this,SLOT(Reoilgas_Factor_SettedtoSys()));
+//发送网络油枪加油数据
 	//post添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	uart_reoilgas->start();
 	//isoosi添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	//isoosi添加重庆 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_cq(QString,QString,QString,QString,QString,QString,QString,QString,QString)),thread_isoosi_cq,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	uart_reoilgas->start();
 
-    //可燃气体线程
-    FGA1000_485 *uart_fga;
-    uart_fga = new FGA1000_485();
-    connect(uart_fga,SIGNAL(data_show()),this,SLOT(Disp_Reoilgas_Env()));
-
-    connect(uart_fga,SIGNAL(normal_fga(int)),this,SLOT(Env_warn_normal_fga(int)));
-    connect(uart_fga,SIGNAL(alarm_hig_fga(int)),this,SLOT(Env_warn_hig_fga(int)));
-    connect(uart_fga,SIGNAL(alarm_low_fga(int)),this,SLOT(Env_warn_low_fga(int)));
-    connect(uart_fga,SIGNAL(alarm_sensor_fga(int)),this,SLOT(Env_warn_sensor_fga(int)));
-    connect(uart_fga,SIGNAL(alarm_uart_fga(int)),this,SLOT(Env_warn_uart_fga(int)));
-    connect(uart_fga,SIGNAL(alarm_sensor_de_fga(int)),this,SLOT(Env_warn_sensor_de_fga(int)));
-
-    connect(uart_fga,SIGNAL(alarm_uart_pressure(int)),this,SLOT(Env_warn_pre_uart(int)));
-    connect(uart_fga,SIGNAL(normal_pressure(int)),this,SLOT(Env_warn_pre_normal(int)));
-    connect(uart_fga,SIGNAL(alarm_early_pre(int)),this,SLOT(Env_warn_pre_pre(int)));
-    connect(uart_fga,SIGNAL(alarm_warn_pre(int)),this,SLOT(Env_warn_pre_warn(int)));
-
-    connect(uart_fga,SIGNAL(alarm_tem_normal()),this,SLOT(Env_warn_normal_tem()));
-    connect(uart_fga,SIGNAL(alarm_tem_warn()),this,SLOT(Env_warn_uart_tem()));
-
-    connect(uart_fga,SIGNAL(init_burngas_setted(int)),this,SLOT(amount_burngas_setted(int)));
-    connect(this,SIGNAL(Time_Fga_1s()),uart_fga,SLOT(time_time()));
+//post形式发送网络数据
 	//post添加 槽函数直连
 	connect(uart_fga,SIGNAL(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(Send_Surroundingsdata(QString,QString,QString,QString)),post_message,SLOT(Send_Surroundingsdata(QString,QString,QString,QString)),Qt::DirectConnection);
@@ -1737,6 +1723,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 
+//isoosi形式发送网络数据
 	//isoosi添加  槽函数直连
 	connect(uart_fga,SIGNAL(environmental_data(QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(environmental_data(QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(gun_warn_data(QString,QString,QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(gun_warn_data(QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
@@ -1750,7 +1737,16 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(setup_data_cq(QString,QString,QString,QString)),thread_isoosi_cq,SLOT(setup_data(QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)),Qt::DirectConnection);
 
-    uart_fga->start();
+	thread_isoosi_cq->start();
+	thread_isoosi->start();
+	myserver_thread->start();
+	uart_reoilgas->start();
+	uart_fga->start();
+
+	timer_thread *delay_time = new timer_thread;
+	connect(delay_time,SIGNAL(delay_1000ms()),uart_fga,SLOT(time_time()),Qt::DirectConnection);
+	delay_time->start();
+//******************************油气回收初始化*end******************************/
 
     ui->widget_warn_rom->setHidden(1);//存储空间不足显示
     ui->label_warn_rom->setHidden(1);//存储空间不足显示
@@ -1799,6 +1795,67 @@ void MainWindow::on_pushButton_clicked()            //login
     connect(Log,SIGNAL(login_enter(int)),this,SLOT(login_enter_set(int)));
     connect(Log,SIGNAL(mainwindow_enable()),this,SLOT(mainwindow_enabled()));
     Log->show();
+}
+void MainWindow::login_enter_set(int t)
+{
+	systemset_exec = new systemset;
+	connect(systemset_exec,SIGNAL(amount_basin_reset(int)),this,SLOT(amount_basin_setted()));
+	connect(systemset_exec,SIGNAL(amount_pipe_reset(int)),this,SLOT(amount_pipe_setted()));
+	connect(systemset_exec,SIGNAL(amount_dispener_reset(int)),this,SLOT(amount_dispener_setted()));
+	connect(systemset_exec,SIGNAL(amount_tank_reset(int)),this,SLOT(amount_tank_setted()));
+	connect(systemset_exec,SIGNAL(method_tank_reset(int)),this,SLOT(method_tank_setted()));
+	connect(systemset_exec,SIGNAL(mainwindow_enable()),this,SLOT(mainwindow_enabled()));
+	connect(Log,SIGNAL(disp_for_managerid(const QString&)),systemset_exec,SLOT(dispset_for_managerid(const QString&)));
+	connect(this,SIGNAL(whoareyou(unsigned char)),systemset_exec,SLOT(whoareyou_userset(unsigned char)));
+	//added for radar
+	connect(this,SIGNAL(systemset_show()),systemset_exec,SLOT(systemset_showed()));
+	connect(systemset_exec,SIGNAL(button_sysshow()),this,SLOT(key_syssetshow()));
+	connect(systemset_exec,SIGNAL(mainwindow_repainting()),this,SLOT(area_painted()));
+	//connect(systemset_exec,SIGNAL(mainwindow_radar_click()),this,SLOT(on_toolButton_radar_clicked()));
+	connect(uart_run,SIGNAL(repaint_set_yuzhi()),systemset_exec,SLOT(repaint_seted_yuzhi()));
+	//added for radar<-
+	//added for screen set
+	connect(systemset_exec,SIGNAL(hide_tablewidget(unsigned char,unsigned char)),this,SLOT(hide_tablewidget(unsigned char,unsigned char)));
+	//added for screen set<-
+	connect(uart_reoilgas,SIGNAL(reflash_setinfo()),systemset_exec,SLOT(tableview_2_replay()));
+	//油气回收
+	connect(systemset_exec,SIGNAL(amount_oilgas_dispen_set(int)),this,SLOT(set_amount_oilgas_dispen(int)));
+	connect(systemset_exec,SIGNAL(amount_oilgas_gun_set()),this,SLOT(set_amount_oilgas_gun()));
+	connect(this,SIGNAL(Version_To_SystemSet(unsigned char,unsigned char)),systemset_exec,SLOT(Version_Recv_FromMainwindow(unsigned char,unsigned char)));
+	connect(this,SIGNAL(Setinfo_To_SystemSet(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)),systemset_exec,SLOT(Setinfo_Recv_FromMainwindow(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)));
+	connect(this,SIGNAL(Reoilgas_Factorset_UartWrong(unsigned char,unsigned int)),systemset_exec,SLOT(Reoilgas_FactorUartError_Setted(unsigned char,unsigned int)));
+	connect(this,SIGNAL(Reoilgas_Factor_Setted()),systemset_exec,SLOT(Reoilgas_Factor_Setover()));
+	connect(systemset_exec,SIGNAL(Pre_Pipe_Close()),this,SLOT(Env_Pre_Pipe_Close()));
+	connect(systemset_exec,SIGNAL(Pre_Tank_Close()),this,SLOT(Env_Pre_Tank_Close()));
+	connect(systemset_exec,SIGNAL(Fga_Gas_Close()),this,SLOT(Env_FGA_Gas1_Close()));
+	connect(systemset_exec,SIGNAL(Tem_Tank_Close()),this,SLOT(Env_Tem_Tank_Close()));
+	//可燃气体
+	connect(systemset_exec,SIGNAL(amount_burngas_set(int)),this,SLOT(amount_burngas_setted(int)));
+	//安全防护
+	connect(systemset_exec,SIGNAL(amount_safe_reset()),this,SLOT(reset_safe()));
+	//防撞柱
+	connect(systemset_exec,SIGNAL(crash_num_reset()),this,SLOT(crash_column_reset()));
+	if((t == 2)||(t == 1)||(t == 3))
+	{
+		emit whoareyou(t);
+	}
+	//同步带屏气液比采集器脉冲当量
+	connect(uart_reoilgas,SIGNAL(signal_sync_data(uint,uint,float,float,float,float)),systemset_exec,SLOT(sync_factor_data(uint,uint,float,float,float,float)));
+	//每周更新时间  如果网络好用
+	connect(this,SIGNAL(Time_calibration()),systemset_exec,SLOT(on_pushButton_testnet_clicked()));
+
+//网络上传相关
+	//post添加
+	connect(systemset_exec,SIGNAL(Send_Configurationdata(QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)));
+	connect(systemset_exec,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)));
+	//isoosi添加
+	connect(systemset_exec,SIGNAL(setup_data(QString,QString,QString,QString)),thread_isoosi,SLOT(setup_data(QString,QString,QString,QString)));
+	//isoosi添加重庆
+	connect(systemset_exec,SIGNAL(setup_data_cq(QString,QString,QString,QString)),thread_isoosi_cq,SLOT(setup_data(QString,QString,QString,QString)));
+	//服务器上传
+	connect(systemset_exec,SIGNAL(myserver_xielousetup(QString,QString,QString,QString,QString)),myserver_thread,SLOT(xielousetup(QString,QString,QString,QString,QString)));
+
+	systemset_exec->show();
 }
 void MainWindow::on_pushButton_7_clicked()      //历史记录
 {
@@ -1849,6 +1906,9 @@ void MainWindow::on_pushButton_3_clicked()      //静音
 //	airtest = new Airtightness_Test;
 //	airtest->setAttribute(Qt::WA_DeleteOnClose);
 //	airtest->show();
+//	One_click_sync *sync = new One_click_sync;
+//	sync->setAttribute(Qt::WA_DeleteOnClose);
+//	sync->show();
 }
 void MainWindow::on_pushButton_2_clicked()      //联系我们
 {
@@ -2763,64 +2823,6 @@ void MainWindow::right_set_tank(int t)
     }
 }
 
-void MainWindow::login_enter_set(int t)
-{
-    systemset_exec = new systemset;
-    connect(systemset_exec,SIGNAL(amount_basin_reset(int)),this,SLOT(amount_basin_setted()));
-    connect(systemset_exec,SIGNAL(amount_pipe_reset(int)),this,SLOT(amount_pipe_setted()));
-    connect(systemset_exec,SIGNAL(amount_dispener_reset(int)),this,SLOT(amount_dispener_setted()));
-    connect(systemset_exec,SIGNAL(amount_tank_reset(int)),this,SLOT(amount_tank_setted()));
-    connect(systemset_exec,SIGNAL(method_tank_reset(int)),this,SLOT(method_tank_setted()));
-    connect(systemset_exec,SIGNAL(mainwindow_enable()),this,SLOT(mainwindow_enabled()));
-    connect(Log,SIGNAL(disp_for_managerid(const QString&)),systemset_exec,SLOT(dispset_for_managerid(const QString&)));
-    connect(this,SIGNAL(whoareyou(unsigned char)),systemset_exec,SLOT(whoareyou_userset(unsigned char)));
-    //added for radar
-    connect(this,SIGNAL(systemset_show()),systemset_exec,SLOT(systemset_showed()));
-    connect(systemset_exec,SIGNAL(button_sysshow()),this,SLOT(key_syssetshow()));
-    connect(systemset_exec,SIGNAL(mainwindow_repainting()),this,SLOT(area_painted()));
-    //connect(systemset_exec,SIGNAL(mainwindow_radar_click()),this,SLOT(on_toolButton_radar_clicked()));
-    connect(uart_run,SIGNAL(repaint_set_yuzhi()),systemset_exec,SLOT(repaint_seted_yuzhi()));
-    //added for radar<-
-    //added for screen set
-    connect(systemset_exec,SIGNAL(hide_tablewidget(unsigned char,unsigned char)),this,SLOT(hide_tablewidget(unsigned char,unsigned char)));
-    //added for screen set<-
-
-    //油气回收
-    connect(systemset_exec,SIGNAL(amount_oilgas_dispen_set(int)),this,SLOT(set_amount_oilgas_dispen(int)));
-    connect(systemset_exec,SIGNAL(amount_oilgas_gun_set()),this,SLOT(set_amount_oilgas_gun()));
-    connect(this,SIGNAL(Version_To_SystemSet(unsigned char,unsigned char)),systemset_exec,SLOT(Version_Recv_FromMainwindow(unsigned char,unsigned char)));
-    connect(this,SIGNAL(Setinfo_To_SystemSet(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)),systemset_exec,SLOT(Setinfo_Recv_FromMainwindow(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)));
-    connect(this,SIGNAL(Reoilgas_Factorset_UartWrong(unsigned char,unsigned int)),systemset_exec,SLOT(Reoilgas_FactorUartError_Setted(unsigned char,unsigned int)));
-    connect(this,SIGNAL(Reoilgas_Factor_Setted()),systemset_exec,SLOT(Reoilgas_Factor_Setover()));
-    connect(systemset_exec,SIGNAL(Pre_Pipe_Close()),this,SLOT(Env_Pre_Pipe_Close()));
-    connect(systemset_exec,SIGNAL(Pre_Tank_Close()),this,SLOT(Env_Pre_Tank_Close()));
-    connect(systemset_exec,SIGNAL(Fga_Gas_Close()),this,SLOT(Env_FGA_Gas1_Close()));
-    connect(systemset_exec,SIGNAL(Tem_Tank_Close()),this,SLOT(Env_Tem_Tank_Close()));
-    //可燃气体
-    connect(systemset_exec,SIGNAL(amount_burngas_set(int)),this,SLOT(amount_burngas_setted(int)));
-    //安全防护
-    connect(systemset_exec,SIGNAL(amount_safe_reset()),this,SLOT(reset_safe()));
-    //防撞柱
-    connect(systemset_exec,SIGNAL(crash_num_reset()),this,SLOT(crash_column_reset()));
-    if((t == 2)||(t == 1)||(t == 3))
-    {
-        emit whoareyou(t);
-    }
-
-    //post添加
-    connect(systemset_exec,SIGNAL(Send_Configurationdata(QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)));
-	connect(systemset_exec,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)));
-	//isoosi添加
-    connect(systemset_exec,SIGNAL(setup_data(QString,QString,QString,QString)),thread_isoosi,SLOT(setup_data(QString,QString,QString,QString)));
-	//isoosi添加重庆
-	connect(systemset_exec,SIGNAL(setup_data_cq(QString,QString,QString,QString)),thread_isoosi_cq,SLOT(setup_data(QString,QString,QString,QString)));
-    //每周更新时间  如果网络好用
-    connect(this,SIGNAL(Time_calibration()),systemset_exec,SLOT(on_pushButton_testnet_clicked()));
-	//服务器上传
-	connect(systemset_exec,SIGNAL(myserver_xielousetup(QString,QString,QString,QString,QString)),myserver_thread,SLOT(xielousetup(QString,QString,QString,QString,QString)));
-	systemset_exec->show();
-}
-
 void MainWindow::amount_basin_setted()       //basin
 {
 
@@ -3555,7 +3557,7 @@ void MainWindow::Timerout_lcd()
     QDateTime date_time = QDateTime::currentDateTime();
     ui->systemtime->display(date_time.toString("hh:mm:ss"));
     ui->systemtime_2->display(date_time.toString("yyyy-MM-dd"));
-    emit time_out_slotfunction_s(date_time);
+	emit time_out_slotfunction_s(date_time);
 	//qDebug()<<date_time.toString("hh:mm:ss");
 }
 
@@ -3576,7 +3578,7 @@ void MainWindow::time_out_slotfunction(QDateTime date_time)
 	ui->label_debug_send->setText(QString::number(debug_send));
 	ui->label_debug_read->setText(QString::number(debug_read));
     //QDateTime date_time = QDateTime::currentDateTime();
-    emit Time_Fga_1s();
+	//emit Time_Fga_1s();
 //********雷达时间类*********/
     //雷达监控时间判断
     unsigned int time_day = date_time.toString("dd").toInt();
