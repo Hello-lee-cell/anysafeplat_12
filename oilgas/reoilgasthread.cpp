@@ -562,7 +562,7 @@ void reoilgasthread::SendDataReoilgas_v2()
 //                    printf("ask oilgas!\n");
 					if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 					{
-						msleep(1000);
+						msleep(1300);
 					}
 					else
 					{
@@ -588,7 +588,7 @@ void reoilgasthread::SendDataReoilgas_v2()
                     write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
 					if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 					{
-						msleep(1000);
+						msleep(1400);
 					}
 					else
 					{
@@ -766,7 +766,7 @@ void reoilgasthread::SendDataReoilgas_v2()
                     write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
 					if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 					{
-						msleep(1200);
+						msleep(1300);
 					}
 					else
 					{
@@ -962,13 +962,13 @@ void reoilgasthread::ask_pressure()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1000);
+		msleep(1300);
 		//读
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 		if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
 		{
-			//printf("pressure duqu chenggong \n");
+			printf("pressure duqu chenggong \n");
 			if(Pressure_AskNum == 1)
 			{
 				pressure_value[0] = RecvBuff_init[3];
@@ -1001,7 +1001,12 @@ void reoilgasthread::ask_pressure()
 		}
 		else //ask again
 		{
-			//printf("pressure jiaoyanshibai!!\n");
+//			qDebug()<<len_uart_reoilgas<<"^^^^^^^^^^^^^^^^^";
+//			for(unsigned int i = 0;i<9;i++)
+//			{
+//				printf("%02x ",RecvBuff_init[i]);
+//			}
+			printf("pressure jiaoyanshibai!!\n");
 			Flag_PreUartWrong[Pressure_AskNum-1]++;
 			if(Flag_PreUartWrong[Pressure_AskNum-1] >= 3)
 			{
@@ -1044,7 +1049,7 @@ void reoilgasthread::ask_fga1000()
 		SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 		SendBuff_init[7] = (SCRC & 0x00ff);
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-		msleep(1000);
+		msleep(1300);
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 		SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 		if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
@@ -1122,7 +1127,7 @@ void reoilgasthread::ask_temperature()
 			SendBuff_init[6] = (SCRC & 0xff00) >> 8;
 			SendBuff_init[7] = (SCRC & 0x00ff);
 			write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
-			msleep(1000);
+			msleep(1300);
 			len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 			SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
 			if((RecvBuff_init[len_uart_reoilgas-2] == ((SCRC & 0xff00)>>8)) && (RecvBuff_init[len_uart_reoilgas-1] == (SCRC & 0x00ff)))//校验是否成功
@@ -1288,7 +1293,7 @@ void reoilgasthread::sync_data()
 				{
 					msleep(800);
 				}
-				qDebug()<<"ask!!!!!!!!!!!!"<<Address_Reoilgas[i*4+j];
+				//qDebug()<<"ask!!!!!!!!!!!!"<<Address_Reoilgas[i*4+j];
 				//读取同步信息
 				len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_Oilgas,sizeof(RecvBuff_Oilgas));
 				SCRC = CRC_Test(RecvBuff_Oilgas,len_uart_reoilgas);
@@ -1324,7 +1329,7 @@ void reoilgasthread::sync_data()
 					loop_num = 0;
 					loop = 0;
 					emit signal_sync_data(i,j,256,256,256,256);
-					qDebug()<<"no receive!!!!!!!!!!!!!!!!!!!!!!";
+					//qDebug()<<"no receive!!!!!!!!!!!!!!!!!!!!!!";
 				}
 			}
 		}

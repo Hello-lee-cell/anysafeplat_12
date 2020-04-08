@@ -121,7 +121,6 @@ void myserver::tcp_client()
 		close(nsockfd_myserver);
 		close(sockfd_myserve);
 		add_value_netinfo("MyServer TCPClient Client the Port 8201 Failed");
-
 	}
 	else
 	{
@@ -238,7 +237,7 @@ void myserver::send_tcpclient_data(QString data)
 				}
 				else
 				{
-					msleep(500);
+					msleep(300);
 					memset(myserver_revbuf,0,sizeof(char)*128);//清零数组
 					if((MyServerRecvNum = recv(sockfd_myserve,myserver_revbuf,200,MSG_WAITALL)) <= 0)//MSG_DONTWAIT 1秒延时或者收到40个字节
 					{
@@ -287,7 +286,10 @@ void myserver::send_tcpclient_data(QString data)
 	}
 	else
 	{
-		qDebug()<< "MyServer tcpclient is not connected!!";
+		if(Flag_MyServerEn == 1)
+		{
+			qDebug()<< "MyServer tcpclient is not connected!!";
+		}
 	}
 }
 /*****************准备发送泄漏状态****************
@@ -332,7 +334,7 @@ void myserver::xielousta(QString data_type,QString num,QString sensor_type,QStri
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 }
 /*****************准备发送泄漏设置数据****************
@@ -378,7 +380,7 @@ void myserver::xielousetup(QString tank_num,QString tank_type,QString pipe_num,Q
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 }
 /*****************准备发送油枪数据****************
@@ -427,7 +429,7 @@ void myserver::refueling_gun_data(QString gun_num,QString AlvR,QString GasCur,QS
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 }
 
@@ -480,7 +482,7 @@ void myserver::environmental_data(QString dynbPress,QString tankPress,QString un
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 
 }
@@ -529,7 +531,7 @@ void myserver::setup_data(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QS
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 }
 
@@ -584,7 +586,7 @@ void myserver::gun_warn_data(QString gun_data,QString TightAlm,QString DynbPAlm,
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 
 
@@ -645,7 +647,7 @@ void myserver::refueling_gun_stop(QString gun_num,QString operate,QString Event)
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 
 }
@@ -677,7 +679,7 @@ void myserver::refueling_gun_sta(QString gun_data)
 	send_data.append(key).append("\r\n");
 	//qDebug() << key;
 	send_data.prepend("0").prepend(send_dada_length).prepend(MyServerSendHead);
-	qDebug()<<send_data;
+	//qDebug()<<send_data;
 	send_tcpclient_data(send_data);
 
 }

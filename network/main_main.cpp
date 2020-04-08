@@ -66,19 +66,19 @@ void *client_tcp(void*)
             shutdown(nsockfd,2);
             break;
         }
-
+		//02 01 07 01 00 20 00 XX 02 04 11 01 02 00 00
         memset(sdbuf_active,0,sizeof(char)*512);
         sdbuf_active[0] = 0x02;  //Logic_Add_S;
         sdbuf_active[1] = 0x01;  //Logic_Add_N;
         sdbuf_active[2] = 0x07;   //LNAO_S;
         sdbuf_active[3] = 0x01;  //LNAO_N;
         sdbuf_active[4] = 0x00;  //0; //Mc
-        sdbuf_active[5] = 0x80;  //M_st
+		sdbuf_active[5] = 0x20;  //M_st
         sdbuf_active[6] = 0x00;  //M_Lg 高位
-        sdbuf_active[7] = 0x0E;  //M_Lg 低位
-        sdbuf_active[8] = 0x02;  //DB_Ad_Lg，数据库地址长度
-        sdbuf_active[11] = 0x64; //
-        sdbuf_active[12] = 0x02; //
+		sdbuf_active[7] = 0x07;  //M_Lg 低位
+		sdbuf_active[8] = 0x02;  //DB_Ad_Lg，数据库地址长度
+		sdbuf_active[11] = 0x02; //各个传感器状态数据，暂时只传状态数据
+		sdbuf_active[12] = 0x02; //状态数据长度
 
         for(unsigned int i = 0;i<50;i++)
         {
@@ -90,11 +90,11 @@ void *client_tcp(void*)
                 }//发送数据之前判断网络是否良好
                 else
                 {
-                    sdbuf_active[9] = FLAG_STACHANGE[i][0];
-                    sdbuf_active[10] = FLAG_STACHANGE[i][1];
-                    sdbuf_active[13] = FLAG_STACHANGE[i][2];
-                    sdbuf_active[14] = FLAG_STACHANGE[i][3];
-//主动上传加上时间  符合广东中石化的要求  传输字节由15变成22  数据长度字节改为0X0E
+					sdbuf_active[9] = FLAG_STACHANGE[i][0];
+					sdbuf_active[10] = FLAG_STACHANGE[i][1];
+					sdbuf_active[13] = FLAG_STACHANGE[i][2];
+					sdbuf_active[14] = FLAG_STACHANGE[i][3];
+//主动上传加上时间  符合广东中石化的要求  传输字节由15变成22  数据长度字节改为0X0E //后面的时间又不传了
                     sdbuf_active[15] = FLAG_STACHANGE[i][4];
                     sdbuf_active[16] = FLAG_STACHANGE[i][5];
                     sdbuf_active[17] = FLAG_STACHANGE[i][6];
@@ -103,7 +103,7 @@ void *client_tcp(void*)
                     sdbuf_active[20] = FLAG_STACHANGE[i][9];
                     sdbuf_active[21] = FLAG_STACHANGE[i][10];
 
-                    if((num = send(nsockfd,sdbuf_active,22,0)) == -1)
+					if((num = send(nsockfd,sdbuf_active,15,0)) == -1)
                     {
                         printf("error:failed to send warning message!\n");
                         return 0;

@@ -19,7 +19,7 @@
      <x>932</x>
      <y>2</y>
      <width>81</width>
-     <height>51</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -959,7 +959,7 @@
     <rect>
      <x>2</x>
      <y>0</y>
-     <width>1011</width>
+     <width>1022</width>
      <height>2000</height>
     </rect>
    </property>
@@ -980,7 +980,7 @@
       <rect>
        <x>-1</x>
        <y>-1</y>
-       <width>951</width>
+       <width>961</width>
        <height>511</height>
       </rect>
      </property>
@@ -1219,7 +1219,7 @@
          <rect>
           <x>10</x>
           <y>340</y>
-          <width>241</width>
+          <width>221</width>
           <height>41</height>
          </rect>
         </property>
@@ -1487,7 +1487,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>20</pointsize>
+          <pointsize>17</pointsize>
          </font>
         </property>
         <property name="styleSheet">
@@ -1550,7 +1550,7 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>20</pointsize>
+          <pointsize>17</pointsize>
          </font>
         </property>
         <property name="focusPolicy">
@@ -3260,7 +3260,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="iconSize">
        <size>
@@ -5903,7 +5903,7 @@
           <enum>QTabWidget::West</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="iconSize">
           <size>

@@ -496,6 +496,7 @@ systemset::systemset(QWidget *parent) :
         ui->toolButton_gun_off_guanbi->setEnabled(0);
         ui->toolButton_gun_off_kaiqi->setEnabled(1);
     }
+	ui->pushButton_sync->setHidden(1);//一键同步按钮只在3.0 或 3.1版本才能用
     //********************油气回收设置********************//
 
     //********************网络设置********************//
@@ -646,6 +647,14 @@ void systemset::on_tabWidget_all_currentChanged(int index)
         flag_post_Configuration = 1;
         printf("we will send oilgun set to webservice!!\n");
         ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
+		if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//带屏版本的采集器才有这个一键同步的功能
+		{
+			ui->pushButton_sync->setHidden(0);
+		}
+		else
+		{
+			ui->pushButton_sync->setHidden(1);
+		}
         ui->comboBox_pressure_transmitters_mode_mode->setCurrentIndex(Flag_Pressure_Transmitters_Mode);
         if(Flag_Reoilgas_NeverShow == 0)
         {
@@ -682,7 +691,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->comboBox_network_version->setCurrentIndex(8);
         }
 
-        ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
+		//ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
         ui->comboBox_pressure_transmitters_mode_mode->setCurrentIndex(Flag_Pressure_Transmitters_Mode);
         //选择显示油气回收的网络上传目标地址
 		if(Flag_Network_Send_Version == 0) //福州
@@ -4823,6 +4832,14 @@ void systemset::on_pushButton_testnet_clicked()
 void systemset::on_comboBox_reoilgas_ver_currentIndexChanged(int index)
 {
      Flag_Reoilgas_Version = index+1;
+	 if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//带屏版本的采集器才有这个一键同步的功能
+	 {
+		 ui->pushButton_sync->setHidden(0);
+	 }
+	 else
+	 {
+		 ui->pushButton_sync->setHidden(1);
+	 }
      config_Pressure_Transmitters_Mode_write();//压力变送器,气液比采集器模式设置写入
 }
 

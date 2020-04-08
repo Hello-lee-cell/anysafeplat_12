@@ -632,7 +632,7 @@ void history::on_pushButton_gasre_huanjing_clicked()    //在线油气回收   �
 	model->clear();
 	Filter.clear();
     Flag_AL_ENV = 1;
-	ui->scrollArea->setEnabled(0); //条件查询框 更改后有没有无所谓
+	//ui->scrollArea->setEnabled(0); //条件查询框 更改后有没有无所谓
     model->setTable("envinfo");
     model->setSort(0,Qt::DescendingOrder);
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -665,7 +665,7 @@ void history::on_pushButton_gasre_oilgun_clicked()      //在线油气回收    
 	model->clear();
 	Filter.clear();
     Flag_AL_ENV = 0;
-	ui->scrollArea->setEnabled(1);//条件查询框 更改后有没有无所谓
+	//ui->scrollArea->setEnabled(1);//条件查询框 更改后有没有无所谓
     model->setTable("reoilgasinfo");
     model->setSort(0,Qt::DescendingOrder);  //倒序
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -711,7 +711,7 @@ void history::on_pushButton_gasre_warn_clicked() //报警信息
 	model->clear();
 	Filter.clear();
     Flag_AL_ENV = 2;
-	ui->scrollArea->setEnabled(1);//条件查询框 更改后有没有无所谓
+	//ui->scrollArea->setEnabled(1);//条件查询框 更改后有没有无所谓
     model->setTable("reoilgaswarn");
     model->setSort(0,Qt::DescendingOrder);
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -743,6 +743,115 @@ void history::on_pushButton_conditional_query_clicked()
     ui->pushButton_gasre_huanjing->setStyleSheet("background-color: rgb(60,164,252)");
     ui->pushButton_gasre_oilgun->setStyleSheet("background-color: rgb(60,164,252)");
     ui->pushButton_gasre_warn->setStyleSheet("background-color: rgb(60,164,252)");
+
+	ui->checkBox_1_1->setText(QString("1-1").append("(").append(Mapping_Show[0]).append(")"));
+	ui->checkBox_1_2->setText(QString("1-2").append("(").append(Mapping_Show[1]).append(")"));
+	ui->checkBox_1_3->setText(QString("1-3").append("(").append(Mapping_Show[2]).append(")"));
+	ui->checkBox_1_4->setText(QString("1-4").append("(").append(Mapping_Show[3]).append(")"));
+	ui->checkBox_1_5->setText(QString("1-5").append("(").append(Mapping_Show[4]).append(")"));
+	ui->checkBox_1_6->setText(QString("1-6").append("(").append(Mapping_Show[5]).append(")"));
+	ui->checkBox_1_7->setText(QString("1-7").append("(").append(Mapping_Show[6]).append(")"));
+	ui->checkBox_1_8->setText(QString("1-8").append("(").append(Mapping_Show[7]).append(")"));
+
+	ui->checkBox_2_1->setText(QString("2-1").append("(").append(Mapping_Show[8]).append(")"));
+	ui->checkBox_2_2->setText(QString("2-2").append("(").append(Mapping_Show[9]).append(")"));
+	ui->checkBox_2_3->setText(QString("2-3").append("(").append(Mapping_Show[10]).append(")"));
+	ui->checkBox_2_4->setText(QString("2-4").append("(").append(Mapping_Show[11]).append(")"));
+	ui->checkBox_2_5->setText(QString("2-5").append("(").append(Mapping_Show[12]).append(")"));
+	ui->checkBox_2_6->setText(QString("2-6").append("(").append(Mapping_Show[13]).append(")"));
+	ui->checkBox_2_7->setText(QString("2-7").append("(").append(Mapping_Show[14]).append(")"));
+	ui->checkBox_2_8->setText(QString("2-8").append("(").append(Mapping_Show[15]).append(")"));
+
+	ui->checkBox_3_1->setText(QString("3-1").append("(").append(Mapping_Show[16]).append(")"));
+	ui->checkBox_3_2->setText(QString("3-2").append("(").append(Mapping_Show[17]).append(")"));
+	ui->checkBox_3_3->setText(QString("3-3").append("(").append(Mapping_Show[18]).append(")"));
+	ui->checkBox_3_4->setText(QString("3-4").append("(").append(Mapping_Show[19]).append(")"));
+	ui->checkBox_3_5->setText(QString("3-5").append("(").append(Mapping_Show[20]).append(")"));
+	ui->checkBox_3_6->setText(QString("3-6").append("(").append(Mapping_Show[21]).append(")"));
+	ui->checkBox_3_7->setText(QString("3-7").append("(").append(Mapping_Show[22]).append(")"));
+	ui->checkBox_3_8->setText(QString("3-8").append("(").append(Mapping_Show[23]).append(")"));
+
+	ui->checkBox_4_1->setText(QString("4-1").append("(").append(Mapping_Show[24]).append(")"));
+	ui->checkBox_4_2->setText(QString("4-2").append("(").append(Mapping_Show[25]).append(")"));
+	ui->checkBox_4_3->setText(QString("4-3").append("(").append(Mapping_Show[26]).append(")"));
+	ui->checkBox_4_4->setText(QString("4-4").append("(").append(Mapping_Show[27]).append(")"));
+	ui->checkBox_4_5->setText(QString("4-5").append("(").append(Mapping_Show[28]).append(")"));
+	ui->checkBox_4_6->setText(QString("4-6").append("(").append(Mapping_Show[29]).append(")"));
+	ui->checkBox_4_7->setText(QString("4-7").append("(").append(Mapping_Show[30]).append(")"));
+	ui->checkBox_4_8->setText(QString("4-8").append("(").append(Mapping_Show[31]).append(")"));
+
+	ui->checkBox_5_1->setText(QString("5-1").append("(").append(Mapping_Show[32]).append(")"));
+	ui->checkBox_5_2->setText(QString("5-2").append("(").append(Mapping_Show[33]).append(")"));
+	ui->checkBox_5_3->setText(QString("5-3").append("(").append(Mapping_Show[34]).append(")"));
+	ui->checkBox_5_4->setText(QString("5-4").append("(").append(Mapping_Show[35]).append(")"));
+	ui->checkBox_5_5->setText(QString("5-5").append("(").append(Mapping_Show[36]).append(")"));
+	ui->checkBox_5_6->setText(QString("5-6").append("(").append(Mapping_Show[37]).append(")"));
+	ui->checkBox_5_7->setText(QString("5-7").append("(").append(Mapping_Show[38]).append(")"));
+	ui->checkBox_5_8->setText(QString("5-8").append("(").append(Mapping_Show[39]).append(")"));
+
+	ui->checkBox_6_1->setText(QString("6-1").append("(").append(Mapping_Show[40]).append(")"));
+	ui->checkBox_6_2->setText(QString("6-2").append("(").append(Mapping_Show[41]).append(")"));
+	ui->checkBox_6_3->setText(QString("6-3").append("(").append(Mapping_Show[42]).append(")"));
+	ui->checkBox_6_4->setText(QString("6-4").append("(").append(Mapping_Show[43]).append(")"));
+	ui->checkBox_6_5->setText(QString("6-5").append("(").append(Mapping_Show[44]).append(")"));
+	ui->checkBox_6_6->setText(QString("6-6").append("(").append(Mapping_Show[45]).append(")"));
+	ui->checkBox_6_7->setText(QString("6-7").append("(").append(Mapping_Show[46]).append(")"));
+	ui->checkBox_6_8->setText(QString("6-8").append("(").append(Mapping_Show[47]).append(")"));
+
+	ui->checkBox_7_1->setText(QString("7-1").append("(").append(Mapping_Show[48]).append(")"));
+	ui->checkBox_7_2->setText(QString("7-2").append("(").append(Mapping_Show[49]).append(")"));
+	ui->checkBox_7_3->setText(QString("7-3").append("(").append(Mapping_Show[50]).append(")"));
+	ui->checkBox_7_4->setText(QString("7-4").append("(").append(Mapping_Show[51]).append(")"));
+	ui->checkBox_7_5->setText(QString("7-5").append("(").append(Mapping_Show[52]).append(")"));
+	ui->checkBox_7_6->setText(QString("7-6").append("(").append(Mapping_Show[53]).append(")"));
+	ui->checkBox_7_7->setText(QString("7-7").append("(").append(Mapping_Show[54]).append(")"));
+	ui->checkBox_7_8->setText(QString("7-8").append("(").append(Mapping_Show[55]).append(")"));
+
+	ui->checkBox_8_1->setText(QString("8-1").append("(").append(Mapping_Show[56]).append(")"));
+	ui->checkBox_8_2->setText(QString("8-2").append("(").append(Mapping_Show[57]).append(")"));
+	ui->checkBox_8_3->setText(QString("8-3").append("(").append(Mapping_Show[58]).append(")"));
+	ui->checkBox_8_4->setText(QString("8-4").append("(").append(Mapping_Show[59]).append(")"));
+	ui->checkBox_8_5->setText(QString("8-5").append("(").append(Mapping_Show[60]).append(")"));
+	ui->checkBox_8_6->setText(QString("8-6").append("(").append(Mapping_Show[61]).append(")"));
+	ui->checkBox_8_7->setText(QString("8-7").append("(").append(Mapping_Show[62]).append(")"));
+	ui->checkBox_8_8->setText(QString("8-8").append("(").append(Mapping_Show[63]).append(")"));
+
+	ui->checkBox_9_1->setText(QString("9-1").append("(").append(Mapping_Show[64]).append(")"));
+	ui->checkBox_9_2->setText(QString("9-2").append("(").append(Mapping_Show[65]).append(")"));
+	ui->checkBox_9_3->setText(QString("9-3").append("(").append(Mapping_Show[66]).append(")"));
+	ui->checkBox_9_4->setText(QString("9-4").append("(").append(Mapping_Show[67]).append(")"));
+	ui->checkBox_9_5->setText(QString("9-5").append("(").append(Mapping_Show[68]).append(")"));
+	ui->checkBox_9_6->setText(QString("9-6").append("(").append(Mapping_Show[69]).append(")"));
+	ui->checkBox_9_7->setText(QString("9-7").append("(").append(Mapping_Show[70]).append(")"));
+	ui->checkBox_9_8->setText(QString("9-8").append("(").append(Mapping_Show[71]).append(")"));
+
+	ui->checkBox_10_1->setText(QString("10-1").append("(").append(Mapping_Show[72]).append(")"));
+	ui->checkBox_10_2->setText(QString("10-2").append("(").append(Mapping_Show[73]).append(")"));
+	ui->checkBox_10_3->setText(QString("10-3").append("(").append(Mapping_Show[74]).append(")"));
+	ui->checkBox_10_4->setText(QString("10-4").append("(").append(Mapping_Show[75]).append(")"));
+	ui->checkBox_10_5->setText(QString("10-5").append("(").append(Mapping_Show[76]).append(")"));
+	ui->checkBox_10_6->setText(QString("10-6").append("(").append(Mapping_Show[77]).append(")"));
+	ui->checkBox_10_7->setText(QString("10-7").append("(").append(Mapping_Show[78]).append(")"));
+	ui->checkBox_10_8->setText(QString("10-8").append("(").append(Mapping_Show[79]).append(")"));
+
+	ui->checkBox_11_1->setText(QString("11-1").append("(").append(Mapping_Show[80]).append(")"));
+	ui->checkBox_11_2->setText(QString("11-2").append("(").append(Mapping_Show[81]).append(")"));
+	ui->checkBox_11_3->setText(QString("11-3").append("(").append(Mapping_Show[82]).append(")"));
+	ui->checkBox_11_4->setText(QString("11-4").append("(").append(Mapping_Show[83]).append(")"));
+	ui->checkBox_11_5->setText(QString("11-5").append("(").append(Mapping_Show[84]).append(")"));
+	ui->checkBox_11_6->setText(QString("11-6").append("(").append(Mapping_Show[85]).append(")"));
+	ui->checkBox_11_7->setText(QString("11-7").append("(").append(Mapping_Show[86]).append(")"));
+	ui->checkBox_11_8->setText(QString("11-8").append("(").append(Mapping_Show[87]).append(")"));
+
+	ui->checkBox_12_1->setText(QString("12-1").append("(").append(Mapping_Show[88]).append(")"));
+	ui->checkBox_12_2->setText(QString("12-2").append("(").append(Mapping_Show[89]).append(")"));
+	ui->checkBox_12_3->setText(QString("12-3").append("(").append(Mapping_Show[90]).append(")"));
+	ui->checkBox_12_4->setText(QString("12-4").append("(").append(Mapping_Show[91]).append(")"));
+	ui->checkBox_12_5->setText(QString("12-5").append("(").append(Mapping_Show[92]).append(")"));
+	ui->checkBox_12_6->setText(QString("12-6").append("(").append(Mapping_Show[93]).append(")"));
+	ui->checkBox_12_7->setText(QString("12-7").append("(").append(Mapping_Show[94]).append(")"));
+	ui->checkBox_12_8->setText(QString("12-8").append("(").append(Mapping_Show[95]).append(")"));
+	//ui->checkBox_1_2->setText();
 }
 //条件查询
 void history::on_toolButton_reoilgas_detail_clicked()

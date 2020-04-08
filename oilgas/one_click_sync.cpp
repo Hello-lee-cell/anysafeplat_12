@@ -40,7 +40,7 @@ One_click_sync::One_click_sync(QWidget *parent) :
 
 	gun_num_calc();//计算气液比采集器数目
 
-	move(0,85);
+	move(2,85);
 
 	lcd_shot = new QTimer(this);
 	lcd_shot->setInterval(500);
