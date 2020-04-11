@@ -683,7 +683,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
     }
     if(index == 5)
     {
-		if(Flag_Network_Send_Version<=4)
+		if(Flag_Network_Send_Version<=5)
         {
             ui->comboBox_network_version->setCurrentIndex(Flag_Network_Send_Version);
         }
@@ -736,7 +736,15 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->lineEdit_postpassword->setText(POSTPASSWORD_HUNAN);
 			ui->label_post_name->setText("湖南油气回收上传");
 		}
-		if(Flag_Network_Send_Version >= 5)//其他
+		if(Flag_Network_Send_Version == 5) //江门 与唐山  与福州相同
+		{
+			ui->frame_fujian->setHidden(0);
+			ui->frame_guangzhou->setHidden(1);
+			ui->frame_network_verselect->setHidden(1);
+			ui->frame_hunan_login->setHidden(1);//湖南的登录信息
+			ui->label_post_name->setText("江门油气回收上传");
+		}
+		if(Flag_Network_Send_Version >= 6)//其他
 		{
 			ui->frame_fujian->setHidden(1);
 			ui->frame_guangzhou->setHidden(1);
@@ -4772,7 +4780,15 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->lineEdit_postpassword->setText(POSTPASSWORD_HUNAN);
 		ui->label_post_name->setText("湖南油气回收上传");
 	}
-	if(Flag_Network_Send_Version >= 5)//其他
+	if(Flag_Network_Send_Version == 5) //江门  与  唐山  与福州相同
+	{
+		ui->frame_fujian->setHidden(0);
+		ui->frame_guangzhou->setHidden(1);
+		ui->frame_network_verselect->setHidden(1);
+		ui->frame_hunan_login->setHidden(1);//湖南的登录信息
+		ui->label_post_name->setText("江门油气回收上传");
+	}
+	if(Flag_Network_Send_Version >= 6)//其他
 	{
 		ui->frame_fujian->setHidden(1);
 		ui->frame_guangzhou->setHidden(1);
@@ -4995,6 +5011,16 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		if(Flag_Network_Send_Version == 4) //湖南协议，与福建类似
 		{
 			Send_Configurationdata_HuNan(DATAID_POST,jyqs,pvz,pvf,"NULL",yzqh);
+		}
+		if(Flag_Network_Send_Version == 5) //江门协议 与唐山协议，与福建相同
+		{
+			Send_Configurationdata(DATAID_POST,jyqs,pvz,pvf,hclk,yzqh);
+		}
+
+		if(Flag_MyServerEn == 1) //myserver协议
+		{
+			//isoosi添加
+			emit setup_data_myserver(pvz,QString::number(-(pvf.toFloat())),"0.00","0.00");
 		}
 	}
 }

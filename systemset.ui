@@ -8162,6 +8162,11 @@ background-color: rgb(189,223,255);
         </item>
         <item>
          <property name="text">
+          <string>江门油气回收上传协议</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>天津油气回收上传协议</string>
          </property>
         </item>

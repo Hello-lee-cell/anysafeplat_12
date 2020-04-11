@@ -1693,35 +1693,38 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(warn,SIGNAL(myserver_send_single(QString,QString,QString,QString,QString)),myserver_thread,SLOT(xielousta(QString,QString,QString,QString,QString)),Qt::DirectConnection);
 
 //发送网络故障数据
-	connect(this,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)),Qt::DirectConnection);
-	connect(this,SIGNAL(Send_Wrongsdat_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)),Qt::DirectConnection);
+	connect(this,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)));
+	connect(this,SIGNAL(Send_Wrongsdat_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)));
 	//isoosi添加 重庆
 	connect(this,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)),Qt::DirectConnection);
 
 //发送网络油枪加油数据
 	//post添加 槽函数直连
-	connect(uart_reoilgas,SIGNAL(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+	connect(uart_reoilgas,SIGNAL(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 	//isoosi添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	//isoosi添加重庆 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_cq(QString,QString,QString,QString,QString,QString,QString,QString,QString)),thread_isoosi_cq,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 
+	//myserver添加 槽函数直连
+	connect(uart_reoilgas,SIGNAL(refueling_gun_data_myserver(QString,QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+
 //post形式发送网络数据
 	//post添加 槽函数直连
-	connect(uart_fga,SIGNAL(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Surroundingsdata(QString,QString,QString,QString)),post_message,SLOT(Send_Surroundingsdata(QString,QString,QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Stagundata(QString,QString)),post_message,SLOT(Send_Stagundata(QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Closegunsdata(QString,QString,QString,QString,QString)),post_message,SLOT(Send_Closegunsdata(QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Configurationdata(QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+	connect(uart_fga,SIGNAL(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Surroundingsdata(QString,QString,QString,QString)),post_message,SLOT(Send_Surroundingsdata(QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Stagundata(QString,QString)),post_message,SLOT(Send_Stagundata(QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Closegunsdata(QString,QString,QString,QString,QString)),post_message,SLOT(Send_Closegunsdata(QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Configurationdata(QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)));
 
-	connect(uart_fga,SIGNAL(Send_Warndata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Warndata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Surroundingsdata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Surroundingsdata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Wrongsdata_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Stagundata_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Stagundata_HuNan(QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)),Qt::DirectConnection);
-	connect(uart_fga,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+	connect(uart_fga,SIGNAL(Send_Warndata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Warndata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Surroundingsdata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Surroundingsdata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Wrongsdata_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Stagundata_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Stagundata_HuNan(QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)));
 
 //isoosi形式发送网络数据
 	//isoosi添加  槽函数直连
@@ -1736,6 +1739,13 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(refueling_gun_stop_cq(QString,QString,QString)),thread_isoosi_cq,SLOT(refueling_gun_stop(QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(setup_data_cq(QString,QString,QString,QString)),thread_isoosi_cq,SLOT(setup_data(QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)),Qt::DirectConnection);
+
+	//myserver添加  槽函数直连
+	connect(uart_fga,SIGNAL(environmental_data_myserver(QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(environmental_data(QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+	connect(uart_fga,SIGNAL(gun_warn_data_myserver(QString,QString,QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(gun_warn_data(QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+	connect(uart_fga,SIGNAL(refueling_gun_sta_myserver(QString)),myserver_thread,SLOT(refueling_gun_sta(QString)),Qt::DirectConnection);
+	connect(uart_fga,SIGNAL(refueling_gun_stop_myserver(QString,QString,QString)),myserver_thread,SLOT(refueling_gun_stop(QString,QString,QString)),Qt::DirectConnection);
+	connect(uart_fga,SIGNAL(setup_data_myserver(QString,QString,QString,QString)),myserver_thread,SLOT(setup_data(QString,QString,QString,QString)),Qt::DirectConnection);
 
 	thread_isoosi_cq->start();
 	thread_isoosi->start();
@@ -1853,6 +1863,7 @@ void MainWindow::login_enter_set(int t)
 	//isoosi添加重庆
 	connect(systemset_exec,SIGNAL(setup_data_cq(QString,QString,QString,QString)),thread_isoosi_cq,SLOT(setup_data(QString,QString,QString,QString)));
 	//服务器上传
+	connect(systemset_exec,SIGNAL(setup_data_myserver(QString,QString,QString,QString)),myserver_thread,SLOT(setup_data(QString,QString,QString,QString)));
 	connect(systemset_exec,SIGNAL(myserver_xielousetup(QString,QString,QString,QString,QString)),myserver_thread,SLOT(xielousetup(QString,QString,QString,QString,QString)));
 
 	systemset_exec->show();
@@ -13247,6 +13258,11 @@ void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络�
 		{
 			QString wrongdata_post = "0111";//post添加
 			emit Send_Wrongsdat_HuNan(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0'))));//只发送采集器第一把枪
+		}
+		if(Flag_Network_Send_Version == 5)//江门协议，与唐山协议，与福建相同
+		{
+			QString wrongdata_post = "0111";//post添加
+			emit Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
 		}
 
 	}

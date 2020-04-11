@@ -86,6 +86,13 @@ signals:
 	void refueling_gun_stop_cq(QString gun_num,QString operate,QString Event);
 	void refueling_wrongdata_cq(QString warn_data);
 
+	//myserver添加
+	void environmental_data_myserver(QString dynbPress,QString tankPress,QString unloadgasCon,QString DevicegasCon,QString GasTemp,QString GasVolume);
+	void gun_warn_data_myserver(QString gun_data,QString TightAlm,QString DynbPAlm,QString TankPAlm,QString DeviceAlm,QString PVTapAlm,QString DevOpenAlm,QString DevStopAlm);
+	void refueling_gun_sta_myserver(QString gun_data);
+	void refueling_gun_stop_myserver(QString gun_num,QString operate,QString Event);
+	void setup_data_myserver(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);//用来每天上传一次设置数据
+
 private slots:
     void SendDataFGA();  //发送数据
     void ReadDataFGA();  //接收数据

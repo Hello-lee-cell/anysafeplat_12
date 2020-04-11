@@ -42,7 +42,7 @@ unsigned char Flag_Sound_Radar_temp = 0;
 unsigned int Flag_warn_delay = 0;                   //报警延长时间  也当标志位使用
 unsigned char Flag_Timeto_CloseNeeded[6] = {0}; //==0计时定时息屏  ==1取消计时 Flag_Timeto_closeMainwindow = 300;
                                               //[0]窗体创建[1]测漏报警[2]气液比通信故障[3]环境检测：pre_pipe/tank[4]环境检测报警:gas1[5]气液比报警
-unsigned char Flag_Network_Send_Version = 100;//油气回收网络上传版本 0-福州 1-广州 2 3 4 5其他
+unsigned char Flag_Network_Send_Version = 100;//油气回收网络上传版本 0-福州 1-广州 2重庆  3 唐山  4 湖南 5江门  6其他
 float PerDay_Al_Big[8] = {0};
 float PerDay_Al_Smal[8] = {0};
 

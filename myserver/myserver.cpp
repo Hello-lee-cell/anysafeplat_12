@@ -141,6 +141,11 @@ void myserver::tcp_client()
 //        //continue;
 //    }
 	sleep(2);
+	xielousetup(QString::number(count_tank),QString::number(Test_Method),QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
+	setup_data(QString::number(Positive_Pres,'f',1),QString::number(-Negative_Pres,'f',1),"0.00","0.00");
+	//初次连接发送泄漏和油气回收的设置信息
+
+
 	while(1)
 	{
 		if(Flag_MyServerClientSuccess == 0)
@@ -156,22 +161,23 @@ void myserver::tcp_client()
 				qDebug()<<"MyServer IP changed! So break!";
 				break;
 			}
-			qDebug()<<"MyServer ready to send!";
+			//qDebug()<<"MyServer ready to send!";
+
 			//xielousta("1","1","2","0","88.8");
-			sleep(2);
+			//sleep(2);
 			//xielousetup("4","1","4","4","4");
 			//refueling_gun_data("q0001","1.1","10.2","12.2","8.3","5.3","null");
-			sleep(2);
+			//sleep(2);
 			 //environmental_data("10","12","0","1","36.5","0");
-			 sleep(2);
+			 //sleep(2);
 			//setup_data("0","1","2","3");
-			sleep(2);
+			//sleep(2);
 			//gun_warn_data("q0001-AlvAlm=0","0","0","0","0","0","0","0");
-			sleep(2);
+			//sleep(2);
 			//refueling_gun_stop("N","N","N");
-			sleep(2);
+			//sleep(2);
 			//refueling_gun_sta("q0001-Status=0;q0003-Status=0;q0004-Status=0;q0005-Status=0");
-			sleep(2);
+			//sleep(2);
 		}
 		//如果不要该协议则退出
 		if(Flag_MyServerEn != 1)
@@ -390,7 +396,7 @@ GasCur     油气流速
 GasFlow    油气流量
 FuelCur    燃油流速
 FuelFlow   燃油流量
-DynbPrs    液阻
+DynbPrs    液阻  不上传
 信号来自reoilgasthread
 **********************************************/
 void myserver::refueling_gun_data(QString gun_num,QString AlvR,QString GasCur,QString GasFlow,QString FuelCur,QString FuelFlow,QString DynbPrs)
@@ -513,8 +519,27 @@ void myserver::setup_data(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QS
 	send_TrOpenPrs.append(TrOpenPrs);
 	send_TrStopPrs.append(TrStopPrs);
 
-  send_data = "QN="+MyServer_QN+";"+"MN="+MyStationId+";"+MyServer_ST+";"+"CN=2031;"+"PW="+MyStationPW+";"+"CP=&&DataTime="+date+";"
-                 +"GunNum="+Gun_Num+";"+send_PVFrwPrs+";"+send_PVRevPrs+";"+send_TrOpenPrs+";"+send_TrStopPrs+"&&";
+	//下面的用来传输油枪号映射
+	unsigned int num_map = 0;
+	QString gun_map = "";
+	QString Send_Map = "";
+	for(unsigned int i = 0;i<Amount_Dispener;i++)
+	{
+		gun_map = "";
+		for(unsigned int j = 0;j<Amount_Gasgun[i];j++)
+		{
+			num_map++;
+			gun_map = QString("%1").arg(num_map,4,10,QLatin1Char('0'));
+			gun_map.append("=").append(Mapping_Show[i*8+j]);
+			gun_map.prepend("q");
+
+			Send_Map.append(";").append(gun_map);
+		}
+	}
+
+
+	send_data = "QN="+MyServer_QN+";"+"MN="+MyStationId+";"+MyServer_ST+";"+"CN=2031;"+"PW="+MyStationPW+";"+"CP=&&DataTime="+date+";"
+	             +"GunNum="+Gun_Num+";"+send_PVFrwPrs+";"+send_PVRevPrs+";"+send_TrOpenPrs+";"+send_TrStopPrs+Send_Map+"&&";  //sendmap字符串前面已经有一个；了
 
 //    send_data = "QN="+MyServer_QN+";"+"MN="+MyStationId+";"+MyServer_ST+";"+"CN=2031;"+"PW="+MyStationPW+";"+"CP=&&DataTime="+date+";"
 //                 +"m01-GunNum="+Gun_Num+";"+"m01-"+send_PVFrwPrs+";"+"m01-"+send_PVRevPrs+";"+"m01-"+send_TrOpenPrs+";"+"m01-"+send_TrStopPrs+"&&";

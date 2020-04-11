@@ -1006,7 +1006,7 @@ void reoilgasthread::ask_pressure()
 //			{
 //				printf("%02x ",RecvBuff_init[i]);
 //			}
-			printf("pressure jiaoyanshibai!!\n");
+			//printf("pressure jiaoyanshibai!!\n");
 			Flag_PreUartWrong[Pressure_AskNum-1]++;
 			if(Flag_PreUartWrong[Pressure_AskNum-1] >= 3)
 			{
@@ -1362,7 +1362,7 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 		if(Flag_Network_Send_Version == 1)  //广州协议
 		{
 			float send_al = al.toFloat();
-			QString gun_num = QString("%1").arg((Mapping[(jyjid.toInt()-1)*8+jyqid.toInt()]),4,10,QLatin1Char('0'));//k为int型或char型都可
+			QString gun_num = QString("%1").arg((Mapping[(jyjid.toInt()-1)*8+jyqid.toInt()-1]),4,10,QLatin1Char('0'));//k为int型或char型都可
 			gun_num.prepend("q");
 			if((send_al<=120)&&(send_al>=100))
 			{
@@ -1394,7 +1394,7 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 		if(Flag_Network_Send_Version == 2)  //重庆协议
 		{
 			float send_al = (al.toFloat())/100;
-			QString gun_num = QString("%1").arg((Mapping[(jyjid.toInt()-1)*8+jyqid.toInt()]),3,10,QLatin1Char('0'));//k为int型或char型都可
+			QString gun_num = QString("%1").arg((Mapping[(jyjid.toInt()-1)*8+jyqid.toInt()-1]),3,10,QLatin1Char('0'));//k为int型或char型都可
 			QString gas_tem;
 			if(Tem_tank_en == 1)
 			{
@@ -1439,6 +1439,44 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 		if(Flag_Network_Send_Version == 4) //湖南协议，与福建相同
 		{
 			emit Send_Oilgundata_HuNan(DATAID_POST,"date_kong",jyjid,jyqid,al,qls,qll,yls,yll,"NULL","NULL",yz);
+		}
+		if(Flag_Network_Send_Version == 5) //江门协议 与唐山协议，与福建相同
+		{
+			emit Send_Oilgundata(DATAID_POST,jyjid,jyqid,al,qls,qll,yls,yll,yz);
+		}
+
+
+		if(Flag_MyServerEn == 1)  //myserver协议
+		{
+			float send_al = al.toFloat();
+			QString gun_num = QString("%1").arg((Mapping[(jyjid.toInt()-1)*8+jyqid.toInt()-1]),4,10,QLatin1Char('0'));//k为int型或char型都可
+			gun_num.prepend("q");
+			if((send_al<=120)&&(send_al>=100))
+			{
+				refueling_gun_data(gun_num,al.append("0"),qls.append("0"),qll.append("0"),yls.append("0"),yll.append("0"),yz.append("0"));//.append保证小数点后两位
+			}
+			else
+			{
+				if(Flag_Shield_Network == 1)//屏蔽状态
+				{
+					float time = (yll.toFloat())/(yls.toFloat());
+					int al_num = qrand()%(12000-10000);//用1.0~1.2之间的随机数代替
+					float al_xiuzheng = al_num+10000;
+					float send_qll = (yll.toFloat())*(al_xiuzheng/10000);
+					float send_qls = send_qll/time;
+					qDebug()<<al_xiuzheng<<send_qll<<send_qls<<time;
+					refueling_gun_data(gun_num,QString::number((al_xiuzheng/100),'f',2),
+					                   QString::number(send_qls,'f',2),
+					                   QString::number(send_qll,'f',2),
+					                   yls.append("0"),yll.append("0"),yz.append("0"));
+
+				}
+				else
+				{
+					refueling_gun_data_myserver(gun_num,al.append("0"),qls.append("0"),qll.append("0"),yls.append("0"),yll.append("0"),yz.append("0"));//.append保证小数点后两位
+				}
+			}
+
 		}
 	}
 }

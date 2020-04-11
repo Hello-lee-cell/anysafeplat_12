@@ -534,6 +534,10 @@ signals:
 	void setup_data_cq(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);
 	//服务器上传
 	void myserver_xielousetup(QString tank_num,QString tank_type,QString pipe_num,QString dispener_num,QString basin_num);
+
+	//myserver添加
+	void setup_data_myserver(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);
+
 	//同步带屏气液比采集器脉冲当量
 	void signal_sync_factor_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2);
 

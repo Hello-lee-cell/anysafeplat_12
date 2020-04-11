@@ -60,36 +60,72 @@ void post_webservice::requestFinished(QNetworkReply* reply)
 {
     if (reply->error() == QNetworkReply::NoError)
     {
-        if(network_wrong == 1)
-        {
-            add_value_netinfo("在线监测服务器访问成功");
-            network_wrong = 0;
-        }
+		if(Flag_Network_Send_Version == 5)
+		{
+			if(network_wrong == 1)
+			{
+				add_value_netinfo("在线监测服务器访问成功");
+				network_wrong = 0;
+			}
 
-        QByteArray bytes = reply->readAll();
-        //qDebug()<<bytes;
-		QString string = QString::fromUtf8(bytes);
-        QString re = ReadXml(string);
-        if(re == "01")
-        {
-            //emit show_data(re.append("  send success"));
-            qDebug() << re.append("  send success");
-			if(send_wrong != 0)
-            {
-                add_value_netinfo("在线监测数据上传成功");
-                send_wrong = 0;
-            }
-        }
-        else
-        {
-            //emit show_data(re.append("  send fail"));
-            qDebug() << re.append("  send fail");
-			if(send_wrong != 1)
-            {
-                add_value_netinfo("在线监测数据上传失败");
-                send_wrong = 1;
-            }
-        }
+			QByteArray bytes = reply->readAll();
+			//qDebug()<<bytes;
+			QString string = QString::fromUtf8(bytes);
+			QString re = ReadXml(string);
+			if(re == "ok")
+			{
+				//emit show_data(re.append("  send success"));
+				qDebug() << re.append("  send success");
+				if(send_wrong != 0)
+				{
+					add_value_netinfo("在线监测数据上传成功");
+					send_wrong = 0;
+				}
+			}
+			else
+			{
+				//emit show_data(re.append("  send fail"));
+				qDebug() << re.append("  send fail");
+				if(send_wrong != 1)
+				{
+					add_value_netinfo("在线监测数据上传失败");
+					send_wrong = 1;
+				}
+			}
+		}
+		else
+		{
+			if(network_wrong == 1)
+			{
+				add_value_netinfo("在线监测服务器访问成功");
+				network_wrong = 0;
+			}
+
+			QByteArray bytes = reply->readAll();
+			//qDebug()<<bytes;
+			QString string = QString::fromUtf8(bytes);
+			QString re = ReadXml(string);
+			if(re == "01")
+			{
+				//emit show_data(re.append("  send success"));
+				qDebug() << re.append("  send success");
+				if(send_wrong != 0)
+				{
+					add_value_netinfo("在线监测数据上传成功");
+					send_wrong = 0;
+				}
+			}
+			else
+			{
+				//emit show_data(re.append("  send fail"));
+				qDebug() << re.append("  send fail");
+				if(send_wrong != 1)
+				{
+					add_value_netinfo("在线监测数据上传失败");
+					send_wrong = 1;
+				}
+			}
+		}
     }
     else
     {
@@ -610,6 +646,91 @@ QString CreatXml(QString version,QString data_id,QString user_id,QString time,QS
 
 		tagFileInfo_data.appendChild(tagFileInfo_root);
 		tagFileInfo_post.appendChild(tagFileInfo_data);
+		tagFileInfo_body.appendChild(tagFileInfo_post);
+		//tagFileInfo_header.appendChild(tagFileInfo_body);
+		//tagFileInfo_envelope.appendChild(tagFileInfo_header);
+		tagFileInfo_envelope.appendChild(tagFileInfo_body);
+
+		doc.appendChild(tagFileInfo_envelope);
+	}
+	else if(Flag_Network_Send_Version == 5) //江门协议，与唐山 福州相同
+	{
+		/*
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+	<post xmlns="http://tempuri.org/">
+	   <root>
+				<VERSION>V1.1</VERSION>
+				<DATAID>000001</DATAID>
+				<USERID>1111111111</USERID>
+				<TIME>20200410160132</TIME>
+				<TYPE>01</TYPE>
+				<SEC>01</SEC>
+				<BUSINESSCONTENT>PHJvd3M+PHJvdz48SUQ+MDAwMDAxPC9JRD48REFURT4yMDE4MDExODEwMjkzNjwvREFURT48QUw+MTowOzI6MDszOjA7NDoxOzU6MDs2OjA7NzoxOzg6MTs5OjE7MTA6MDsxMTowOzEyOjE7MTM6MTsxNDoxOzE1OjE7MTY6MTsxNzoxOzE4OjE7PC9BTD48TUI+MDwvTUI+PFlaPjA8L1laPjxZR0xZPjA8L1lHTFk+PFBWWlQ+MjwvUFZaVD48UFZMSlpUPjA8L1BWTEpaVD48SENMWlQ+MDwvSENMWlQ+PC9yb3c+PC9yb3dzPg==</BUSINESSCONTENT>
+				<HMAC></HMAC>
+			</root>
+	</post>
+  </soap:Body>
+</soap:Envelope>
+		 * */
+		QString header("version=\"1.0\" encoding=\"UTF-8\"");
+		doc.appendChild(doc.createProcessingInstruction("xml",header));
+		QDomElement tagFileInfo_envelope = doc.createElementNS("http://schemas.xmlsoap.org/soap/envelope/", "soap:Envelope");
+		tagFileInfo_envelope.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+		tagFileInfo_envelope.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
+
+		QDomElement tagFileInfo_body = doc.createElement("soap:Body");
+		QDomElement tagFileInfo_post = doc.createElementNS("http://tempuri.org/","post");
+		//QDomElement tagFileInfo_data = doc.createElementNS("","arg0");
+		QDomElement tagFileInfo_root = doc.createElement("ROOT");
+
+		//QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
+		//版本号
+		QDomElement tagFileVersion = doc.createElement("VERSION");
+		QDomText textFileVersion = doc.createTextNode(version);
+		//数据类型
+		QDomElement tagFileDataId = doc.createElement("DATAID");
+		QDomText textFileDataID = doc.createTextNode(data_id);
+		//用户ID
+		QDomElement tagFileUserId = doc.createElement("USERID");
+		QDomText textFileUserID = doc.createTextNode(user_id);
+		//时间
+		QDomElement tagFileTime = doc.createElement("TIME");
+		QDomText textFileTime = doc.createTextNode(time);
+		//数据类型
+		QDomElement tagFileType = doc.createElement("TYPE");
+		QDomText textFileType = doc.createTextNode(type);
+		//传输方式 明文
+		QDomElement tagFileSec = doc.createElement("SEC");
+		QDomText textFileSec = doc.createTextNode(sec);
+		//数据报文
+		QDomElement tagFileBusin = doc.createElement("BUSINESSCONTENT");
+		QDomText textFileBusin = doc.createTextNode(bus_data);
+		//HMAC校验  预留
+		QDomElement tagFileHmac = doc.createElement("HMAC");
+		QDomText textFileHmac = doc.createTextNode("");
+
+		tagFileVersion.appendChild(textFileVersion);
+		tagFileDataId.appendChild(textFileDataID);
+		tagFileUserId.appendChild(textFileUserID);
+		tagFileTime.appendChild(textFileTime);
+		tagFileType.appendChild(textFileType);
+		tagFileSec.appendChild(textFileSec);
+		tagFileBusin.appendChild(textFileBusin);
+		tagFileHmac.appendChild(textFileHmac);
+
+		tagFileInfo_root.appendChild(tagFileVersion);
+		tagFileInfo_root.appendChild(tagFileDataId);
+		tagFileInfo_root.appendChild(tagFileUserId);
+		tagFileInfo_root.appendChild(tagFileTime);
+		tagFileInfo_root.appendChild(tagFileType);
+		tagFileInfo_root.appendChild(tagFileSec);
+		tagFileInfo_root.appendChild(tagFileBusin);
+		tagFileInfo_root.appendChild(tagFileHmac);
+
+		//tagFileInfo_data.appendChild(tagFileInfo_root);
+		tagFileInfo_post.appendChild(tagFileInfo_root);
 		tagFileInfo_body.appendChild(tagFileInfo_post);
 		//tagFileInfo_header.appendChild(tagFileInfo_body);
 		//tagFileInfo_envelope.appendChild(tagFileInfo_header);
