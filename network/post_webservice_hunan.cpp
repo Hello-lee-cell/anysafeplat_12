@@ -115,9 +115,10 @@ void post_webservice_hunan::post_message_HuNan(QString xml_data)
 	{
 		//POST  //森茂加油站对应协议
 		emit show_data_HuNan(xml_data);
+		qDebug()<<xml_data;
 		QNetworkRequest *request = new QNetworkRequest();
 		request->setUrl(QUrl(Post_Address));
-		request->setHeader(QNetworkRequest::ContentTypeHeader, "text/xml");
+		request->setHeader(QNetworkRequest::ContentTypeHeader, "application/xml");
 		QNetworkReply* reply = m_accessManager_hunan->post(*request,xml_data.toUtf8());
 		//delete reply;
 		delete request;
@@ -363,7 +364,7 @@ void post_webservice_hunan::Send_Surroundingsdata_HuNan(QString id,QString data,
 		{
 			xmldata_surround_hunan.prepend("<rows>");
 			xmldata_surround_hunan.append("</rows>");
-			qDebug() << xmldata_surround_hunan;
+			//qDebug() << xmldata_surround_hunan;
 			TYPE_POST_HUNAN = "04";
 			QByteArray byteArray(xmldata_surround_hunan.toStdString().c_str(), xmldata_surround_hunan.toStdString().length());
 			QString xml_data64(byteArray.toBase64());
@@ -495,10 +496,11 @@ QString CreatXml_HuNan(QString version,QString data_id,QString user_id,QString t
 	    //qDebug()<<"open successful!";
 	    QString header("version=\"1.0\" encoding=\"UTF-8\"");
 		doc.appendChild(doc.createProcessingInstruction("xml",header));
-		QDomElement tagFileInfo_envelope = doc.createElementNS("http://schemas.xmlsoap.org/soap/envelope/", "soap:Envelope");
+		QDomElement tagFileInfo_envelope = doc.createElementNS("http://www.w3.org/2003/05/soap-envelope", "soap12:Envelope");
 		tagFileInfo_envelope.setAttribute("xmlns:ser", "http://service.meedoo.com/");
-		QDomElement tagFileInfo_header = doc.createElement("soap:Header");
-		QDomElement tagFileInfo_body = doc.createElement("soap:Body");
+		QDomElement tagFileInfo_auth = doc.createElement("auth");
+		QDomElement tagFileInfo_header = doc.createElementNS("http://service.meedoo.com/authentication","soap12:Header");
+		QDomElement tagFileInfo_body = doc.createElement("soap12:Body");
 		QDomElement tagFileInfo_post = doc.createElement("ser:receiveData");
 		QDomElement tagFileInfo_data = doc.createElement("roots");
 		QDomElement tagFileInfo_root = doc.createElement("root");
@@ -560,8 +562,11 @@ QString CreatXml_HuNan(QString version,QString data_id,QString user_id,QString t
 		tagFileInfo_post.appendChild(tagFileInfo_data);
 		tagFileInfo_body.appendChild(tagFileInfo_post);
 
-		tagFileInfo_header.appendChild(tagFileUsername);
-		tagFileInfo_header.appendChild(tagFilePassword);
+		tagFileInfo_auth.appendChild(tagFileUsername);
+		tagFileInfo_auth.appendChild(tagFilePassword);
+
+		tagFileInfo_header.appendChild(tagFileInfo_auth);
+		//tagFileInfo_header.appendChild(tagFilePassword);
 
 		tagFileInfo_envelope.appendChild(tagFileInfo_header);
 		tagFileInfo_envelope.appendChild(tagFileInfo_body);
@@ -570,10 +575,12 @@ QString CreatXml_HuNan(QString version,QString data_id,QString user_id,QString t
 
 		//转义字符 < > 都需要转换编码
 		QString xmldata = doc.toString();
-		qDebug() << xmldata;
-
-//		xmldata = xmldata.replace(QRegExp("\\<ROOT>"),"&lt;ROOT&gt;");
-//		xmldata = xmldata.replace(QRegExp("\\</ROOT>"),"&lt;/ROOT&gt;");
+		//qDebug() << xmldata;
+		xmldata = xmldata.replace("soap12:Header xmlns:soap12","soap12:Header xmlns");
+//		xmldata = xmldata.replace(QRegExp("\\<root>"),"&lt;root&gt;");
+//		xmldata = xmldata.replace(QRegExp("\\</root>"),"&lt;/root&gt;");
+//		xmldata = xmldata.replace(QRegExp("\\<roots>"),"&lt;roots&gt;");
+//		xmldata = xmldata.replace(QRegExp("\\</roots>"),"&lt;/roots&gt;");
 //		xmldata = xmldata.replace(QRegExp("\\<VERSION>"),"&lt;VERSION&gt;");
 //		xmldata = xmldata.replace(QRegExp("\\</VERSION>"),"&lt;/VERSION&gt;");
 //		xmldata = xmldata.replace(QRegExp("\\<DATAID>"),"&lt;DATAID&gt;");
@@ -651,7 +658,7 @@ QString XML_Requestdata_HuNan(QString type,QString data)
 	doc.appendChild(tagFileInforows);
 
 	QString xmldata = doc.toString();
-	qDebug() << xmldata;
+	//qDebug() << xmldata;
 	return xmldata;
 }
 /********************配置数据****************
@@ -705,14 +712,14 @@ QString XML_Configurationdata_HuNan(QString id,QString data,QString jyqs,QString
 	tagFileInforow.appendChild(tagFilePvz);
 	tagFileInforow.appendChild(tagFilePvf);
 	tagFileInforow.appendChild(tagFileHclk);
-	tagFileInforow.appendChild(tagFileHclt);
+	//tagFileInforow.appendChild(tagFileHclt);
 	tagFileInforow.appendChild(tagFileYzqh);
 
 	tagFileInforows.appendChild(tagFileInforow);
 	doc.appendChild(tagFileInforows);
 
 	QString xmldata = doc.toString();
-	qDebug() << xmldata;
+	//qDebug() << xmldata;
 	return xmldata;
 }
 
@@ -780,17 +787,17 @@ QString XML_Warndata_HuNan(QString id,QString data,QString al,QString mb,
 	tagFileInforow.appendChild(tagFileMb);
 	tagFileInforow.appendChild(tagFileYz);
 	tagFileInforow.appendChild(tagFileYgYl);
-	tagFileInforow.appendChild(tagFileclzznd);
+	//tagFileInforow.appendChild(tagFileclzznd);
 	tagFileInforow.appendChild(tagFilePv);
 	tagFileInforow.appendChild(tagFileclzzqd);
-	tagFileInforow.appendChild(tagFileclzztz);
+	//tagFileInforow.appendChild(tagFileclzztz);
 	tagFileInforow.appendChild(tagFilexyhqg);
 
 	tagFileInforows.appendChild(tagFileInforow);
 	doc.appendChild(tagFileInforows);
 
 	QString xmldata = doc.toString();
-	qDebug() << xmldata;
+	//qDebug() << xmldata;
 	return xmldata;
 }
 /********************油枪数据****************
@@ -863,8 +870,8 @@ QString XML_Oilgundata_HuNan(QString id,QString data,QString jyjid,QString jyqid
 	tagFileInforow.appendChild(tagFileQll);
 	tagFileInforow.appendChild(tagFileYls);
 	tagFileInforow.appendChild(tagFileYll);
-	tagFileInforow.appendChild(tagFileYqNd);
-	tagFileInforow.appendChild(tagFileYqWd);
+	//tagFileInforow.appendChild(tagFileYqNd);
+	//tagFileInforow.appendChild(tagFileYqWd);
 	tagFileInforow.appendChild(tagFileYz);
 
 	tagFileInforows.appendChild(tagFileInforow);
@@ -925,9 +932,9 @@ QString XML_Surroundingsdata_HuNan(QString id,QString data,QString ygyl,QString 
 	tagFileInforow.appendChild(tagFileData);
 	tagFileInforow.appendChild(tagFileYgyl);
 	tagFileInforow.appendChild(tagFileYzyl);
-	tagFileInforow.appendChild(tagFilexnd);
-	tagFileInforow.appendChild(tagFileclnd);
-	tagFileInforow.appendChild(tagFileyqwd);
+	//tagFileInforow.appendChild(tagFilexnd);
+	//tagFileInforow.appendChild(tagFileclnd);
+	//tagFileInforow.appendChild(tagFileyqwd);
 	tagFileInforow.appendChild(tagFileYqkj);
 
 	tagFileInforows.appendChild(tagFileInforow);
@@ -969,7 +976,7 @@ QString XML_Wrongsdata_HuNan(QString id,QString data,QString type)
 	doc.appendChild(tagFileInforows);
 
 	QString xmldata = doc.toString();
-	qDebug() << xmldata;
+	//qDebug() << xmldata;
 	return xmldata;
 }
 /********************油枪关停数据*****未使用***********
@@ -1017,7 +1024,7 @@ QString XML_Closegunsdata_HuNan(QString id,QString data,QString jyjid,QString jy
 	doc.appendChild(tagFileInforow);
 
 	QString xmldata = doc.toString();
-	qDebug() << xmldata;
+	//qDebug() << xmldata;
 	return xmldata;
 }
 /********************加油枪状态****************
@@ -1051,7 +1058,7 @@ QString XML_Stagundata_HuNan(QString id,QString data,QString status)
 	doc.appendChild(tagFileInforows);
 
 	QString xmldata = doc.toString();
-	qDebug() << xmldata;
+	//qDebug() << xmldata;
 	return xmldata;
 }
 

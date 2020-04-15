@@ -150,6 +150,7 @@ void post_webservice::post_message(QString xml_data)
     post_data.lock();//上锁
     if(net_state == 0)
     {
+		//qDebug()<<"send net net  net";
         //POST  //森茂加油站对应协议
         emit show_data(xml_data);
         QNetworkRequest *request = new QNetworkRequest();
@@ -185,6 +186,7 @@ DATA 当TYPE 为"01"时，DATA表示修改后的口令值（字符串）
 **********************************************/
 void post_webservice::Send_Requestdata(QString type,QString data)
 {
+
     if(Flag_Postsend_Enable == 1)
     {
         TYPE_POST = "00";
@@ -204,6 +206,7 @@ void post_webservice::Send_Requestdata(QString type,QString data)
     {
         qDebug() << "network post send disenable!";
     }
+	qDebug()<<"send"<<TYPE_POST;
 }
 /******************发送配置数据****************
 ID   对象ID，在本次数据传输中唯一
@@ -235,6 +238,7 @@ void post_webservice::Send_Configurationdata(QString id,QString jyqs,QString pvz
     {
         qDebug() << "network post send disenable!";
     }
+	qDebug()<<"send"<<TYPE_POST;
 }
 /******************发送报警数据****************
 ID     对象ID，在本次数据传输中唯一
@@ -295,6 +299,7 @@ void post_webservice::Send_Warndata(QString id,QString al,QString mb,QString yz,
     {
         qDebug() << "network post send disenable!";
     }
+	qDebug()<<"send"<<TYPE_POST;
 }
 /******************发送油枪数据****************
 ID     对象ID，在本次数据传输中唯一
@@ -372,6 +377,7 @@ void post_webservice::Send_Oilgundata(QString id,QString jyjid,QString jyqid,QSt
     {
         qDebug() << "network post send disenable!";
     }
+	qDebug()<<"send"<<TYPE_POST;
 }
 /******************发送环境数据****************
 ID     对象ID，在本次数据传输中唯一
@@ -395,7 +401,7 @@ void post_webservice::Send_Surroundingsdata(QString id,QString ygyl,QString yzyl
         {
             xmldata_surround.prepend("<rows>");
             xmldata_surround.append("</rows>");
-            qDebug() << xmldata_surround;
+			//qDebug() << xmldata_surround;
             TYPE_POST = "04";
             QByteArray byteArray(xmldata_surround.toStdString().c_str(), xmldata_surround.toStdString().length());
             QString xml_data64(byteArray.toBase64());
@@ -405,12 +411,15 @@ void post_webservice::Send_Surroundingsdata(QString id,QString ygyl,QString yzyl
             post_message(send_xml);
             xmldata_surround = "";
             flag_numofsurrounddata = 0;
+
+			    qDebug()<<"send"<<TYPE_POST;
         }
     }
     else
     {
         qDebug() << "network post send disenable!";
     }
+
 }
 /******************发送故障数据****************
 ID     对象ID，在本次数据传输中唯一
@@ -418,6 +427,7 @@ TYPE   故障码
 **********************************************/
 void post_webservice::Send_Wrongsdata(QString id,QString type)
 {
+	//qDebug()<<"send wrong data";
     if(Flag_Postsend_Enable == 1)
     {
         TYPE_POST = "05";
@@ -437,6 +447,7 @@ void post_webservice::Send_Wrongsdata(QString id,QString type)
     {
         qDebug() << "network post send disenable!";
     }
+	qDebug()<<"send"<<TYPE_POST;
 }
 /******************发送油枪关停数据****************
 ID       对象ID，在本次数据传输中唯一
@@ -466,6 +477,7 @@ void post_webservice::Send_Closegunsdata(QString id,QString jyjid,QString jyqid,
     {
         qDebug() << "network post send disenable!";
     }
+	qDebug()<<"send"<<TYPE_POST;
 }
 /******************发送加油枪状态****************
 ID       对象ID，在本次数据传输中唯一
@@ -492,6 +504,7 @@ void post_webservice::Send_Stagundata(QString id,QString status)
     {
         qDebug() << "network post send disenable!";
     }
+	qDebug()<<"send"<<TYPE_POST;
 }
 
 
@@ -674,15 +687,14 @@ QString CreatXml(QString version,QString data_id,QString user_id,QString time,QS
   </soap:Body>
 </soap:Envelope>
 		 * */
-		QString header("version=\"1.0\" encoding=\"UTF-8\"");
+		QString header("version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"");
 		doc.appendChild(doc.createProcessingInstruction("xml",header));
-		QDomElement tagFileInfo_envelope = doc.createElementNS("http://schemas.xmlsoap.org/soap/envelope/", "soap:Envelope");
-		tagFileInfo_envelope.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-		tagFileInfo_envelope.setAttribute("xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-
-		QDomElement tagFileInfo_body = doc.createElement("soap:Body");
-		QDomElement tagFileInfo_post = doc.createElementNS("http://tempuri.org/","post");
-		//QDomElement tagFileInfo_data = doc.createElementNS("","arg0");
+		QDomElement tagFileInfo_envelope = doc.createElementNS("http://schemas.xmlsoap.org/soap/envelope/", "soapenv:Envelope");
+		tagFileInfo_envelope.setAttribute("xmlns:tem", "http://tempuri.org/");
+		QDomElement tagFileInfo_header = doc.createElement("soapenv:Header");
+		QDomElement tagFileInfo_body = doc.createElement("soapenv:Body");
+		QDomElement tagFileInfo_post = doc.createElement("tem:post");
+		QDomElement tagFileInfo_data = doc.createElement("tem:data");
 		QDomElement tagFileInfo_root = doc.createElement("ROOT");
 
 		//QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
@@ -729,11 +741,12 @@ QString CreatXml(QString version,QString data_id,QString user_id,QString time,QS
 		tagFileInfo_root.appendChild(tagFileBusin);
 		tagFileInfo_root.appendChild(tagFileHmac);
 
-		//tagFileInfo_data.appendChild(tagFileInfo_root);
-		tagFileInfo_post.appendChild(tagFileInfo_root);
+		tagFileInfo_data.appendChild(tagFileInfo_root);
+		tagFileInfo_post.appendChild(tagFileInfo_data);
 		tagFileInfo_body.appendChild(tagFileInfo_post);
 		//tagFileInfo_header.appendChild(tagFileInfo_body);
 		//tagFileInfo_envelope.appendChild(tagFileInfo_header);
+		tagFileInfo_envelope.appendChild(tagFileInfo_header);
 		tagFileInfo_envelope.appendChild(tagFileInfo_body);
 
 		doc.appendChild(tagFileInfo_envelope);
@@ -741,7 +754,7 @@ QString CreatXml(QString version,QString data_id,QString user_id,QString time,QS
 
 	//转义字符 < > 都需要转换编码
 	QString xmldata = doc.toString();
-	qDebug() << xmldata;
+	//qDebug() << xmldata;
 
 	xmldata = xmldata.replace(QRegExp("\\<ROOT>"),"&lt;ROOT&gt;");
 	xmldata = xmldata.replace(QRegExp("\\</ROOT>"),"&lt;/ROOT&gt;");
@@ -766,7 +779,7 @@ QString CreatXml(QString version,QString data_id,QString user_id,QString time,QS
 	//        QByteArray byteArray(xmldata.toStdString().c_str(), xmldata.toStdString().length());
 	//        QByteArray encdata=QByteArray::fromBase64(byteArray);
 	//        qDebug() << encdata;
-
+	//qDebug() << xmldata;
 	QString return_xml;
 	return_xml = xmldata;
 	return return_xml;
@@ -883,7 +896,7 @@ QString XML_Configurationdata(QString id,QString data,QString jyqs,QString pvz,
     doc.appendChild(tagFileInforows);
 
     QString xmldata = doc.toString();
-    qDebug() << xmldata;
+	//qDebug() << xmldata;
     return xmldata;
 }
 
@@ -956,7 +969,7 @@ QString XML_Warndata(QString id,QString data,QString al,QString mb,
     doc.appendChild(tagFileInforows);
 
     QString xmldata = doc.toString();
-    qDebug() << xmldata;
+	//qDebug() << xmldata;
     return xmldata;
 }
 /********************油枪数据****************
@@ -1027,7 +1040,7 @@ QString XML_Oilgundata(QString id,QString data,QString jyjid,QString jyqid,QStri
     doc.appendChild(tagFileInforows);
 
     QString xmldata = doc.toString();
-    qDebug() << xmldata;
+	//qDebug() << xmldata;
     return xmldata;
 }
 /********************环境数据****************
@@ -1108,7 +1121,7 @@ QString XML_Wrongsdata(QString id,QString data,QString type)
     doc.appendChild(tagFileInforows);
 
     QString xmldata = doc.toString();
-    qDebug() << xmldata;
+   // qDebug() << xmldata;
     return xmldata;
 }
 /********************油枪关停数据****************
@@ -1156,7 +1169,7 @@ QString XML_Closegunsdata(QString id,QString data,QString jyjid,QString jyqid,QS
     doc.appendChild(tagFileInforow);
 
     QString xmldata = doc.toString();
-    qDebug() << xmldata;
+	//qDebug() << xmldata;
     return xmldata;
 }
 /********************加油枪状态****************
@@ -1190,6 +1203,6 @@ QString XML_Stagundata(QString id,QString data,QString status)
     doc.appendChild(tagFileInforows);
 
     QString xmldata = doc.toString();
-    qDebug() << xmldata;
+   // qDebug() << xmldata;
     return xmldata;
 }

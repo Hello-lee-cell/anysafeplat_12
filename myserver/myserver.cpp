@@ -215,6 +215,7 @@ void myserver::send_tcpclient_data(QString data)
 	{
 		myserver_send_over.lock();//上锁
 		//记得加锁
+		qDebug()<<data;
 		QByteArray byte_send = data.toUtf8();
 		MyServer_send_count = data.length();
 		memset(SdbufMyServer,0,sizeof(char)*3072);//清零数组

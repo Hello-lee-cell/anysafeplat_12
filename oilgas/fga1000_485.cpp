@@ -63,6 +63,7 @@ unsigned char pressure[8] = {0};//气压
 unsigned char flag_uart_wro_pressure[3] = {0}; //压力变送器通讯故障计数 [2]当做4-20ma温度传感器的状态
 unsigned char sta_pre[3] = {0};//压力变送器状态标志位qqqqqqqqqlock  sta_pre[2] 当做4-20ma温度传感器的状态
 unsigned char add_pre = 0;//压力变送器标号
+unsigned char flag_ifsend = 0;//判断是否重发数据
 
 int time_line_pressure = 0;//管线压力预警次数
 
@@ -1282,8 +1283,13 @@ void FGA1000_485::time_time()
         day_over = 1;//调试用
     }
     //post添加
-    if((time_h == 0)&&(time_m == 0)&&(time_s == 0))//每天凌晨0点
+	if((time_h == 22))
+	{
+		flag_ifsend = 0;
+	}
+	if((time_h == 0)&&(time_m == 0)&&(time_s == 0))//每天凌晨0点  有时候在这个函数进不来，所有后面又加了标志位，再发两次
     {
+		flag_ifsend = 1;
         network_Warndata("1","N","N","N");//发送日报警信息
         network_Stagundata("0","N");      //日油枪状态
         network_Wrongsdata("1","N");      //日故障信息
@@ -1291,15 +1297,45 @@ void FGA1000_485::time_time()
         network_Closegunsdata("0","N","N","N","N");//关枪数据
         //Fga_StaPostSend();
     }
-	if((time_h == 0)&&(time_m == 2)&&(time_s == 00))//每天凌晨0点  发送两次
+	if((time_h == 0)&&(time_m == 0)&&(time_s == 1))//每天凌晨0点  发送两次
     {
-        network_Warndata("1","N","N","N");//发送日报警信息
-        network_Stagundata("0","N");      //日油枪状态
-        network_Wrongsdata("1","N");      //日故障信息
-        network_Configurationdata("N");   //日设置信息
-        network_Closegunsdata("0","N","N","N","N");//关枪数据
-        //Fga_StaPostSend();
+		if(flag_ifsend == 0)
+		{
+			flag_ifsend = 1;
+			network_Warndata("1","N","N","N");//发送日报警信息
+			network_Stagundata("0","N");      //日油枪状态
+			network_Wrongsdata("1","N");      //日故障信息
+			network_Configurationdata("N");   //日设置信息
+			network_Closegunsdata("0","N","N","N","N");//关枪数据
+			//Fga_StaPostSend();
+		}
     }
+	if((time_h == 0)&&(time_m == 0)&&(time_s == 2))//每天凌晨0点  发送两次
+	{
+		if(flag_ifsend == 0)
+		{
+			flag_ifsend = 1;
+			network_Warndata("1","N","N","N");//发送日报警信息
+			network_Stagundata("0","N");      //日油枪状态
+			network_Wrongsdata("1","N");      //日故障信息
+			network_Configurationdata("N");   //日设置信息
+			network_Closegunsdata("0","N","N","N","N");//关枪数据
+			//Fga_StaPostSend();
+		}
+	}
+	if((time_h == 0)&&(time_m == 0)&&(time_s == 3))//每天凌晨0点  发送两次
+	{
+		if(flag_ifsend == 0)
+		{
+			flag_ifsend = 1;
+			network_Warndata("1","N","N","N");//发送日报警信息
+			network_Stagundata("0","N");      //日油枪状态
+			network_Wrongsdata("1","N");      //日故障信息
+			network_Configurationdata("N");   //日设置信息
+			network_Closegunsdata("0","N","N","N","N");//关枪数据
+			//Fga_StaPostSend();
+		}
+	}
     Flag_Count++;
     if(!(Flag_Count%5))
     {
@@ -3321,6 +3357,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				else
 				{
 					flag_uartwrong = 1;
+					Send_Wrongsdata(DATAID_POST,"031000");
 				}
 				if(flag_uartwrong == 0)
 				{
@@ -3329,6 +3366,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				else
 				{
 					qDebug()<<"have uart wrong!";
+					//Send_Wrongsdata(DATAID_POST,"031000");
 				}
 			}
 			if(id == "0")
@@ -3369,6 +3407,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				else
 				{
 					flag_uartwrong = 1;
+					Send_Wrongsdata(DATAID_POST,"031000");
 				}
 				if(flag_uartwrong == 0)
 				{
@@ -3413,6 +3452,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				else
 				{
 					flag_uartwrong = 1;
+					Send_Wrongsdata(DATAID_POST,"031000");
 				}
 				if(flag_uartwrong == 0)
 				{
@@ -3501,6 +3541,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				else
 				{
 					flag_uartwrong = 1;
+					Send_Wrongsdata(DATAID_POST,"031000");
 				}
 				if(flag_uartwrong == 0)
 				{

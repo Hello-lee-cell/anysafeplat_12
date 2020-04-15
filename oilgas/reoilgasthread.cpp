@@ -86,10 +86,11 @@ void reoilgasthread::run()
 		Flag_ask_PreAndTem++;
 		if(Flag_ask_PreAndTem >= 10)
 		{
+			//network_oilgundata(DATAID_POST,"1","1","1.1","40","25","40","25","200");
 			if(Flag_Pressure_Transmitters_Mode == 2)//压力表无线模式
 			{
 				Flag_ask_PreAndTem = 0;
-				msleep(100);
+				msleep(200);
 				Ask_Sensor();
 			}
 		}
@@ -911,6 +912,11 @@ void reoilgasthread::ReadDataReoilgas_v2()
  * */
 void reoilgasthread::Ask_Sensor()
 {
+	msleep(100);
+	//先读一次串口，把缓存读完
+	unsigned char RecvBuff_init[100] = {0};
+	len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
+
 	if(Pre_tank_en == 1)
 	{
 		Pressure_AskNum = 1;

@@ -65,7 +65,7 @@ void* talk_udp(void*)
     //history_net_write("Udp_talk");
     add_value_netinfo("UDP客户端广播中");
     char sdbuf[10]={(char)ipa,(char)ipb,(char)ipc,(char)ipd,0x0d,0x9f,0x07,(char)ID_M,0x01,UDP_STATE};
-    while(1)
+	while(1)
     {
         sleep(heartbeat_time);      //3486端口设置
         sdbuf[0] = (char)ipa;
