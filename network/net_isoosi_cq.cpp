@@ -63,7 +63,7 @@
 #include "systemset.h"
 #include "database_op.h"
 
-    
+unsigned char Flag_FirstClient_cq = 3;//判断是不是第一次连接，做历史记录用
 QMutex wait_send_over_cq;
 int nsockfd_tcp_cq;        //tcp套接字
 int sockfd_cq;            //tcp套接字
@@ -166,7 +166,12 @@ void net_isoosi_cq::tcp_client()
         Flag_TcpClient_Success_Cq = 0;//连接失败
         close(nsockfd_tcp_cq);
         close(sockfd_cq);
-		add_value_netinfo("ChongQing TCPClient Client the Port 8201 Failed");
+		if(Flag_FirstClient_cq != 0)
+		{
+			add_value_netinfo("ChongQing TCPClient Client the Port 8201 Failed");
+			Flag_FirstClient_cq = 0;
+		}
+
 
     }
     else
@@ -175,6 +180,12 @@ void net_isoosi_cq::tcp_client()
 		add_value_netinfo("ChongQing TCPClient Client the Port 8201 sucessfully");
         Flag_TcpClient_Success_Cq = 1;//连接成功
         client_keep_ali(sockfd_cq);//tcp保活
+
+		if(Flag_FirstClient_cq != 1)
+		{
+			add_value_netinfo("ChongQing TCPClient Client the Port 8201 Failed");
+			Flag_FirstClient_cq = 1;
+		}
     }
     sleep(2);
     while(1)

@@ -254,120 +254,11 @@ background-color: rgb(255, 255, 255);
       </size>
      </property>
     </widget>
-    <widget class="QFrame" name="frame">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>410</y>
-       <width>131</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-     <widget class="QLabel" name="label_mem">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>111</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>13</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>mem_sta</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_mem_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>131</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>13</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>磁盘空间</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </widget>
    </widget>
    <widget class="QWidget" name="tab">
     <attribute name="title">
      <string>泄漏检测系统</string>
     </attribute>
-    <widget class="QPushButton" name="pushButton_xielou_net">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>120</y>
-       <width>131</width>
-       <height>43</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>17</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>通信日志</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>300</width>
-       <height>100</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_xielou_op">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>70</y>
-       <width>131</width>
-       <height>43</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>17</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>操作日志</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>300</width>
-       <height>100</height>
-      </size>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton_xielou_warn">
      <property name="geometry">
       <rect>
@@ -2720,6 +2611,115 @@ background-color: rgb(255, 255, 255);
     </layout>
    </widget>
   </widget>
+  <widget class="QPushButton" name="pushButton_xielou_net">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>400</y>
+     <width>131</width>
+     <height>43</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>通信日志</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>300</width>
+     <height>100</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_xielou_op">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>350</y>
+     <width>131</width>
+     <height>43</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>13</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="text">
+    <string>操作日志</string>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>300</width>
+     <height>100</height>
+    </size>
+   </property>
+  </widget>
+  <widget class="QFrame" name="frame">
+   <property name="geometry">
+    <rect>
+     <x>15</x>
+     <y>450</y>
+     <width>131</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_mem">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>111</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>mem_sta</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_mem_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>磁盘空间</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+  </widget>
   <zorder>label_2</zorder>
   <zorder>pushButton_3</zorder>
   <zorder>pushButton_copy</zorder>
@@ -2727,6 +2727,9 @@ background-color: rgb(255, 255, 255);
   <zorder>label_copying</zorder>
   <zorder>tableView</zorder>
   <zorder>widget_conditional_query</zorder>
+  <zorder>pushButton_xielou_net</zorder>
+  <zorder>pushButton_xielou_op</zorder>
+  <zorder>frame</zorder>
  </widget>
  <resources>
   <include location="picture_.qrc"/>

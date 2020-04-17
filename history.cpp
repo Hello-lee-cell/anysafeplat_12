@@ -137,8 +137,8 @@ void history::on_pushButton_xielou_warn_clicked()     //报警记录
 	ui->tableView->setColumnWidth(2,180);
 
     ui->pushButton_xielou_warn->setStyleSheet("background-color: rgb(250,250,250)");
-    ui->pushButton_xielou_op->setStyleSheet("background-color: rgb(60,164,252)");
-    ui->pushButton_xielou_net->setStyleSheet("background-color: rgb(60,164,252)");
+	//ui->pushButton_xielou_op->setStyleSheet("background-color: rgb(60,164,252)");
+	//ui->pushButton_xielou_net->setStyleSheet("background-color: rgb(60,164,252)");
 }
 
 void history::on_pushButton_xielou_op_clicked()     //操作日志
@@ -159,9 +159,9 @@ void history::on_pushButton_xielou_op_clicked()     //操作日志
 	ui->tableView->setColumnWidth(1,140);
 	ui->tableView->setColumnWidth(2,250);
 
-    ui->pushButton_xielou_warn->setStyleSheet("background-color: rgb(60,164,252)");
-    ui->pushButton_xielou_op->setStyleSheet("background-color: rgb(250,250,250)");
-    ui->pushButton_xielou_net->setStyleSheet("background-color: rgb(60,164,252)");
+	//ui->pushButton_xielou_warn->setStyleSheet("background-color: rgb(60,164,252)");
+	//ui->pushButton_xielou_op->setStyleSheet("background-color: rgb(250,250,250)");
+	//ui->pushButton_xielou_net->setStyleSheet("background-color: rgb(60,164,252)");
 }
 
 void history::on_pushButton_xielou_net_clicked()     //通信日志
@@ -180,9 +180,9 @@ void history::on_pushButton_xielou_net_clicked()     //通信日志
 	ui->tableView->setColumnWidth(0,300);
 	ui->tableView->setColumnWidth(1,400);
 
-    ui->pushButton_xielou_warn->setStyleSheet("background-color: rgb(60,164,252)");
-    ui->pushButton_xielou_op->setStyleSheet("background-color: rgb(60,164,252)");
-    ui->pushButton_xielou_net->setStyleSheet("background-color: rgb(250,250,250)");
+	//ui->pushButton_xielou_warn->setStyleSheet("background-color: rgb(60,164,252)");
+	//ui->pushButton_xielou_op->setStyleSheet("background-color: rgb(60,164,252)");
+	//ui->pushButton_xielou_net->setStyleSheet("background-color: rgb(250,250,250)");
 }
 
 

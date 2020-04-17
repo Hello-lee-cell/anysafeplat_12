@@ -21,6 +21,7 @@
 QMutex myserver_send_over;
 void *tcpclient_myserver_read(void*);
 
+unsigned char Flag_FirstClient_MyServer = 3;//标识是否第一次传输，做历史记录
 //QString MyStationId = "1234565789"; //全局变量youzhanID
 //QString MyServerIp = "192.168.0.121";
 //int MyServerPort = 8080;     //1111 The port which is communicate with server     可设置
@@ -120,7 +121,12 @@ void myserver::tcp_client()
 		Flag_MyServerClientSuccess = 0;//连接失败
 		close(nsockfd_myserver);
 		close(sockfd_myserve);
-		add_value_netinfo("MyServer TCPClient Client the Port 8201 Failed");
+		if(Flag_FirstClient_MyServer != 0)
+		{
+			add_value_netinfo("MyServer TCPClient Client the Port 8080 Failed");
+			Flag_FirstClient_MyServer = 0;
+		}
+
 	}
 	else
 	{
@@ -128,6 +134,12 @@ void myserver::tcp_client()
 		add_value_netinfo("MyServer TCPClient Client the Port 8201 sucessfully");
 		Flag_MyServerClientSuccess = 1;//连接成功
 		client_keep_ali(sockfd_myserve);//tcp保活
+
+		if(Flag_FirstClient_MyServer != 1)
+		{
+			add_value_netinfo("MyServer TCPClient Client the Port 8080 Failed");
+			Flag_FirstClient_MyServer = 1;
+		}
 	}
 	//新线程，tcp_read
 //    pthread_t id_tcpread;

@@ -25,6 +25,7 @@
 #include "mainwindow.h"
 #include "database_op.h"
 
+unsigned char Flag_FirstClient_hb = 3;//用来标识是不是第一次连接，历史记录用
 unsigned char Warn_Data_Tcp_Send_Hb[32][2] = {0};//32个点 油罐 油管 加油机 防渗池 各8个  0标志位 1状态位
 unsigned char Station_ID_HB[2] = {0};//站端id 两位
 unsigned char Flag_HuBeitcp_Enable = 0;//功能使能
@@ -74,13 +75,13 @@ void net_tcpclient_hb::tcp_client()
         if( (sockfd_hb = socket(AF_INET, SOCK_STREAM, 0)) == -1 )
         {
             printf ("TCPClient Failed to obtain Socket Despcritor.\n");
-            add_value_netinfo("HuBei TCPClient Failed to obtain Socket Despcritor");
+			//add_value_netinfo("HuBei TCPClient Failed to obtain Socket Despcritor");
             //return 0;
         }
         else
         {
             printf ("HuBei TCPClient Obtain Socket Despcritor sucessfully.\n");
-            add_value_netinfo("HuBei TCPClient Obtain Socket Despcritor sucessfully");
+			//add_value_netinfo("HuBei TCPClient Obtain Socket Despcritor sucessfully");
             //history_net_write("Tcp_Obtain");
         }
         sever_remote.sin_family = AF_INET;           		// Protocol Family 协议族
@@ -109,14 +110,25 @@ void net_tcpclient_hb::tcp_client()
             Flag_TcpClient_Success_Hb = 0;//连接失败
             close(nsockfd_tcp_hb);
             close(sockfd_hb);
-            add_value_netinfo("HuBei TCPClient Client the Port 1111 Failed");
-        }
+
+			if(Flag_FirstClient_hb != 0)
+			{
+				add_value_netinfo("HuBei TCPClient Client the Port 1111 Failed");
+				Flag_FirstClient_hb = 0;
+			}
+		}
         else
         {
             printf ("HuBei TCPClient Client the Port %d sucessfully.\n", PORT_TCP_CLIENT_HB);
-            add_value_netinfo("HuBei TCPClient Client the Port 1111 sucessfully");
+
             Flag_TcpClient_Success_Hb = 1;//连接成功
             client_keep_ali(sockfd_hb);//tcp保活
+
+			if(Flag_FirstClient_hb != 1)
+			{
+				add_value_netinfo("HuBei TCPClient Client the Port 1111 sucessfully");
+				Flag_FirstClient_hb = 1;
+			}
         }
         sleep(2);
         while(1)

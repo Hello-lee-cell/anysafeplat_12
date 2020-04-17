@@ -26,6 +26,9 @@
 #include "mytcpclient_zhongyou.h"
 #include "main_main_zhongyou.h"
 #include "io_op.h"
+#include "database_op.h"
+
+unsigned char Flag_FirstClient_zhongyou = 2;//判断是不是第一次连接，做历史记录用
 
 QString ip_renzheng = "11.0.31.88";
 sem_t sem;//信号量做阻塞
@@ -123,12 +126,25 @@ void mytcpclient_zhongyou::send_tcp()
 		Flag_TcpClient_Success_Ifis = 0;//连接失败
 		close(nsockfd_tcp_ifis);
 
+		if(Flag_FirstClient_zhongyou != 0)
+		{
+			add_value_netinfo("ZhongYou TcpClient is failed");
+			Flag_FirstClient_zhongyou = 0;
+		}
+
 	}
 	else
 	{
 		printf ("TCPClient Client the Port %d sucessfully.\n", porttcpclietn);
 		Flag_TcpClient_Success_Ifis = 1;//连接成功
 		client_keep_ali(sockfd_ifis);//tcp保活
+
+		if(Flag_FirstClient_zhongyou != 1)
+		{
+			add_value_netinfo("ZhongYou TcpClient is cennected!");
+			Flag_FirstClient_zhongyou = 1;
+		}
+
 	}
 	//新线程，tcp  主动发送关掉
 	pthread_t id_tcptalk;

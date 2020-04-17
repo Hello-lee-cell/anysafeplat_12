@@ -26,8 +26,9 @@
 
 void *tcpclient_read(void*);
 
-QMutex wait_send_over;
+unsigned char Flag_FirstClient = 2;//判断是不是第一次连接，做历史记录用
 
+QMutex wait_send_over;
 QString IsoOis_QN = "20160801085857223";
 //QString IsoOis_MN = "440111301A52TWUF73000001";//"440111301A52TWUF73000001";
 QString IsoOis_ST = "ST=61";
@@ -139,15 +140,24 @@ void net_isoosi::tcp_client()
         Flag_TcpClient_Success = 0;//连接失败
         close(nsockfd_tcp);
         close(sockfd);
-        add_value_netinfo("GuangZhou TCPClient Client the Port 8201 Failed");
+		if(Flag_FirstClient != 0)
+		{
+			add_value_netinfo("GuangZhou TCPClient Client the Port 8201 Failed");
+			Flag_FirstClient = 0;
+		}
 
     }
     else
     {
-        printf ("GuangZhou TCPClient Client the Port %d sucessfully.\n", PORT_TCP_CLIENT);
-        add_value_netinfo("GuangZhou TCPClient Client the Port 8201 sucessfully");
+        printf ("GuangZhou TCPClient Client the Port %d sucessfully.\n", PORT_TCP_CLIENT);  
         Flag_TcpClient_Success = 1;//连接成功
         client_keep_ali(sockfd);//tcp保活
+
+		if(Flag_FirstClient != 1)
+		{
+			add_value_netinfo("GuangZhou TCPClient Client the Port 8201 sucessfully");
+			Flag_FirstClient = 1;
+		}
     }
     //新线程，tcp_read
 //    pthread_t id_tcpread;
