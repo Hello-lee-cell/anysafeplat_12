@@ -133,6 +133,12 @@ void myserver::tcp_client()
 		printf ("MyServer TCPClient Client the Port %d sucessfully.\n", MyServerPort);
 		add_value_netinfo("MyServer TCPClient Client the Port 8201 sucessfully");
 		Flag_MyServerClientSuccess = 1;//连接成功
+
+		//xielousetup(QString::number(count_tank),QString::number(Test_Method),QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
+		setup_data(QString::number(Positive_Pres,'f',1),QString::number(-Negative_Pres,'f',1),"0.00","0.00");
+		//初次连接发送泄漏和油气回收的设置信息
+		analysis_xielou_sta();//分析泄漏状态，用于发送,初次连接发送  ,每天的放到油枪关停状态那里去
+
 		client_keep_ali(sockfd_myserve);//tcp保活
 
 		if(Flag_FirstClient_MyServer != 1)
@@ -153,9 +159,6 @@ void myserver::tcp_client()
 //        //continue;
 //    }
 	sleep(2);
-	xielousetup(QString::number(count_tank),QString::number(Test_Method),QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
-	setup_data(QString::number(Positive_Pres,'f',1),QString::number(-Negative_Pres,'f',1),"0.00","0.00");
-	//初次连接发送泄漏和油气回收的设置信息
 
 
 	while(1)
@@ -256,7 +259,7 @@ void myserver::send_tcpclient_data(QString data)
 				}
 				else
 				{
-					msleep(300);
+					msleep(400);
 					memset(myserver_revbuf,0,sizeof(char)*128);//清零数组
 					if((MyServerRecvNum = recv(sockfd_myserve,myserver_revbuf,200,MSG_WAITALL)) <= 0)//MSG_DONTWAIT 1秒延时或者收到40个字节
 					{
@@ -515,6 +518,19 @@ TrStopPrs   三次停止压力
 **********************************************/
 void myserver::setup_data(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs)
 {
+	if(Flag_MyServerEn == 1)
+	{
+		unsigned char SensorType = 0;;
+		if(Test_Method == 0){SensorType = 3;}//其他方法
+		else if(Test_Method == 1){SensorType = 2;}//压力法
+		else if(Test_Method == 2){SensorType = 1;}//液媒法
+		else if(Test_Method == 3){SensorType = 0;}//传感器法
+		else {
+			SensorType = 0;
+		}
+		xielousetup(QString::number(count_tank),QString::number(SensorType),QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
+	}
+
 	QDateTime date_time = QDateTime::currentDateTime();
 	QString date = date_time.toString("yyyyMMddhhmmss");
 	QString send_data;
@@ -648,11 +664,13 @@ void myserver::refueling_gun_stop(QString gun_num,QString operate,QString Event)
 
 	if(gun_num == "N")
 	{
+		unsigned int gun_num_send = 0;
 		for(unsigned int i = 0;i < Amount_Dispener;i++)
 		{
 			for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
 			{
-				gun_head_num = QString("%1").arg(Mapping[(i*8+j)],4,10,QLatin1Char('0'));//k为int型或char型都可
+				gun_num_send++;
+				gun_head_num = QString("%1").arg(gun_num_send,4,10,QLatin1Char('0'));//k为int型或char型都可
 				gun_head.append("q").append(gun_head_num).append("-OpDate=").append(date).append(";");
 				gun_head.append("q").append(gun_head_num).append("-Operate=").append("1").append(";");
 				gun_head.append("q").append(gun_head_num).append("-Event=").append("0").append(";");
@@ -696,6 +714,10 @@ gun_data  油枪状态，所有数据，需要预处理
 **********************************************/
 void myserver::refueling_gun_sta(QString gun_data)
 {
+	if(Flag_MyServerEn == 1)//泄漏状态
+	{
+		analysis_xielou_sta();
+	}
 	QDateTime date_time = QDateTime::currentDateTime();
 	QString date = date_time.toString("yyyyMMddhhmmss");
 	QString send_data;
@@ -786,4 +808,2190 @@ QString b64ToQs(QString b64qs1){//ok
 	ba=ba.fromBase64(ba);                     //unBase64
 	QString qs1=QString::fromUtf8(ba);        //QString
 	return  qs1;
+}
+
+void myserver::analysis_xielou_sta()//分析泄漏状态，用于发送
+{
+	//basin   防渗池
+	if(count_basin>=1)          //1#
+	{
+		if(OIL_BASIN[0]==0xc0)
+		{
+			if(OIL_BASIN[1]==0x00 )           //flag_output_basin[0] == 0 || //flag_output_basin[0] != 1))
+			{
+				//emit right_basin(1);
+				net_history(17,0);
+				//add_value_controlinfo("1# 防渗池 ","设备正常");
+				//flag_output_basin[0] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[1]==0x88 )           //flag_output_basin[0] == 0 || //flag_output_basin[0] != 2))
+				{
+					//emit warning_oil_basin(1);//油报警
+					net_history(17,1);
+					//add_value_controlinfo("1# 防渗池 ","检油报警");
+					//flag_output_basin[0] = 2;
+				}
+				if(OIL_BASIN[1]==0x90 )           //flag_output_basin[0] == 0 || //flag_output_basin[0] != 3))
+				{
+					//emit warning_water_basin(1);//水报警
+					net_history(17,2);
+					//add_value_controlinfo("1# 防渗池 ","检水报警");
+					//flag_output_basin[0] = 3;
+				}
+				if(OIL_BASIN[1]==0x01 )           //flag_output_basin[0] == 0 || //flag_output_basin[0] != 4))
+				{
+					//emit warning_sensor_basin(1);//传感器故障
+					net_history(17,3);
+					//add_value_controlinfo("1# 防渗池 ","传感器故障");
+					//flag_output_basin[0] = 4;
+				}
+				if(OIL_BASIN[1]==0x04 )           //flag_output_basin[0] == 0 || //flag_output_basin[0] != 5))
+				{
+					//emit warning_uart_basin(1);//通信故障
+					net_history(17,4);
+					//add_value_controlinfo("1# 防渗池 ","通信故障");
+					//flag_output_basin[0] = 5;
+				}
+			}
+		}
+	}
+	if(count_basin>=2)              //2#
+	{
+		if(OIL_BASIN[2]==0xc0)
+		{
+			if(OIL_BASIN[3]==0x00 )           //flag_output_basin[1] == 0 || //flag_output_basin[1] != 1))
+			{
+				//emit right_basin(2);
+				net_history(18,0);
+				//add_value_controlinfo("2# 防渗池 ","设备正常");
+				//flag_output_basin[1] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[3]==0x88 )           //flag_output_basin[1] == 0 || //flag_output_basin[1] != 2))
+				{
+					//emit warning_oil_basin(2);//油报警
+					net_history(18,1);
+					//add_value_controlinfo("2# 防渗池 ","检油报警");
+					//flag_output_basin[1] = 2;
+				}
+				if(OIL_BASIN[3]==0x90 )           //flag_output_basin[1] == 0 || //flag_output_basin[1] != 3))
+				{
+					//emit warning_water_basin(2);//水报警
+					net_history(18,2);
+					//add_value_controlinfo("2# 防渗池 ","检水报警");
+					//flag_output_basin[1] = 3;
+				}
+				if(OIL_BASIN[3]==0x01 )           //flag_output_basin[1] == 0 || //flag_output_basin[1] != 4))
+				{
+					//emit warning_sensor_basin(2);//传感器故障
+					net_history(18,3);
+					//add_value_controlinfo("2# 防渗池 ","传感器故障");
+					//flag_output_basin[1] = 4;
+				}
+				if(OIL_BASIN[3]==0x04 )           //flag_output_basin[1] == 0 || //flag_output_basin[1] != 5))
+				{
+					//emit warning_uart_basin(2);//通信故障
+					net_history(18,4);
+					//add_value_controlinfo("2# 防渗池 ","通信故障");
+					//flag_output_basin[1] = 5;
+				}
+			}
+		}
+	}
+	if(count_basin>=3)              //3#
+	{
+		if(OIL_BASIN[4]==0xc0)
+		{
+			if(OIL_BASIN[5]==0x00 )           //flag_output_basin[2] == 0 || //flag_output_basin[2] != 1))
+			{
+				//emit right_basin(3);
+				net_history(19,0);
+				//add_value_controlinfo("3# 防渗池 ","设备正常");
+				//flag_output_basin[2] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[5]==0x88 )           //flag_output_basin[2] == 0 || //flag_output_basin[2] != 2))
+				{
+					//emit warning_oil_basin(3);//油报警
+					net_history(19,1);
+					//add_value_controlinfo("3# 防渗池 ","检油报警");
+					//flag_output_basin[2] = 2;
+				}
+				if(OIL_BASIN[5]==0x90 )           //flag_output_basin[2] == 0 || //flag_output_basin[2] != 3))
+				{
+					//emit warning_water_basin(3);//水报警
+					net_history(19,2);
+					//add_value_controlinfo("3# 防渗池 ","检水报警");
+					//flag_output_basin[2] = 3;
+				}
+				if(OIL_BASIN[5]==0x01 )           //flag_output_basin[2] == 0 || //flag_output_basin[2] != 4))
+				{
+					//emit warning_sensor_basin(3);//传感器故障
+					net_history(19,3);
+					//add_value_controlinfo("3# 防渗池 ","传感器故障");
+					//flag_output_basin[2] = 4;
+				}
+				if(OIL_BASIN[5]==0x04 )           //flag_output_basin[2] == 0 || //flag_output_basin[2] != 5))
+				{
+					//emit warning_uart_basin(3);//通信故障
+					net_history(19,4);
+					//add_value_controlinfo("3# 防渗池 ","通信故障");
+					//flag_output_basin[2] = 5;
+				}
+			}
+		}
+	}
+	if(count_basin>=4)              //4#
+	{
+		if(OIL_BASIN[6]==0xc0)
+		{
+			if(OIL_BASIN[7]==0x00 )           //flag_output_basin[3] == 0 || //flag_output_basin[3] != 1))
+			{
+				//emit right_basin(4);
+				net_history(20,0);
+				//add_value_controlinfo("4# 防渗池 ","设备正常");
+				//flag_output_basin[3] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[7]==0x88 )           //flag_output_basin[3] == 0 || //flag_output_basin[3] != 2))
+				{
+					//emit warning_oil_basin(4);//油报警
+					net_history(20,1);
+					//add_value_controlinfo("4# 防渗池 ","检油报警");
+					//flag_output_basin[3] = 2;
+				}
+				if(OIL_BASIN[7]==0x90 )           //flag_output_basin[3] == 0 || //flag_output_basin[3] != 3))
+				{
+					//emit warning_water_basin(4);//水报警
+					net_history(20,2);
+					//add_value_controlinfo("4# 防渗池 ","检水报警");
+					//flag_output_basin[3] = 3;
+				}
+				if(OIL_BASIN[7]==0x01 )           //flag_output_basin[3] == 0 || //flag_output_basin[3] != 4))
+				{
+					//emit warning_sensor_basin(4);//传感器故障
+					net_history(20,3);
+					//add_value_controlinfo("4# 防渗池 ","传感器故障");
+					//flag_output_basin[3] = 4;
+				}
+				if(OIL_BASIN[7]==0x04 )           //flag_output_basin[3] == 0 || //flag_output_basin[3] != 5))
+				{
+					//emit warning_uart_basin(4);//通信故障
+					net_history(20,4);
+					//add_value_controlinfo("4# 防渗池 ","通信故障");
+					//flag_output_basin[3] = 5;
+				}
+			}
+		}
+	}
+	if(count_basin>=5)             //5#
+	{
+		if(OIL_BASIN[8]==0xc0)
+		{
+			if(OIL_BASIN[9]==0x00 )           //flag_output_basin[4] == 0 || //flag_output_basin[4] != 1))
+			{
+				//emit right_basin(5);
+				net_history(21,0);
+				//add_value_controlinfo("5# 防渗池 ","设备正常");
+				//flag_output_basin[4] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[9]==0x88 )           //flag_output_basin[4] == 0 || //flag_output_basin[4] != 2))
+				{
+					//emit warning_oil_basin(5);//油报警
+					net_history(21,1);
+					//add_value_controlinfo("5# 防渗池 ","检油报警");
+					//flag_output_basin[4] = 2;
+				}
+				if(OIL_BASIN[9]==0x90 )           //flag_output_basin[4] == 0 || //flag_output_basin[4] != 3))
+				{
+					//emit warning_water_basin(5);//水报警
+					net_history(21,2);
+					//add_value_controlinfo("5# 防渗池 ","检水报警");
+					//flag_output_basin[4] = 3;
+				}
+				if(OIL_BASIN[9]==0x01 )           //flag_output_basin[4] == 0 || //flag_output_basin[4] != 4))
+				{
+					//emit warning_sensor_basin(5);//传感器故障
+					net_history(21,3);
+					//add_value_controlinfo("5# 防渗池 ","传感器故障");
+					//flag_output_basin[4] = 4;
+				}
+				if(OIL_BASIN[9]==0x04 )           //flag_output_basin[4] == 0 || //flag_output_basin[4] != 5))
+				{
+					//emit warning_uart_basin(5);//通信故障
+					net_history(21,4);
+					//add_value_controlinfo("5# 防渗池 ","通信故障");
+					//flag_output_basin[4] = 5;
+				}
+			}
+		}
+	}
+	if(count_basin>=6)             //6#
+	{
+		if(OIL_BASIN[10]==0xc0)
+		{
+			if(OIL_BASIN[11]==0x00 )           //flag_output_basin[5] == 0 || //flag_output_basin[5] != 1))
+			{
+				//emit right_basin(6);
+				net_history(22,0);
+				//add_value_controlinfo("6# 防渗池 ","设备正常");
+				//flag_output_basin[5] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[11]==0x88 )           //flag_output_basin[5] == 0 || //flag_output_basin[5] != 2))
+				{
+					//emit warning_oil_basin(6);//油报警
+					net_history(22,1);
+					//add_value_controlinfo("6# 防渗池 ","检油报警");
+					//flag_output_basin[5] = 2;
+				}
+				if(OIL_BASIN[11]==0x90 )           //flag_output_basin[5] == 0 || //flag_output_basin[5] != 3))
+				{
+					//emit warning_water_basin(6);//水报警
+					net_history(22,2);
+					//add_value_controlinfo("6# 防渗池 ","检水报警");
+					//flag_output_basin[5] = 3;
+				}
+				if(OIL_BASIN[11]==0x01 )           //flag_output_basin[5] == 0 || //flag_output_basin[5] != 4))
+				{
+					//emit warning_sensor_basin(6);//传感器故障
+					net_history(22,3);
+					//add_value_controlinfo("6# 防渗池 ","传感器故障");
+					//flag_output_basin[5] = 4;
+				}
+				if(OIL_BASIN[11]==0x04 )           //flag_output_basin[5] == 0 || //flag_output_basin[5] != 5))
+				{
+					//emit warning_uart_basin(6);//通信故障
+					net_history(22,4);
+					//add_value_controlinfo("6# 防渗池 ","通信故障");
+					//flag_output_basin[5] = 5;
+				}
+			}
+		}
+	}
+	if(count_basin>=7)              //7#
+	{
+		if(OIL_BASIN[12]==0xc0)
+		{
+			if(OIL_BASIN[13]==0x00 )           //flag_output_basin[6] == 0 || //flag_output_basin[6] != 1))
+			{
+				//emit right_basin(7);
+				net_history(23,0);
+				//add_value_controlinfo("7# 防渗池 ","设备正常");
+				//flag_output_basin[6] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[13]==0x88 )           //flag_output_basin[6] == 0 || //flag_output_basin[6] != 2))
+				{
+					//emit warning_oil_basin(7);//油报警
+					net_history(23,1);
+					//add_value_controlinfo("7# 防渗池 ","检油报警");
+					//flag_output_basin[6] = 2;
+				}
+				if(OIL_BASIN[13]==0x90 )           //flag_output_basin[6] == 0 || //flag_output_basin[6] != 3))
+				{
+					//emit warning_water_basin(7);//水报警
+					net_history(23,2);
+					//add_value_controlinfo("7# 防渗池 ","检水报警");
+					//flag_output_basin[6] = 3;
+				}
+				if(OIL_BASIN[13]==0x01 )           //flag_output_basin[6] == 0 || //flag_output_basin[6] != 4))
+				{
+					//emit warning_sensor_basin(7);//传感器故障
+					net_history(23,3);
+					//add_value_controlinfo("7# 防渗池 ","传感器故障");
+					//flag_output_basin[6] = 4;
+				}
+				if(OIL_BASIN[13]==0x04 )           //flag_output_basin[6] == 0 || //flag_output_basin[6] != 5))
+				{
+					//emit warning_uart_basin(7);//通信故障
+					net_history(23,4);
+					//add_value_controlinfo("7# 防渗池 ","通信故障");
+					//flag_output_basin[6] = 5;
+				}
+			}
+		}
+	}
+	if(count_basin>=8)           //8#
+	{
+		if(OIL_BASIN[14]==0xc0)
+		{
+
+			if(OIL_BASIN[15]==0x00 )           //flag_output_basin[7] == 0 || //flag_output_basin[7] != 1))
+			{
+				//emit right_basin(8);
+				net_history(24,0);
+				//add_value_controlinfo("8# 防渗池 ","设备正常");
+				//flag_output_basin[7] = 1;
+			}
+			else
+			{
+				if(OIL_BASIN[15]==0x88 )           //flag_output_basin[7] == 0 || //flag_output_basin[7] != 2))
+				{
+					//emit warning_oil_basin(8);//油报警
+					net_history(24,1);
+					//add_value_controlinfo("8# 防渗池 ","检油报警");
+					//flag_output_basin[7] = 2;
+				}
+				if(OIL_BASIN[15]==0x90 )           //flag_output_basin[7] == 0 || //flag_output_basin[7] != 3))
+				{
+					//emit warning_water_basin(8);//水报警
+					net_history(24,2);
+					//add_value_controlinfo("8# 防渗池 ","检水报警");
+					//flag_output_basin[7] = 3;
+				}
+				if(OIL_BASIN[15]==0x01 )           //flag_output_basin[7] == 0 || //flag_output_basin[7] != 4))
+				{
+					//emit warning_sensor_basin(8);//传感器故障
+					net_history(24,3);
+					//add_value_controlinfo("8# 防渗池 ","传感器故障");
+					//flag_output_basin[7] = 4;
+				}
+				if(OIL_BASIN[15]==0x04 )           //flag_output_basin[7] == 0 || //flag_output_basin[7] != 5))
+				{
+					//emit warning_uart_basin(8);//通信故障
+					net_history(24,4);
+					//add_value_controlinfo("8# 防渗池 ","通信故障");
+					//flag_output_basin[7] = 5;
+				}
+			}
+		}
+	}
+	//pipe 管线
+	if(count_pipe>=1)        //1#
+	{
+		if(OIL_PIPE[0]==0xc0)
+		{
+			if(OIL_PIPE[1]==0x00 )           //flag_output_pipe[0] == 0 || //flag_output_pipe[0] != 1))
+			{
+				//emit right_pipe(91);
+				net_history(9,0);
+				//add_value_controlinfo("1# 管线   ","设备正常");
+				//flag_output_pipe[0] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[1]==0x88 )           //flag_output_pipe[0] == 0 || //flag_output_pipe[0] != 2))
+				{
+					//emit warning_oil_pipe(91);//油报警
+					net_history(9,1);
+					//add_value_controlinfo("1# 管线   ","检油报警");
+					//flag_output_pipe[0] = 2;
+				}
+				if(OIL_PIPE[1]==0x90 )           //flag_output_pipe[0] == 0 || //flag_output_pipe[0] != 3))
+				{
+					//emit warning_water_pipe(91);//水报警
+					net_history(9,2);
+					//add_value_controlinfo("1# 管线   ","检水报警");
+					//flag_output_pipe[0] = 3;
+				}
+				if(OIL_PIPE[1]==0x01 )           //flag_output_pipe[0] == 0 || //flag_output_pipe[0] != 4))
+				{
+					//emit warning_sensor_pipe(91);//传感器故障
+					net_history(9,3);
+					//add_value_controlinfo("1# 管线   ","传感器故障");
+					//flag_output_pipe[0] = 4;
+				}
+				if(OIL_PIPE[1]==0x04 )           //flag_output_pipe[0] == 0 || //flag_output_pipe[0] != 5))
+				{
+					//emit warning_uart_pipe(91);//通信故障
+					net_history(9,4);
+					//add_value_controlinfo("1# 管线   ","通信故障");
+					//flag_output_pipe[0] = 5;
+				}
+			}
+
+		}
+	}
+	if(count_pipe>=2)       //2#
+	{
+		if(OIL_PIPE[2]==0xc0)
+		{
+			if(OIL_PIPE[3]==0x00 )           //flag_output_pipe[1] == 0 || //flag_output_pipe[1] != 1))
+			{
+				//emit right_pipe(92);
+				net_history(10,0);
+				//add_value_controlinfo("2# 管线   ","设备正常");
+				//flag_output_pipe[1] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[3]==0x88 )           //flag_output_pipe[1] == 0 || //flag_output_pipe[1] != 2))
+				{
+					//emit warning_oil_pipe(92);//油报警
+					net_history(10,1);
+					//add_value_controlinfo("2# 管线   ","检油报警");
+					//flag_output_pipe[1] = 2;
+				}
+				if(OIL_PIPE[3]==0x90 )           //flag_output_pipe[1] == 0 || //flag_output_pipe[1] != 3))
+				{
+					//emit warning_water_pipe(92);//水报警
+					net_history(10,2);
+					//add_value_controlinfo("2# 管线   ","检水报警");
+					//flag_output_pipe[1] = 3;
+				}
+				if(OIL_PIPE[3]==0x01 )           //flag_output_pipe[1] == 0 || //flag_output_pipe[1] != 4))
+				{
+					//emit warning_sensor_pipe(92);//传感器故障
+					net_history(10,3);
+					//add_value_controlinfo("2# 管线   ","传感器故障");
+					//flag_output_pipe[1] = 4;
+				}
+				if(OIL_PIPE[3]==0x04 )           //flag_output_pipe[1] == 0 || //flag_output_pipe[1] != 5))
+				{
+					//emit warning_uart_pipe(92);//通信故障
+					net_history(10,4);
+					//add_value_controlinfo("2# 管线   ","通信故障");
+					//flag_output_pipe[1] = 5;
+				}
+			}
+		}
+	}
+	if(count_pipe>=3)           //3#
+	{
+		if(OIL_PIPE[4]==0xc0)
+		{
+			if(OIL_PIPE[5]==0x00 )           //flag_output_pipe[2] == 0 || //flag_output_pipe[2] != 1))
+			{
+				//emit right_pipe(93);
+				net_history(11,0);
+				//add_value_controlinfo("3# 管线   ","设备正常");
+				//flag_output_pipe[2] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[5]==0x88 )           //flag_output_pipe[2] == 0 || //flag_output_pipe[2] != 2))
+				{
+					//emit warning_oil_pipe(93);//油报警
+					net_history(11,1);
+					//add_value_controlinfo("3# 管线   ","检油报警");
+					//flag_output_pipe[2] = 2;
+				}
+				if(OIL_PIPE[5]==0x90 )           //flag_output_pipe[2] == 0 || //flag_output_pipe[2] != 3))
+				{
+					//emit warning_water_pipe(93);//水报警
+					net_history(11,2);
+					//add_value_controlinfo("3# 管线   ","检水报警");
+					//flag_output_pipe[2] = 3;
+				}
+				if(OIL_PIPE[5]==0x01 )           //flag_output_pipe[2] == 0 || //flag_output_pipe[2] != 4))
+				{
+					//emit warning_sensor_pipe(93);//传感器故障
+					net_history(11,3);
+					//add_value_controlinfo("3# 管线   ","传感器故障");
+					//flag_output_pipe[2] = 4;
+				}
+				if(OIL_PIPE[5]==0x04 )           //flag_output_pipe[2] == 0 || //flag_output_pipe[2] != 5))
+				{
+					//emit warning_uart_pipe(93);//通信故障
+					net_history(11,4);
+					//add_value_controlinfo("3# 管线   ","通信故障");
+					//flag_output_pipe[2] = 5;
+				}
+			}
+		}
+	}
+	if(count_pipe>=4)       //4#
+	{
+		if(OIL_PIPE[6]==0xc0)
+		{
+
+			if(OIL_PIPE[7]==0x00 )           //flag_output_pipe[3] == 0 || //flag_output_pipe[3] != 1))
+			{
+				//emit right_pipe(94);
+				net_history(12,0);
+				//add_value_controlinfo("4# 管线   ","设备正常");
+				//flag_output_pipe[3] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[7]==0x88 )           //flag_output_pipe[3] == 0 || //flag_output_pipe[3] != 2))
+				{
+					//emit warning_oil_pipe(94);//油报警
+					net_history(12,1);
+					//add_value_controlinfo("4# 管线   ","检油报警");
+					//flag_output_pipe[3] = 2;
+				}
+				if(OIL_PIPE[7]==0x90 )           //flag_output_pipe[3] == 0 || //flag_output_pipe[3] != 3))
+				{
+					//emit warning_water_pipe(94);//水报警
+					net_history(12,2);
+					//add_value_controlinfo("4# 管线   ","检水报警");
+					//flag_output_pipe[3] = 3;
+				}
+				if(OIL_PIPE[7]==0x01 )           //flag_output_pipe[3] == 0 || //flag_output_pipe[3] != 4))
+				{
+					//emit warning_sensor_pipe(94);//传感器故障
+					net_history(12,3);
+					//add_value_controlinfo("4# 管线   ","传感器故障");
+					//flag_output_pipe[3] = 4;
+				}
+				if(OIL_PIPE[7]==0x04 )           //flag_output_pipe[3] == 0 || //flag_output_pipe[3] != 5))
+				{
+					//emit warning_uart_pipe(94);//通信故障
+					net_history(12,4);
+					//add_value_controlinfo("4# 管线   ","通信故障");
+					//flag_output_pipe[3] = 5;
+				}
+			}
+		}
+	}
+	if(count_pipe>=5)       //5#
+	{
+		if(OIL_PIPE[8]==0xc0)
+		{
+
+			if(OIL_PIPE[9]==0x00 )           //flag_output_pipe[4] == 0 || //flag_output_pipe[4] != 1))
+			{
+				//emit right_pipe(95);
+				net_history(13,0);
+				//add_value_controlinfo("5# 管线   ","设备正常");
+				//flag_output_pipe[4] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[9]==0x88 )           //flag_output_pipe[4] == 0 || //flag_output_pipe[4] != 2))
+				{
+					//emit warning_oil_pipe(95);//油报警
+					net_history(13,1);
+					//add_value_controlinfo("5# 管线   ","检油报警");
+					//flag_output_pipe[4] = 2;
+				}
+				if(OIL_PIPE[9]==0x90 )           //flag_output_pipe[4] == 0 || //flag_output_pipe[4] != 3))
+				{
+					//emit warning_water_pipe(95);//水报警
+					net_history(13,2);
+					//add_value_controlinfo("5# 管线   ","检水报警");
+					//flag_output_pipe[4] = 3;
+				}
+				if(OIL_PIPE[9]==0x01 )           //flag_output_pipe[4] == 0 || //flag_output_pipe[4] != 4))
+				{
+					//emit warning_sensor_pipe(95);//传感器故障
+					net_history(13,3);
+					//add_value_controlinfo("5# 管线   ","传感器故障");
+					//flag_output_pipe[4] = 4;
+				}
+				if(OIL_PIPE[9]==0x04 )           //flag_output_pipe[4] == 0 || //flag_output_pipe[4] != 5))
+				{
+					//emit warning_uart_pipe(95);//通信故障
+					net_history(13,4);
+					//add_value_controlinfo("5# 管线   ","通信故障");
+					//flag_output_pipe[4] = 5;
+				}
+			}
+		}
+	}
+	if(count_pipe>=6)           //6#
+	{
+		if(OIL_PIPE[10]==0xc0)
+		{
+
+			if(OIL_PIPE[11]==0x00 )           //flag_output_pipe[5] == 0 || //flag_output_pipe[5] != 1))
+			{
+				//emit right_pipe(96);
+				net_history(14,0);
+				//add_value_controlinfo("6# 管线   ","设备正常");
+				//flag_output_pipe[5] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[11]==0x88 )           //flag_output_pipe[5] == 0 || //flag_output_pipe[5] != 2))
+				{
+					//emit warning_oil_pipe(96);//油报警
+					net_history(14,1);
+					//add_value_controlinfo("6# 管线   ","检油报警");
+					//flag_output_pipe[5] = 2;
+				}
+				if(OIL_PIPE[11]==0x90 )           //flag_output_pipe[5] == 0 || //flag_output_pipe[5] != 3))
+				{
+					//emit warning_water_pipe(96);//水报警
+					net_history(14,2);
+					//add_value_controlinfo("6# 管线   ","检水报警");
+					//flag_output_pipe[5] = 3;
+				}
+				if(OIL_PIPE[11]==0x01 )           //flag_output_pipe[5] == 0 || //flag_output_pipe[5] != 4))
+				{
+					//emit warning_sensor_pipe(96);//传感器故障
+					net_history(14,3);
+					//add_value_controlinfo("6# 管线   ","传感器故障");
+					//flag_output_pipe[5] = 4;
+				}
+				if(OIL_PIPE[11]==0x04 )           //flag_output_pipe[5] == 0 || //flag_output_pipe[5] != 5))
+				{
+					//emit warning_uart_pipe(96);//通信故障
+					net_history(14,4);
+					//add_value_controlinfo("6# 管线   ","通信故障");
+					//flag_output_pipe[5] = 5;
+				}
+			}
+		}
+	}
+	if(count_pipe>=7)            //7#
+	{
+		if(OIL_PIPE[12]==0xc0)
+		{
+
+			if(OIL_PIPE[13]==0x00 )           //flag_output_pipe[6] == 0 || //flag_output_pipe[6] != 1))
+			{
+				//emit right_pipe(97);
+				net_history(15,0);
+				//add_value_controlinfo("7# 管线   ","设备正常");
+				//flag_output_pipe[6] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[13]==0x88 )           //flag_output_pipe[6] == 0 || //flag_output_pipe[6] != 2))
+				{
+					//emit warning_oil_pipe(97);//油报警
+					net_history(15,1);
+					//add_value_controlinfo("7# 管线   ","检油报警");
+					//flag_output_pipe[6] = 2;
+				}
+				if(OIL_PIPE[13]==0x90 )           //flag_output_pipe[6] == 0 || //flag_output_pipe[6] != 3))
+				{
+					//emit warning_water_pipe(97);//水报警
+					net_history(15,2);
+					//add_value_controlinfo("7# 管线   ","检水报警");
+					//flag_output_pipe[6] = 3;
+				}
+				if(OIL_PIPE[13]==0x01 )           //flag_output_pipe[6] == 0 || //flag_output_pipe[6] != 4))
+				{
+					//emit warning_sensor_pipe(97);//传感器故障
+					net_history(15,3);
+					//add_value_controlinfo("7# 管线   ","传感器故障");
+					//flag_output_pipe[6] = 4;
+				}
+				if(OIL_PIPE[13]==0x04 )           //flag_output_pipe[6] == 0 || //flag_output_pipe[6] != 5))
+				{
+					//emit warning_uart_pipe(97);//通信故障
+					net_history(15,4);
+					//add_value_controlinfo("7# 管线   ","通信故障");
+					//flag_output_pipe[6] = 5;
+				}
+			}
+		}
+	}
+	if(count_pipe>=8)           //8#
+	{
+		if(OIL_PIPE[14]==0xc0)
+		{
+
+			if(OIL_PIPE[15]==0x00 )           //flag_output_pipe[7] == 0 || //flag_output_pipe[7] != 1))
+			{
+				//emit right_pipe(98);
+				net_history(16,0);
+				//add_value_controlinfo("8# 管线   ","设备正常");
+				//flag_output_pipe[7] = 1;
+			}
+			else
+			{
+				if(OIL_PIPE[15]==0x88 )           //flag_output_pipe[7] == 0 || //flag_output_pipe[7] != 2))
+				{
+					//emit warning_oil_pipe(98);//油报警
+					net_history(16,1);
+					//add_value_controlinfo("8# 管线   ","检油报警");
+					//flag_output_pipe[7] = 2;
+				}
+				if(OIL_PIPE[15]==0x90 )           //flag_output_pipe[7] == 0 || //flag_output_pipe[7] != 3))
+				{
+					//emit warning_water_pipe(98);//水报警
+					net_history(16,2);
+					//add_value_controlinfo("8# 管线   ","检水报警");
+					//flag_output_pipe[7] = 3;
+				}
+				if(OIL_PIPE[15]==0x01 )           //flag_output_pipe[7] == 0 || //flag_output_pipe[7] != 4))
+				{
+					//emit warning_sensor_pipe(98);//传感器故障
+					net_history(16,3);
+					//add_value_controlinfo("8# 管线   ","传感器故障");
+					//flag_output_pipe[7] = 4;
+				}
+				if(OIL_PIPE[15]==0x04 )           //flag_output_pipe[7] == 0 || //flag_output_pipe[7] != 5))
+				{
+					//emit warning_uart_pipe(98);//通信故障
+					net_history(16,4);
+					//add_value_controlinfo("8# 管线   ","通信故障");
+					//flag_output_pipe[7] = 5;
+				}
+			}
+		}
+	}
+
+	//tank 罐
+	if((OIL_TANK[0]&0xf0)==0xc0)      //传感器法
+	{
+		if(count_tank>=1)           //1#
+		{
+			if((OIL_TANK[0]&0x0f)==0)
+			{
+				if(OIL_TANK[1]==0 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 1))
+				{
+					//emit right_tank(71);
+					net_history(1,0);
+					//add_value_controlinfo("1# 油罐   ","设备正常");
+					//flag_output_tank[0] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[1]==0x88 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 2))
+					{
+						//emit warning_oil_tank(71);//油报警
+						net_history(1,1);
+						//add_value_controlinfo("1# 油罐   ","检油报警");
+						//flag_output_tank[0] = 2;
+					}
+					if(OIL_TANK[1]==0x90 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 3))
+					{
+						//emit warning_water_tank(71);//水报警
+						net_history(1,2);
+						//add_value_controlinfo("1# 油罐   ","检水报警");
+						//flag_output_tank[0] = 3;
+					}
+					if(OIL_TANK[1]==0x01 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 4))
+					{
+						//emit warning_sensor_tank(71);//传感器故障
+						net_history(1,3);
+						//add_value_controlinfo("1# 油罐   ","传感器故障");
+						//flag_output_tank[0] = 4;
+					}
+					if(OIL_TANK[1]==0x04 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 5))
+					{
+						//emit warning_uart_tank(71);//通信故障
+						net_history(1,4);
+						//add_value_controlinfo("1# 油罐   ","通信故障");
+						//flag_output_tank[0] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank>=2)            //2#
+		{
+			if((OIL_TANK[2]&0x0f)==0)
+			{
+				if(OIL_TANK[3]==0 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 1))
+				{
+					//emit right_tank(72);
+					net_history(2,0);
+					//add_value_controlinfo("2# 油罐   ","设备正常");
+					//flag_output_tank[1] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[3]==0x88 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 2))
+					{
+						//emit warning_oil_tank(72);//油报警
+						net_history(2,1);
+						//add_value_controlinfo("2# 油罐   ","检油报警");
+						//flag_output_tank[1] = 2;
+					}
+					if(OIL_TANK[3]==0x90 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 3))
+					{
+						//emit warning_water_tank(72);//水报警
+						net_history(2,2);
+						//add_value_controlinfo("2# 油罐   ","检水报警");
+						//flag_output_tank[1] = 3;
+					}
+					if(OIL_TANK[3]==0x01 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 4))
+					{
+						//emit warning_sensor_tank(72);//传感器故障
+						net_history(2,3);
+						//add_value_controlinfo("2# 油罐   ","传感器故障");
+						//flag_output_tank[1] = 4;
+					}
+					if(OIL_TANK[3]==0x04 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 5))
+					{
+						//emit warning_uart_tank(72);//通信故障
+						net_history(2,4);
+						//add_value_controlinfo("2# 油罐   ","通信故障");
+						//flag_output_tank[1] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank>=3)            //3#
+		{
+			if((OIL_TANK[4]&0x0f)==0)
+			{
+				if(OIL_TANK[5]==0 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 1))
+				{
+					//emit right_tank(73);
+					net_history(3,0);
+					//add_value_controlinfo("3# 油罐   ","设备正常");
+					//flag_output_tank[2] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[5]==0x88 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 2))
+					{
+						//emit warning_oil_tank(73);//油报警
+						net_history(3,1);
+						//add_value_controlinfo("3# 油罐   ","检油报警");
+						//flag_output_tank[2] = 2;
+					}
+					if(OIL_TANK[5]==0x90 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 3))
+					{
+						//emit warning_water_tank(73);//水报警
+						net_history(3,2);
+						//add_value_controlinfo("3# 油罐   ","检水报警");
+						//flag_output_tank[2] = 3;
+					}
+					if(OIL_TANK[5]==0x01 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 4))
+					{
+						//emit warning_sensor_tank(73);//传感器故障
+						net_history(3,3);
+						//add_value_controlinfo("3# 油罐   ","传感器故障");
+						//flag_output_tank[2] = 4;
+					}
+					if(OIL_TANK[5]==0x04 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 5))
+					{
+						//emit warning_uart_tank(73);//通信故障
+						net_history(3,4);
+						//add_value_controlinfo("3# 油罐   ","通信故障");
+						//flag_output_tank[2] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank>=4)           //4#
+		{
+			if((OIL_TANK[6]&0x0f)==0)
+			{
+				if(OIL_TANK[7]==0 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 1))
+				{
+					//emit right_tank(74);
+					net_history(4,0);
+					//add_value_controlinfo("4# 油罐   ","设备正常");
+					//flag_output_tank[3] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[7]==0x88 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 2))
+					{
+						//emit warning_oil_tank(74);//油报警
+						net_history(4,1);
+						//add_value_controlinfo("4# 油罐   ","检油报警");
+						//flag_output_tank[3] = 2;
+					}
+					if(OIL_TANK[7]==0x90 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 3))
+					{
+						//emit warning_water_tank(74);//水报警
+						net_history(4,2);
+						//add_value_controlinfo("4# 油罐   ","检水报警");
+						//flag_output_tank[3] = 3;
+					}
+					if(OIL_TANK[7]==0x01 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 4))
+					{
+						//emit warning_sensor_tank(74);//传感器故障
+						net_history(4,3);
+						//add_value_controlinfo("4# 油罐   ","传感器故障");
+						//flag_output_tank[3] = 4;
+					}
+					if(OIL_TANK[7]==0x04 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 5))
+					{
+						//emit warning_uart_tank(74);//通信故障
+						net_history(4,4);
+						//add_value_controlinfo("4# 油罐   ","通信故障");
+						//flag_output_tank[3] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank>=5)       //5#
+		{
+			if((OIL_TANK[8]&0x0f)==0)
+			{
+				if(OIL_TANK[9]==0 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 1))
+				{
+					//emit right_tank(75);
+					net_history(5,0);
+					//add_value_controlinfo("5# 油罐   ","设备正常");
+					//flag_output_tank[4] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[9]==0x88 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 2))
+					{
+						//emit warning_oil_tank(75);//油报警
+						net_history(5,1);
+						//add_value_controlinfo("5# 油罐   ","检油报警");
+						//flag_output_tank[4] = 2;
+					}
+					if(OIL_TANK[9]==0x90 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 3))
+					{
+						//emit warning_water_tank(75);//水报警
+						net_history(5,2);
+						//add_value_controlinfo("5# 油罐   ","检水报警");
+						//flag_output_tank[4] = 3;
+					}
+					if(OIL_TANK[9]==0x01 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 4))
+					{
+						//emit warning_sensor_tank(75);//传感器故障
+						net_history(5,3);
+						//add_value_controlinfo("5# 油罐   ","传感器故障");
+						//flag_output_tank[4] = 4;
+					}
+					if(OIL_TANK[9]==0x04 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 5))
+					{
+						//emit warning_uart_tank(75);//通信故障
+						net_history(5,4);
+						//add_value_controlinfo("5# 油罐   ","通信故障");
+						//flag_output_tank[4] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank>=6)         //6#
+		{
+			if((OIL_TANK[10]&0x0f)==0)
+			{
+				if(OIL_TANK[11]==0 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 1))
+				{
+					//emit right_tank(76);
+					net_history(6,0);
+					//add_value_controlinfo("6# 油罐   ","设备正常");
+					//flag_output_tank[5] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[11]==0x88 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 2))
+					{
+						//emit warning_oil_tank(76);//油报警
+						net_history(6,1);
+						//add_value_controlinfo("6# 油罐   ","检油报警");
+						//flag_output_tank[5] = 2;
+					}
+					if(OIL_TANK[11]==0x90 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 3))
+					{
+						//emit warning_water_tank(76);//水报警
+						net_history(6,2);
+						//add_value_controlinfo("6# 油罐   ","检水报警");
+						//flag_output_tank[5] = 3;
+					}
+					if(OIL_TANK[11]==0x01 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 4))
+					{
+						//emit warning_sensor_tank(76);//传感器故障
+						net_history(6,3);
+						//add_value_controlinfo("6# 油罐   ","传感器故障");
+						//flag_output_tank[5] = 4;
+					}
+					if(OIL_TANK[11]==0x04 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 5))
+					{
+						//emit warning_uart_tank(76);//通信故障
+						net_history(6,4);
+						//add_value_controlinfo("6# 油罐   ","通信故障");
+						//flag_output_tank[5] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank>=7)         //7#
+		{
+			if((OIL_TANK[12]&0x0f)==0)
+			{
+				if(OIL_TANK[13]==0 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 1))
+				{
+					//emit right_tank(77);
+					net_history(7,0);
+					//add_value_controlinfo("7# 油罐   ","设备正常");
+					//flag_output_tank[6] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[13]==0x88 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 2))
+					{
+						//emit warning_oil_tank(77);//油报警
+						net_history(7,1);
+						//add_value_controlinfo("7# 油罐   ","检油报警");
+						//flag_output_tank[6] = 2;
+					}
+					if(OIL_TANK[13]==0x90 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 3))
+					{
+						//emit warning_water_tank(77);//水报警
+						net_history(7,2);
+						//add_value_controlinfo("7# 油罐   ","检水报警");
+						//flag_output_tank[6] = 3;
+					}
+					if(OIL_TANK[13]==0x01 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 4))
+					{
+						//emit warning_sensor_tank(77);//传感器故障
+						net_history(7,3);
+						//add_value_controlinfo("7# 油罐   ","传感器故障");
+						//flag_output_tank[6] = 4;
+					}
+					if(OIL_TANK[13]==0x04 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 5))
+					{
+						//emit warning_uart_tank(77);//通信故障
+						net_history(7,4);
+						//add_value_controlinfo("7# 油罐   ","通信故障");
+						//flag_output_tank[6] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank>=8)     //8#
+		{
+			if((OIL_TANK[14]&0x0f)==0)
+			{
+				if(OIL_TANK[15]==0 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 1))
+				{
+					//emit right_tank(78);
+					net_history(8,0);
+					//add_value_controlinfo("8# 油罐   ","设备正常");
+					//flag_output_tank[7] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[15]==0x88 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 2))
+					{
+						//emit warning_oil_tank(78);//油报警
+						net_history(8,1);
+						//add_value_controlinfo("8# 油罐   ","检油报警");
+						//flag_output_tank[7] = 2;
+					}
+					if(OIL_TANK[15]==0x90 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 3))
+					{
+						//emit warning_water_tank(78);//水报警
+						net_history(8,2);
+						//add_value_controlinfo("8# 油罐   ","检水报警");
+						//flag_output_tank[7] = 3;
+					}
+					if(OIL_TANK[15]==0x01 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 4))
+					{
+						//emit warning_sensor_tank(78);//传感器故障
+						net_history(8,3);
+						//add_value_controlinfo("8# 油罐   ","传感器故障");
+						//flag_output_tank[7] = 4;
+					}
+					if(OIL_TANK[15]==0x04 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 5))
+					{
+						//emit warning_uart_tank(78);//通信故障
+						net_history(8,4);
+						//add_value_controlinfo("8# 油罐   ","通信故障");
+						//flag_output_tank[7] = 5;
+					}
+				}
+			}
+		}
+
+	}
+	if((OIL_TANK[0]&0xf0)==0x80)      //液媒法
+	{
+
+		if(count_tank >= 1)     //1#
+		{
+			if((OIL_TANK[0]&0x0f)==0)
+			{
+				if(OIL_TANK[1]==0 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 1))
+				{
+					//emit right_tank(71);
+					net_history(1,0);
+					//add_value_controlinfo("1# 油罐   ","设备正常");
+					//flag_output_tank[0] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[1]==0xa0 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 2))
+					{
+						//emit warning_high_tank(71);//高报警
+						net_history(1,5);
+						//add_value_controlinfo("1# 油罐   ","高液位报警");
+						//flag_output_tank[0] = 2;
+					}
+					if(OIL_TANK[1]==0xc0 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 3))
+					{
+						//emit warning_low_tank(71);//低报警
+						net_history(1,6);
+						//add_value_controlinfo("1# 油罐   ","低液位报警");
+						//flag_output_tank[0] = 3;
+					}
+					if(OIL_TANK[1]==0x01 )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 4))
+					{
+						//emit warning_sensor_tank(71);//传感器故障
+						net_history(1,3);
+						//add_value_controlinfo("1# 油罐   ","传感器故障");
+						//flag_output_tank[0] = 4;
+					}
+					if(OIL_TANK[1]==0x04 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 5))
+					{
+						//emit warning_uart_tank(71);//通信故障
+						net_history(1,4);
+						//add_value_controlinfo("1# 油罐   ","通信故障");
+						//flag_output_tank[0] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank >= 2)       //2#
+		{
+			if((OIL_TANK[2]&0x0f)==0)
+			{
+				if(OIL_TANK[3]==0 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 1))
+				{
+					//emit right_tank(72);
+					net_history(2,0);
+					//add_value_controlinfo("2# 油罐   ","设备正常");
+					//flag_output_tank[1] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[3]==0xa0 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 2))
+					{
+						//emit warning_high_tank(72);//高报警
+						net_history(2,5);
+						//add_value_controlinfo("2# 油罐   ","高液位报警");
+						//flag_output_tank[1] = 2;
+					}
+					if(OIL_TANK[3]==0xc0 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 3))
+					{
+						//emit warning_low_tank(72);//低报警
+						net_history(2,6);
+						//add_value_controlinfo("2# 油罐   ","低液位报警");
+						//flag_output_tank[1] = 3;
+					}
+					if(OIL_TANK[3]==0x01 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 4))
+					{
+						//emit warning_sensor_tank(72);//传感器故障
+						net_history(2,3);
+						//add_value_controlinfo("2# 油罐   ","传感器故障");
+						//flag_output_tank[1] = 4;
+					}
+					if(OIL_TANK[3]==0x04 )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 5))
+					{
+						//emit warning_uart_tank(72);//通信故障
+						net_history(2,4);
+						//add_value_controlinfo("2# 油罐   ","通信故障");
+						//flag_output_tank[1] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank >= 3)      //3#
+		{
+			if((OIL_TANK[4]&0x0f)==0)
+			{
+				if(OIL_TANK[5]==0 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 1))
+				{
+					//emit right_tank(73);
+					net_history(3,0);
+					//add_value_controlinfo("3# 油罐   ","设备正常");
+					//flag_output_tank[2] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[5]==0xa0 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 2))
+					{
+						//emit warning_high_tank(73);//高报警
+						net_history(3,5);
+						//add_value_controlinfo("3# 油罐   ","高液位报警");
+						//flag_output_tank[2] = 2;
+					}
+					if(OIL_TANK[5]==0xc0 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 3))
+					{
+						//emit warning_low_tank(73);//低报警
+						net_history(3,6);
+						//add_value_controlinfo("3# 油罐   ","低液位报警");
+						//flag_output_tank[2] = 3;
+					}
+					if(OIL_TANK[5]==0x01 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 4))
+					{
+						//emit warning_sensor_tank(73);//传感器故障
+						net_history(3,3);
+						//add_value_controlinfo("3# 油罐   ","传感器故障");
+						//flag_output_tank[2] = 4;
+					}
+					if(OIL_TANK[5]==0x04 )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 5))
+					{
+						//emit warning_uart_tank(73);//通信故障
+						net_history(3,4);
+						//add_value_controlinfo("3# 油罐   ","通信故障");
+						//flag_output_tank[2] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank >= 4)      //4#
+		{
+			if((OIL_TANK[6]&0x0f)==0)
+			{
+				if(OIL_TANK[7]==0 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 1))
+				{
+					//emit right_tank(74);
+					net_history(4,0);
+					//add_value_controlinfo("4# 油罐   ","设备正常");
+					//flag_output_tank[3] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[7]==0xa0 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 2))
+					{
+						//emit warning_high_tank(74);//高报警
+						net_history(4,5);
+						//add_value_controlinfo("4# 油罐   ","高液位报警");
+						//flag_output_tank[3] = 2;
+					}
+					if(OIL_TANK[7]==0xc0 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 3))
+					{
+						//emit warning_low_tank(74);//低报警
+						net_history(4,6);
+						//add_value_controlinfo("4# 油罐   ","低液位报警");
+						//flag_output_tank[3] = 3;
+					}
+					if(OIL_TANK[7]==0x01 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 4))
+					{
+						//emit warning_sensor_tank(74);//传感器故障
+						net_history(4,3);
+						//add_value_controlinfo("4# 油罐   ","传感器故障");
+						//flag_output_tank[3] = 4;
+					}
+					if(OIL_TANK[7]==0x04 )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 5))
+					{
+						//emit warning_uart_tank(74);//通信故障
+						net_history(4,4);
+						//add_value_controlinfo("4# 油罐   ","通信故障");
+						//flag_output_tank[3] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank >= 5)     //5#
+		{
+			if((OIL_TANK[8]&0x0f)==0)
+			{
+				if(OIL_TANK[9]==0 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 1))
+				{
+					//emit right_tank(75);
+					net_history(5,0);
+					//add_value_controlinfo("5# 油罐   ","设备正常");
+					//flag_output_tank[4] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[9]==0xa0 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 2))
+					{
+						//emit warning_high_tank(75);//高报警
+						net_history(5,5);
+						//add_value_controlinfo("5# 油罐   ","高液位报警");
+						//flag_output_tank[4] = 2;
+					}
+					if(OIL_TANK[9]==0xc0 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 3))
+					{
+						//emit warning_low_tank(75);//低报警
+						net_history(5,6);
+						//add_value_controlinfo("5# 油罐   ","低液位报警");
+						//flag_output_tank[4] = 3;
+					}
+					if(OIL_TANK[9]==0x01 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 4))
+					{
+						//emit warning_sensor_tank(75);//传感器故障
+						net_history(5,3);
+						//add_value_controlinfo("5# 油罐   ","传感器故障");
+						//flag_output_tank[4] = 4;
+					}
+					if(OIL_TANK[9]==0x04 )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 5))
+					{
+						//emit warning_uart_tank(75);//通信故障
+						net_history(5,4);
+						//add_value_controlinfo("5# 油罐   ","通信故障");
+						//flag_output_tank[4] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank >= 6)     //6#
+		{
+			if((OIL_TANK[10]&0x0f)==0)
+			{
+				if(OIL_TANK[11]==0 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 1))
+				{
+					//emit right_tank(76);
+					net_history(6,0);
+					//add_value_controlinfo("6# 油罐   ","设备正常");
+					//flag_output_tank[5] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[11]==0xa0 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 2))
+					{
+						//emit warning_high_tank(76);//高报警
+						net_history(6,5);
+						//add_value_controlinfo("6# 油罐   ","高液位报警");
+						//flag_output_tank[5] = 2;
+					}
+					if(OIL_TANK[11]==0xc0 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 3))
+					{
+						//emit warning_low_tank(76);//低报警
+						net_history(6,6);
+						//add_value_controlinfo("6# 油罐   ","低液位报警");
+						//flag_output_tank[5] = 3;
+					}
+					if(OIL_TANK[11]==0x01 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 4))
+					{
+						//emit warning_sensor_tank(76);//传感器故障
+						net_history(6,3);
+						//add_value_controlinfo("6# 油罐   ","传感器故障");
+						//flag_output_tank[5] = 4;
+					}
+					if(OIL_TANK[11]==0x04 )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 5))
+					{
+						//emit warning_uart_tank(76);//通信故障
+						net_history(6,4);
+						//add_value_controlinfo("6# 油罐   ","通信故障");
+						//flag_output_tank[5] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank >= 7)     //7#
+		{
+			if((OIL_TANK[12]&0x0f)==0)
+			{
+				if(OIL_TANK[13]==0 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 1))
+				{
+					//emit right_tank(77);
+					net_history(7,0);
+					//add_value_controlinfo("7# 油罐   ","设备正常");
+					//flag_output_tank[6] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[13]==0xa0 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 2))
+					{
+						//emit warning_high_tank(77);//高报警
+						net_history(7,5);
+						//add_value_controlinfo("7# 油罐   ","高液位报警");
+						//flag_output_tank[6] = 2;
+					}
+					if(OIL_TANK[13]==0xc0 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 3))
+					{
+						//emit warning_low_tank(77);//低报警
+						net_history(7,6);
+						//add_value_controlinfo("7# 油罐   ","低液位报警");
+						//flag_output_tank[6] = 3;
+					}
+					if(OIL_TANK[13]==0x01 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 4))
+					{
+						//emit warning_sensor_tank(77);//传感器故障
+						net_history(7,3);
+						//add_value_controlinfo("7# 油罐   ","传感器故障");
+						//flag_output_tank[6] = 4;
+					}
+					if(OIL_TANK[13]==0x04 )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 5))
+					{
+						//emit warning_uart_tank(77);//通信故障
+						net_history(7,4);
+						//add_value_controlinfo("7# 油罐   ","通信故障");
+						//flag_output_tank[6] = 5;
+					}
+				}
+			}
+		}
+		if(count_tank >= 8)     //8#
+		{
+			if((OIL_TANK[14]&0x0f)==0)
+			{
+				if(OIL_TANK[15]==0 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 1))
+				{
+					//emit right_tank(78);
+					net_history(8,0);
+					//add_value_controlinfo("8# 油罐   ","设备正常");
+					//flag_output_tank[7] = 1;
+				}
+				else
+				{
+					if(OIL_TANK[15]==0xa0 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 2))
+					{
+						//emit warning_high_tank(78);//高报警
+						net_history(8,5);
+						//add_value_controlinfo("8# 油罐   ","高液位报警");
+						//flag_output_tank[7] = 2;
+					}
+					if(OIL_TANK[15]==0xc0 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 3))
+					{
+						//emit warning_low_tank(78);//低报警
+						net_history(8,6);
+						//add_value_controlinfo("8# 油罐   ","低液位报警");
+						//flag_output_tank[7] = 3;
+					}
+					if(OIL_TANK[15]==0x01 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 4))
+					{
+						//emit warning_sensor_tank(78);//传感器故障
+						net_history(8,3);
+						//add_value_controlinfo("8# 油罐   ","传感器故障");
+						//flag_output_tank[7] = 4;
+					}
+					if(OIL_TANK[15]==0x04 )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 5))
+					{
+						//emit warning_uart_tank(78);//通信故障
+						net_history(8,4);
+						//add_value_controlinfo("8# 油罐   ","通信故障");
+						//flag_output_tank[7] = 5;
+					}
+				}
+			}
+		}
+	}
+	if((OIL_TANK[0]&0xf0)==0x40)      //压力法
+	{
+		if(count_tank >= 1)     //1#
+		{
+			if(((OIL_TANK[0] == 0x40)&&(OIL_TANK[1] == 0)) )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 1)) //1#
+			{
+				//emit right_tank(71);
+				net_history(1,0);
+				//add_value_controlinfo("1# 油罐   ","设备正常");
+				//flag_output_tank[0] = 1;
+			}
+			if(((OIL_TANK[0] == 0x41)&&(OIL_TANK[1] == 0x80)) )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 2))
+			{
+				//emit warning_pre_tank(71);//预报警
+				net_history(1,7);
+				//add_value_controlinfo("1# 油罐   ","压力预报警");
+				//flag_output_tank[0] = 2;
+			}
+			if(((OIL_TANK[0] == 0x42)&&(OIL_TANK[1] == 0x80)) )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 3))
+			{
+				//emit warning_warn_tank(71);//报警
+				net_history(1,6);
+				//add_value_controlinfo("1# 油罐   ","压力报警");
+				//flag_output_tank[0] = 3;
+			}
+			if(((OIL_TANK[0] == 0x40)&&(OIL_TANK[1] == 0x01)) )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 4))
+			{
+				//emit warning_sensor_tank(71);//传感器故障
+				net_history(1,3);
+				//add_value_controlinfo("1# 油罐   ","传感器故障");
+				//flag_output_tank[0] = 4;
+			}
+			if(((OIL_TANK[0] == 0x40)&&(OIL_TANK[1] == 0x04)) )           //flag_output_tank[0] == 0 || //flag_output_tank[0] != 5))
+			{
+				//emit warning_uart_tank(71);//通信故障
+				net_history(1,4);
+				//add_value_controlinfo("1# 油罐   ","通信故障");
+				//flag_output_tank[0] = 5;
+			}
+		}
+
+		if(count_tank >= 2)     //2#
+		{
+			if(((OIL_TANK[2] == 0x40)&&(OIL_TANK[3] == 0)) )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 1)) //2#
+			{
+				//emit right_tank(72);
+				net_history(2,0);
+				//add_value_controlinfo("2# 油罐   ","设备正常");
+				//flag_output_tank[1] = 1;
+			}
+			if(((OIL_TANK[2] == 0x41)&&(OIL_TANK[3] == 0x80)) )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 2))
+			{
+				//emit warning_pre_tank(72);//预报警
+				net_history(2,7);
+				//add_value_controlinfo("2# 油罐   ","压力预报警");
+				//flag_output_tank[1] = 2;
+			}
+			if(((OIL_TANK[2] == 0x42)&&(OIL_TANK[3] == 0x80)) )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 3))
+			{
+				//emit warning_warn_tank(72);//报警
+				net_history(2,8);
+				//add_value_controlinfo("2# 油罐   ","压力报警");
+				//flag_output_tank[1] = 3;
+			}
+			if(((OIL_TANK[2] == 0x40)&&(OIL_TANK[3] == 0x01)) )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 4))
+			{
+				//emit warning_sensor_tank(72);//传感器故障
+				net_history(2,3);
+				//add_value_controlinfo("2# 油罐   ","传感器故障");
+				//flag_output_tank[1] = 4;
+			}
+			if(((OIL_TANK[2] == 0x40)&&(OIL_TANK[3] == 0x04)) )           //flag_output_tank[1] == 0 || //flag_output_tank[1] != 5))
+			{
+				//emit warning_uart_tank(72);//通信故障
+				net_history(2,4);
+				//add_value_controlinfo("2# 油罐   ","通信故障");
+				//flag_output_tank[1] = 5;
+			}
+		}
+		if(count_tank >= 3)    //3#
+		{
+			if(((OIL_TANK[4] == 0x40)&&(OIL_TANK[5] == 0)) )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 1)) //3#
+			{
+				//emit right_tank(73);
+				net_history(3,0);
+				//add_value_controlinfo("3# 油罐   ","设备正常");
+				//flag_output_tank[2] = 1;
+			}
+			if(((OIL_TANK[4] == 0x41)&&(OIL_TANK[5] == 0x80)) )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 2))
+			{
+				//emit warning_pre_tank(73);//预报警
+				net_history(3,7);
+				//add_value_controlinfo("3# 油罐   ","压力预报警");
+				//flag_output_tank[2] = 2;
+			}
+			if(((OIL_TANK[4] == 0x42)&&(OIL_TANK[5] == 0x80)) )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 3))
+			{
+				//emit warning_warn_tank(73);//报警
+				net_history(3,8);
+				//add_value_controlinfo("3# 油罐   ","压力报警");
+				//flag_output_tank[2] = 3;
+			}
+			if(((OIL_TANK[4] == 0x40)&&(OIL_TANK[5] == 0x01)) )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 4))
+			{
+				//emit warning_sensor_tank(73);//传感器故障
+				net_history(3,3);
+				//add_value_controlinfo("3# 油罐   ","传感器故障");
+				//flag_output_tank[2] = 4;
+			}
+			if(((OIL_TANK[4] == 0x40)&&(OIL_TANK[5] == 0x04)) )           //flag_output_tank[2] == 0 || //flag_output_tank[2] != 5))
+			{
+				//emit warning_uart_tank(73);//通信故障
+				net_history(3,4);
+				//add_value_controlinfo("3# 油罐   ","通信故障");
+				//flag_output_tank[2] = 5;
+			}
+		}
+		if(count_tank >= 4)    //4#
+		{
+			if(((OIL_TANK[6] == 0x40)&&(OIL_TANK[7] == 0)) )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 1)) //4#
+			{
+				//emit right_tank(74);
+				net_history(4,0);
+				//add_value_controlinfo("4# 油罐   ","设备正常");
+				//flag_output_tank[3] = 1;
+			}
+			if(((OIL_TANK[6] == 0x41)&&(OIL_TANK[7] == 0x80)) )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 2))
+			{
+				//emit warning_pre_tank(74);//预报警
+				net_history(4,7);
+				//add_value_controlinfo("4# 油罐   ","压力预报警");
+				//flag_output_tank[3] = 2;
+			}
+			if(((OIL_TANK[6] == 0x42)&&(OIL_TANK[7] == 0x80)) )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 3))
+			{
+				//emit warning_warn_tank(74);//报警
+				net_history(4,8);
+				//add_value_controlinfo("4# 油罐   ","压力报警");
+				//flag_output_tank[3] = 3;
+			}
+			if(((OIL_TANK[6] == 0x40)&&(OIL_TANK[7] == 0x01)) )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 4))
+			{
+				//emit warning_sensor_tank(74);//传感器故障
+				net_history(4,3);
+				//add_value_controlinfo("4# 油罐   ","传感器故障");
+				//flag_output_tank[3] = 4;
+			}
+			if(((OIL_TANK[6] == 0x40)&&(OIL_TANK[7] == 0x04)) )           //flag_output_tank[3] == 0 || //flag_output_tank[3] != 5))
+			{
+				//emit warning_uart_tank(74);//通信故障
+				net_history(4,4);
+				//add_value_controlinfo("4# 油罐   ","通信故障");
+				//flag_output_tank[3] = 5;
+			}
+		}
+		if(count_tank >= 5)    //5#
+		{
+			if(((OIL_TANK[8] == 0x40)&&(OIL_TANK[9] == 0)) )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 1)) //5#
+			{
+				//emit right_tank(75);
+				net_history(5,0);
+				//add_value_controlinfo("5# 油罐   ","设备正常");
+				//flag_output_tank[4] = 1;
+			}
+			if(((OIL_TANK[8] == 0x41)&&(OIL_TANK[9] == 0x80)) )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 2))
+			{
+				//emit warning_pre_tank(75);//预报警
+				net_history(5,7);
+				//add_value_controlinfo("5# 油罐   ","压力预报警");
+				//flag_output_tank[4] = 2;
+			}
+			if(((OIL_TANK[8] == 0x42)&&(OIL_TANK[9] == 0x80)) )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 3))
+			{
+				//emit warning_warn_tank(75);//报警
+				net_history(5,8);
+				//add_value_controlinfo("5# 油罐   ","压力报警");
+				//flag_output_tank[4] = 3;
+			}
+			if(((OIL_TANK[8] == 0x40)&&(OIL_TANK[9] == 0x01)) )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 4))
+			{
+				//emit warning_sensor_tank(75);//传感器故障
+				net_history(5,3);
+				//add_value_controlinfo("5# 油罐   ","传感器故障");
+				//flag_output_tank[4] = 4;
+			}
+			if(((OIL_TANK[8] == 0x40)&&(OIL_TANK[9] == 0x04)) )           //flag_output_tank[4] == 0 || //flag_output_tank[4] != 5))
+			{
+				//emit warning_uart_tank(75);//通信故障
+				net_history(5,4);
+				//add_value_controlinfo("5# 油罐   ","通信故障");
+				//flag_output_tank[4] = 5;
+			}
+		}
+		if(count_tank >= 6)    //6#
+		{
+			if(((OIL_TANK[10] == 0x40)&&(OIL_TANK[11] == 0)) )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 1)) //6#
+			{
+				//emit right_tank(76);
+				net_history(6,0);
+				//add_value_controlinfo("6# 油罐   ","设备正常");
+				//flag_output_tank[5] = 1;
+			}
+			if(((OIL_TANK[10] == 0x41)&&(OIL_TANK[11] == 0x80)) )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 2))
+			{
+				//emit warning_pre_tank(76);//预报警
+				net_history(6,7);
+				//add_value_controlinfo("6# 油罐   ","压力预报警");
+				//flag_output_tank[5] = 2;
+			}
+			if(((OIL_TANK[10] == 0x42)&&(OIL_TANK[11] == 0x80)) )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 3))
+			{
+				//emit warning_warn_tank(76);//报警
+				net_history(6,8);
+				//add_value_controlinfo("6# 油罐   ","压力报警");
+				//flag_output_tank[5] = 3;
+			}
+			if(((OIL_TANK[10] == 0x40)&&(OIL_TANK[11] == 0x01)) )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 4))
+			{
+				//emit warning_sensor_tank(76);//传感器故障
+				net_history(6,3);
+				//add_value_controlinfo("6# 油罐   ","传感器故障");
+				//flag_output_tank[5] = 4;
+			}
+			if(((OIL_TANK[10] == 0x40)&&(OIL_TANK[11] == 0x04)) )           //flag_output_tank[5] == 0 || //flag_output_tank[5] != 5))
+			{
+				//emit warning_uart_tank(76);//通信故障
+				net_history(6,4);
+				//add_value_controlinfo("6# 油罐   ","通信故障");
+				//flag_output_tank[5] = 5;
+			}
+		}
+
+		if(count_tank >= 7)    //7#
+		{
+			if(((OIL_TANK[12] == 0x40)&&(OIL_TANK[13] == 0)) )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 1)) //7#
+			{
+				//emit right_tank(77);
+				net_history(7,0);
+				//add_value_controlinfo("7# 油罐   ","设备正常");
+				//flag_output_tank[6] = 1;
+			}
+			if(((OIL_TANK[12] == 0x41)&&(OIL_TANK[13] == 0x80)) )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 2))
+			{
+				//emit warning_pre_tank(77);//预报警
+				net_history(7,7);
+				//add_value_controlinfo("7# 油罐   ","压力预报警");
+				//flag_output_tank[6] = 2;
+			}
+			if(((OIL_TANK[12] == 0x42)&&(OIL_TANK[13] == 0x80)) )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 3))
+			{
+				//emit warning_warn_tank(77);//报警
+				net_history(7,8);
+				//add_value_controlinfo("7# 油罐   ","压力报警");
+				//flag_output_tank[6] = 3;
+			}
+			if(((OIL_TANK[12] == 0x40)&&(OIL_TANK[13] == 0x01)) )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 4))
+			{
+				//emit warning_sensor_tank(77);//传感器故障
+				net_history(7,3);
+				//add_value_controlinfo("7# 油罐   ","传感器故障");
+				//flag_output_tank[6] = 4;
+			}
+			if(((OIL_TANK[12] == 0x40)&&(OIL_TANK[13] == 0x04)) )           //flag_output_tank[6] == 0 || //flag_output_tank[6] != 5))
+			{
+				//emit warning_uart_tank(77);//通信故障
+				net_history(7,4);
+				//add_value_controlinfo("7# 油罐   ","通信故障");
+				//flag_output_tank[6] = 5;
+			}
+		}
+
+		if(count_tank >= 8)    //8#
+		{
+			if(((OIL_TANK[14] == 0x40)&&(OIL_TANK[15] == 0)) )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 1)) //7#
+			{
+				//emit right_tank(78);
+				net_history(8,0);
+				//add_value_controlinfo("8# 油罐   ","设备正常");
+				//flag_output_tank[7] = 1;
+			}
+			if(((OIL_TANK[14] == 0x41)&&(OIL_TANK[15] == 0x80)) )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 2))
+			{
+				//emit warning_pre_tank(78);//预报警
+				net_history(8,7);
+				//add_value_controlinfo("8# 油罐   ","压力预报警");
+				//flag_output_tank[7] = 2;
+			}
+			if(((OIL_TANK[14] == 0x42)&&(OIL_TANK[15] == 0x80)) )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 3))
+			{
+				//emit warning_warn_tank(78);//报警
+				net_history(8,8);
+				//add_value_controlinfo("8# 油罐   ","压力报警");
+				//flag_output_tank[7] = 3;
+			}
+			if(((OIL_TANK[14] == 0x40)&&(OIL_TANK[15] == 0x01)) )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 4))
+			{
+				//emit warning_sensor_tank(78);//传感器故障
+				net_history(8,3);
+				//add_value_controlinfo("8# 油罐   ","传感器故障");
+				//flag_output_tank[7] = 4;
+			}
+			if(((OIL_TANK[14] == 0x40)&&(OIL_TANK[15] == 0x04)) )           //flag_output_tank[7] == 0 || //flag_output_tank[7] != 5))
+			{
+				//emit warning_uart_tank(78);//通信故障
+				net_history(8,4);
+				//add_value_controlinfo("8# 油罐   ","通信故障");
+				//flag_output_tank[7] = 5;
+			}
+		}
+	}
+	//加油机 dis
+	if(count_dispener>=1)       //1#
+	{
+		if(OIL_DISPENER[0]==0xc0)
+		{
+			if(OIL_DISPENER[1]==0x00 )           //flag_output_dispener[0] == 0 || //flag_output_dispener[0] != 1))
+			{
+				//emit right_dispener(81);
+				net_history(25,0);
+				//add_value_controlinfo("1# 加油机 ","设备正常");
+				//flag_output_dispener[0] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[1]==0x88 )           //flag_output_dispener[0] == 0 || //flag_output_dispener[0] != 2))
+				{
+					//emit warning_oil_dispener(81);//油报警
+					net_history(25,1);
+					//add_value_controlinfo("1# 加油机 ","检油报警");
+					//flag_output_dispener[0] = 2;
+				}
+				if(OIL_DISPENER[1]==0x90 )           //flag_output_dispener[0] == 0 || //flag_output_dispener[0] != 3))
+				{
+					//emit warning_water_dispener(81);//水报警
+					net_history(25,2);
+					//add_value_controlinfo("1# 加油机 ","检水报警");
+					//flag_output_dispener[0] = 3;
+				}
+				if(OIL_DISPENER[1]==0x01 )           //flag_output_dispener[0] == 0 || //flag_output_dispener[0] != 4))
+				{
+					//emit warning_sensor_dispener(81);//传感器故障
+					net_history(25,3);
+					//add_value_controlinfo("1# 加油机 ","传感器故障");
+					//flag_output_dispener[0] = 4;
+				}
+				if(OIL_DISPENER[1]==0x04 )           //flag_output_dispener[0] == 0 || //flag_output_dispener[0] != 5))
+				{
+					//emit warning_uart_dispener(81);//通信故障
+					net_history(25,4);
+					//add_value_controlinfo("1# 加油机 ","通信故障");
+					//flag_output_dispener[0] = 5;
+				}
+			}
+		}
+	}
+	if(count_dispener>=2)       //2#
+	{
+		if(OIL_DISPENER[2]==0xc0)
+		{
+			if(OIL_DISPENER[3]==0x00 )           //flag_output_dispener[1] == 0 || //flag_output_dispener[1] != 1))
+			{
+				//emit right_dispener(82);
+				net_history(26,0);
+				//add_value_controlinfo("2# 加油机 ","设备正常");
+				//flag_output_dispener[1] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[3]==0x88 )           //flag_output_dispener[1] == 0 || //flag_output_dispener[1] != 2))
+				{
+					//emit warning_oil_dispener(82);//油报警
+					net_history(26,1);
+					//add_value_controlinfo("2# 加油机 ","检油报警");
+					//flag_output_dispener[1] = 2;
+				}
+				if(OIL_DISPENER[3]==0x90 )           //flag_output_dispener[1] == 0 || //flag_output_dispener[1] != 3))
+				{
+					//emit warning_water_dispener(82);//水报警
+					net_history(26,2);
+					//add_value_controlinfo("2# 加油机 ","检水报警");
+					//flag_output_dispener[1] = 3;
+				}
+				if(OIL_DISPENER[3]==0x01 )           //flag_output_dispener[1] == 0 || //flag_output_dispener[1] != 4))
+				{
+					//emit warning_sensor_dispener(82);//传感器故障
+					net_history(26,3);
+					//add_value_controlinfo("2# 加油机 ","传感器故障");
+					//flag_output_dispener[1] = 4;
+				}
+				if(OIL_DISPENER[3]==0x04 )           //flag_output_dispener[1] == 0 || //flag_output_dispener[1] != 5))
+				{
+					//emit warning_uart_dispener(82);//通信故障
+					net_history(26,4);
+					//add_value_controlinfo("2# 加油机 ","通信故障");
+					//flag_output_dispener[1] = 5;
+				}
+			}
+		}
+	}
+	if(count_dispener>=3)      //3#
+	{
+		if(OIL_DISPENER[4]==0xc0)
+		{
+
+			if(OIL_DISPENER[5]==0x00 )           //flag_output_dispener[2] == 0 || //flag_output_dispener[2] != 1))
+			{
+				//emit right_dispener(83);
+				net_history(27,0);
+				//add_value_controlinfo("3# 加油机 ","设备正常");
+				//flag_output_dispener[2] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[5]==0x88 )           //flag_output_dispener[2] == 0 || //flag_output_dispener[2] != 2))
+				{
+					//emit warning_oil_dispener(83);//油报警
+					net_history(27,1);
+					//add_value_controlinfo("3# 加油机 ","检油报警");
+					//flag_output_dispener[2] = 2;
+				}
+				if(OIL_DISPENER[5]==0x90 )           //flag_output_dispener[2] == 0 || //flag_output_dispener[2] != 3))
+				{
+					//emit warning_water_dispener(83);//水报警
+					net_history(27,2);
+					//add_value_controlinfo("3# 加油机 ","检水报警");
+					//flag_output_dispener[2] = 3;
+				}
+				if(OIL_DISPENER[5]==0x01 )           //flag_output_dispener[2] == 0 || //flag_output_dispener[2] != 4))
+				{
+					//emit warning_sensor_dispener(83);//传感器故障
+					net_history(27,3);
+					//add_value_controlinfo("3# 加油机 ","传感器故障");
+					//flag_output_dispener[2] = 4;
+				}
+				if(OIL_DISPENER[5]==0x04 )           //flag_output_dispener[2] == 0 || //flag_output_dispener[2] != 5))
+				{
+					//emit warning_uart_dispener(83);//通信故障
+					net_history(27,4);
+					//add_value_controlinfo("3# 加油机 ","通信故障");
+					//flag_output_dispener[2] = 5;
+				}
+			}
+		}
+	}
+	if(count_dispener>=4)      //4#
+	{
+		if(OIL_DISPENER[6]==0xc0)
+		{
+
+			if(OIL_DISPENER[7]==0x00 )           //flag_output_dispener[3] == 0 || //flag_output_dispener[3] != 1))
+			{
+				//emit right_dispener(84);
+				net_history(28,0);
+				//add_value_controlinfo("4# 加油机 ","设备正常");
+				//flag_output_dispener[3] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[7]==0x88 )           //flag_output_dispener[3] == 0 || //flag_output_dispener[3] != 2))
+				{
+					//emit warning_oil_dispener(84);//油报警
+					net_history(28,1);
+					//add_value_controlinfo("4# 加油机 ","检油报警");
+					//flag_output_dispener[3] = 2;
+				}
+				if(OIL_DISPENER[7]==0x90 )           //flag_output_dispener[3] == 0 || //flag_output_dispener[3] != 3))
+				{
+					//emit warning_water_dispener(84);//水报警
+					net_history(28,2);
+					//add_value_controlinfo("4# 加油机 ","检水报警");
+					//flag_output_dispener[3] = 3;
+				}
+				if(OIL_DISPENER[7]==0x01 )           //flag_output_dispener[3] == 0 || //flag_output_dispener[3] != 4))
+				{
+					//emit warning_sensor_dispener(84);//传感器故障
+					net_history(28,3);
+					//add_value_controlinfo("4# 加油机 ","传感器故障");
+					//flag_output_dispener[3] = 4;
+				}
+				if(OIL_DISPENER[7]==0x04 )           //flag_output_dispener[3] == 0 || //flag_output_dispener[3] != 5))
+				{
+					//emit warning_uart_dispener(84);//通信故障
+					net_history(28,4);
+					//add_value_controlinfo("4# 加油机 ","通信故障");
+					//flag_output_dispener[3] = 5;
+				}
+			}
+		}
+	}
+	if(count_dispener>=5)      //5#
+	{
+		if(OIL_DISPENER[8]==0xc0)      //5#
+		{
+
+			if(OIL_DISPENER[9]==0x00 )           //flag_output_dispener[4] == 0 || //flag_output_dispener[4] != 1))
+			{
+				//emit right_dispener(85);
+				net_history(29,0);
+				//add_value_controlinfo("5# 加油机 ","设备正常");
+				//flag_output_dispener[4] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[9]==0x88 )           //flag_output_dispener[4] == 0 || //flag_output_dispener[4] != 2))
+				{
+					//emit warning_oil_dispener(85);//油报警
+					net_history(29,1);
+					//add_value_controlinfo("5# 加油机 ","检油报警");
+					//flag_output_dispener[4] = 2;
+				}
+				if(OIL_DISPENER[9]==0x90 )           //flag_output_dispener[4] == 0 || //flag_output_dispener[4] != 3))
+				{
+					//emit warning_water_dispener(85);//水报警
+					net_history(29,2);
+					//add_value_controlinfo("5# 加油机 ","检水报警");
+					//flag_output_dispener[4] = 3;
+				}
+				if(OIL_DISPENER[9]==0x01 )           //flag_output_dispener[4] == 0 || //flag_output_dispener[4] != 4))
+				{
+					//emit warning_sensor_dispener(85);//传感器故障
+					net_history(29,3);
+					//add_value_controlinfo("5# 加油机 ","传感器故障");
+					//flag_output_dispener[4] = 4;
+				}
+				if(OIL_DISPENER[9]==0x04 )           //flag_output_dispener[4] == 0 || //flag_output_dispener[4] != 5))
+				{
+					//emit warning_uart_dispener(85);//通信故障
+					net_history(29,4);
+					//add_value_controlinfo("5# 加油机 ","通信故障");
+					//flag_output_dispener[4] = 5;
+				}
+			}
+		}
+	}
+	if(count_dispener>=6)      //6#
+	{
+		if(OIL_DISPENER[10]==0xc0)
+		{
+
+			if(OIL_DISPENER[11]==0x00 )           //flag_output_dispener[5] == 0 || //flag_output_dispener[5] != 1))
+			{
+				//emit right_dispener(86);
+				net_history(30,0);
+				//add_value_controlinfo("6# 加油机 ","设备正常");
+				//flag_output_dispener[5] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[11]==0x88 )           //flag_output_dispener[5] == 0 || //flag_output_dispener[5] != 2))
+				{
+					//emit warning_oil_dispener(86);//油报警
+					net_history(30,1);
+					//add_value_controlinfo("6# 加油机 ","检油报警");
+					//flag_output_dispener[5] = 2;
+				}
+				if(OIL_DISPENER[11]==0x90 )           //flag_output_dispener[5] == 0 || //flag_output_dispener[5] != 3))
+				{
+					//emit warning_water_dispener(86);//水报警
+					net_history(30,2);
+					//add_value_controlinfo("6# 加油机 ","检水报警");
+					//flag_output_dispener[5] = 3;
+				}
+				if(OIL_DISPENER[11]==0x01 )           //flag_output_dispener[5] == 0 || //flag_output_dispener[5] != 4))
+				{
+					//emit warning_sensor_dispener(86);//传感器故障
+					net_history(30,3);
+					//add_value_controlinfo("6# 加油机 ","传感器故障");
+					//flag_output_dispener[5] = 4;
+				}
+				if(OIL_DISPENER[11]==0x04 )           //flag_output_dispener[5] == 0 || //flag_output_dispener[5] != 5))
+				{
+					//emit warning_uart_dispener(86);//通信故障
+					net_history(30,4);
+					//add_value_controlinfo("6# 加油机 ","通信故障");
+					//flag_output_dispener[5] = 5;
+				}
+			}
+		}
+	}
+	if(count_dispener>=7)      //7#
+	{
+		if(OIL_DISPENER[12]==0xc0)
+		{
+
+			if(OIL_DISPENER[13]==0x00 )           //flag_output_dispener[6] == 0 || //flag_output_dispener[6] != 1))
+			{
+				//emit right_dispener(87);
+				net_history(31,0);
+				//add_value_controlinfo("7# 加油机 ","设备正常");
+				//flag_output_dispener[6] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[13]==0x88 )           //flag_output_dispener[6] == 0 || //flag_output_dispener[6] != 2))
+				{
+					//emit warning_oil_dispener(87);//油报警
+					net_history(31,1);
+					//add_value_controlinfo("7# 加油机 ","检油报警");
+					//flag_output_dispener[6] = 2;
+				}
+				if(OIL_DISPENER[13]==0x90 )           //flag_output_dispener[6] == 0 || //flag_output_dispener[6] != 3))
+				{
+					//emit warning_water_dispener(87);//水报警
+					net_history(31,2);
+					//add_value_controlinfo("7# 加油机 ","检水报警");
+					//flag_output_dispener[6] = 3;
+				}
+				if(OIL_DISPENER[13]==0x01 )           //flag_output_dispener[6] == 0 || //flag_output_dispener[6] != 4))
+				{
+					//emit warning_sensor_dispener(87);//传感器故障
+					net_history(31,3);
+					//add_value_controlinfo("7# 加油机 ","传感器故障");
+					//flag_output_dispener[6] = 4;
+				}
+				if(OIL_DISPENER[13]==0x04 )           //flag_output_dispener[6] == 0 || //flag_output_dispener[6] != 5))
+				{
+					//emit warning_uart_dispener(87);//通信故障
+					net_history(31,4);
+					//add_value_controlinfo("7# 加油机 ","通信故障");
+					//flag_output_dispener[6] = 5;
+				}
+			}
+		}
+	}
+	if(count_dispener>=8)      //8#
+	{
+		if(OIL_DISPENER[14]==0xc0)
+		{
+
+			if(OIL_DISPENER[15]==0x00 )           //flag_output_dispener[7] == 0 || //flag_output_dispener[7] != 1))
+			{
+				//emit right_dispener(88);
+				net_history(32,0);
+				//add_value_controlinfo("8# 加油机 ","设备正常");
+				//flag_output_dispener[7] = 1;
+			}
+			else
+			{
+				if(OIL_DISPENER[15]==0x88 )           //flag_output_dispener[7] == 0 || //flag_output_dispener[7] != 2))
+				{
+					//emit warning_oil_dispener(88);//油报警
+					net_history(32,1);
+					//add_value_controlinfo("8# 加油机 ","检油报警");
+					//flag_output_dispener[7] = 2;
+				}
+				if(OIL_DISPENER[15]==0x90 )           //flag_output_dispener[7] == 0 || //flag_output_dispener[7] != 3))
+				{
+					//emit warning_water_dispener(88);//水报警
+					net_history(32,2);
+					//add_value_controlinfo("8# 加油机 ","检水报警");
+					//flag_output_dispener[7] = 3;
+				}
+				if(OIL_DISPENER[15]==0x01 )           //flag_output_dispener[7] == 0 || //flag_output_dispener[7] != 4))
+				{
+					//emit warning_sensor_dispener(88);//传感器故障
+					net_history(32,3);
+					//add_value_controlinfo("8# 加油机 ","传感器故障");
+					//flag_output_dispener[7] = 4;
+				}
+				if(OIL_DISPENER[15]==0x04 )           //flag_output_dispener[7] == 0 || //flag_output_dispener[7] != 5))
+				{
+					//emit warning_uart_dispener(88);//通信故障
+					net_history(32,4);
+					//add_value_controlinfo("8# 加油机 ","通信故障");
+					//flag_output_dispener[7] = 5;
+				}
+			}
+		}
+	}
+}
+
+
+int myserver::net_history(int num,int sta)
+{
+	QString DataType;
+	QString SensorNum;
+	QString SensorType;
+	QString SensorSta;
+	QString SensorData;
+	if((num>=1)&&(num<=8))//油罐
+	{
+		DataType = "0";
+		SensorNum = QString::number(num);
+	}
+	if((num>=9)&&(num<=16))//管线
+	{
+		DataType = "1";
+		SensorNum = QString::number(num-8);
+	}
+	if((num>=17)&&(num<=24))//人井
+	{
+		DataType = "3";
+		SensorNum = QString::number(num-16);
+	}
+	if((num>=25)&&(num<=32))//加油机
+	{
+		DataType = "2";
+		SensorNum = QString::number(num-24);
+	}
+
+	if(sta == 0) //正常
+	{
+		SensorSta = "0";
+	}
+	if(sta == 1) //检油
+	{
+		SensorSta = "1";
+	}
+	if(sta == 2) //检水
+	{
+		SensorSta = "2";
+	}
+	if(sta == 3) //传感器
+	{
+		SensorSta = "4";
+	}
+	if(sta == 4) //通信
+	{
+		SensorSta = "3";
+	}
+	if(sta == 5) //高液位
+	{
+		SensorSta = "5";
+	}
+	if(sta == 6) //低液位
+	{
+		SensorSta = "6";
+	}
+	if(sta == 7) //压力预警
+	{
+		SensorSta = "7";
+	}
+	if(sta == 8) //压力报警
+	{
+		SensorSta = "8";
+	}
+
+	if(DataType == "0")
+	{
+		if(Test_Method == 0){SensorType = "3";SensorData = "N";}//其他方法
+		else if(Test_Method == 1){SensorType = "2";SensorData = QString::number(count_Pressure[num-1],'f',1);}//压力法
+		else if(Test_Method == 2){SensorType = "1";SensorData = "N";}//液媒法
+		else if(Test_Method == 3){SensorType = "0";SensorData = "N";}//传感器法
+		else {
+			SensorType = "0";
+			SensorData = "N";
+		}
+	}
+	else {
+		SensorType = "0";
+		SensorData = "N";
+	}
+
+	xielousta(DataType,SensorNum,SensorType,SensorSta,SensorData);
+	return 0;
 }

@@ -93,6 +93,7 @@ void reoilgasthread::run()
 				msleep(200);
 				Ask_Sensor();
 			}
+			Flag_ask_PreAndTem = 0;
 		}
 		if(Flag_WaitSync == 1) //如果需要同步数据
 		{
@@ -1455,7 +1456,23 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 		if(Flag_MyServerEn == 1)  //myserver协议
 		{
 			float send_al = al.toFloat();
-			QString gun_num = QString("%1").arg((Mapping[(jyjid.toInt()-1)*8+jyqid.toInt()-1]),4,10,QLatin1Char('0'));//k为int型或char型都可
+			//用来获取上传的序号
+			unsigned int gun_num_true = 0;
+			unsigned int gun_num_send = 0;
+			for(int i = 0;i<Amount_Dispener;i++)
+			{
+				for(int j = 0;j<Amount_Gasgun[i];j++)
+				{
+					gun_num_true++;
+					if((jyjid.toInt()-1 == i)&&((jyqid.toInt()-1) == j))
+					{
+						//qDebug()<<i<<j<<"break"<<gun_num_true;
+						gun_num_send = gun_num_true;
+						break;
+					}
+				}
+			}
+			QString gun_num = QString("%1").arg((gun_num_send),4,10,QLatin1Char('0'));//k为int型或char型都可
 			gun_num.prepend("q");
 			if((send_al<=120)&&(send_al>=100))
 			{

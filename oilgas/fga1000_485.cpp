@@ -3119,11 +3119,13 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 				{
 					STA_YZ = "2";
 				}
+				unsigned int gun_num_send = 0;
 				for(unsigned int i = 0;i < Amount_Dispener;i++)
 				{
 					printf("!!!!!!!!!%d",Amount_Gasgun[i]);
 					for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
 					{
+						gun_num_send++;
 						if(Flag_Accumto[i][j] == 0)
 						{
 							sta_gun = "0";
@@ -3136,7 +3138,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 						{
 							sta_gun = "2";
 						}
-						gun_num = QString("%1").arg(Mapping[(i*8+j)],4,10,QLatin1Char('0'));//k为int型或char型都可
+						gun_num = QString("%1").arg(gun_num_send,4,10,QLatin1Char('0'));//k为int型或char型都可
 						send_gun_sta.append("q").append(gun_num).append("-AlvAlm=").append(sta_gun).append(";");
 					}
 				}
@@ -3678,25 +3680,14 @@ void FGA1000_485:: network_Stagundata(QString id,QString status)//发送油枪�
 		{
 			QString send_gun_sta;
 			QString gun_num;
+			unsigned gun_num_send = 0;
 			//isoosi油枪实际状态 全部设置为开启
 			for(unsigned int i = 0;i < Amount_Dispener;i++)
 			{
 				for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
 				{
-					//isoosi添加
-					//                if(Flag_Accumto[i][j] == 0)
-					//                {
-					//                    sta_gun = "0";
-					//                }
-					//                if((Flag_Accumto[i][j] > 0)&&(Flag_Accumto[i][j] <= 5))
-					//                {
-					//                    sta_gun = "1";
-					//                }
-					//                if(Flag_Accumto[i][j] > 5)
-					//                {
-					//                    sta_gun = "2";
-					//                }
-					gun_num = QString("%1").arg(Mapping[(i*8+j)],4,10,QLatin1Char('0'));//k为int型或char型都可
+					gun_num_send++;
+					gun_num = QString("%1").arg(gun_num_send,4,10,QLatin1Char('0'));//k为int型或char型都可
 					send_gun_sta.append("q").append(gun_num).append("-Status=").append("1").append(";");
 				}
 			}

@@ -34,6 +34,10 @@ private slots:
 	void client_keep_ali(int sockfd);
 	void send_tcpclient_data(QString data);
 	unsigned int CRC16_Checkout ( unsigned char *puchMsg, unsigned int usDataLen );
+
+private:
+	void analysis_xielou_sta();//分析泄漏状态，用于发送
+	int net_history(int num,int sta);
 };
 
 #endif // MYSERVER_H

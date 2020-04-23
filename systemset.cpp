@@ -622,9 +622,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
     emit closeing_touchkey();
 	if(index == 1)
     {
-        char IP[32] = {0};
-        get_local_ip(if_name,IP);
-        ui->label_14->setText(IP);
+
     }
 	if(index == 2)
     {
@@ -683,6 +681,10 @@ void systemset::on_tabWidget_all_currentChanged(int index)
     }
     if(index == 5)
     {
+		char IP[32] = {0};
+		get_local_ip(if_name,IP);
+		ui->label_14->setText(IP);
+
 		if(Flag_Network_Send_Version<=5)
         {
             ui->comboBox_network_version->setCurrentIndex(Flag_Network_Send_Version);
@@ -5034,7 +5036,8 @@ basin_num      防渗池传感器数量
 **********************************************/
 void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pipe_num,QString dispener_num,QString basin_num)
 {
-	emit myserver_xielousetup(tank_num,tank_type,pipe_num,dispener_num,basin_num);
+	//放到油气回收设置里面了
+	//emit myserver_xielousetup(tank_num,tank_type,pipe_num,dispener_num,basin_num);
 }
 
 
