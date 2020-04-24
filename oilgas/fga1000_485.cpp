@@ -3859,3 +3859,15 @@ void FGA1000_485::network_Configurationdata(QString id)//设置数据，每天�
 
 	}
 }
+
+/************初次连接服务器的时候发送所有数据*****************
+ *
+ * ***************************/
+void FGA1000_485::Myserver_First_Client()//服务器第一次连接，需要上传一次所有状态
+{
+	network_Warndata("1","N","N","N");//发送日报警信息
+	network_Stagundata("0","N");      //日油枪状态
+	network_Wrongsdata("1","N");      //日故障信息
+	network_Configurationdata("N");   //日设置信息
+	network_Closegunsdata("0","N","N","N","N");//关枪数据
+}

@@ -18,7 +18,7 @@ private:
 	volatile bool is_runnable = true;
 
 signals:
-
+	void Myserver_First_Client();//服务器第一次连接，需要上传一次所有状态
 public slots:
 	void refueling_gun_data(QString gun_num,QString AlvR,QString GasCur,QString GasFlow,QString FuelCur,QString FuelFlow,QString DynbPrs);
 	void environmental_data(QString dynbPress,QString tankPress,QString unloadgasCon,QString DevicegasCon,QString GasTemp,QString GasVolume);

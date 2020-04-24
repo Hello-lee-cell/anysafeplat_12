@@ -1747,6 +1747,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(refueling_gun_stop_myserver(QString,QString,QString)),myserver_thread,SLOT(refueling_gun_stop(QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(setup_data_myserver(QString,QString,QString,QString)),myserver_thread,SLOT(setup_data(QString,QString,QString,QString)),Qt::DirectConnection);
 
+	connect(myserver_thread,SIGNAL(Myserver_First_Client()),uart_fga,SLOT(Myserver_First_Client()),Qt::DirectConnection);
+
 	thread_isoosi_cq->start();
 	thread_isoosi->start();
 	myserver_thread->start();

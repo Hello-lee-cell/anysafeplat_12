@@ -135,9 +135,10 @@ void myserver::tcp_client()
 		Flag_MyServerClientSuccess = 1;//连接成功
 
 		//xielousetup(QString::number(count_tank),QString::number(Test_Method),QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
-		setup_data(QString::number(Positive_Pres,'f',1),QString::number(-Negative_Pres,'f',1),"0.00","0.00");
+		//setup_data(QString::number(Positive_Pres,'f',1),QString::number(-Negative_Pres,'f',1),"0.00","0.00");
 		//初次连接发送泄漏和油气回收的设置信息
-		analysis_xielou_sta();//分析泄漏状态，用于发送,初次连接发送  ,每天的放到油枪关停状态那里去
+		//analysis_xielou_sta();//分析泄漏状态，用于发送,初次连接发送  ,每天的放到油枪关停状态那里去
+		emit Myserver_First_Client();//第一次连接发送数据
 
 		client_keep_ali(sockfd_myserve);//tcp保活
 

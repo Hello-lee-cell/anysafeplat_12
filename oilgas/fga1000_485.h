@@ -35,6 +35,7 @@ private:
     void network_Closegunsdata(QString id,QString jyjid,QString jyqid,QString operate,QString event);//关枪数据
     void network_Configurationdata(QString id);//设置数据，每天发送一次用
 
+
 signals:
     void data_show();//显示数值
     void normal_fga(int n);//正常
@@ -107,6 +108,8 @@ private slots:
     //post添加
     void Fga_WarnPostSend(QString which,QString sta);
     void Fga_StaPostSend();
+	//myserver添加
+	void Myserver_First_Client();//服务器第一次连接，需要上传一次所有状态
 };
 
 #endif // FGA1000_485_H
