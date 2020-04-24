@@ -131,8 +131,7 @@ void myserver::tcp_client()
 	else
 	{
 		printf ("MyServer TCPClient Client the Port %d sucessfully.\n", MyServerPort);
-		add_value_netinfo("MyServer TCPClient Client the Port 8201 sucessfully");
-		Flag_MyServerClientSuccess = 1;//连接成功
+
 
 		//xielousetup(QString::number(count_tank),QString::number(Test_Method),QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
 		//setup_data(QString::number(Positive_Pres,'f',1),QString::number(-Negative_Pres,'f',1),"0.00","0.00");
@@ -144,8 +143,8 @@ void myserver::tcp_client()
 
 		if(Flag_FirstClient_MyServer != 1)
 		{
-			add_value_netinfo("MyServer TCPClient Client the Port 8080 Failed");
-			Flag_FirstClient_MyServer = 1;
+			add_value_netinfo("MyServer TCPClient Client the Port 8201 sucessfully");
+			Flag_MyServerClientSuccess = 1;//连接成功
 		}
 	}
 	//新线程，tcp_read
