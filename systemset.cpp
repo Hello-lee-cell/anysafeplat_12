@@ -4988,7 +4988,7 @@ void systemset::sync_factor_data(unsigned int idi,unsigned int idj,float oil_fac
  * ***********************××××××*********/
 void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, QString pvf, QString hclk, QString yzqh)
 {
-	if(net_state == 0) //有网线连接
+	if(1) //有网线连接
 	{
 
 		id = id;
@@ -5012,7 +5012,7 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		}
 		if(Flag_Network_Send_Version == 4) //湖南协议，与福建类似
 		{
-			Send_Configurationdata_HuNan(DATAID_POST,jyqs,pvz,pvf,"NULL",yzqh);
+            Send_Configurationdata_HuNan(DATAID_POST,jyqs,pvz,pvf,"0",yzqh);
 		}
 		if(Flag_Network_Send_Version == 5) //江门协议 与唐山协议，与福建相同
 		{

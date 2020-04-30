@@ -157,8 +157,8 @@ void net_tcpclient_hb::tcp_client()
             //如果不要该协议则退出
             if(Flag_HuBeitcp_Enable != 1)
             {
-				//close(nsockfd_tcp_hb);
-				//close(sockfd_hb);
+				close(nsockfd_tcp_hb);
+				close(sockfd_hb);
                 break;
             }
             sleep(1);

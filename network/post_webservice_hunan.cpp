@@ -360,7 +360,7 @@ void post_webservice_hunan::Send_Surroundingsdata_HuNan(QString id,QString data,
 		TIME_POST = current_datetime.toString("yyyyMMddhhmmss");
 		QString xml_data = XML_Surroundingsdata_HuNan(id,TIME_POST,ygyl,yzyl,xnd,clnd,yqwd,yqkj);
 		xmldata_surround_hunan.append(xml_data);
-		if(flag_numofsurrounddata_hunan >= 15)  //30秒进一次该函数，450秒7分多钟，小于10分钟
+        if(flag_numofsurrounddata_hunan >= 1)  //30秒进一次该函数，450秒7分多钟，小于10分钟
 		{
 			xmldata_surround_hunan.prepend("<rows>");
 			xmldata_surround_hunan.append("</rows>");
@@ -675,52 +675,52 @@ YZQH 安装液阻传感器加油机
 QString XML_Configurationdata_HuNan(QString id,QString data,QString jyqs,QString pvz,
                               QString pvf,QString hclk,QString yzqh)
 {
-	QDomDocument doc;
-	QDomElement tagFileInforows = doc.createElement("rows");
-	QDomElement tagFileInforow = doc.createElement("row");
+    QDomDocument doc;
+    QDomElement tagFileInforows = doc.createElement("rows");
+    QDomElement tagFileInforow = doc.createElement("row");
 
-	//QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
-	QDomElement tagFileId = doc.createElement("ID");
-	QDomText textFileId = doc.createTextNode(id);
-	QDomElement tagFileData = doc.createElement("DATE");
-	QDomText textFileData = doc.createTextNode(data);
-	QDomElement tagFileJyqs = doc.createElement("JYQS");
-	QDomText textFileJyqs = doc.createTextNode(jyqs);
-	QDomElement tagFilePvz = doc.createElement("PVZ");
-	QDomText textFilePvz = doc.createTextNode(pvz);
-	QDomElement tagFilePvf = doc.createElement("PVF");
-	QDomText textFilePvf  = doc.createTextNode(pvf);
-	QDomElement tagFileHclk = doc.createElement("SCK");
-	QDomText textFileHclk = doc.createTextNode(hclk);
-	QDomElement tagFileHclt = doc.createElement("SCT");
-	QDomText textFileHclt = doc.createTextNode(hclk); //开启压力与停止压力一样  都是NULL
-	QDomElement tagFileYzqh = doc.createElement("YZQH");
-	QDomText textFileYzqh = doc.createTextNode(yzqh);
+    //QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
+    QDomElement tagFileId = doc.createElement("ID");
+    QDomText textFileId = doc.createTextNode(id);
+    QDomElement tagFileData = doc.createElement("DATE");
+    QDomText textFileData = doc.createTextNode(data);
+    QDomElement tagFileJyqs = doc.createElement("JYQS");
+    QDomText textFileJyqs = doc.createTextNode(jyqs);
+    QDomElement tagFilePvz = doc.createElement("PVZ");
+    QDomText textFilePvz = doc.createTextNode(pvz);
+    QDomElement tagFilePvf = doc.createElement("PVF");
+    QDomText textFilePvf  = doc.createTextNode(pvf);
+    QDomElement tagFileHclk = doc.createElement("HCLK");
+    QDomText textFileHclk = doc.createTextNode(hclk);
+    QDomElement tagFileHclt = doc.createElement("SCT");
+    QDomText textFileHclt = doc.createTextNode(hclk); //开启压力与停止压力一样  都是NULL
+    QDomElement tagFileYzqh = doc.createElement("YZQH");
+    QDomText textFileYzqh = doc.createTextNode(yzqh);
 
-	tagFileId.appendChild(textFileId);
-	tagFileData.appendChild(textFileData);
-	tagFileJyqs.appendChild(textFileJyqs);
-	tagFilePvz.appendChild(textFilePvz);
-	tagFilePvf.appendChild(textFilePvf);
-	tagFileHclk.appendChild(textFileHclk);
-	tagFileHclt.appendChild(textFileHclt);
-	tagFileYzqh.appendChild(textFileYzqh);
+    tagFileId.appendChild(textFileId);
+    tagFileData.appendChild(textFileData);
+    tagFileJyqs.appendChild(textFileJyqs);
+    tagFilePvz.appendChild(textFilePvz);
+    tagFilePvf.appendChild(textFilePvf);
+    tagFileHclk.appendChild(textFileHclk);
+    tagFileHclt.appendChild(textFileHclt);
+    tagFileYzqh.appendChild(textFileYzqh);
 
-	tagFileInforow.appendChild(tagFileId);
-	tagFileInforow.appendChild(tagFileData);
-	tagFileInforow.appendChild(tagFileJyqs);
-	tagFileInforow.appendChild(tagFilePvz);
-	tagFileInforow.appendChild(tagFilePvf);
-	tagFileInforow.appendChild(tagFileHclk);
-	//tagFileInforow.appendChild(tagFileHclt);
-	tagFileInforow.appendChild(tagFileYzqh);
+    tagFileInforow.appendChild(tagFileId);
+    tagFileInforow.appendChild(tagFileData);
+    tagFileInforow.appendChild(tagFileJyqs);
+    tagFileInforow.appendChild(tagFilePvz);
+    tagFileInforow.appendChild(tagFilePvf);
+    tagFileInforow.appendChild(tagFileHclk);
+    //tagFileInforow.appendChild(tagFileHclt);
+    tagFileInforow.appendChild(tagFileYzqh);
 
-	tagFileInforows.appendChild(tagFileInforow);
-	doc.appendChild(tagFileInforows);
+    tagFileInforows.appendChild(tagFileInforow);
+    doc.appendChild(tagFileInforows);
 
-	QString xmldata = doc.toString();
-	//qDebug() << xmldata;
-	return xmldata;
+    QString xmldata = doc.toString();
+    qDebug() << xmldata;
+    return xmldata;
 }
 
 /********************报警数据****************
@@ -741,64 +741,64 @@ XYHQG  卸油回气管状态
 QString XML_Warndata_HuNan(QString id,QString data,QString al,QString mb,
                               QString yz,QString ygyl,QString clzznd,QString pv,QString clzzqd,QString clzztz,QString xyhqg)
 {
-	QDomDocument doc;
-	QDomElement tagFileInforows = doc.createElement("rows");
-	QDomElement tagFileInforow = doc.createElement("row");
+    QDomDocument doc;
+    QDomElement tagFileInforows = doc.createElement("rows");
+    QDomElement tagFileInforow = doc.createElement("row");
 
-	//QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
-	QDomElement tagFileId = doc.createElement("ID");
-	QDomText textFileId = doc.createTextNode(id);
-	QDomElement tagFileData = doc.createElement("DATE");
-	QDomText textFileData = doc.createTextNode(data);
-	QDomElement tagFileAl = doc.createElement("AL");
-	QDomText textFileAl = doc.createTextNode(al);
-	QDomElement tagFileMb = doc.createElement("MB");
-	QDomText textFileMb = doc.createTextNode(mb);
-	QDomElement tagFileYz = doc.createElement("YZ");
-	QDomText textFileYz  = doc.createTextNode(yz);
-	QDomElement tagFileYgYl = doc.createElement("YGYL");
-	QDomText textFileYgYl = doc.createTextNode(ygyl);
-	QDomElement tagFileclzznd = doc.createElement("CLZZND");
-	QDomText textFileclzznd = doc.createTextNode(clzznd);
-	QDomElement tagFilePv = doc.createElement("PV");
-	QDomText textFilePv = doc.createTextNode(pv);
-	QDomElement tagFileclzzqd = doc.createElement("CLZZQD");
-	QDomText textFileclzzqd = doc.createTextNode(clzzqd);
-	QDomElement tagFileclzztz = doc.createElement("CLZZTZ");
-	QDomText textFileclzztz = doc.createTextNode(clzztz);
-	QDomElement tagFilexyhqg = doc.createElement("XYHQG");
-	QDomText textFilexyhqg = doc.createTextNode(xyhqg);
+    //QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
+    QDomElement tagFileId = doc.createElement("ID");
+    QDomText textFileId = doc.createTextNode(id);
+    QDomElement tagFileData = doc.createElement("DATE");
+    QDomText textFileData = doc.createTextNode(data);
+    QDomElement tagFileAl = doc.createElement("AL");
+    QDomText textFileAl = doc.createTextNode(al);
+    QDomElement tagFileMb = doc.createElement("MB");
+    QDomText textFileMb = doc.createTextNode(mb);
+    QDomElement tagFileYz = doc.createElement("YZ");
+    QDomText textFileYz  = doc.createTextNode(yz);
+    QDomElement tagFileYgYl = doc.createElement("YGLY");
+    QDomText textFileYgYl = doc.createTextNode(ygyl);
+    QDomElement tagFileclzznd = doc.createElement("PVZT");
+    QDomText textFileclzznd = doc.createTextNode(clzznd);
+    QDomElement tagFilePv = doc.createElement("PVLJZT");
+    QDomText textFilePv = doc.createTextNode(pv);
+    QDomElement tagFileclzzqd = doc.createElement("HCLZT");
+    QDomText textFileclzzqd = doc.createTextNode(clzzqd);
+    QDomElement tagFileclzztz = doc.createElement("CLZZTZ");
+    QDomText textFileclzztz = doc.createTextNode(clzztz);
+    QDomElement tagFilexyhqg = doc.createElement("XYHQG");
+    QDomText textFilexyhqg = doc.createTextNode(xyhqg);
 
-	tagFileId.appendChild(textFileId);
-	tagFileData.appendChild(textFileData);
-	tagFileAl.appendChild(textFileAl);
-	tagFileMb.appendChild(textFileMb);
-	tagFileYz.appendChild(textFileYz);
-	tagFileYgYl.appendChild(textFileYgYl);
-	tagFileclzznd.appendChild(textFileclzznd);
-	tagFilePv.appendChild(textFilePv);
-	tagFileclzzqd.appendChild(textFileclzzqd);
-	tagFileclzztz.appendChild(textFileclzztz);
-	tagFilexyhqg.appendChild(textFilexyhqg);
+    tagFileId.appendChild(textFileId);
+    tagFileData.appendChild(textFileData);
+    tagFileAl.appendChild(textFileAl);
+    tagFileMb.appendChild(textFileMb);
+    tagFileYz.appendChild(textFileYz);
+    tagFileYgYl.appendChild(textFileYgYl);
+    tagFileclzznd.appendChild(textFileclzznd);
+    tagFilePv.appendChild(textFilePv);
+    tagFileclzzqd.appendChild(textFileclzzqd);
+    tagFileclzztz.appendChild(textFileclzztz);
+    tagFilexyhqg.appendChild(textFilexyhqg);
 
-	tagFileInforow.appendChild(tagFileId);
-	tagFileInforow.appendChild(tagFileData);
-	tagFileInforow.appendChild(tagFileAl);
-	tagFileInforow.appendChild(tagFileMb);
-	tagFileInforow.appendChild(tagFileYz);
-	tagFileInforow.appendChild(tagFileYgYl);
-	//tagFileInforow.appendChild(tagFileclzznd);
-	tagFileInforow.appendChild(tagFilePv);
-	tagFileInforow.appendChild(tagFileclzzqd);
-	//tagFileInforow.appendChild(tagFileclzztz);
-	tagFileInforow.appendChild(tagFilexyhqg);
+    tagFileInforow.appendChild(tagFileId);
+    tagFileInforow.appendChild(tagFileData);
+    tagFileInforow.appendChild(tagFileAl);
+    tagFileInforow.appendChild(tagFileMb);
+    tagFileInforow.appendChild(tagFileYz);
+    tagFileInforow.appendChild(tagFileYgYl);
+    tagFileInforow.appendChild(tagFileclzznd);
+    tagFileInforow.appendChild(tagFilePv);
+    tagFileInforow.appendChild(tagFileclzzqd);
+    //tagFileInforow.appendChild(tagFileclzztz);
+    //tagFileInforow.appendChild(tagFilexyhqg);
 
-	tagFileInforows.appendChild(tagFileInforow);
-	doc.appendChild(tagFileInforows);
+    tagFileInforows.appendChild(tagFileInforow);
+    doc.appendChild(tagFileInforows);
 
-	QString xmldata = doc.toString();
-	//qDebug() << xmldata;
-	return xmldata;
+    QString xmldata = doc.toString();
+    qDebug() << xmldata;
+    return xmldata;
 }
 /********************油枪数据****************
 ID     对象ID，在本次数据传输中唯一
@@ -989,43 +989,44 @@ EVENT    关停或启用事件类型关停事件类型：0 自动关停 1 手动
 **********************************************/
 QString XML_Closegunsdata_HuNan(QString id,QString data,QString jyjid,QString jyqid,QString operate,QString event)
 {
-	QDomDocument doc;
-	QDomElement tagFileInforows = doc.createElement("rows");
-	QDomElement tagFileInforow = doc.createElement("row");
+    QDomDocument doc;
+    QDomElement tagFileInforows = doc.createElement("rows");
+    QDomElement tagFileInforow = doc.createElement("row");
 
-	//QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
-	QDomElement tagFileId = doc.createElement("ID");
-	QDomText textFileId = doc.createTextNode(id);
-	QDomElement tagFileData = doc.createElement("DATE");
-	QDomText textFileData = doc.createTextNode(data);
-	QDomElement tagFileJyjid = doc.createElement("JYJID");
-	QDomText textFileJyjid = doc.createTextNode(jyjid);
-	QDomElement tagFileJyqid = doc.createElement("JYQID");
-	QDomText textFileJyqid = doc.createTextNode(jyqid);
-	QDomElement tagFileOperate = doc.createElement("OPERATE");
-	QDomText textFileOperate = doc.createTextNode(operate);
-	QDomElement tagFileEvent = doc.createElement("EVENT");
-	QDomText textFileEvent = doc.createTextNode(event);
+    //QDomElement相当于加标签，QDomText相当于加内容<QDomElement>QDomText</QDomElement>
+    QDomElement tagFileId = doc.createElement("ID");
+    QDomText textFileId = doc.createTextNode(id);
+    QDomElement tagFileData = doc.createElement("DATE");
+    QDomText textFileData = doc.createTextNode(data);
+    QDomElement tagFileJyjid = doc.createElement("JYJID");
+    QDomText textFileJyjid = doc.createTextNode(jyjid);
+    QDomElement tagFileJyqid = doc.createElement("JYQID");
+    QDomText textFileJyqid = doc.createTextNode(jyqid);
+    QDomElement tagFileOperate = doc.createElement("OPERATE");
+    QDomText textFileOperate = doc.createTextNode(operate);
+    QDomElement tagFileEvent = doc.createElement("EVENT");
+    QDomText textFileEvent = doc.createTextNode(event);
 
-	tagFileId.appendChild(textFileId);
-	tagFileData.appendChild(textFileData);
-	tagFileJyjid.appendChild(textFileJyjid);
-	tagFileJyqid.appendChild(textFileJyqid);
-	tagFileOperate.appendChild(textFileOperate);
-	tagFileEvent.appendChild(textFileEvent);
+    tagFileId.appendChild(textFileId);
+    tagFileData.appendChild(textFileData);
+    tagFileJyjid.appendChild(textFileJyjid);
+    tagFileJyqid.appendChild(textFileJyqid);
+    tagFileOperate.appendChild(textFileOperate);
+    tagFileEvent.appendChild(textFileEvent);
 
-	tagFileInforow.appendChild(tagFileId);
-	tagFileInforow.appendChild(tagFileData);
-	tagFileInforow.appendChild(tagFileJyjid);
-	tagFileInforow.appendChild(tagFileJyqid);
-	tagFileInforow.appendChild(tagFileEvent);
+    tagFileInforow.appendChild(tagFileId);
+    tagFileInforow.appendChild(tagFileData);
+    tagFileInforow.appendChild(tagFileJyjid);
+    tagFileInforow.appendChild(tagFileJyqid);
+    tagFileInforow.appendChild(tagFileOperate);
+    tagFileInforow.appendChild(tagFileEvent);
 
-	tagFileInforows.appendChild(tagFileInforow);
-	doc.appendChild(tagFileInforow);
+    tagFileInforows.appendChild(tagFileInforow);
+    doc.appendChild(tagFileInforows);
 
-	QString xmldata = doc.toString();
-	//qDebug() << xmldata;
-	return xmldata;
+    QString xmldata = doc.toString();
+    qDebug() << xmldata;
+    return xmldata;
 }
 /********************加油枪状态****************
 ID       对象ID，在本次数据传输中唯一

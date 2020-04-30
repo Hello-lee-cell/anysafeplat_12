@@ -1671,7 +1671,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //界面显示的一些数据
 	connect(uart_reoilgas,SIGNAL(Version_To_Mainwindow(unsigned char,unsigned char)),this,SLOT(Version_Recv_FromReoilgas(unsigned char,unsigned char)));
 	connect(uart_reoilgas,SIGNAL(Setinfo_To_Mainwindow(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)),this,SLOT(Setinfo_Recv_FromReoilgas(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)));
-	connect(uart_reoilgas,SIGNAL(Warn_UartWrong_Mainwindowdisp(unsigned char,unsigned char)),this,SLOT(Reoilgas_UartWrong_Maindisped(unsigned char,unsigned char)),Qt::DirectConnection);
+	connect(uart_reoilgas,SIGNAL(Warn_UartWrong_Mainwindowdisp(unsigned char,unsigned char)),this,SLOT(Reoilgas_UartWrong_Maindisped(unsigned char,unsigned char)));
 	connect(uart_reoilgas,SIGNAL(Reoilgas_Factor_Setover()),this,SLOT(Reoilgas_Factor_SettedtoSys()));
 	connect(uart_fga,SIGNAL(data_show()),this,SLOT(Disp_Reoilgas_Env()));
 	connect(uart_fga,SIGNAL(normal_fga(int)),this,SLOT(Env_warn_normal_fga(int)));
@@ -1747,7 +1747,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(refueling_gun_stop_myserver(QString,QString,QString)),myserver_thread,SLOT(refueling_gun_stop(QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(setup_data_myserver(QString,QString,QString,QString)),myserver_thread,SLOT(setup_data(QString,QString,QString,QString)),Qt::DirectConnection);
 
-	connect(myserver_thread,SIGNAL(Myserver_First_Client()),uart_fga,SLOT(Myserver_First_Client()),Qt::DirectConnection);
+	connect(myserver_thread,SIGNAL(Myserver_First_Client()),uart_fga,SLOT(Myserver_First_Client()));
 
 	thread_isoosi_cq->start();
 	thread_isoosi->start();
@@ -13232,7 +13232,7 @@ void MainWindow::refresh_dispener_data_slot()
  * ******************************/
 void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络数据上传
 {
-	if(net_state == 0)
+	if(1)
 	{
 
 		id = id;

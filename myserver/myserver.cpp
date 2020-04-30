@@ -40,7 +40,7 @@ int UrlMyServerPort_Pre = 0;
 QString UrlMyServerIp_Pre = "";
 int on_myserverip = 1;
 unsigned char Flag_MyServerClientSuccess = 0;//tcpclient连接成功
-char SdbufMyServer[3072] = {0};
+char SdbufMyServer[10240] = {0};
 unsigned int MyServer_send_count = 0;
 unsigned char Flag_MyServer_SendOver = 0;
 QString MyServerSendHead = "##";
@@ -57,15 +57,17 @@ myserver::myserver(QWidget *parent) :
 void myserver::run()
 {
 	sleep(5);
-	while(1)
+	while(is_runnable)
 	{
-		if(Flag_MyServerEn == 1)
+		if((Flag_MyServerEn == 1)&& (net_state == 0)&&(Flag_MyServerEn ==1))
 		{
+			qDebug()<<"I will Client Myserver!";
 			tcp_client();
 			sleep(5);
 		}
 		else
 		{
+			qDebug()<<"I will do not Client Myserver!!";
 			sleep(5);
 		}
 	}
@@ -139,11 +141,9 @@ void myserver::tcp_client()
 			Flag_FirstClient_MyServer = 1;
 		}
 		sleep(1);
-		emit Myserver_First_Client();//第一次连接发送数据
-
 		client_keep_ali(sockfd_myserve);//tcp保活
-
-
+		msleep(2000);
+		emit Myserver_First_Client();//第一次连接发送数据
 	}
 	//新线程，tcp_read
 //    pthread_t id_tcpread;
@@ -165,10 +165,13 @@ void myserver::tcp_client()
 		{
 			printf ("wait MyServer TCPClient  Client \n");
 			sleep(5);
+			close(nsockfd_myserver);
+			close(sockfd_myserve);
 			break;
 		}
 		else
 		{
+			qDebug()<<"Myserver is connected!!";
 			if((UrlMyServerIp_Pre!=MyServerIp)||(UrlMyServerPort_Pre!=MyServerPort))
 			{
 				qDebug()<<"MyServer IP changed! So break!";
@@ -210,8 +213,8 @@ void myserver::tcp_client()
 void myserver::client_keep_ali(int sockfd_myserve)
 {
 	int keepAlive = 1;      // 开启keepalive属性
-	int keepIdle = 10;      // 如该连接在60秒内没有任何数据往来,则进行探测
-	int keepInterval = 10;   // 探测时发包的时间间隔为5 秒
+	int keepIdle = 10;      // 如该连接在10秒内没有任何数据往来,则进行探测
+	int keepInterval = 10;   // 探测时发包的时间间隔为10秒
 	int keepCount = 3;      // 探测尝试的次数.如果第1次探测包就收到响应了,则后2次
 	setsockopt(sockfd_myserve, SOL_SOCKET, SO_KEEPALIVE, (void *)&keepAlive, sizeof(keepAlive));
 	setsockopt(sockfd_myserve, SOL_TCP, TCP_KEEPIDLE, (void*)&keepIdle, sizeof(keepIdle)); //对应tcp_keepalive_time
@@ -231,7 +234,7 @@ void myserver::send_tcpclient_data(QString data)
 		qDebug()<<data;
 		QByteArray byte_send = data.toUtf8();
 		MyServer_send_count = data.length();
-		memset(SdbufMyServer,0,sizeof(char)*3072);//清零数组
+		memset(SdbufMyServer,0,sizeof(char)*10240);//清零数组
 		for(unsigned int i = 0;i < MyServer_send_count;i++)
 		{
 			SdbufMyServer[i] = byte_send[i];
@@ -241,8 +244,9 @@ void myserver::send_tcpclient_data(QString data)
 			while(!if_send)
 			{
 				int num_send = 0;
-				if((num_send = ::send(sockfd_myserve,SdbufMyServer, MyServer_send_count, 0)) == -1)
+				if((num_send = ::send(sockfd_myserve,SdbufMyServer, MyServer_send_count, 0)) <= -1)
 				{
+					qDebug()<<"myserver faile "<<num_send;
 					printf("ERROR: MyServer Failed to sent string.\n");
 					if(Flag_MyserverSendSuccess == 1)
 					{
@@ -257,6 +261,7 @@ void myserver::send_tcpclient_data(QString data)
 				}
 				else
 				{
+					qDebug()<<"myserver success "<<num_send;
 					msleep(400);
 					memset(myserver_revbuf,0,sizeof(char)*128);//清零数组
 					if((MyServerRecvNum = recv(sockfd_myserve,myserver_revbuf,200,MSG_WAITALL)) <= 0)//MSG_DONTWAIT 1秒延时或者收到40个字节

@@ -47,7 +47,7 @@ QString urlip_pre = "";
 //const char* tcp_sever_ip = "210.72.1.33";
 int on_tcp = 1;
 unsigned char Flag_TcpClient_Success = 0;//tcpclient连接成功
-char Sdbuf[3072] = {0};
+char Sdbuf[10240] = {0};
 unsigned int Tcp_send_count = 0;
 unsigned char Flag_TcpClient_SendOver = 0;
 QString send_head = "##";
@@ -176,6 +176,8 @@ void net_isoosi::tcp_client()
         if(Flag_TcpClient_Success == 0)
         {
             printf ("wait TCPClient  Client \n");
+			close(nsockfd_tcp);
+			close(sockfd);
             sleep(5);
             break;
         }
@@ -191,8 +193,8 @@ void net_isoosi::tcp_client()
         //如果不要该协议则退出
         if(Flag_Network_Send_Version != 1)
         {
-			//close(nsockfd_tcp);
-			//close(sockfd);
+			close(nsockfd_tcp);
+			close(sockfd);
             break;
         }
         sleep(1);
@@ -225,7 +227,7 @@ void net_isoosi::send_tcpclient_data(QString data)
         //记得加锁
         QByteArray byte_send = data.toUtf8();
         Tcp_send_count = data.length();
-        memset(Sdbuf,0,sizeof(char)*3072);//清零数组
+		memset(Sdbuf,0,sizeof(char)*10240);//清零数组
         for(unsigned int i = 0;i < Tcp_send_count;i++)
         {
             Sdbuf[i] = byte_send[i];

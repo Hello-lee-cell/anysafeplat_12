@@ -73,7 +73,7 @@ int PORT_TCP_CLIENT_CQ = 0;     // The port which is communicate with server    
 //const char* tcp_sever_ip_cq = "139.9.158.84";
 int on_tcp_cq = 1;
 unsigned char Flag_TcpClient_Success_Cq = 0;//tcpclient连接成功
-char Sdbuf_Cq[3072] = {0};
+char Sdbuf_Cq[10240] = {0};
 unsigned int Tcp_send_count_cq = 0;
 unsigned char Flag_TcpClient_SendOver_Cq = 0;
 QString send_head_cq = "##";
@@ -193,6 +193,8 @@ void net_isoosi_cq::tcp_client()
         if(Flag_TcpClient_Success_Cq == 0)
         {
             printf ("wait TCPClient  Client \n");
+			close(nsockfd_tcp_cq);
+			close(sockfd_cq);
             sleep(5);
             break;
         }
@@ -208,8 +210,8 @@ void net_isoosi_cq::tcp_client()
         //如果不要该协议则退出
         if(Flag_Network_Send_Version != 2)
         {
-			//close(nsockfd_tcp_cq);
-			//close(sockfd_cq);
+			close(nsockfd_tcp_cq);
+			close(sockfd_cq);
             break;
         }
         sleep(1);
@@ -244,7 +246,7 @@ void net_isoosi_cq::send_tcpclient_data(QString data)
 		qDebug()<<data;
         QByteArray byte_send = data.toUtf8();
         Tcp_send_count_cq = data.length();
-        memset(Sdbuf_Cq,0,sizeof(char)*3072);//清零数组
+		memset(Sdbuf_Cq,0,sizeof(char)*10240);//清零数组
         for(unsigned int i = 0;i < Tcp_send_count_cq;i++)
         {
             Sdbuf_Cq[i] = byte_send[i];
