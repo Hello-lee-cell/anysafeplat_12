@@ -203,6 +203,7 @@ void net_tcpclient_hb::send_tcpclient_data(unsigned int data_length)
             if((num_send = ::send(sockfd_hb,Sdbuf_Hb, Tcp_send_count_Hb, 0)) == -1)
             {
                 printf("ERROR: Failed to sent string.\n");
+				Flag_Ifsend = 0;//在这里把全局变量置0，之后时间到了要再重新发送零点的信息
                 Flag_TcpClient_Success_Hb = 0;//连接失败
                 if(flag_send_succes_hb == 1)
                 {

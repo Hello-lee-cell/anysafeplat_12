@@ -95,6 +95,7 @@ void post_webservice_hunan::requestFinished_HuNan(QNetworkReply* reply)
 		if(network_wrong_hunan != 1)
 		{
 			add_value_netinfo("在线监测服务器访问失败");
+			Flag_Ifsend = 0;//在这里把全局变量置0，之后时间到了要再重新发送零点的信息
 			network_wrong_hunan = 1;
 			qDebug() << "webservice fail~!!";
 		}

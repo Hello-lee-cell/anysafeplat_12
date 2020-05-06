@@ -231,6 +231,7 @@ extern unsigned char Num_Fga;
 extern unsigned char Gas_Concentration_Fga[7];       //fga浓度 [0]没用
 extern unsigned char Flag_Pressure_Transmitters_Mode;//压力变送器模式 0 485  1 4-20ma  2 无线模式，在reoilgas线程中问询
 //extern QMutex Lock_Exchange_Reoilgas;
+extern unsigned char Flag_Ifsend;//判断是否重发数据  全局变量，发送失败的时候置0在重新发送
 
 //泄漏网络
 extern int PORT_UDP;

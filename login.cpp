@@ -169,6 +169,7 @@ void login::on_pushButton_clicked()             //enter
         emit login_enter(flag_right);         //flag_right = 1为管理员登录
                                               //flag_right = 2为用户登录
                                               //flag_right = 3为服务帐号
+		usleep(10000);
         emit disp_for_managerid(ui->lineEdit->text());
         close();
     }

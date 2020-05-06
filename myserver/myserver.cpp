@@ -251,6 +251,7 @@ void myserver::send_tcpclient_data(QString data)
 					if(Flag_MyserverSendSuccess == 1)
 					{
 						add_value_netinfo("MyServer TCP 数据发送失败");
+						Flag_Ifsend = 0;//在这里把全局变量置0，之后时间到了要再重新发送零点的信息
 					}
 					//sendfail_num++;//发送失败再发一次
 					if_send = 1; //发送失败 端口有问题  直接退出
