@@ -91,6 +91,7 @@ unsigned char Flag_screen_safe = 1;
 unsigned char Flag_screen_burngas = 1;
 unsigned char Flag_screen_zaixian = 1;
 unsigned char Flag_screen_cc = 1;
+unsigned char Flag_Controller_Version = 1;//控制器硬件版本控制器
 
 //udp.h
 unsigned char net_state = 0;
@@ -119,7 +120,7 @@ unsigned char Amount_Dispener = 0;      //加油机数量
 int Far_Dispener = 0;  //最远端加油机编号
 unsigned char Speed_fargas = 0;  //最远端油气流速
 unsigned char Amount_Gasgun[12] = {0};    //加油机挂载的油枪数量
-unsigned char Flag_SendMode_Oilgas = 1;     //模式选择位
+unsigned char Flag_SendMode_Oilgas = 1;     //模式选择位 1、正常模式 2、版本号  3、写设置 4、写设置准备 5、设置读取
 unsigned char Reoilgas_Version_Set_Whichone = 0;    //选择询问哪个变送器
 QMutex Lock_Mode_Reoilgas;
 float Temperature_Day[290][2] = {0};//图标日数据

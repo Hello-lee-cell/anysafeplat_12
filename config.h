@@ -137,6 +137,8 @@ extern unsigned char Flag_screen_cc;
 extern unsigned char Mapping[96];
 extern QString Mapping_Show[96];
 extern QString Mapping_OilNo[96];
+extern unsigned char Flag_Controller_Version;//控制器硬件版本控制器 0 原版  1 485合一
+
 //uartthread.h
 extern unsigned char count_radar_uart;
 extern unsigned char Flag_Sound_Radar[5];
@@ -216,13 +218,21 @@ extern QString IsoOis_UrlPort; //网络上传端口
 //isoosi重庆
 extern QString IsoOis_StationId_Cq;      //加油站ID 重庆
 
-//reoilgas_pop
+//reoilgas  and pop
 extern unsigned char ReoilgasPop_GunSta[96];//96把枪的状态
+extern unsigned char Flag_Reoilgas_Pop_Sta;//在线油气回收详情页面打开状态 0 未打开 1打开
+
+extern unsigned char Ptr_Ask690[44];
+
 //fga
 extern unsigned char Env_Gas_en;//气体浓度传感器使能
 extern unsigned char Pre_tank_en;//油罐压力传感器使能
 extern unsigned char Pre_pipe_en;//管线液阻压使能
 extern unsigned char Tem_tank_en;//油罐、气体温度使能
+extern unsigned char Flag_TankPre_Type;//0有线版本 1无线版本  默认无线版本
+extern unsigned char Flag_PipePre_Type;
+extern unsigned char Flag_TankTem_Type;
+extern unsigned char Flag_Gas_Type;
 extern float Tem[2];             //温度  tem[0]油罐 1管线
 extern float Pre[2];             //压力
 extern float Positive_Pres;      //正压开启压力
@@ -272,8 +282,6 @@ extern unsigned char Warn_Data_Tcp_Send_Hb[32][2];//32个点 油罐 油管 加�
 extern unsigned char Station_ID_HB[2];//站端id 两位
 extern unsigned char Flag_HuBeitcp_Enable;//功能使能
 
-//reoilgas_pop
-extern unsigned char Flag_Reoilgas_Pop_Sta;//在线油气回收详情页面打开状态 0 未打开 1打开
 
 //my server thread
 extern QString MyStationId; //全局变量youzhanID

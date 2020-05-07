@@ -279,52 +279,36 @@ systemset::systemset(QWidget *parent) :
     }
     if(Pre_pipe_en)
     {
-        ui->toolButton_reoilgas_pipepre_open->setEnabled(0);
         ui->toolButton_reoilgas_pipepre_open->setText("已开启");
-        ui->toolButton_reoilgas_pipepre_close->setText("点击关闭");
     }
     else
     {
-        ui->toolButton_reoilgas_pipepre_close->setEnabled(0);
         ui->toolButton_reoilgas_pipepre_open->setText("点击开启");
-        ui->toolButton_reoilgas_pipepre_close->setText("已关闭");
     }
     if(Pre_tank_en)
     {
-        ui->toolButton_reoilgas_tankpre_open->setEnabled(0);
         ui->toolButton_reoilgas_tankpre_open->setText("已开启");
-        ui->toolButton_reoilgas_tankpre_close->setText("点击关闭");
     }
     else
     {
-        ui->toolButton_reoilgas_tankpre_close->setEnabled(0);
         ui->toolButton_reoilgas_tankpre_open->setText("点击开启");
-        ui->toolButton_reoilgas_tankpre_close->setText("已关闭");
     }
     if(Env_Gas_en)
     {
-        ui->toolButton_gas1_open->setEnabled(0);
         ui->toolButton_gas1_open->setText("已开启");
-        ui->toolButton_gas1_close->setText("点击关闭");
     }
     else
     {
-        ui->toolButton_gas1_close->setEnabled(0);
         ui->toolButton_gas1_open->setText("点击开启");
-        ui->toolButton_gas1_close->setText("已关闭");
     }
     //温度传感器
     if(Tem_tank_en)
     {
-        ui->toolButton_reoilgas_tem_open->setEnabled(0);
         ui->toolButton_reoilgas_tem_open->setText("已开启");
-        ui->toolButton_reoilgas_tem_close->setText("点击关闭");
     }
     else
     {
-        ui->toolButton_reoilgas_tem_close->setEnabled(0);
         ui->toolButton_reoilgas_tem_open->setText("点击开启");
-        ui->toolButton_reoilgas_tem_close->setText("已关闭");
     }
     ui->comboBox_num_cc->setCurrentIndex(Num_Crash_Column);//防撞柱显示
     //********************安全防护设置********************//
@@ -599,6 +583,11 @@ systemset::systemset(QWidget *parent) :
 
     //其他
     on_tabWidget_all_currentChanged(0);
+	ui->comboBox_Controller_Version->setCurrentIndex(Flag_Controller_Version);
+	ui->comboBox_TankPre_type->setCurrentIndex(Flag_TankPre_Type);
+	ui->comboBox_PipePre_type->setCurrentIndex(Flag_PipePre_Type);
+	ui->comboBox_PreTem_type->setCurrentIndex(Flag_PipePre_Type);
+	ui->comboBox_Gas_type->setCurrentIndex(Flag_Gas_Type);
 }
 
 systemset::~systemset()
@@ -4351,86 +4340,122 @@ void systemset::on_comboBox_burngas_currentIndexChanged(const QString &arg1)
 //油气回收油罐压力开启
 void systemset::on_toolButton_reoilgas_tankpre_open_clicked()
 {
-    Pre_tank_en = 1;
-    ui->toolButton_reoilgas_tankpre_open->setEnabled(0);
-    ui->toolButton_reoilgas_tankpre_open->setText("已开启");
-    ui->toolButton_reoilgas_tankpre_close->setEnabled(1);
-    ui->toolButton_reoilgas_tankpre_close->setText("点击关闭");
-    config_reoilgas_pre_en_write();
+	if(Pre_tank_en == 0)
+	{
+		Pre_tank_en = 1;
+		//ui->toolButton_reoilgas_tankpre_open->setEnabled(0);
+		ui->toolButton_reoilgas_tankpre_open->setText("已开启");
+		//ui->toolButton_reoilgas_tankpre_close->setEnabled(1);
+		//ui->toolButton_reoilgas_tankpre_close->setText("点击关闭");
+		config_reoilgas_pre_en_write();
+	}
+	else if(Pre_tank_en == 1)
+	{
+		Pre_tank_en = 0;
+		//ui->toolButton_reoilgas_tankpre_open->setEnabled(1);
+		ui->toolButton_reoilgas_tankpre_open->setText("点击开启");
+		//ui->toolButton_reoilgas_tankpre_close->setEnabled(0);
+		//ui->toolButton_reoilgas_tankpre_close->setText("已关闭");
+		emit Pre_Tank_Close();
+		config_reoilgas_pre_en_write();
+	}
 }
-//油气回收油罐压力关闭
-void systemset::on_toolButton_reoilgas_tankpre_close_clicked()
-{
-    Pre_tank_en = 0;
-    ui->toolButton_reoilgas_tankpre_open->setEnabled(1);
-    ui->toolButton_reoilgas_tankpre_open->setText("点击开启");
-    ui->toolButton_reoilgas_tankpre_close->setEnabled(0);
-    ui->toolButton_reoilgas_tankpre_close->setText("已关闭");
-    emit Pre_Tank_Close();
-    config_reoilgas_pre_en_write();
-}
+
 //油气回收管线压力开启
 void systemset::on_toolButton_reoilgas_pipepre_open_clicked()
 {
-    Pre_pipe_en = 1;
-    ui->toolButton_reoilgas_pipepre_open->setEnabled(0);
-    ui->toolButton_reoilgas_pipepre_open->setText("已开启");
-    ui->toolButton_reoilgas_pipepre_close->setEnabled(1);
-    ui->toolButton_reoilgas_pipepre_close->setText("点击关闭");
-    config_reoilgas_pre_en_write();
+	if(Pre_pipe_en == 0)
+	{
+		Pre_pipe_en = 1;
+		//ui->toolButton_reoilgas_pipepre_open->setEnabled(0);
+		ui->toolButton_reoilgas_pipepre_open->setText("已开启");
+		//ui->toolButton_reoilgas_pipepre_close->setEnabled(1);
+		//ui->toolButton_reoilgas_pipepre_close->setText("点击关闭");
+		config_reoilgas_pre_en_write();
+	}
+	else if(Pre_pipe_en == 1)
+	{
+		Pre_pipe_en = 0;
+		//ui->toolButton_reoilgas_pipepre_open->setEnabled(1);
+		ui->toolButton_reoilgas_pipepre_open->setText("点击开启");
+		//ui->toolButton_reoilgas_pipepre_close->setEnabled(0);
+		//ui->toolButton_reoilgas_pipepre_close->setText("已开启");
+		emit Pre_Pipe_Close();
+		config_reoilgas_pre_en_write();
+	}
+
 }
-//油气回收管线压力关闭
-void systemset::on_toolButton_reoilgas_pipepre_close_clicked()
-{
-    Pre_pipe_en = 0;
-    ui->toolButton_reoilgas_pipepre_open->setEnabled(1);
-	ui->toolButton_reoilgas_pipepre_open->setText("点击开启");
-    ui->toolButton_reoilgas_pipepre_close->setEnabled(0);
-    ui->toolButton_reoilgas_pipepre_close->setText("已开启");
-    emit Pre_Pipe_Close();
-    config_reoilgas_pre_en_write();
-}
+
 //油气回收气体浓度开启
 void systemset::on_toolButton_gas1_open_clicked()
 {
-    Env_Gas_en = 1;
-    ui->toolButton_gas1_open->setEnabled(0);
-    ui->toolButton_gas1_open->setText("已开启");
-    ui->toolButton_gas1_close->setEnabled(1);
-    ui->toolButton_gas1_close->setText("点击关闭");
-    config_reoilgas_pre_en_write();
+	if(Env_Gas_en == 0)
+	{
+		Env_Gas_en = 1;
+		//ui->toolButton_gas1_open->setEnabled(0);
+		ui->toolButton_gas1_open->setText("已开启");
+		//ui->toolButton_gas1_close->setEnabled(1);
+		//ui->toolButton_gas1_close->setText("点击关闭");
+		config_reoilgas_pre_en_write();
+	}
+	else if(Env_Gas_en == 1)
+	{
+		Env_Gas_en = 0;
+		emit Fga_Gas_Close();
+		//ui->toolButton_gas1_close->setEnabled(0);
+		ui->toolButton_gas1_open->setText("点击开启");
+		//ui->toolButton_gas1_open->setEnabled(1);
+		//ui->toolButton_gas1_close->setText("已关闭");
+		config_reoilgas_pre_en_write();
+	}
 }
-//油气回收气体浓度关闭
-void systemset::on_toolButton_gas1_close_clicked()
-{
-    Env_Gas_en = 0;
-    emit Fga_Gas_Close();
-    ui->toolButton_gas1_close->setEnabled(0);
-    ui->toolButton_gas1_open->setText("点击开启");
-    ui->toolButton_gas1_open->setEnabled(1);
-    ui->toolButton_gas1_close->setText("已关闭");
-    config_reoilgas_pre_en_write();
-}
+
 //油气回收气体温度开启
 void systemset::on_toolButton_reoilgas_tem_open_clicked()
 {
-    Tem_tank_en = 1;
-    ui->toolButton_reoilgas_tem_open->setEnabled(0);
-    ui->toolButton_reoilgas_tem_open->setText("已开启");
-    ui->toolButton_reoilgas_tem_close->setEnabled(1);
-    ui->toolButton_reoilgas_tem_close->setText("点击关闭");
-    config_reoilgas_pre_en_write();
+	if(Tem_tank_en == 0)
+	{
+		Tem_tank_en = 1;
+		//ui->toolButton_reoilgas_tem_open->setEnabled(0);
+		ui->toolButton_reoilgas_tem_open->setText("已开启");
+		//ui->toolButton_reoilgas_tem_close->setEnabled(1);
+		//ui->toolButton_reoilgas_tem_close->setText("点击关闭");
+		config_reoilgas_pre_en_write();
+	}
+	else if(Tem_tank_en == 1)
+	{
+		Tem_tank_en = 0;
+		emit Tem_Tank_Close();
+		//ui->toolButton_reoilgas_tem_open->setEnabled(1);
+		ui->toolButton_reoilgas_tem_open->setText("点击开启");
+		//ui->toolButton_reoilgas_tem_close->setEnabled(0);
+		//ui->toolButton_reoilgas_tem_close->setText("已关闭");
+		config_reoilgas_pre_en_write();
+	}
 }
-//油气回收气体温度关闭
-void systemset::on_toolButton_reoilgas_tem_close_clicked()
+//罐压传感器类型
+void systemset::on_comboBox_TankPre_type_currentIndexChanged(int index)
 {
-    Tem_tank_en = 0;
-    emit Tem_Tank_Close();
-    ui->toolButton_reoilgas_tem_open->setEnabled(1);
-    ui->toolButton_reoilgas_tem_open->setText("点击开启");
-    ui->toolButton_reoilgas_tem_close->setEnabled(0);
-    ui->toolButton_reoilgas_tem_close->setText("已关闭");
-    config_reoilgas_pre_en_write();
+	Flag_TankPre_Type = index;
+	PreTemGasSensor_Type_write();
+}
+//管线压力传感器类型
+void systemset::on_comboBox_PipePre_type_currentIndexChanged(int index)
+{
+	Flag_PipePre_Type = index;
+	PreTemGasSensor_Type_write();
+}
+//回气温度传感器类型
+void systemset::on_comboBox_PreTem_type_currentIndexChanged(int index)
+{
+	Flag_TankTem_Type = index;
+	PreTemGasSensor_Type_write();
+}
+//油气浓度传感器类型
+void systemset::on_comboBox_Gas_type_currentIndexChanged(int index)
+{
+	Flag_Gas_Type = index;
+	PreTemGasSensor_Type_write();
 }
 
 
@@ -4920,6 +4945,12 @@ void systemset::on_toolButton_gun_off_kaiqi_2_clicked()//手动解除关枪
     config_alset();
 }
 
+//控制器硬件版本，0老版本   1 485合一版本
+void systemset::on_comboBox_Controller_Version_currentIndexChanged(int index)
+{
+	Flag_Controller_Version = index;
+	Controller_Version_write();
+}
 void systemset::on_toolButton_pop_show_clicked()
 {
     if(Flag_Reoilgas_NeverShow == 0)
@@ -5039,6 +5070,7 @@ void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pi
 	//放到油气回收设置里面了
 	//emit myserver_xielousetup(tank_num,tank_type,pipe_num,dispener_num,basin_num);
 }
+
 
 
 

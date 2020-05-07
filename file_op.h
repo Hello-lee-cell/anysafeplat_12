@@ -42,7 +42,6 @@ void config_boundary_machine1_area4();
 void config_boundary_machine1_area5();
 void config_boundary_machine1_area6();
 
-
 //人体静电
 void history_jingdian_warn_write(const char *t);
 void history_jingdian_warn_del();
@@ -62,10 +61,11 @@ void config_Pressure_Transmitters_Mode_write();//压力变送器模式设置写�
 void init_Pressure_Transmitters_Mode();//压力变送器模式设置读取
 void config_reoilgas_warnpop();//弹窗设置相关
 void init_reoilgas_warnpop();//弹窗设置相关读取
+void PreTemGasSensor_Type_init();//在线监测传感器类型初始化
+void PreTemGasSensor_Type_write();//在线监测传感器类型写入
 //气液比相关
 void config_alset();
 void init_alset();
-
 void config_jingdian_write();
 void config_IIE_write();
 //液阻相关
@@ -86,5 +86,8 @@ void init_xielou_network();//泄漏网络上传相关参数读取
 //服务器网络上传
 void config_MyServer_network();//服务器网络上传相关参数写入
 void init_myserver_network();//服务器网络上传相关参数读取
+//控制器硬件版本
+void Controller_Version_init();//控制器硬件版本初始化
+void Controller_Version_write();//控制器硬件版本写入
 #endif // FILE_OP_H
 

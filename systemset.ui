@@ -2099,24 +2099,6 @@
          <string>P/V阀正压开启压力设置(Pa) :</string>
         </property>
        </widget>
-       <widget class="QToolButton" name="toolButton_reoilgas_tem_close">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>270</y>
-          <width>81</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>17</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>关</string>
-        </property>
-       </widget>
        <widget class="QLabel" name="label_94">
         <property name="geometry">
          <rect>
@@ -2282,24 +2264,6 @@
          <string>油罐压力传感器使能：</string>
         </property>
        </widget>
-       <widget class="QToolButton" name="toolButton_reoilgas_pipepre_close">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>220</y>
-          <width>81</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>17</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>关</string>
-        </property>
-       </widget>
        <widget class="QLineEdit" name="lineEdit_pv">
         <property name="geometry">
          <rect>
@@ -2372,24 +2336,6 @@
          <string>开</string>
         </property>
        </widget>
-       <widget class="QToolButton" name="toolButton_reoilgas_tankpre_close">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>170</y>
-          <width>81</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>17</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>关</string>
-        </property>
-       </widget>
        <widget class="QToolButton" name="toolButton_gun_off_kaiqi">
         <property name="geometry">
          <rect>
@@ -2424,24 +2370,6 @@
         </property>
         <property name="text">
          <string>开</string>
-        </property>
-       </widget>
-       <widget class="QToolButton" name="toolButton_gas1_close">
-        <property name="geometry">
-         <rect>
-          <x>360</x>
-          <y>320</y>
-          <width>81</width>
-          <height>31</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>17</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>关</string>
         </property>
        </widget>
        <widget class="QComboBox" name="comboBox_far_dispener">
@@ -2604,6 +2532,106 @@
         <property name="text">
          <string>确认</string>
         </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox_TankPre_type">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>170</y>
+          <width>81</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>有线</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>无线</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="comboBox_PipePre_type">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>220</y>
+          <width>81</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>有线</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>无线</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="comboBox_PreTem_type">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>270</y>
+          <width>81</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>有线</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>无线</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QComboBox" name="comboBox_Gas_type">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>320</y>
+          <width>81</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>有线</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>无线</string>
+         </property>
+        </item>
        </widget>
       </widget>
       <widget class="QFrame" name="frame_16">
@@ -9003,7 +9031,7 @@ background-color: rgb(189,223,255);
        <property name="geometry">
         <rect>
          <x>490</x>
-         <y>150</y>
+         <y>210</y>
          <width>411</width>
          <height>151</height>
         </rect>
@@ -10398,7 +10426,7 @@ background-color: rgb(189,223,255);
          <x>10</x>
          <y>10</y>
          <width>461</width>
-         <height>521</height>
+         <height>571</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -10725,7 +10753,7 @@ background-color: rgb(189,223,255);
           <x>140</x>
           <y>310</y>
           <width>211</width>
-          <height>201</height>
+          <height>241</height>
          </rect>
         </property>
         <property name="font">
@@ -10843,7 +10871,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>490</x>
-         <y>10</y>
+         <y>80</y>
          <width>411</width>
          <height>121</height>
         </rect>
@@ -11065,7 +11093,7 @@ p, li { white-space: pre-wrap; }
        <property name="geometry">
         <rect>
          <x>490</x>
-         <y>320</y>
+         <y>370</y>
          <width>411</width>
          <height>211</height>
         </rect>
@@ -11317,10 +11345,10 @@ p, li { white-space: pre-wrap; }
       <widget class="QFrame" name="frame_13">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>540</y>
-         <width>891</width>
-         <height>81</height>
+         <x>490</x>
+         <y>10</y>
+         <width>411</width>
+         <height>61</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -11329,6 +11357,67 @@ p, li { white-space: pre-wrap; }
        <property name="frameShadow">
         <enum>QFrame::Raised</enum>
        </property>
+       <widget class="QLabel" name="label_149">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>181</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>控制器硬件版本：</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox_Controller_Version">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>20</y>
+          <width>71</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+         </font>
+        </property>
+        <item>
+         <property name="text">
+          <string>1.0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2.0</string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QLabel" name="label_158">
+        <property name="geometry">
+         <rect>
+          <x>260</x>
+          <y>20</y>
+          <width>181</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>17</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ef2929;&quot;&gt;重启控制器生效！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </widget>

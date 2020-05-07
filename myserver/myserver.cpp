@@ -171,7 +171,7 @@ void myserver::tcp_client()
 		}
 		else
 		{
-			qDebug()<<"Myserver is connected!!";
+			//qDebug()<<"Myserver is connected!!";
 			if((UrlMyServerIp_Pre!=MyServerIp)||(UrlMyServerPort_Pre!=MyServerPort))
 			{
 				qDebug()<<"MyServer IP changed! So break!";

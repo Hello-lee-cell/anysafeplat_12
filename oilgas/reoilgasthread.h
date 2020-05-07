@@ -22,6 +22,9 @@ private:
 	void ask_fga1000();
 	void floating_point_conversion();
 	void sync_data();//同步采集器设置
+	void ask_690();
+	void read_690();
+	void send_data_690();
 signals:
     void Version_To_Mainwindow(unsigned char high,unsigned char low);
     void Setinfo_To_Mainwindow(unsigned char factoroil11,unsigned char factoroil12,unsigned char factorgas11,unsigned char factorgas12,unsigned char delay1,unsigned char factoroil21,unsigned char factoroil22,unsigned char factorgas21,unsigned char factor22,unsigned char delay2);

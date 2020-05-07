@@ -106,6 +106,10 @@ unsigned char Pre_pipe_en_change = 0;
 unsigned char Env_Gas_en_change = 0;
 unsigned char Tem_tank_en_change = 0;
 unsigned char flag_pre_version = 0;//压力表版本
+unsigned char Flag_TankPre_Type = 1;//0有线版本 1无线版本  默认无线版本
+unsigned char Flag_PipePre_Type = 1;
+unsigned char Flag_TankTem_Type = 1;
+unsigned char Flag_Gas_Type = 1;
 
 FGA1000_485::FGA1000_485(QObject *parent):
     QThread(parent)
@@ -152,12 +156,12 @@ void FGA1000_485::run()
             Tem_tank_en_change = Tem_tank_en;
             flag_pre_version = Flag_Pressure_Transmitters_Mode;
         }
-        if((Flag_Pressure_Transmitters_Mode == 0) || (Flag_Pressure_Transmitters_Mode == 1))
+		if(Flag_Controller_Version == 0)
         {
             SendDataFGA();
             msleep(100);
         }
-        else if(Flag_Pressure_Transmitters_Mode == 2)//无线模式
+		else if(Flag_Controller_Version == 1)//新版本控制器模式，所有传感器在一个口上  无线模式 新压力表模式
         {
             //浓度同步
             sta_fga[1] = ReoilGasFgaSta[0];sta_fga[2] = ReoilGasFgaSta[1];

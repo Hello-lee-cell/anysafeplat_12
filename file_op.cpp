@@ -1536,7 +1536,54 @@ void config_reoilgas_pre_en_write()
     fsync(fp);
     close(fp);
 }
+//在线监测传感器类型初始化
+void PreTemGasSensor_Type_init()
+{
+	QFile config_ver("/opt/reoilgas/config_pre_type.txt");
+	if(!config_ver.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"can not open /opt/reoilgas/config_pre_type.txt"<<endl;
+	}
+	QTextStream in(&config_ver);
+	QString line;
+	line = in.readLine();
+	Flag_TankPre_Type = line.toInt();
+	line = in.readLine();
+	Flag_PipePre_Type = line.toInt();
+	line = in.readLine();
+	Flag_TankTem_Type = line.toInt();
+	line = in.readLine();
+	Flag_Gas_Type = line.toInt();
 
+	config_ver.close();
+	QFileInfo fileInfo("/opt/reoilgas/config_pre_type.txt");
+	if(fileInfo.isFile())
+	{
+	}
+	else
+	{
+		Flag_TankPre_Type = 1;//0有线版本 1无线版本  默认无线版本
+		Flag_PipePre_Type = 1;
+		Flag_TankTem_Type = 1;
+		Flag_Gas_Type = 1;
+	}
+}
+//在线监测传感器类型写入
+void PreTemGasSensor_Type_write()
+{
+	QFile file("/opt/reoilgas/config_pre_type.txt");
+	file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+	QTextStream in(&file);
+	in<<QString::number(Flag_TankPre_Type)+"\r\n";
+	in<<QString::number(Flag_PipePre_Type)+"\r\n";
+	in<<QString::number(Flag_TankTem_Type)+"\r\n";
+	in<<QString::number(Flag_Gas_Type)+"\r\n";
+	file.close();
+
+	int fp = open("/opt/reoilgas/config_pre_type.txt",O_RDONLY);
+	fsync(fp);
+	close(fp);
+}
 
 void config_pv_positive_write()
 {
@@ -2075,4 +2122,40 @@ void init_reoilgas_warnpop()//弹窗设置相关读取
     {
         Flag_Reoilgas_NeverShow = 1;//默认弹窗功能关闭
     }
+}
+//控制器硬件版本初始化
+void Controller_Version_init()
+{
+	QFile config_ver("/opt/controller_version.txt");
+	if(!config_ver.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"can not open /opt/controller_version.txt"<<endl;
+	}
+	QTextStream in(&config_ver);
+	QString line;
+	line = in.readLine();
+	Flag_Controller_Version = line.toInt();
+
+	config_ver.close();
+	QFileInfo fileInfo("/opt/controller_version.txt");
+	if(fileInfo.isFile())
+	{
+	}
+	else
+	{
+		Flag_Controller_Version = 1;//默认是最新版的485合一的控制器
+	}
+}
+//控制器硬件版本写入
+void Controller_Version_write()
+{
+	QFile file("/opt/controller_version.txt");
+	file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+	QTextStream in(&file);
+	in<<QString::number(Flag_Controller_Version)+"\r\n";
+	file.close();
+
+	int fp = open("/opt/controller_version.txt",O_RDONLY);
+	fsync(fp);
+	close(fp);
 }

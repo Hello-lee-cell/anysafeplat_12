@@ -72,13 +72,24 @@ void mythread::run()
         {
             usleep(20000);
         }
-        //读共享内存
-        sem_wait(semid);
-        for(uchar i = 0;i < 44;i++) //增加IIE后由36改为44
-        {
-            Data_Buf_Sencor[i] = ptr[i];
-        }
-        strcpy(ptr,"\0");
+		if(Flag_Controller_Version == 0)
+		{
+			//读共享内存
+			sem_wait(semid);
+			for(uchar i = 0;i < 44;i++) //增加IIE后由36改为44
+			{
+				Data_Buf_Sencor[i] = ptr[i];
+			}
+			strcpy(ptr,"\0");
+		}
+		else
+		{
+			for(uchar i = 0;i < 44;i++) //增加IIE后由36改为44
+			{
+				Data_Buf_Sencor[i] = Ptr_Ask690[i];
+			}
+			sleep(1);
+		}
 
 //        for(uchar i = 0;i < 44;i++) //增加IIE后由36改为44
 //        {

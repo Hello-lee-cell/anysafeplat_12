@@ -361,15 +361,9 @@ private slots:
 
     void on_toolButton_reoilgas_tankpre_open_clicked();
 
-    void on_toolButton_reoilgas_tankpre_close_clicked();
-
     void on_toolButton_reoilgas_pipepre_open_clicked();
 
-    void on_toolButton_reoilgas_pipepre_close_clicked();
-
     void on_toolButton_gas1_open_clicked();
-
-    void on_toolButton_gas1_close_clicked();
 
     void on_toolButton_kaiqi_IIE_clicked();
 
@@ -466,8 +460,6 @@ private slots:
 
     void on_toolButton_reoilgas_tem_open_clicked();
 
-    void on_toolButton_reoilgas_tem_close_clicked();
-
 	void on_pushButtonsave_yingshe_copy_clicked();
 
 	void on_toolButton_MyServerSwitch_clicked();
@@ -479,6 +471,16 @@ private slots:
 	void on_pushButton_sync_clicked();
 	//同步带屏气液比采集器的脉冲当量
 	void sync_factor_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2);
+
+	void on_comboBox_Controller_Version_currentIndexChanged(int index);
+
+	void on_comboBox_TankPre_type_currentIndexChanged(int index);
+
+	void on_comboBox_PipePre_type_currentIndexChanged(int index);
+
+	void on_comboBox_PreTem_type_currentIndexChanged(int index);
+
+	void on_comboBox_Gas_type_currentIndexChanged(int index);
 
 signals:
 

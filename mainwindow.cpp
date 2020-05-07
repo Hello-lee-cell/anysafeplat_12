@@ -1372,6 +1372,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	//init_xielou_network();//初始化泄漏网络上传  转移到main函数tcp创建之前
     init_reoilgas_warnpop();//弹窗设置相关读取
 	init_myserver_network();//服务器初始化
+	Controller_Version_init();//控制器硬件版本初始化
+	PreTemGasSensor_Type_init();//在线监测传感器类型初始化
 	//网络相关初始化
 	QFile config_postnet(CONFIG_POSTNETWORK);
 	if(!config_postnet.open(QIODevice::ReadOnly | QIODevice::Text))
