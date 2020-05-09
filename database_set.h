@@ -17,6 +17,8 @@ static bool creatConnection()
     {
         qDebug("Connected database.");
     }
+	//db.transaction();//开启事务
+	//db.commit();//提交
     return true;
 }
 

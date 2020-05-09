@@ -896,20 +896,12 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 
 void systemset::on_pushButton_3_clicked()       //保存 退出
 {
+	ui->label_2->setHidden(0);
+	qApp->processEvents();//立刻显示
     closeing_touchkey();
     Flag_Timeto_CloseNeeded[0] = 0;
     config_backgroundvalue_machine1();
     toolButton_areaset_enter_clicked();
-    if(flag_waitsetup)
-    {
-        delay10s->start();
-    }
-    else
-    {
-        delay10s->setInterval(500);
-        delay10s->start();
-    }
-    ui->label_2->setHidden(0);
     this->setEnabled(0);
     if(flag_mythread_temp)
     {
@@ -947,6 +939,15 @@ void systemset::on_pushButton_3_clicked()       //保存 退出
 	}
 	myserver_xielouset(QString::number(count_tank),sensor_type,QString::number(count_pipe),QString::number(count_dispener),QString::number(count_basin));
 
+	if(flag_waitsetup)
+	{
+		delay10s->start();
+	}
+	else
+	{
+		delay10s->setInterval(500);
+		delay10s->start();
+	}
 }
 void systemset::setok_delay10sclose()
 {
@@ -3856,7 +3857,6 @@ void systemset::on_toolButton_reoilgas_versionask_clicked()
     Reoilgas_Version_Set_Whichone = ui->comboBox_dispen_x_select->currentIndex();
     qDebug()<<ui->comboBox_dispen_x_select->currentText();
     printf("--%d\n",Reoilgas_Version_Set_Whichone);
-
     Flag_SendMode_Oilgas = 2;
     Lock_Mode_Reoilgas.unlock();
     ui->label_reoilgas_factorset_state->setHidden(1);

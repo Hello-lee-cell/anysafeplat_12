@@ -1594,7 +1594,7 @@ void mythread::run()
                             add_value_controlinfo("1# 油罐   ","传感器故障");
                             flag_output_tank[0] = 4;
                         }
-                        if(OIL_TANK[1]==0x04 && (flag_output_tank[1] == 0 || flag_output_tank[1] != 5))
+						if(OIL_TANK[1]==0x04 && (flag_output_tank[0] == 0 || flag_output_tank[0] != 5))
                         {
                             emit warning_uart_tank(71);//通信故障
                             net_history(1,4);

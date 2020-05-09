@@ -166,12 +166,12 @@ unsigned char Flag_Pressure_Transmitters_Mode = 1;//压力变送器模式 0 485 
 
 int main(int argc, char *argv[])
 {
-	setvbuf(stdout, 0, _IONBF, 0);
+	setvbuf(stdout, NULL, _IONBF, 0);//使printf可以立刻输出到控制台
  //   QWSServer::setBackground(QColor(0,0,0,0));  //去掉绿屏
     QApplication a(argc, argv,QApplication::GuiServer);
 //    QWSServer::setCursorVisible(false);//取消鼠标显   位置qapplication实例化之后
     //数据库初始化
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     creatConnection();
     creat_table();
     MainWindow w;

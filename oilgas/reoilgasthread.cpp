@@ -129,7 +129,7 @@ void reoilgasthread::run()
 				{
 					if((count_basin!=0)&&(count_dispener!=0)&&(count_pipe!=0)&&(count_tank!=0))//传感器数目不等于0
 					{
-						for(unsigned int i = 0;i<8;i++)
+						for(unsigned int i = 0;i<((unsigned int)count_basin+count_dispener+count_pipe+count_tank);i++)
 						{
 							ask_690();
 							msleep(100);

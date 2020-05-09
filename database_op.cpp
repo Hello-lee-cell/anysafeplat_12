@@ -40,6 +40,7 @@ unsigned char Dispener_Troubleshooting[96][2] = {0};
 void creat_table()
 {
     QSqlQuery qry;
+
     //创建泄漏检测    表
     qry.prepare("CREATE TABLE IF NOT EXISTS controlinfo (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),whichone VARCHAR(30),state VARCHAR(30)) ");
     qry.exec();

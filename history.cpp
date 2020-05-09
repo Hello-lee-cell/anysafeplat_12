@@ -100,7 +100,8 @@ history::history(QWidget *parent) :
 	mem_used.append("M");
 	mem_available.append("M");
 	qDebug()<<mem_all<<mem_used<<mem_available<<mem_percentage;
-	QString mem_sta = "已用: "+mem_used+"\r\n"+"可用: "+mem_available+"\n"+"使用率: "+mem_percentage ;
+	//QString mem_sta = "已用: "+mem_used+"\r\n"+"可用: "+mem_available+"\n"+"使用率: "+mem_percentage ;
+	QString mem_sta = "使用率: "+mem_percentage;
 	ui->label_mem->setText(mem_sta);
 
 }
