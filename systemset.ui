@@ -7455,7 +7455,7 @@ background-color: rgb(189,223,255);
          <rect>
           <x>29</x>
           <y>20</y>
-          <width>101</width>
+          <width>31</width>
           <height>31</height>
          </rect>
         </property>
@@ -7465,7 +7465,7 @@ background-color: rgb(189,223,255);
          </font>
         </property>
         <property name="text">
-         <string>本机当前IP:</string>
+         <string>IP:</string>
         </property>
        </widget>
        <widget class="QLineEdit" name="lineEdit_mask">
@@ -7511,7 +7511,7 @@ background-color: rgb(189,223,255);
        <widget class="QLabel" name="label_14">
         <property name="geometry">
          <rect>
-          <x>120</x>
+          <x>60</x>
           <y>20</y>
           <width>121</width>
           <height>31</height>
@@ -7565,7 +7565,7 @@ background-color: rgb(189,223,255);
        <widget class="QLabel" name="label_139">
         <property name="geometry">
          <rect>
-          <x>245</x>
+          <x>190</x>
           <y>20</y>
           <width>41</width>
           <height>31</height>
@@ -7583,9 +7583,9 @@ background-color: rgb(189,223,255);
        <widget class="QLabel" name="label_mac">
         <property name="geometry">
          <rect>
-          <x>280</x>
+          <x>230</x>
           <y>20</y>
-          <width>111</width>
+          <width>181</width>
           <height>31</height>
          </rect>
         </property>

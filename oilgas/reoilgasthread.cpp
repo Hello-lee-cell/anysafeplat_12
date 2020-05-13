@@ -2119,7 +2119,7 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 			gun_num.prepend("q");
 			if((send_al<=120)&&(send_al>=100))
 			{
-				refueling_gun_data(gun_num,al.append("0"),qls.append("0"),qll.append("0"),yls.append("0"),yll.append("0"),yz.append("0"));//.append保证小数点后两位
+				refueling_gun_data_myserver(gun_num,al.append("0"),qls.append("0"),qll.append("0"),yls.append("0"),yll.append("0"),yz.append("0"));//.append保证小数点后两位
 			}
 			else
 			{
@@ -2131,7 +2131,7 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 					float send_qll = (yll.toFloat())*(al_xiuzheng/10000);
 					float send_qls = send_qll/time;
 					qDebug()<<al_xiuzheng<<send_qll<<send_qls<<time;
-					refueling_gun_data(gun_num,QString::number((al_xiuzheng/100),'f',2),
+					refueling_gun_data_myserver(gun_num,QString::number((al_xiuzheng/100),'f',2),
 					                   QString::number(send_qls,'f',2),
 					                   QString::number(send_qll,'f',2),
 					                   yls.append("0"),yll.append("0"),yz.append("0"));

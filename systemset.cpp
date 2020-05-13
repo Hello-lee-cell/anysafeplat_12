@@ -2373,6 +2373,9 @@ void systemset::on_toolButton_poweroff_clicked()    //关机按钮
 void systemset::on_toolButton_clicked()     //升级按钮
 {
     ui->widget_warn_update->setHidden(0);
+	system("chmod +x /media/sda*/anysafe_plat");
+	system("sync");
+	qDebug()<<"chmod +x /media/sda*/anysafe_plat";
 }
 void systemset::on_toolButton_warn_update_enter_clicked()   //确认升级
 {

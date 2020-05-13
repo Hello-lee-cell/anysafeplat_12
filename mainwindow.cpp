@@ -72,6 +72,9 @@ MainWindow::MainWindow(QWidget *parent) :
     beep_none();
     err_none();
 	system("touch /opt/TouchCalibration");
+	system("chmod +x /media/sda*/anysafe_plat");
+	system("sync");
+	qDebug()<<"chmod +x /media/sda*/anysafe_plat";
 	system("sync");
 	ui->label_touch_calibration->setHidden(0);
 
