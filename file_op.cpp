@@ -2143,7 +2143,7 @@ void Controller_Version_init()
 	}
 	else
 	{
-		Flag_Controller_Version = 1;//默认是最新版的485合一的控制器
+		Flag_Controller_Version = 0;//默认是最新版的485合一的控制器
 	}
 }
 //控制器硬件版本写入

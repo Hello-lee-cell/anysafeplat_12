@@ -47,6 +47,7 @@ QString MyServerSendHead = "##";
 int MyServerRecvNum;
 char myserver_revbuf[128] = {0};
 unsigned char Flag_MyserverSendSuccess = 0;//发送成功置1，记录一次
+unsigned int SendFail_Num = 0;//发送失败计数，多了之后重连
 
 
 myserver::myserver(QWidget *parent) :
@@ -205,6 +206,7 @@ void myserver::tcp_client()
 		sleep(1);
 	}
 	//qDebug()<<"chagged xieyi !!!@@@@######";
+	shutdown(sockfd_myserve,2);
 	close(nsockfd_myserver);
 	close(sockfd_myserve);
 	sleep(1);
@@ -231,7 +233,7 @@ void myserver::send_tcpclient_data(QString data)
 	{
 		myserver_send_over.lock();//上锁
 		//记得加锁
-		qDebug()<<data;
+		//qDebug()<<data;
 		QByteArray byte_send = data.toUtf8();
 		MyServer_send_count = data.length();
 		memset(SdbufMyServer,0,sizeof(char)*10240);//清零数组
@@ -265,7 +267,7 @@ void myserver::send_tcpclient_data(QString data)
 					qDebug()<<"myserver success "<<num_send;
 					msleep(400);
 					memset(myserver_revbuf,0,sizeof(char)*128);//清零数组
-					if((MyServerRecvNum = recv(sockfd_myserve,myserver_revbuf,200,MSG_WAITALL)) <= 0)//MSG_DONTWAIT 1秒延时或者收到40个字节
+					if((MyServerRecvNum = recv(sockfd_myserve,myserver_revbuf,128,MSG_WAITALL)) <= 0)//MSG_DONTWAIT 1秒延时或者收到40个字节
 					{
 						//发送失败
 						qDebug()<<"MyServer send faile !!";
@@ -278,7 +280,7 @@ void myserver::send_tcpclient_data(QString data)
 							//真正的发送成功
 							//printf("MyServer TcpClient send success %d.\n",MyServer_send_count);
 							qDebug()<<"MyServer Tcp send success"<<MyServer_send_count<<" Receive "<<MyServerRecvNum;
-							qDebug()<<myserver_revbuf;
+							//qDebug()<<myserver_revbuf;
 							if(Flag_MyserverSendSuccess == 0)
 							{
 								add_value_netinfo("MyServer TCP 数据发送成功");
@@ -286,6 +288,7 @@ void myserver::send_tcpclient_data(QString data)
 							Flag_MyserverSendSuccess =1;
 							if_send = 1;
 							MyServer_send_count = 0;
+							SendFail_Num = 0;
 						}
 						else
 						{
@@ -301,6 +304,7 @@ void myserver::send_tcpclient_data(QString data)
 					sendfail_num = 0;
 					MyServer_send_count = 0;
 					//Flag_MyServerClientSuccess = 0;//连接失败 //没有收到返回。不重新连接
+					SendFail_Num++;
 				}
 			}
 		}
@@ -309,6 +313,13 @@ void myserver::send_tcpclient_data(QString data)
 			qDebug()<<"myserver semd data is kong!!";
 		}
 		myserver_send_over.unlock();//解锁
+
+		if(SendFail_Num>=2880)//大约12个多小时 最多24个小时
+		{
+			SendFail_Num = 0;
+			if((net_state == 0)&&(Flag_MyServerEn ==1))
+			Flag_MyServerClientSuccess = 0;//连接失败
+		}
 	}
 	else
 	{
@@ -317,6 +328,7 @@ void myserver::send_tcpclient_data(QString data)
 			qDebug()<< "MyServer tcpclient is not connected!!";
 		}
 	}
+
 }
 /*****************准备发送泄漏状态****************
 data_type

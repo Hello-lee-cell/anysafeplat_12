@@ -72,9 +72,38 @@ MainWindow::MainWindow(QWidget *parent) :
     beep_none();
     err_none();
 	system("touch /opt/TouchCalibration");
-	system("chmod +x /media/sda*/anysafe_plat");
-	system("sync");
-	qDebug()<<"chmod +x /media/sda*/anysafe_plat";
+	QFileInfo fi("/opt/reoilgas");
+	if(fi.isDir()) //油气回收存在
+	{
+		qDebug()<<"reoilgas is haved";
+	}
+	else //不存在
+	{system("mkdir /opt/reoilgas");}
+
+	QFileInfo fifga("/opt/fga");
+	if(fifga.isDir()) //可燃气体存在
+	{
+		qDebug()<<"fga is haved";
+	}
+	else //不存在
+	{system("mkdir /opt/fga");}
+
+	QFileInfo firadar("/opt/radar");
+	if(firadar.isDir()) //雷达存在
+	{
+		qDebug()<<"radar is haved";
+	}
+	else //不存在
+	{system("mkdir /opt/radar");}
+
+	QFileInfo fijingdian("/opt/jingdian");
+	if(fijingdian.isDir()) //静电存在
+	{
+		qDebug()<<"jingdian is haved";
+	}
+	else //不存在
+	{system("mkdir /opt/jingdian");}
+
 	system("sync");
 	ui->label_touch_calibration->setHidden(0);
 
@@ -3750,6 +3779,11 @@ void MainWindow::time_out_slotfunction(QDateTime date_time)
             ui->label_warn_rom->setHidden(0);
             ui->widget_warn_rom->setHidden(0);
         }
+		if(mem_available.toInt() < 2048)
+		{
+			system("rm -r /opt/alptecdata.db");
+			system("reboot");
+		}
     }
     //时间校准函数
     if(time_day%7 == 0)

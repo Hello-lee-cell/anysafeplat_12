@@ -91,7 +91,7 @@ unsigned char Flag_screen_safe = 1;
 unsigned char Flag_screen_burngas = 1;
 unsigned char Flag_screen_zaixian = 1;
 unsigned char Flag_screen_cc = 1;
-unsigned char Flag_Controller_Version = 1;//控制器硬件版本控制器
+unsigned char Flag_Controller_Version = 0;//控制器硬件版本控制器
 
 //udp.h
 unsigned char net_state = 0;

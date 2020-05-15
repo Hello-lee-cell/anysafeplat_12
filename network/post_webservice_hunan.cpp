@@ -116,7 +116,7 @@ void post_webservice_hunan::post_message_HuNan(QString xml_data)
 	{
 		//POST  //森茂加油站对应协议
 		emit show_data_HuNan(xml_data);
-		qDebug()<<xml_data;
+		//qDebug()<<xml_data;
 		QNetworkRequest *request = new QNetworkRequest();
 		request->setUrl(QUrl(Post_Address));
 		request->setHeader(QNetworkRequest::ContentTypeHeader, "application/xml");
