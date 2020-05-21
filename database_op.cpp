@@ -8,7 +8,6 @@
 #include "config.h"
 #include "systemset.h"
 #include "network/net_tcpclient_hb.h"
-#include <QSqlQueryModel>
 
 /*************表************/
 //泄漏检测：
@@ -41,7 +40,6 @@ unsigned char Dispener_Troubleshooting[96][2] = {0};
 void creat_table()
 {
     QSqlQuery qry;
-
     //创建泄漏检测    表
     qry.prepare("CREATE TABLE IF NOT EXISTS controlinfo (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),whichone VARCHAR(30),state VARCHAR(30)) ");
     qry.exec();
@@ -570,19 +568,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
     int cols;
     int data_sqlvalue = 0;
 
-	//获取最大id
-	qry.exec("SELECT * FROM reoilgasinfo");
-	QSqlQueryModel *queryModel = new QSqlQueryModel();
-	queryModel->setQuery(qry);
-	while(queryModel->canFetchMore())
-	{
-		queryModel->fetchMore();
-	}
-	unsigned int max_id = queryModel->rowCount();
-	qDebug()<<max_id<<"hahahahahahahahahhahahahahhhahahahahahahahahahhahaa";
-
-	switch (flag_time)
-	{
+    switch (flag_time)
+    {
         case 0: //按键查询  当前加油机详情显示
                 PerDay_AL[0] = 0;
                 PerDay_AL[1] = 0;
@@ -599,17 +586,14 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     count_all = 0;
                     count_al_big = 0;
                     count_al_small = 0;
-					qry.prepare(QString("SELECT flagstate,al FROM reoilgasinfo LIMIT 1000 OFFSET 900 WHERE whichone LIKE '%1-1%' AND time like '%2%'").arg(whichdisp).arg(current_datetime_qstr));
-					//sql = "select * from TableName where "+条件+" order by "+排序+" limit "+要显示多少条记录+" offset "+跳过多少条记录;
-					qry.exec();
+                    qry.prepare(QString("SELECT flagstate,al FROM reoilgasinfo WHERE whichone LIKE '%1-1%' AND time like '%2%'").arg(whichdisp).arg(current_datetime_qstr));
+                    qry.exec();
                     rec = qry.record();
                     cols = rec.count();
-					int num_jishu = 0;
                     for(int r = 0;qry.next();r++)
                     {
-						num_jishu++;
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -631,7 +615,6 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                             PerDay_AL[0] = PerDay_AL[0] + qry.value(1).toFloat();
                         }
                     }
-					qDebug()<<num_jishu<<"**********************************";
                     PerDay_AL[0] = PerDay_AL[0]/count_all;
                     PerDay_Percent[0] = (float)count_state/count_all;
                     PerDay_Al_Big[0] = (float)count_al_big/count_all;
@@ -651,7 +634,7 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     for(int r = 0;qry.next();r++)
                     {
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -693,7 +676,7 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     for(int r = 0;qry.next();r++)
                     {
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -735,7 +718,7 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     for(int r = 0;qry.next();r++)
                     {
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -777,7 +760,7 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     for(int r = 0;qry.next();r++)
                     {
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -819,7 +802,7 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     for(int r = 0;qry.next();r++)
                     {
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -861,7 +844,7 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     for(int r = 0;qry.next();r++)
                     {
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -902,7 +885,7 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                     for(int r = 0;qry.next();r++)
                     {
                         data_sqlvalue = qry.value(0).toInt();
-                        if((data_sqlvalue == 0)||(data_sqlvalue == 1) ) //满足15L且是有效数据
+						if((data_sqlvalue == 0)||(data_sqlvalue == 1) ||(data_sqlvalue == 2) ||(data_sqlvalue == 3) ||(data_sqlvalue == 4) ) //满足15L且是有效数据
                         {
                             for(int c = 0;c < cols;c++)
                             {
@@ -934,7 +917,6 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
         //qDebug() << "once oneday";
                 for(unsigned char i = 1;i < Amount_Dispener+1;i++)
                 {
-
                     //1#油枪
                     if(Amount_Gasgun[i-1]>=1)
                     {
@@ -946,7 +928,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)) //有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -976,7 +959,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {
@@ -1042,7 +1026,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -1072,7 +1057,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {
@@ -1138,7 +1124,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -1168,7 +1155,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {
@@ -1234,7 +1222,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -1264,7 +1253,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {
@@ -1330,7 +1320,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -1360,7 +1351,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {
@@ -1426,7 +1418,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -1456,7 +1449,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {
@@ -1522,7 +1516,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -1552,7 +1547,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {
@@ -1618,7 +1614,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                         cols = rec.count();
                         for(int r = 0;qry.next();r++)
                         {
-                            if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+							if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+							        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                             {
                                 for(int c = 0;c < cols;c++)
                                 {
@@ -1648,7 +1645,8 @@ void oneday_analy(unsigned char whichdisp, unsigned char flag_time)
                                 count_state = 0;
                                 for(int r = 0;qry.next();r++)
                                 {
-                                    if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1))//有效数据  大于15L且不是流速过低数据
+									if((qry.value(0).toInt() == 0)||(qry.value(0).toInt() == 1)||(qry.value(0).toInt() == 2)
+									        ||(qry.value(0).toInt() == 3)||(qry.value(0).toInt() == 4)) //有效数据(不在判断是否有效，只判断是不是大于15L)
                                     {
                                         for(int c = 0;c < cols;c++)
                                         {

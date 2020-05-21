@@ -778,6 +778,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
         QString mask;
         QProcess mem_process;
         mem_process.start("ifconfig eth1");
+		mem_process.waitForStarted();
         mem_process.waitForFinished();
         QByteArray mem_output = mem_process.readAllStandardOutput();
         QString str_output = mem_output;

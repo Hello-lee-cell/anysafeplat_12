@@ -85,6 +85,7 @@ history::history(QWidget *parent) :
 	QString mem_percentage;
 	QProcess mem_process;
 	mem_process.start("df /opt");
+	mem_process.waitForStarted();
 	mem_process.waitForFinished();
 	QByteArray mem_output = mem_process.readAllStandardOutput();
 

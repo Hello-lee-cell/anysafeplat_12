@@ -3768,6 +3768,7 @@ void MainWindow::time_out_slotfunction(QDateTime date_time)
         QString mem_available;
         QProcess mem_process;
         mem_process.start("df /opt");
+		mem_process.waitForStarted();
         mem_process.waitForFinished();
         QByteArray mem_output = mem_process.readAllStandardOutput();
         QString str_output = mem_output;
