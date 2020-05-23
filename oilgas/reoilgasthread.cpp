@@ -58,11 +58,12 @@ unsigned char Ask_690_Buf[8] = {0x00,0x04,0x00,0x02,0x00,0x02,0,0}; //发送缓�
 unsigned char Count_Ask690 = 0;     //0管线 1油罐 2防渗池 3加油机
 unsigned char Count_Ask690_pipetank = 0;
 unsigned char Count_Ask690_basindispener = 0;
-unsigned char Data_Buf_Sencor_Pre[21] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};//19字节预处理数组  第一位和最后两位做校验
+unsigned char Data_Buf_Sencor_Pre[21] = {0};//19字节预处理数组  第一位和最后两位做校验
 unsigned char aucAlarmState = 0;    //每位状态传递
 unsigned char Flag_690 = 0; //通信故障检测位
 unsigned char Receive_Pressure_Data[16] = {0}; //用来存储压力数值的数组
 unsigned char Ptr_Ask690[44] = {0};
+unsigned char Refresh_Receivebuf[256] = {0};//用来清空接收缓冲区
 
 reoilgasthread::reoilgasthread(QObject *parent):
     QThread(parent)
@@ -113,12 +114,18 @@ void reoilgasthread::run()
 			Flag_ask_PreAndTem++;
 			if(Flag_ask_PreAndTem >= 10)
 			{
+				//先读一次串口，把缓存读完,该数组最大为256
+				len_uart_reoilgas = read(fd_uart_reoilgas,Refresh_Receivebuf,sizeof(Refresh_Receivebuf));
+				len_uart_reoilgas = 0;
+				memset(Refresh_Receivebuf,0,sizeof(char)*256);
+
 				//network_oilgundata(DATAID_POST,"1","1","1.1","40","25","40","25","200");
 				if(Flag_Controller_Version == 1)//压力表无线模式  且是新版控制器
 				{
 					Flag_ask_PreAndTem = 0;
 					msleep(200);
 					Ask_Sensor();
+					msleep(200);
 				}
 				Flag_ask_PreAndTem = 0;
 			}
@@ -129,6 +136,13 @@ void reoilgasthread::run()
 				{
 					if((count_basin+count_dispener+count_pipe+count_tank)!=0)//传感器数目不等于0
 					{
+						msleep(100);
+						//先读一次串口，把缓存读完,该数组最大为256
+						len_uart_reoilgas = read(fd_uart_reoilgas,Refresh_Receivebuf,sizeof(Refresh_Receivebuf));
+						len_uart_reoilgas = 0;
+						memset(Refresh_Receivebuf,0,sizeof(char)*256);
+						msleep(10);
+
 						for(unsigned int i = 0;i<((unsigned int)count_basin+count_dispener+count_pipe+count_tank);i++)
 						{
 							ask_690();
@@ -140,6 +154,7 @@ void reoilgasthread::run()
 								send_data_690(); //处理传感器返回数据并发送
 							}
 						}
+						msleep(300);
 					}
 				}
 			}
@@ -957,10 +972,6 @@ void reoilgasthread::ReadDataReoilgas_v2()
 void reoilgasthread::Ask_Sensor()
 {
 	msleep(100);
-	//先读一次串口，把缓存读完
-	unsigned char RecvBuff_init[100] = {0};
-	len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
-
 	if(Pre_tank_en == 1)
 	{
 		Pressure_AskNum = 1;

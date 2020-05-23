@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.5.2, 2020-05-21T15:56:48. -->
+<!-- Written by QtCreator 4.5.2, 2020-05-23T17:07:26. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -208,18 +208,23 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">RemoteLinux.DirectUploadStep</value>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedFiles">
        <value type="QString">/home/mahao/桌面/安全平台4-485合一/build-anysafe_plat-A7-Debug/anysafe_plat</value>
+       <value type="QString">/home/mahao/桌面/安全平台4-485合一/build-anysafe_plat-A7-Release/anysafe_plat</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedHosts">
        <value type="QString">192.168.0.91</value>
+       <value type="QString">192.168.0.97</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedRemotePaths">
+       <value type="QString">/opt</value>
        <value type="QString">/opt</value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedSysroots">
        <value type="QString"></value>
+       <value type="QString"></value>
       </valuelist>
       <valuelist type="QVariantList" key="ProjectExplorer.RunConfiguration.LastDeployedTimes">
        <value type="QDateTime">2020-05-08T16:59:56</value>
+       <value type="QDateTime">2020-05-21T16:31:01</value>
       </valuelist>
       <value type="bool" key="RemoteLinux.GenericDirectUploadStep.IgnoreMissingFiles">false</value>
       <value type="bool" key="RemoteLinux.GenericDirectUploadStep.Incremental">true</value>

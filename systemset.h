@@ -482,6 +482,8 @@ private slots:
 
 	void on_comboBox_Gas_type_currentIndexChanged(int index);
 
+	void on_toolButton_poweroff_2_clicked();
+
 signals:
 
     void amount_basin_reset(int t);

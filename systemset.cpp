@@ -27,6 +27,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <QTcpSocket>
+#include <qnetworkinterface.h>
 
 
 unsigned char hang = 0;
@@ -773,38 +774,65 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 		ui->widget_warn_ip_wrong->setHidden(1);
 
         //当前ip地址显示
-        QString ip_add;
-        QString bcast;
-        QString mask;
-        QProcess mem_process;
-        mem_process.start("ifconfig eth1");
-		mem_process.waitForStarted();
-        mem_process.waitForFinished();
-        QByteArray mem_output = mem_process.readAllStandardOutput();
-        QString str_output = mem_output;
-        str_output.replace(QRegExp("[\\s]+"), " ");  //把所有的多余的空格转为一个空格
-        ip_add = str_output.section(' ', 6, 6);
-        bcast = str_output.section(' ', 7, 7);
-        mask = str_output.section(' ', 8, 8);
-        ip_add = ip_add.right(ip_add.length()-5);
-        bcast = bcast.right(bcast.length()-6);
-         mask = mask.right(mask.length()-5);
-        qDebug()<< ip_add<<bcast<<mask;
+//        QString ip_add;
+//        QString bcast;
+//        QString mask;
+//        QProcess mem_process;
+//        mem_process.start("ifconfig eth1");
+//		mem_process.waitForStarted();
+//        mem_process.waitForFinished();
+//        QByteArray mem_output = mem_process.readAllStandardOutput();
+//        QString str_output = mem_output;
+//        str_output.replace(QRegExp("[\\s]+"), " ");  //把所有的多余的空格转为一个空格
+//        ip_add = str_output.section(' ', 6, 6);
+//        bcast = str_output.section(' ', 7, 7);
+//        mask = str_output.section(' ', 8, 8);
+//        ip_add = ip_add.right(ip_add.length()-5);
+//        bcast = bcast.right(bcast.length()-6);
+//         mask = mask.right(mask.length()-5);
+//        qDebug()<< ip_add<<bcast<<mask;
 
-        ui->lineEdit_ip->setPlaceholderText(ip_add);
-        ui->lineEdit_mask->setPlaceholderText(mask);
-        ui->lineEdit_bcast->setPlaceholderText(bcast);
-		//获取mac地址
-		QFile devicd_id("/sys/class/net/eth1/address");
-		if(!devicd_id.open(QIODevice::ReadOnly | QIODevice::Text))
+//        ui->lineEdit_ip->setPlaceholderText(ip_add);
+//        ui->lineEdit_mask->setPlaceholderText(mask);
+//        ui->lineEdit_bcast->setPlaceholderText(bcast);
+//		//获取mac地址
+//		QFile devicd_id("/sys/class/net/eth1/address");
+//		if(!devicd_id.open(QIODevice::ReadOnly | QIODevice::Text))
+//		{
+//			printf("read device MAC file\n");
+//		}
+//		QTextStream in(&devicd_id);
+//		QString mac_id;
+//		mac_id = in.readLine();
+//		ui->label_mac->setText(mac_id);
+//		qDebug()<<mac_id;
+
+		QList<QNetworkInterface> interfaceList = QNetworkInterface::allInterfaces();
+		foreach(QNetworkInterface interfaceItem, interfaceList)
 		{
-			printf("read device MAC file\n");
+			QList<QNetworkAddressEntry> addressEntryList=interfaceItem.addressEntries();
+			foreach(QNetworkAddressEntry addressEntryItem, addressEntryList)
+			{
+				if(addressEntryItem.ip().protocol()==QAbstractSocket::IPv4Protocol)
+				{
+					qDebug()<<"------------------------------------------------------------";
+					qDebug()<<"Adapter Name:"<<interfaceItem.name();
+					if(interfaceItem.name() == "eth1")
+					{
+						qDebug()<<"Adapter Address:"<<interfaceItem.hardwareAddress();
+						qDebug()<<"IP Address:"<<addressEntryItem.ip().toString();
+						qDebug()<<"IP Mask:"<<addressEntryItem.netmask().toString();
+						qDebug()<<"Broadcast:" <<addressEntryItem.broadcast().toString();
+
+						ui->lineEdit_ip->setPlaceholderText(addressEntryItem.ip().toString());
+						ui->lineEdit_mask->setPlaceholderText(addressEntryItem.netmask().toString());
+						ui->lineEdit_bcast->setPlaceholderText(addressEntryItem.broadcast().toString());//广播地址
+						ui->label_mac->setText(interfaceItem.hardwareAddress());
+					}
+				}
+			}
 		}
-		QTextStream in(&devicd_id);
-		QString mac_id;
-		mac_id = in.readLine();
-		ui->label_mac->setText(mac_id);
-		qDebug()<<mac_id;
+
     }
     if(index == 6)
     {
@@ -2361,6 +2389,10 @@ void systemset::on_toolButton_poweroff_enter_clicked()  //确认关机
     add_value_operateinfo(ui->label_managerid->text(),"关闭系统");
     sleep(1);
     system("poweroff");
+}
+void systemset::on_toolButton_poweroff_2_clicked()
+{
+	system("reboot");
 }
 void systemset::on_toolButton_poweroff_cancl_clicked()  //取消关机
 {
@@ -4953,6 +4985,15 @@ void systemset::on_toolButton_gun_off_kaiqi_2_clicked()//手动解除关枪
 void systemset::on_comboBox_Controller_Version_currentIndexChanged(int index)
 {
 	Flag_Controller_Version = index;
+	if(index == 0)
+	{
+		system("chmod +x /opt/ask690");
+	}
+	if(index == 1)
+	{
+		system("chmod -x /opt/ask690");
+	}
+	system("sync");
 	Controller_Version_write();
 }
 void systemset::on_toolButton_pop_show_clicked()
@@ -5074,7 +5115,5 @@ void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pi
 	//放到油气回收设置里面了
 	//emit myserver_xielousetup(tank_num,tank_type,pipe_num,dispener_num,basin_num);
 }
-
-
 
 

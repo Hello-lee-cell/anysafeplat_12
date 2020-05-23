@@ -11367,8 +11367,8 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>10</x>
-          <y>20</y>
-          <width>181</width>
+          <y>10</y>
+          <width>161</width>
           <height>31</height>
          </rect>
         </property>
@@ -11385,9 +11385,9 @@ p, li { white-space: pre-wrap; }
         <property name="geometry">
          <rect>
           <x>180</x>
-          <y>20</y>
-          <width>71</width>
-          <height>31</height>
+          <y>10</y>
+          <width>61</width>
+          <height>41</height>
          </rect>
         </property>
         <property name="font">
@@ -11406,22 +11406,25 @@ p, li { white-space: pre-wrap; }
          </property>
         </item>
        </widget>
-       <widget class="QLabel" name="label_158">
+       <widget class="QToolButton" name="toolButton_poweroff_2">
         <property name="geometry">
          <rect>
-          <x>260</x>
-          <y>20</y>
-          <width>181</width>
-          <height>31</height>
+          <x>310</x>
+          <y>10</y>
+          <width>91</width>
+          <height>41</height>
          </rect>
         </property>
         <property name="font">
          <font>
-          <pointsize>17</pointsize>
+          <pointsize>16</pointsize>
          </font>
         </property>
+        <property name="layoutDirection">
+         <enum>Qt::LeftToRight</enum>
+        </property>
         <property name="text">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ef2929;&quot;&gt;重启控制器生效！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>重启生效</string>
         </property>
        </widget>
       </widget>
