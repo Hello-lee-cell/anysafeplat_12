@@ -1354,7 +1354,46 @@ void FGA1000_485::time_time()
 			//Fga_StaPostSend();
 		}
 	}
-	if((time_h == 0)&&(time_m == 40)&&(time_s == 0))//每天凌晨0点  发送两次
+	if((time_h == 0)&&(time_m == 50)&&(time_s == 0))//每天凌晨0点  发送两次
+	{
+		if(Flag_Ifsend == 0)
+		{
+			Flag_Ifsend = 1;
+			network_Warndata("1","N","N","N");//发送日报警信息
+			network_Stagundata("0","N");      //日油枪状态
+			network_Wrongsdata("1","N");      //日故障信息
+			network_Configurationdata("N");   //日设置信息
+			network_Closegunsdata("0","N","N","N","N");//关枪数据
+			//Fga_StaPostSend();
+		}
+	}
+	if((time_h == 0)&&(time_m == 59)&&(time_s == 0))//每天凌晨0点  发送两次
+	{
+		if(Flag_Ifsend == 0)
+		{
+			Flag_Ifsend = 1;
+			network_Warndata("1","N","N","N");//发送日报警信息
+			network_Stagundata("0","N");      //日油枪状态
+			network_Wrongsdata("1","N");      //日故障信息
+			network_Configurationdata("N");   //日设置信息
+			network_Closegunsdata("0","N","N","N","N");//关枪数据
+			//Fga_StaPostSend();
+		}
+	}
+	if((time_h == 1)&&(time_m == 30)&&(time_s == 0))//每天凌晨0点  发送两次
+	{
+		if(Flag_Ifsend == 0)
+		{
+			Flag_Ifsend = 1;
+			network_Warndata("1","N","N","N");//发送日报警信息
+			network_Stagundata("0","N");      //日油枪状态
+			network_Wrongsdata("1","N");      //日故障信息
+			network_Configurationdata("N");   //日设置信息
+			network_Closegunsdata("0","N","N","N","N");//关枪数据
+			//Fga_StaPostSend();
+		}
+	}
+	if((time_h == 2)&&(time_m == 0)&&(time_s == 0))//每天凌晨0点  发送两次
 	{
 		if(Flag_Ifsend == 0)
 		{

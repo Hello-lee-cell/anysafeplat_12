@@ -98,14 +98,15 @@ void* talk_udp(void*)
                     case 0: printf("***Off_Line_No.1!\n");
                             gpio_on();
                             count = 1;
-                            signal(SIGALRM,(__sighandler_t)sig_alarm);
-                            alarm(22);
+
                             break;
                     case 1: printf("***Off_Line_No.2!\n");
                             count_history=0;    //1129
                             count = 2;
                             break;
                     default:    printf("***Off_Line_No.3!\n");
+					            signal(SIGALRM,(__sighandler_t)sig_alarm);
+								alarm(22);
                 }
             }
             else

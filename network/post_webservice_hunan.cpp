@@ -86,6 +86,7 @@ void post_webservice_hunan::requestFinished_HuNan(QNetworkReply* reply)
 			if(send_wrong_hunan != 1)
 			{
 				add_value_netinfo("在线监测数据上传失败");
+				Flag_Ifsend = 0;//在这里把全局变量置0，之后时间到了要再重新发送零点的信息
 				send_wrong_hunan = 1;
 			}
 		}
