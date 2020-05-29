@@ -66,14 +66,18 @@ void PreTemGasSensor_Type_write();//在线监测传感器类型写入
 //气液比相关
 void config_alset();
 void init_alset();
-void config_jingdian_write();
-void config_IIE_write();
 //液阻相关
 void config_Liquid_resistance();
 void init_Liquid_resistance();
 
 //安全防护相关
 void config_security();
+void config_jingdian_write();
+void config_IIE_write();
+
+void init_security();
+void init_jingdian_write();
+void init_IIE();
 //post添加
 void config_post_network();
 void config_network_Version_write();//油气回收网络上传版本写入

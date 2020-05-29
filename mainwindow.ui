@@ -10521,7 +10521,7 @@ border-image: url(:/picture/在线油气检测系统白色背景.png);
        <property name="geometry">
         <rect>
          <x>680</x>
-         <y>550</y>
+         <y>400</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -10543,7 +10543,7 @@ border-image: url(:/picture/在线油气检测系统白色背景.png);
        <property name="geometry">
         <rect>
          <x>360</x>
-         <y>400</y>
+         <y>550</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -10625,7 +10625,7 @@ border-image: url(:/picture/在线油气检测系统白色背景.png);
        <property name="geometry">
         <rect>
          <x>360</x>
-         <y>491</y>
+         <y>340</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -10694,7 +10694,7 @@ border-image: url(:/picture/在线油气检测系统白色背景.png);
        <property name="geometry">
         <rect>
          <x>360</x>
-         <y>550</y>
+         <y>400</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -10710,7 +10710,7 @@ border-image: url(:/picture/在线油气检测系统白色背景.png);
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>491</y>
+         <y>340</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -10903,7 +10903,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>360</x>
-         <y>341</y>
+         <y>490</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -10972,7 +10972,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>680</x>
-         <y>341</y>
+         <y>490</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11254,7 +11254,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>400</y>
+         <y>550</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11270,7 +11270,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>680</x>
-         <y>400</y>
+         <y>550</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11313,7 +11313,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>520</x>
-         <y>491</y>
+         <y>340</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11329,7 +11329,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>341</y>
+         <y>490</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11435,7 +11435,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>520</x>
-         <y>400</y>
+         <y>550</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11451,7 +11451,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>680</x>
-         <y>491</y>
+         <y>340</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11546,7 +11546,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>210</x>
-         <y>550</y>
+         <y>400</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11583,7 +11583,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>520</x>
-         <y>341</y>
+         <y>490</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -11668,7 +11668,7 @@ border-image: url(:/picture/right.png);</string>
        <property name="geometry">
         <rect>
          <x>520</x>
-         <y>550</y>
+         <y>400</y>
          <width>107</width>
          <height>47</height>
         </rect>
@@ -12428,6 +12428,8 @@ border-image: url(:/picture/right.png);</string>
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
+      <zorder>label_3</zorder>
+      <zorder>label_2</zorder>
       <zorder>label_94</zorder>
       <zorder>label_8</zorder>
       <zorder>label_84</zorder>
@@ -12444,11 +12446,8 @@ border-image: url(:/picture/right.png);</string>
       <zorder>label_73</zorder>
       <zorder>label_88</zorder>
       <zorder>label_6</zorder>
-      <zorder>label_31</zorder>
-      <zorder>label_42</zorder>
       <zorder>label_28</zorder>
       <zorder>label_82</zorder>
-      <zorder>label_35</zorder>
       <zorder>label_74</zorder>
       <zorder>label_76</zorder>
       <zorder>label_81</zorder>
@@ -12459,19 +12458,15 @@ border-image: url(:/picture/right.png);</string>
       <zorder>label_15</zorder>
       <zorder>label_33</zorder>
       <zorder>label_24</zorder>
-      <zorder>label_2</zorder>
       <zorder>label_38</zorder>
-      <zorder>label_4</zorder>
       <zorder>label_43</zorder>
       <zorder>label_19</zorder>
       <zorder>label_37</zorder>
-      <zorder>label_29</zorder>
       <zorder>label_16</zorder>
       <zorder>label_97</zorder>
       <zorder>label_96</zorder>
       <zorder>label_26</zorder>
       <zorder>label_22</zorder>
-      <zorder>label_32</zorder>
       <zorder>label_25</zorder>
       <zorder>label_5</zorder>
       <zorder>label_36</zorder>
@@ -12479,11 +12474,9 @@ border-image: url(:/picture/right.png);</string>
       <zorder>label_77</zorder>
       <zorder>label_72</zorder>
       <zorder>label_39</zorder>
-      <zorder>label_30</zorder>
       <zorder>label_27</zorder>
       <zorder>label_34</zorder>
       <zorder>label_21</zorder>
-      <zorder>label_3</zorder>
       <zorder>label_17</zorder>
       <zorder>label_40</zorder>
       <zorder>label_23</zorder>
@@ -12500,6 +12493,13 @@ border-image: url(:/picture/right.png);</string>
       <zorder>label_71</zorder>
       <zorder>label_13</zorder>
       <zorder>label_p1</zorder>
+      <zorder>label_4</zorder>
+      <zorder>label_31</zorder>
+      <zorder>label_42</zorder>
+      <zorder>label_32</zorder>
+      <zorder>label_29</zorder>
+      <zorder>label_30</zorder>
+      <zorder>label_35</zorder>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -13384,7 +13384,7 @@ border-image: url(:/picture/底板背景图片.png);
          </font>
         </property>
         <property name="text">
-         <string>卸油静电接地报警仪</string>
+         <string>人体静电接地报警仪</string>
         </property>
        </widget>
        <widget class="QFrame" name="frame">
@@ -14215,7 +14215,7 @@ border-image: url(:/picture/底板背景图片.png);
           </font>
          </property>
          <property name="text">
-          <string>静电功能：</string>
+          <string>电动阀：</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_167">
@@ -14233,7 +14233,7 @@ border-image: url(:/picture/底板背景图片.png);
           </font>
          </property>
          <property name="text">
-          <string>液位报警：</string>
+          <string>车钥匙：</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_168">
@@ -14897,7 +14897,7 @@ border-image: url(:/picture/底板背景图片.png);
          <rect>
           <x>80</x>
           <y>0</y>
-          <width>91</width>
+          <width>141</width>
           <height>31</height>
          </rect>
         </property>
@@ -14907,7 +14907,7 @@ border-image: url(:/picture/底板背景图片.png);
          </font>
         </property>
         <property name="text">
-         <string>空</string>
+         <string>卸油口电动阀</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -14929,6 +14929,952 @@ border-image: url(:/picture/底板背景图片.png);
         </property>
         <property name="text">
          <string>空</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_IIE_electromagnetic">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>40</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>查看详情</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_148">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>15</y>
+          <width>41</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-image: url(:/picture/valve.png);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="widget_iie_electromagnetic" native="true">
+       <property name="geometry">
+        <rect>
+         <x>50</x>
+         <y>180</y>
+         <width>691</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+
+#widget_iie_electromagnetic
+{
+	border-image: url(:/picture/window.png);
+}</string>
+       </property>
+       <widget class="QWidget" name="horizontalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>671</width>
+          <height>152</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>1</number>
+         </property>
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <item>
+          <widget class="QFrame" name="frame_value1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>140</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>130</width>
+             <height>140</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QLabel" name="label_142">
+            <property name="geometry">
+             <rect>
+              <x>28</x>
+              <y>11</y>
+              <width>81</width>
+              <height>20</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>1#</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_uart">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>39</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_206">
+            <property name="geometry">
+             <rect>
+              <x>11</x>
+              <y>39</y>
+              <width>75</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_far">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>68</y>
+              <width>81</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>远程/就地：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_207">
+            <property name="geometry">
+             <rect>
+              <x>11</x>
+              <y>68</y>
+              <width>81</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>自动/手动：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_open">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>97</y>
+              <width>45</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_209">
+            <property name="geometry">
+             <rect>
+              <x>11</x>
+              <y>97</y>
+              <width>45</width>
+              <height>23</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_value2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>130</width>
+             <height>140</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QLabel" name="label_143">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>10</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>2#</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_210">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>81</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>自动/手动：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_211">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>100</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_213">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>40</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_far_2">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>70</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>远程/就地：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_uart_2">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>40</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_open_2">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>100</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_value3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>130</width>
+             <height>140</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QLabel" name="label_144">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>10</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>3#</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_open_3">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>100</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_uart_3">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>40</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_far_3">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>70</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>远程/就地：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_215">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>100</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_217">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>40</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_214">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>81</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>自动/手动：</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_value4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>130</width>
+             <height>140</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QLabel" name="label_145">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>10</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>4#</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_218">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>81</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>自动/手动：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_219">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>100</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_221">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>40</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_far_4">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>70</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>远程/就地：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_uart_4">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>40</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_open_4">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>100</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>0</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_value5">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>130</width>
+             <height>140</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <widget class="QLabel" name="label_146">
+            <property name="geometry">
+             <rect>
+              <x>30</x>
+              <y>10</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>5#</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_222">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>70</y>
+              <width>81</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>自动/手动：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_223">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>100</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_225">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>40</y>
+              <width>67</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_far_5">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>70</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>远程/就地：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_uart_5">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>40</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>故障状态：</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_IIE2_open_5">
+            <property name="geometry">
+             <rect>
+              <x>70</x>
+              <y>100</y>
+              <width>51</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>全开：</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QPushButton" name="pushButton_IIEDetails_close">
+        <property name="geometry">
+         <rect>
+          <x>660</x>
+          <y>0</y>
+          <width>31</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="palette">
+         <palette>
+          <active>
+           <colorrole role="ButtonText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>239</red>
+              <green>41</green>
+              <blue>41</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="ButtonText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>239</red>
+              <green>41</green>
+              <blue>41</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="ButtonText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="96">
+              <red>164</red>
+              <green>166</green>
+              <blue>168</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>24</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>X</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_147">
+        <property name="geometry">
+         <rect>
+          <x>280</x>
+          <y>50</y>
+          <width>121</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>电磁阀状态</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -16674,7 +17620,7 @@ border-image: url(:/picture/底板背景图片.png);
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>340</y>
+      <y>350</y>
       <width>321</width>
       <height>71</height>
      </rect>
@@ -16697,7 +17643,7 @@ color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>340</y>
+      <y>350</y>
       <width>321</width>
       <height>71</height>
      </rect>
@@ -17022,7 +17968,7 @@ border-image: url(:/picture/jinggao.png);</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>130</y>
       <width>996</width>
       <height>461</height>
      </rect>
@@ -17115,7 +18061,7 @@ border-image: url(:/picture/jinggao.png);</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>170</y>
+      <y>130</y>
       <width>1001</width>
       <height>461</height>
      </rect>

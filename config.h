@@ -40,10 +40,12 @@
 
 #define if_name     "eth1"
 
-#define DEV_NAME    "/dev/ttymxc6"   //ttySP0 泄漏
+
 #define RADAR_SERI  "/dev/ttymxc7"  //uart8  雷达
+#define DEV_NAME    "/dev/ttymxc6"   //uart7 泄漏
 #define REOILGAS_SERI   "/dev/ttymxc4"  //uart5 加油机
 #define FGA_SERI    "/dev/ttymxc3"  //uart4  气体监测
+#define SAFTY_IIE "/dev/ttymxc2"  //uart3  IIE
 #define CRASH_COLUMN "/dev/ttymxc1"  //uart2  防撞柱
 
 #define CONFIG_SENSORAMOUNT "/opt/config.txt"
@@ -82,12 +84,21 @@ extern unsigned char count_pipe;
 extern unsigned char count_tank;
 extern unsigned char count_dispener;
 extern unsigned char flag_silent;
-extern unsigned char Flag_xieyou;  //人体静电使能
+extern unsigned char Flag_Psa2;  //人体静电使能
 extern unsigned char Flag_IIE; //IIE使能
+extern unsigned char Flag_Valve;//IIE电磁阀使能
+extern unsigned char IIE_SetModel_Time;//稳油报警时间
+extern unsigned char IIE_SetModel_Warn;//报警设置
+extern unsigned char IIE_Value_Num;//阀门数量
+extern int fd_uart_IIE;
+extern int ret_uart_IIE;
+extern int len_uart_IIE;
+
 extern float count_Pressure[8]; //存储压力值
 
 extern unsigned char IIE_sta[8]; //IIE状态
 extern unsigned char IIE_set[8]; //IIE设置
+extern unsigned char IIE_Electromagnetic_Sta[5][4];//IIE电磁阀状态
 
 extern unsigned char Flag_Timeto_CloseNeeded[6];
 extern QMutex Lock_Flag_Timeto;
@@ -122,7 +133,7 @@ extern unsigned char Alarm_Re_Flag[4];
 extern unsigned char Communication_Machine;
 
 //serial.h
-extern unsigned char Data_Buf_Sencor[45];
+extern unsigned char Data_Buf_Sencor[50];
 extern unsigned char Test_Method;
 
 //systemset.h
@@ -222,7 +233,7 @@ extern QString IsoOis_StationId_Cq;      //加油站ID 重庆
 extern unsigned char ReoilgasPop_GunSta[96];//96把枪的状态
 extern unsigned char Flag_Reoilgas_Pop_Sta;//在线油气回收详情页面打开状态 0 未打开 1打开
 
-extern unsigned char Ptr_Ask690[44];
+extern unsigned char Ptr_Ask690[50];
 
 //fga
 extern unsigned char Env_Gas_en;//气体浓度传感器使能

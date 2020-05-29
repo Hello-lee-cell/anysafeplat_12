@@ -35,7 +35,6 @@ SOURCES += main.cpp\
     database_op.cpp \
     radar_485.cpp \
     myqsqlrelationmodel_centerdisp.cpp \
-    security.cpp \
     timer_pop.cpp \
     reoilgas_pop.cpp \
     protobuf/myserver_thread.cpp \
@@ -59,7 +58,9 @@ SOURCES += main.cpp\
     network/post_webservice.cpp \
     network/post_webservice_hunan.cpp \
     network/udp.cpp \
-    oilgas/one_click_sync.cpp
+    oilgas/one_click_sync.cpp \
+    safty/security.cpp \
+    safty/iie_thread.cpp
 
 HEADERS  += mainwindow.h \
     keyboard.h \
@@ -80,7 +81,6 @@ HEADERS  += mainwindow.h \
     database_set.h \
     database_op.h \
     myqsqlrelationmodel_centerdisp.h \
-    security.h \
     timer_pop.h \
     reoilgas_pop.h \
     protobuf/myserver_thread.h \
@@ -105,7 +105,9 @@ HEADERS  += mainwindow.h \
     network/post_webservice.h \
     network/post_webservice_hunan.h \
     network/udp.h \
-    oilgas/one_click_sync.h
+    oilgas/one_click_sync.h \
+    safty/security.h \
+    safty/iie_thread.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \

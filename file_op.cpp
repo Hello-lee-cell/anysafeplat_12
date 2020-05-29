@@ -13,7 +13,7 @@
 #include"serial.h"
 #include"radar_485.h"
 #include"systemset.h"
-#include"security.h"
+#include"safty/security.h"
 
 
 //将传感器数量写入文本
@@ -1615,7 +1615,7 @@ void config_pv_negative_write()
 void config_jingdian_write()
 {
     QString q_jingdian;
-    q_jingdian = QString("%1").arg(Flag_xieyou);
+	q_jingdian = QString("%1").arg(Flag_Psa2);
     QFile file("/opt/jingdian/config_jingdian.txt");
     file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
     QTextStream in(&file);
@@ -1632,11 +1632,69 @@ void config_IIE_write()
     QFile file("/opt/jingdian/config_IIE.txt");
     file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
     QTextStream in(&file);
-    in<<q_IIE;
+	in<<QString::number(Flag_IIE)+"\r\n";
+	in<<QString::number(Flag_Valve)+"\r\n";
+	in<<QString::number(IIE_SetModel_Time)+"\r\n";
+	in<<QString::number(IIE_SetModel_Warn)+"\r\n";
+	in<<QString::number(IIE_Value_Num)+"\r\n";
     file.close();
     int fp = open("/opt/jingdian/config_IIE.txt",O_RDONLY);
     fsync(fp);
     close(fp);
+}
+void init_security()
+{
+	//潜油泵，液位仪，防撞柱设备初始化
+	QFile config_security("/opt/jingdian/config_security.txt");
+	if(!config_security.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug()<<"Can't open the config file!"<<endl;
+	}
+	QTextStream in_security(&config_security);
+	QString line_security;
+	line_security = in_security.readLine();
+	Flag_Enable_liqiud = line_security.toInt();
+	line_security = in_security.readLine();
+	Flag_Enable_pump = line_security.toInt();
+	line_security = in_security.readLine();
+	Num_Crash_Column = line_security.toInt();
+	config_security.close();
+}
+void init_jingdian_write()
+{
+	QFile config_jingdian("/opt/jingdian/config_jingdian.txt");
+	if(!config_jingdian.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"Can't open config_jingdian file!"<<endl;
+	}
+	QTextStream in_jingdian(&config_jingdian);
+	QString line_jingdian;
+	line_jingdian = in_jingdian.readLine();
+	QByteArray read_config_jingdian = line_jingdian.toLatin1();
+	char *read_data_jingdian = read_config_jingdian.data();
+	Flag_Psa2 = atoi(read_data_jingdian);//使能
+	config_jingdian.close();
+}
+void init_IIE()
+{
+	QFile config_IIE("/opt/jingdian/config_IIE.txt");
+	if(!config_IIE.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"Can't open config_IIE file!"<<endl;
+	}
+	QTextStream in_IIE(&config_IIE);
+	QString line_IIE;
+	line_IIE = in_IIE.readLine();
+	Flag_IIE = line_IIE.toInt();//使能
+	line_IIE = in_IIE.readLine();
+	Flag_Valve = line_IIE.toInt();
+	line_IIE = in_IIE.readLine();
+	IIE_SetModel_Time = line_IIE.toInt();
+	line_IIE = in_IIE.readLine();
+	IIE_SetModel_Warn = line_IIE.toInt();
+	line_IIE = in_IIE.readLine();
+	IIE_Value_Num = line_IIE.toInt();
+	config_IIE.close();
 }
 
 //写入液阻报警相关信息

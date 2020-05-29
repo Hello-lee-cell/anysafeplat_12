@@ -12,9 +12,6 @@ public:
     explicit mythread(QObject *parent=0);
     void run();
 
-    void IIE_analysis();
-    int net_history(int num,int sta);
-
 signals:
 
 //basin
@@ -88,14 +85,17 @@ signals:
 
     //***************给人体静电的信号*******//
     void set_renti(unsigned char whichbit,unsigned char value);
-
     void IIE_display(unsigned char uart, int R,int V,int oil_time,int people_time);
+	void IIE_Electromagnetic_Show(unsigned char sta);//显示IIE电磁阀状态
+
 public slots:
  //   void readFromSharedMem();
     void Data_Display(); //压力值显示
 private:
 	void myserver_send(QString DataType,QString SensorNum,QString SensorType,QString SensorSta,QString SensorData);//服务器上传传感器状态
-
+	void IIE_analysis();
+	void IIE_Electromagnetic_Analysis();//IIE电磁阀数据分析
+	int net_history(int num,int sta);
 };
 
 #endif // MYTHREAD_H

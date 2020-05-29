@@ -6742,7 +6742,7 @@ background-color: rgb(189,223,255);
       </property>
       <property name="font">
        <font>
-        <pointsize>17</pointsize>
+        <pointsize>16</pointsize>
        </font>
       </property>
       <item>
@@ -7008,7 +7008,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>70</y>
+        <y>170</y>
         <width>61</width>
         <height>41</height>
        </rect>
@@ -7026,7 +7026,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>70</y>
+        <y>170</y>
         <width>231</width>
         <height>41</height>
        </rect>
@@ -7044,7 +7044,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>70</y>
+        <y>170</y>
         <width>61</width>
         <height>41</height>
        </rect>
@@ -7062,7 +7062,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>120</y>
+        <y>220</y>
         <width>61</width>
         <height>41</height>
        </rect>
@@ -7080,7 +7080,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>120</y>
+        <y>220</y>
         <width>61</width>
         <height>41</height>
        </rect>
@@ -7098,7 +7098,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>120</y>
+        <y>220</y>
         <width>231</width>
         <height>41</height>
        </rect>
@@ -7116,7 +7116,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>330</x>
-        <y>170</y>
+        <y>70</y>
         <width>61</width>
         <height>41</height>
        </rect>
@@ -7134,7 +7134,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>30</x>
-        <y>170</y>
+        <y>70</y>
         <width>231</width>
         <height>41</height>
        </rect>
@@ -7152,7 +7152,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>240</x>
-        <y>170</y>
+        <y>70</y>
         <width>61</width>
         <height>41</height>
        </rect>
@@ -7166,6 +7166,276 @@ background-color: rgb(189,223,255);
        <string>开启</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label_158">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>120</y>
+        <width>231</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>卸油电磁阀控制系统：</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="toolButton_kaiqi_IIE_valve">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>120</y>
+        <width>61</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>开启</string>
+      </property>
+     </widget>
+     <widget class="QToolButton" name="toolButton_guanbi_IIE_valve">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>120</y>
+        <width>61</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>关闭</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_18">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>330</y>
+       <width>421</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QLabel" name="label_159">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>卸油口阀门数量：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_160">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>50</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>稳油时间设置：</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_161">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>17</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>关阀指令：</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_valuenum">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>20</y>
+        <width>61</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <item>
+       <property name="text">
+        <string>0</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>3</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>4</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>5</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="comboBox_wenyou_time">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>60</y>
+        <width>61</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <item>
+       <property name="text">
+        <string>5min</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>10min</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>15min</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>20min</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>25min</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>30min</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QComboBox" name="comboBox_closevalue">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>100</y>
+        <width>61</width>
+        <height>25</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <item>
+       <property name="text">
+        <string>03</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>04</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>05</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>06</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>00</string>
+       </property>
+      </item>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="frame_19">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>330</y>
+       <width>411</width>
+       <height>181</height>
+      </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab">

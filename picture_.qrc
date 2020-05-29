@@ -79,5 +79,7 @@
         <file>picture/right_pre.png</file>
         <file>picture/uartwro.png</file>
         <file>picture/waterwro.png</file>
+        <file>picture/window.png</file>
+        <file>picture/valve.png</file>
     </qresource>
 </RCC>

@@ -15,7 +15,7 @@
 #include "radar_485.h"
 #include "mythread.h"
 #include "database_op.h"
-#include "security.h"
+#include "safty/security.h"
 #include "network/main_main.h"
 #include "airtightness_test.h"
 #include <QElapsedTimer>
@@ -53,6 +53,7 @@ int Time_IIE_peo = 0;
 int Flag_IIE_timeoil = 0;
 int Flag_IIE_timepeo = 0;
 unsigned char Flag_IIE_warn[10] = {2};//用于标记IIE历史记录，仅记录一次
+unsigned char Flag_IIE_warn_value[12] = {2};//用于标记IIE电磁阀历史记录，仅记录一次
 //油气回收报警记录避免重复记录
 unsigned char Flag_reo_uartwrong[48] = {0};
 
@@ -140,7 +141,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(warn,SIGNAL(set_renti(unsigned char,unsigned char)),this,SLOT(set_label_jingdian(unsigned char,unsigned char)));
     //IIE信号
     QObject::connect(warn,SIGNAL(IIE_display(unsigned char, int,int,int,int)),this,SLOT(IIE_show(unsigned char, int,int,int,int)));
-    warn->start();
+	//IIE电磁阀信号
+	QObject::connect(warn,SIGNAL(IIE_Electromagnetic_Show(unsigned char)),this,SLOT(show_IIE_electromagnetic(unsigned char)));
+	warn->start();
+	ui->widget_iie_electromagnetic->setHidden(1);
+	ui->label_tongxinguzhang->setHidden(1);
     qDebug()<<"my thread is start!";
     /******************涉及共享内存*************************/
 
@@ -787,31 +792,11 @@ MainWindow::MainWindow(QWidget *parent) :
 //************************泄漏初始化*end*****************************//
 
 //*********************安全防护设备初始化*begin**************************//
-	QFile config_jingdian("/opt/jingdian/config_jingdian.txt");
-	if(!config_jingdian.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		qDebug() <<"Can't open config_jingdian file!"<<endl;
-	}
-	QTextStream in_jingdian(&config_jingdian);
-	QString line_jingdian;
-	line_jingdian = in_jingdian.readLine();
-	QByteArray read_config_jingdian = line_jingdian.toLatin1();
-	char *read_data_jingdian = read_config_jingdian.data();
-	Flag_xieyou = atoi(read_data_jingdian);//使能
-	config_jingdian.close();
 
-	QFile config_IIE("/opt/jingdian/config_IIE.txt");
-	if(!config_IIE.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		qDebug() <<"Can't open config_IIE file!"<<endl;
-	}
-	QTextStream in_IIE(&config_IIE);
-	QString line_IIE;
-	line_IIE = in_IIE.readLine();
-	QByteArray read_config_IIE = line_IIE.toLatin1();
-	char *read_data_IIE = read_config_IIE.data();
-	Flag_IIE = atoi(read_data_IIE);//使能
-	config_IIE.close();
+	init_jingdian_write();
+	init_IIE();
+	init_security();
+
 	if(Flag_IIE == 0)
 	{
 		ui->label_IIE_work->setText("设备关闭");
@@ -823,21 +808,7 @@ MainWindow::MainWindow(QWidget *parent) :
 		ui->label_IIE_tongxinguzhang->setHidden(1);//隐藏设备故障
 	}
 
-	//潜油泵，液位仪，防撞柱设备初始化
-	QFile config_security("/opt/jingdian/config_security.txt");
-	if(!config_security.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		qDebug()<<"Can't open the config file!"<<endl;
-	}
-	QTextStream in_security(&config_security);
-	QString line_security;
-	line_security = in_security.readLine();
-	Flag_Enable_liqiud = line_security.toInt();
-	line_security = in_security.readLine();
-	Flag_Enable_pump = line_security.toInt();
-	line_security = in_security.readLine();
-	Num_Crash_Column = line_security.toInt();
-	config_security.close();
+
 //*********************安全防护设备初始化*end**************************//
 
 //*********************防撞柱初始化*begin**************************//
@@ -12714,11 +12685,11 @@ void MainWindow::IIE_show(unsigned char IIE_uart_m,int IIE_R_m, int IIE_V_m, int
             else{ui->label_IIE_time_s->setText("开启");}
 
             //液位报警部分  带屏蔽功能
-            if((IIE_sta[0] == 1)&&(IIE_set[2] == 0))
+			if((IIE_sta[0] == 1))
             {
                 ui->label_IIE_liquid->setText("高液位报警"); //高液位报警
             }
-            if((IIE_sta[0] == 0)&&(IIE_set[2] == 0))
+			if((IIE_sta[0] == 0))
             {
                 ui->label_IIE_liquid->setText("高液位正常"); //高液位报警
             }
@@ -12829,33 +12800,63 @@ void MainWindow::IIE_show(unsigned char IIE_uart_m,int IIE_R_m, int IIE_V_m, int
         if((IIE_uart_m == 0xff)&&(Flag_IIE_warn[1] != 1)) //通信故障
         {
             Flag_IIE_warn[1] = 1;
-            add_value_IIE("通信故障");
+			add_value_IIE("卸油流程控制器：通信故障");
         }
         if((IIE_uart_m == 0x00)&&(Flag_IIE_warn[1] != 0)) //通信正常
         {
             Flag_IIE_warn[1] = 0;
-            add_value_IIE("通信正常");
+			add_value_IIE("卸油流程控制器：通信正常");
         }
         if((IIE_uart_m == 0x00)&&(IIE_sta[0] == 1)&&(IIE_set[2] == 0)&&(Flag_IIE_warn[2] != 1))
         {
             Flag_IIE_warn[2] = 1;
-            add_value_IIE("高液位报警");
+			add_value_IIE("卸油流程控制器：高液位报警");
         }
         if((IIE_uart_m == 0x00)&&(IIE_sta[0] == 0)&&(IIE_set[2] == 0)&&(Flag_IIE_warn[2] != 0))
         {
             Flag_IIE_warn[2] = 0;
-            add_value_IIE("高液位正常");
+			add_value_IIE("卸油流程控制器：高液位正常");
         }
         if((IIE_uart_m == 0x00)&&(IIE_sta[3] == 1)&&(Flag_IIE_warn[3] != 1))
         {
             Flag_IIE_warn[3] = 1;
-            add_value_IIE("待机模式");
+			add_value_IIE("卸油流程控制器：待机模式");
         }
         if((IIE_uart_m == 0x00)&&(IIE_sta[3] == 0)&&(Flag_IIE_warn[3] != 0))
         {
             Flag_IIE_warn[3] = 0;
-            add_value_IIE("工作模式");
+			add_value_IIE("卸油流程控制器：工作模式");
         }
+		if((IIE_uart_m == 0x00)&&(IIE_sta[1] == 1)&&(Flag_IIE_warn[4] != 1))
+		{
+			Flag_IIE_warn[4] = 1;
+			add_value_IIE("卸油流程控制器：静电报警");
+		}
+		if((IIE_uart_m == 0x00)&&(IIE_sta[1] == 0)&&(Flag_IIE_warn[4] != 0))
+		{
+			Flag_IIE_warn[4] = 0;
+			add_value_IIE("卸油流程控制器：静电正常");
+		}
+		if((IIE_uart_m == 0x00)&&(IIE_sta[4] == 1)&&(Flag_IIE_warn[5] != 1))
+		{
+			Flag_IIE_warn[5] = 1;
+			add_value_IIE("卸油流程控制器：夹子报警");
+		}
+		if((IIE_uart_m == 0x00)&&(IIE_sta[4] == 0)&&(Flag_IIE_warn[5] != 0))
+		{
+			Flag_IIE_warn[5] = 0;
+			add_value_IIE("卸油流程控制器：夹子正常");
+		}
+		if((IIE_uart_m == 0x00)&&(IIE_sta[5] == 1)&&(Flag_IIE_warn[6] != 1))
+		{
+			Flag_IIE_warn[6] = 1;
+			add_value_IIE("卸油流程控制器：接地故障");
+		}
+		if((IIE_uart_m == 0x00)&&(IIE_sta[5] == 0)&&(Flag_IIE_warn[6] != 0))
+		{
+			Flag_IIE_warn[6] = 0;
+			add_value_IIE("卸油流程控制器：接地正常");
+		}
 
     }
     else//设备关闭
@@ -12937,7 +12938,376 @@ void MainWindow::reset_safe()
     }
 
 }
+void MainWindow::show_IIE_electromagnetic(unsigned char sta)
+{
+	if(Flag_IIE == 1)
+	{
+		if(sta == 0xff)
+		{
+			ui->pushButton_IIE_electromagnetic->setText("通信故障");
+			if(Flag_IIE_warn_value[0] != 1)
+			{
+				Flag_IIE_warn_value[0] = 1;
+				add_value_IIE("电磁阀控制器：通信故障");
+			}
+		}
+		if(sta == 0x00)
+		{
+			ui->pushButton_IIE_electromagnetic->setText("设备正常");
+			if(Flag_IIE_warn_value[0] != 0)
+			{
+				Flag_IIE_warn_value[0] = 0;
+				add_value_IIE("电磁阀控制器：通信正常");
+			}
+		}
+		if(ui->widget_iie_electromagnetic->isVisible())
+		{
+			on_pushButton_IIE_electromagnetic_clicked();
+		}
+	}
+	else
+	{
+		ui->pushButton_IIE_electromagnetic->setText("设备关闭");
+	}
+}
 
+void MainWindow::on_pushButton_IIE_electromagnetic_clicked()
+{
+	ui->frame_value1->setHidden(1);
+	ui->frame_value2->setHidden(1);
+	ui->frame_value3->setHidden(1);
+	ui->frame_value4->setHidden(1);
+	ui->frame_value5->setHidden(1);
+	if(IIE_Value_Num>=1)
+	{
+		ui-> frame_value1->setHidden(0);
+	}
+	if(IIE_Value_Num>=2)
+	{
+		ui-> frame_value2->setHidden(0);
+	}
+	if(IIE_Value_Num>=3)
+	{
+		ui-> frame_value3->setHidden(0);
+	}
+	if(IIE_Value_Num>=4)
+	{
+		ui-> frame_value4->setHidden(0);
+	}
+	if(IIE_Value_Num>=5)
+	{
+		ui-> frame_value5->setHidden(0);
+	}
+	ui->widget_iie_electromagnetic->setHidden(0);
+	ui->widget_iie_electromagnetic-> setWindowFlags(Qt::Widget);
+	if(Flag_IIE)
+	{
+		if(IIE_Electromagnetic_Sta[0][0] == 0x0f)//单个故障
+		{
+			ui->label_IIE2_uart->setText("通信故障");
+			ui->label_IIE2_far->setText("空");
+			ui->label_IIE2_open->setText("空");
+			if(Flag_IIE_warn_value[1] != 0)
+			{
+				Flag_IIE_warn_value[1] = 0;
+				add_value_IIE("1号电磁阀：通信故障");
+			}
+		}
+		else
+		{
+			if(IIE_Electromagnetic_Sta[0][0] == 1)
+			{
+				ui->label_IIE2_uart->setText("故障");
+				if(Flag_IIE_warn_value[1] != 1)
+				{
+					Flag_IIE_warn_value[1] = 1;
+					add_value_IIE("1号电磁阀：故障");
+				}
+			}
+			else
+			{
+				ui->label_IIE2_uart->setText("正常");
+				if(Flag_IIE_warn_value[1] != 2)
+				{
+					Flag_IIE_warn_value[1] = 2;
+					add_value_IIE("1号电磁阀：正常");
+				}
+			}
+			if(IIE_Electromagnetic_Sta[0][1] == 1)
+			    {ui->label_IIE2_far->setText("自动");}else{ui->label_IIE2_far->setText("手动");}
+			if(IIE_Electromagnetic_Sta[0][2] == 1)
+			{
+				ui->label_IIE2_open->setText("全关");
+				if(Flag_IIE_warn_value[2] != 0)
+				{
+					Flag_IIE_warn_value[2] = 0;
+					add_value_IIE("1号电磁阀：全关");
+				}
+			}
+			else if(IIE_Electromagnetic_Sta[0][3] == 1)
+			{
+				ui->label_IIE2_open->setText("全开");
+				if(Flag_IIE_warn_value[2] != 1)
+				{
+					Flag_IIE_warn_value[2] = 1;
+					add_value_IIE("1号电磁阀：全开");
+				}
+			}
+			else if((IIE_Electromagnetic_Sta[0][2] == 0)&&(IIE_Electromagnetic_Sta[0][3] == 0))
+			{
+				ui->label_IIE2_open->setText("动作");
+			}
+		}
+
+		if(IIE_Electromagnetic_Sta[1][0] == 0x0f)
+		{
+			ui->label_IIE2_uart_2->setText("通信故障");
+			ui->label_IIE2_far_2->setText("空");
+			ui->label_IIE2_open_2->setText("空");
+			if(Flag_IIE_warn_value[3] != 0)
+			{
+				Flag_IIE_warn_value[3] = 0;
+				add_value_IIE("2号电磁阀：通信故障");
+			}
+		}
+		else
+		{
+			if(IIE_Electromagnetic_Sta[1][0] == 1)
+			{
+				ui->label_IIE2_uart_2->setText("故障");
+				if(Flag_IIE_warn_value[3] != 1)
+				{
+					Flag_IIE_warn_value[3] = 1;
+					add_value_IIE("2号电磁阀：故障");
+				}
+			}else
+			{
+				ui->label_IIE2_uart_2->setText("正常");
+				if(Flag_IIE_warn_value[3] != 2)
+				{
+					Flag_IIE_warn_value[3] = 2;
+					add_value_IIE("2号电磁阀：正常");
+				}
+			}
+			if(IIE_Electromagnetic_Sta[1][1] == 1)
+			    {ui->label_IIE2_far_2->setText("自动");}else{ui->label_IIE2_far_2->setText("手动");}
+			if(IIE_Electromagnetic_Sta[1][2] == 1)
+			{
+				ui->label_IIE2_open_2->setText("全关");
+				if(Flag_IIE_warn_value[4] != 0)
+				{
+					Flag_IIE_warn_value[4] = 0;
+					add_value_IIE("2号电磁阀：全关");
+				}
+			}
+			else if(IIE_Electromagnetic_Sta[1][3] == 1)
+			{
+				ui->label_IIE2_open_2->setText("全开");
+				if(Flag_IIE_warn_value[4] != 1)
+				{
+					Flag_IIE_warn_value[4] = 1;
+					add_value_IIE("2号电磁阀：全开");
+				}
+			}
+			else if((IIE_Electromagnetic_Sta[1][2] == 0)&&(IIE_Electromagnetic_Sta[0][3] == 0))
+			{
+				ui->label_IIE2_open_2->setText("动作");
+			}
+		}
+
+		if(IIE_Electromagnetic_Sta[2][0] == 0x0f)
+		{
+			ui->label_IIE2_uart_3->setText("通信故障");
+			ui->label_IIE2_far_3->setText("空");
+			ui->label_IIE2_open_3->setText("空");
+			if(Flag_IIE_warn_value[5] != 0)
+			{
+				Flag_IIE_warn_value[5] = 0;
+				add_value_IIE("3号电磁阀：通信故障");
+			}
+		}
+		else
+		{
+			if(IIE_Electromagnetic_Sta[2][0] == 1)
+			{
+				ui->label_IIE2_uart_3->setText("故障");
+				if(Flag_IIE_warn_value[5] != 1)
+				{
+					Flag_IIE_warn_value[5] = 1;
+					add_value_IIE("3号电磁阀：故障");
+				}
+			}else
+			{
+				ui->label_IIE2_uart_3->setText("正常");
+				if(Flag_IIE_warn_value[5] != 2)
+				{
+					Flag_IIE_warn_value[5] = 2;
+					add_value_IIE("3号电磁阀：正常");
+				}
+			}
+			if(IIE_Electromagnetic_Sta[2][1] == 1)
+			    {ui->label_IIE2_far_3->setText("自动");}else{ui->label_IIE2_far_3->setText("手动");}
+			if(IIE_Electromagnetic_Sta[2][2] == 1)
+			{
+				ui->label_IIE2_open_3->setText("全关");
+				if(Flag_IIE_warn_value[6] != 0)
+				{
+					Flag_IIE_warn_value[6] = 0;
+					add_value_IIE("3号电磁阀：全关");
+				}
+			}
+			else if(IIE_Electromagnetic_Sta[2][3] == 1)
+			{
+				ui->label_IIE2_open_3->setText("全开");
+				if(Flag_IIE_warn_value[6] != 1)
+				{
+					Flag_IIE_warn_value[6] = 1;
+					add_value_IIE("3号电磁阀：全开");
+				}
+			}
+			else if((IIE_Electromagnetic_Sta[2][2] == 0)&&(IIE_Electromagnetic_Sta[0][3] == 0))
+			{
+				ui->label_IIE2_open_3->setText("动作");
+			}
+		}
+
+		if(IIE_Electromagnetic_Sta[3][0] = 0x0f)
+		{
+			ui->label_IIE2_uart_4->setText("通信故障");
+			ui->label_IIE2_far_4->setText("空");
+			ui->label_IIE2_open_4->setText("空");
+			if(Flag_IIE_warn_value[7] != 0)
+			{
+				Flag_IIE_warn_value[7] = 0;
+				add_value_IIE("4号电磁阀：通信故障");
+			}
+		}
+		else
+		{
+			if(IIE_Electromagnetic_Sta[3][0] == 1)
+			{
+				ui->label_IIE2_uart_4->setText("故障");
+				if(Flag_IIE_warn_value[7] != 1)
+				{
+					Flag_IIE_warn_value[7] = 1;
+					add_value_IIE("4号电磁阀：故障");
+				}
+			}else
+			{
+				ui->label_IIE2_uart_4->setText("正常");
+				if(Flag_IIE_warn_value[7] != 2)
+				{
+					Flag_IIE_warn_value[7] = 2;
+					add_value_IIE("4号电磁阀：正常");
+				}
+			}
+			if(IIE_Electromagnetic_Sta[3][1] == 1)
+			    {ui->label_IIE2_far_4->setText("自动");}else{ui->label_IIE2_far_4->setText("手动");}
+			if(IIE_Electromagnetic_Sta[3][2] == 1)
+			{
+				ui->label_IIE2_open_4->setText("全关");
+				if(Flag_IIE_warn_value[8] != 0)
+				{
+					Flag_IIE_warn_value[8] = 0;
+					add_value_IIE("4号电磁阀：全关");
+				}
+			}
+			else if(IIE_Electromagnetic_Sta[3][3] == 1)
+			{
+				ui->label_IIE2_open_4->setText("全开");
+				if(Flag_IIE_warn_value[8] != 1)
+				{
+					Flag_IIE_warn_value[8] = 1;
+					add_value_IIE("4号电磁阀：全开");
+				}
+			}
+			else if((IIE_Electromagnetic_Sta[3][2] == 0)&&(IIE_Electromagnetic_Sta[0][3] == 0))
+			{
+				ui->label_IIE2_open_4->setText("动作");
+			}
+		}
+
+		if(IIE_Electromagnetic_Sta[4][0] = 0x0f)
+		{
+			ui->label_IIE2_uart_5->setText("通信故障");
+			ui->label_IIE2_far_5->setText("空");
+			ui->label_IIE2_open_5->setText("空");
+			if(Flag_IIE_warn_value[9] != 0)
+			{
+				Flag_IIE_warn_value[9] = 0;
+				add_value_IIE("5号电磁阀：通信故障");
+			}
+		}
+		else
+		{
+			if(IIE_Electromagnetic_Sta[4][0] == 1)
+			{
+				ui->label_IIE2_uart_5->setText("故障");
+				if(Flag_IIE_warn_value[9] != 1)
+				{
+					Flag_IIE_warn_value[9] = 1;
+					add_value_IIE("5号电磁阀：故障");
+				}
+			}
+			else
+			{
+				ui->label_IIE2_uart_5->setText("正常");
+				if(Flag_IIE_warn_value[9] != 2)
+				{
+					Flag_IIE_warn_value[9] = 2;
+					add_value_IIE("5号电磁阀：正常");
+				}
+			}
+			if(IIE_Electromagnetic_Sta[4][1] == 1)
+			{ui->label_IIE2_far_5->setText("自动");}else{ui->label_IIE2_far_5->setText("手动");}
+			if(IIE_Electromagnetic_Sta[0][2] == 1)
+			{
+				ui->label_IIE2_open_5->setText("全关");
+				if(Flag_IIE_warn_value[10] != 0)
+				{
+					Flag_IIE_warn_value[10] = 0;
+					add_value_IIE("5号电磁阀：全关");
+				}
+			}
+			else if(IIE_Electromagnetic_Sta[0][3] == 1)
+			{
+				ui->label_IIE2_open_5->setText("全开");
+				if(Flag_IIE_warn_value[10] != 1)
+				{
+					Flag_IIE_warn_value[10] = 1;
+					add_value_IIE("5号电磁阀：全开");
+				}
+			}
+			else if((IIE_Electromagnetic_Sta[0][2] == 0)&&(IIE_Electromagnetic_Sta[0][3] == 0))
+			{
+				ui->label_IIE2_open_5->setText("动作");
+			}
+		}
+	}
+	else
+	{
+		ui->label_IIE2_uart->setText("空");
+		ui->label_IIE2_far->setText("空");
+		ui->label_IIE2_open->setText("空");
+		ui->label_IIE2_uart_2->setText("空");
+		ui->label_IIE2_far_2->setText("空");
+		ui->label_IIE2_open_2->setText("空");
+		ui->label_IIE2_uart_3->setText("空");
+		ui->label_IIE2_far_3->setText("空");
+		ui->label_IIE2_open_3->setText("空");
+		ui->label_IIE2_uart_4->setText("空");
+		ui->label_IIE2_far_4->setText("空");
+		ui->label_IIE2_open_4->setText("空");
+		ui->label_IIE2_uart_5->setText("空");
+		ui->label_IIE2_far_5->setText("空");
+		ui->label_IIE2_open_5->setText("空");
+	}
+
+}
+void MainWindow::on_pushButton_IIEDetails_close_clicked()
+{
+	ui->widget_iie_electromagnetic->setHidden(1);
+}
 void MainWindow::liquid_nomal_s()
 {
     ui->label_yewei_sta->setText("液位正常");
@@ -13309,3 +13679,5 @@ void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络�
 
 	}
 }
+
+

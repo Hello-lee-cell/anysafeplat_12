@@ -484,6 +484,16 @@ private slots:
 
 	void on_toolButton_poweroff_2_clicked();
 
+	void on_toolButton_kaiqi_IIE_valve_clicked();
+
+	void on_toolButton_guanbi_IIE_valve_clicked();
+
+	void on_comboBox_valuenum_currentIndexChanged(int index);
+
+	void on_comboBox_wenyou_time_currentIndexChanged(int index);
+
+	void on_comboBox_closevalue_currentIndexChanged(int index);
+
 signals:
 
     void amount_basin_reset(int t);

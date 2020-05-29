@@ -280,6 +280,11 @@ private slots:
     void on_toolButton_clicked();
     //加油机详情页
     void refresh_dispener_data_slot();
+	//IIE电磁阀相关
+	void on_pushButton_IIE_electromagnetic_clicked();
+	void show_IIE_electromagnetic(unsigned char sta);
+
+	void on_pushButton_IIEDetails_close_clicked();
 
 signals:
     void config_sensoramount();

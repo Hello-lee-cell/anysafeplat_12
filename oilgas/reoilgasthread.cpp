@@ -9,6 +9,9 @@
 #include<QDebug>
 #include<systemset.h>
 #include"io_op.h"
+#include<QMutex>
+
+QMutex SendBuf;
 
 int fd_uart_reoilgas;
 int ret_uart_reoilgas;
@@ -45,15 +48,6 @@ unsigned char Fga1000_Value[8] = {0}; //浓度值           与Fga1000_485共享
 //ask690 05.22
 unsigned char Address[16] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0xF,0x00};          //修改了16号地址为0x00
 unsigned char Address_Extend[16] = {0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E,0x1F};  //加油机和防渗池的地址
-unsigned char Flag_Ask_jingdian = 0;  //1表示问静电监测设备
-unsigned char Count_Ask_jingdian = 0;   //如果不回连续问8次
-unsigned char Flag_ASk_IIE = 0; //1表示问IIE
-unsigned char Count_Ask_IIE = 0; //问IIE的次数
-unsigned char Sta_IIE[15] = {0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff};//IIE的状态 第一位用来存储通讯故障，0正常，f通讯故障
-unsigned char Flag_Jingdian_Enable = 0;//使能
-unsigned char Flag_IIE_Enable = 0;//使能
-unsigned char Flag_Jingdian_uartwrong = 0;//静电通讯故障
-unsigned char Flag_IIE_uartwrong = 0;//IIE通信故障
 unsigned char Ask_690_Buf[8] = {0x00,0x04,0x00,0x02,0x00,0x02,0,0}; //发送缓存区初始化，后两位由程序加上校验码
 unsigned char Count_Ask690 = 0;     //0管线 1油罐 2防渗池 3加油机
 unsigned char Count_Ask690_pipetank = 0;
@@ -62,7 +56,7 @@ unsigned char Data_Buf_Sencor_Pre[21] = {0};//19字节预处理数组  第一位
 unsigned char aucAlarmState = 0;    //每位状态传递
 unsigned char Flag_690 = 0; //通信故障检测位
 unsigned char Receive_Pressure_Data[16] = {0}; //用来存储压力数值的数组
-unsigned char Ptr_Ask690[44] = {0};
+unsigned char Ptr_Ask690[50] = {0};
 unsigned char Refresh_Receivebuf[256] = {0};//用来清空接收缓冲区
 
 reoilgasthread::reoilgasthread(QObject *parent):
@@ -134,28 +128,24 @@ void reoilgasthread::run()
 			{
 				if(Flag_Controller_Version == 1)
 				{
-					if((count_basin+count_dispener+count_pipe+count_tank)!=0)//传感器数目不等于0
-					{
-						msleep(100);
-						//先读一次串口，把缓存读完,该数组最大为256
-						len_uart_reoilgas = read(fd_uart_reoilgas,Refresh_Receivebuf,sizeof(Refresh_Receivebuf));
-						len_uart_reoilgas = 0;
-						memset(Refresh_Receivebuf,0,sizeof(char)*256);
-						msleep(10);
 
-						for(unsigned int i = 0;i<((unsigned int)count_basin+count_dispener+count_pipe+count_tank);i++)
-						{
-							ask_690();
-							msleep(100);
-							read_690();
-							msleep(10);
-							if((Flag_ASk_IIE == 0)&&(Flag_Ask_jingdian == 0))//正常数据分析
-							{
-								send_data_690(); //处理传感器返回数据并发送
-							}
-						}
-						msleep(300);
+					msleep(100);
+					//先读一次串口，把缓存读完,该数组最大为256
+					len_uart_reoilgas = read(fd_uart_reoilgas,Refresh_Receivebuf,sizeof(Refresh_Receivebuf));
+					len_uart_reoilgas = 0;
+					memset(Refresh_Receivebuf,0,sizeof(char)*256);
+					msleep(10);
+
+					for(unsigned int i = 0;i<((unsigned int)count_basin+count_dispener+count_pipe+count_tank);i++)
+					{
+						ask_690();
+						msleep(100);
+						read_690();
+						msleep(5);
+						send_data_690();
+						msleep(5);
 					}
+					msleep(200);
 				}
 			}
 		}
@@ -1435,100 +1425,7 @@ void reoilgasthread::sync_data()
 //ask690，泄漏部分
 void reoilgasthread::ask_690()
 {
-	//设备数目初始化
-	Flag_Jingdian_Enable = Flag_xieyou;
-	Flag_IIE_Enable = Flag_IIE;
 	unsigned int  SCRC = 0;
-	//询问690状态  Count_Ask690 == 0 询问管线| ==1 油罐| == 2 防渗池| == 3 加油机
-	if((Count_Ask_jingdian >= 4) && Flag_Ask_jingdian)
-	{
-		if(Flag_Jingdian_Enable)
-		{
-			Flag_Ask_jingdian = 0;
-			Count_Ask_jingdian = 0;
-			Flag_ASk_IIE = 1;//通讯故障，接下来问IIE,在读取数据那里也有一个置1
-			Flag_Jingdian_uartwrong++;//二轮通信故障才通信故障
-			if(Flag_Jingdian_uartwrong>=2)
-			{
-				Flag_Jingdian_uartwrong = 0;
-				Data_Buf_Sencor_Pre[17] = 0xff;
-			}
-		}
-		else
-		{
-			Flag_ASk_IIE = 1;//通讯故障，接下来问IIE,在读取数据那里也有一个置1
-			Flag_Ask_jingdian = 0;
-		}
-
-	}
-	if((Count_Ask_jingdian < 4) && Flag_Ask_jingdian)
-	{
-		if(Flag_Jingdian_Enable)
-		{
-
-			Ask_690_Buf[0] = 0xb1;
-			SCRC = CRC_Test(Ask_690_Buf,8);
-			Ask_690_Buf[6] = ((SCRC & 0xff00) >> 8);
-			Ask_690_Buf[7] = (SCRC & 0x00ff);
-			len_uart_reoilgas = write(fd_uart_reoilgas,Ask_690_Buf,8);
-
-			Count_Ask_jingdian++;
-			usleep(1000);
-			return;
-		}
-		else
-		{
-			Flag_Ask_jingdian = 0;
-			Count_Ask_jingdian = 0;
-			Flag_Jingdian_uartwrong = 0;
-			Flag_ASk_IIE = 1;//未设置，接下来问IIE,在读取数据那里也有一个置1
-		}
-
-	}
-	//问IIE部分
-	if((Flag_ASk_IIE == 1)&&(Count_Ask_IIE >= 4))//通讯故障
-	{
-		if(Flag_IIE_Enable)
-		{
-			Flag_IIE_uartwrong++;//二轮通信故障才通信故障  修改为4轮
-			Flag_ASk_IIE = 0;
-			Count_Ask_IIE = 0;
-			if(Flag_IIE_uartwrong>=4)
-			{
-				Flag_IIE_uartwrong = 0;
-				Sta_IIE[0] = 0xff;
-				Sta_IIE[1]=0;Sta_IIE[2]=0;Sta_IIE[3]=0;Sta_IIE[4]=0;Sta_IIE[5]=0;Sta_IIE[6]=0;Sta_IIE[7]=0;Sta_IIE[8]=0;Sta_IIE[9]=0;Sta_IIE[10]=0;Sta_IIE[11]=0;
-			}
-		}
-		else
-		{
-			Flag_ASk_IIE = 0;
-		}
-	}
-	if((Flag_ASk_IIE == 1)&&(Count_Ask_IIE < 4))
-	{
-		if(Flag_IIE_Enable)
-		{
-
-			Ask_690_Buf[0] = 0xb2;
-			SCRC = CRC_Test(Ask_690_Buf,8);
-			Ask_690_Buf[6] = ((SCRC & 0xff00) >> 8);
-			Ask_690_Buf[7] = (SCRC & 0x00ff);
-			len_uart_reoilgas = write(fd_uart_reoilgas,Ask_690_Buf,8);
-
-			Count_Ask_IIE++;
-			usleep(1000);
-			return;
-		}
-		else
-		{
-			Count_Ask_IIE = 0;
-			Flag_IIE_uartwrong = 0;
-			Flag_ASk_IIE = 0;
-
-		}
-	}
-
 	switch(Count_Ask690)
 	{
 	case 0: if((count_pipe > 0) && (Count_Ask690_pipetank < count_pipe))
@@ -1596,6 +1493,7 @@ void reoilgasthread::read_690()
 	if (len_uart_reoilgas <= 0)
 	{
 		printf("read error \n");
+		qDebug()<<"ask690 read "<< Count_Ask690<<Count_Ask690_basindispener<<Count_Ask690_pipetank;
 	}
 
 	if(len_uart_reoilgas == 7)                          //如果接收到的数据长度7，则进行数据处理，ＣＲＣ校验调试阶段不开
@@ -1645,110 +1543,61 @@ void reoilgasthread::read_690()
 					}
 				}
 
-
 				//非压力法的罐
 				if((Data_Recv_690[2] == 0x02) && (Test_Method != 0x01) && (Data_Recv_690[0] < 9))//非压力法的罐
 				{
-					if(Flag_Ask_jingdian && (Data_Recv_690[0] == 0xb1))//实际这段判断没有用了，地址不可能是B1
+
+					switch (Data_Recv_690[4])
 					{
-						Data_Buf_Sencor_Pre[17] = Data_Recv_690[4];
-						Flag_Ask_jingdian = 0;
-						Count_Ask_jingdian = 0x10;
+					case 0x00: //O_NORMAL
+						aucAlarmState = 0x00;
+						Flag_690 = 0;
+						break;
+
+					case 0x02: //	O_ALARM_water
+						aucAlarmState = 0x02;
+						Flag_690 = 0;
+						break;
+
+					case 0x01:  //	O_ALARM_oil
+						aucAlarmState = 0x01;
+						Flag_690 = 0;
+						break;
+
+					case 0x04:	//O_ERROR
+						aucAlarmState = 0x04;
+						Flag_690 = 0;
+						break;
 					}
-					else
-						//Real_Time_Kpa_Temp = aucReceiveBuf_Sencor[3];    //用于存储实时压力值
-					{
-						switch (Data_Recv_690[4])
-						{
-						case 0x00: //O_NORMAL
-							aucAlarmState = 0x00;
-							Flag_690 = 0;
-							break;
 
-						case 0x02: //	O_ALARM_water
-							aucAlarmState = 0x02;
-							Flag_690 = 0;
-							break;
-
-						case 0x01:  //	O_ALARM_oil
-							aucAlarmState = 0x01;
-							Flag_690 = 0;
-							break;
-
-						case 0x04:	//O_ERROR
-							aucAlarmState = 0x04;
-							Flag_690 = 0;
-							break;
-						}
-					}
 				}
 
 				//除罐之外的其他设备进行正常判断流程
 				if((Data_Recv_690[2] == 0x02)&& (Data_Recv_690[0] > 8))//对于除罐之外的其他设备进行正常判断流程
 				{
-					if(Flag_Ask_jingdian && (Data_Recv_690[0] == 0xb1))
+					switch (Data_Recv_690[4])
 					{
-						Data_Buf_Sencor_Pre[17] = Data_Recv_690[4];
-						Flag_Ask_jingdian = 0;
-						Count_Ask_jingdian = 0;
-						Flag_Jingdian_uartwrong = 0;
-						Flag_ASk_IIE = 1;//静电设备有返回，接下来问IIE
-					}
-					else
-						//Real_Time_Kpa_Temp = aucReceiveBuf_Sencor[3];    //用于存储实时压力值
-					{
-						switch (Data_Recv_690[4])
-						{
-						case 0x00: //O_NORMAL
-							aucAlarmState = 0x00;
-							Flag_690 = 0;
-							break;
+					case 0x00: //O_NORMAL
+						aucAlarmState = 0x00;
+						Flag_690 = 0;
+						break;
 
-						case 0x02: //	O_ALARM_water
-							aucAlarmState = 0x02;
-							Flag_690 = 0;
-							break;
+					case 0x02: //	O_ALARM_water
+						aucAlarmState = 0x02;
+						Flag_690 = 0;
+						break;
 
-						case 0x01:  //	O_ALARM_oil
-							aucAlarmState = 0x01;
-							Flag_690 = 0;
-							break;
+					case 0x01:  //	O_ALARM_oil
+						aucAlarmState = 0x01;
+						Flag_690 = 0;
+						break;
 
-						case 0x04:	//O_ERROR
-							aucAlarmState = 0x04;
-							Flag_690 = 0;
-							break;
-						}
+					case 0x04:	//O_ERROR
+						aucAlarmState = 0x04;
+						Flag_690 = 0;
+						break;
 					}
 				}
-			}
-		}
-	}
-	if(len_uart == 12)//IIE收12位数据
-	{
-		len_uart = 0;
-
-		//数据crc校验
-		RCRC = CRC_Test(Data_Recv_690,12);
-		CRC_H = ((RCRC & 0xff00) >> 8);               //高八位
-		CRC_L = (RCRC & 0x00ff);                      //低八位
-
-		if((CRC_H == Data_Recv_690[10]) && (CRC_L == Data_Recv_690[11]))
-		{
-			if((Data_Recv_690[0] == 0xb2)&&(Data_Recv_690[2] == 0x02))//IIE的地址
-			{
-				Flag_ASk_IIE = 0;
-				Count_Ask_IIE = 0;
-				Flag_IIE_uartwrong = 0;
-				//数据处理
-				Sta_IIE[0] = 0;
-				Sta_IIE[1] = Data_Recv_690[3];//电压
-				Sta_IIE[2] = Data_Recv_690[4];//电阻
-				Sta_IIE[3] = Data_Recv_690[5];//稳油倒计时低位
-				Sta_IIE[4] = Data_Recv_690[6];//稳油倒计时高位
-				Sta_IIE[5] = Data_Recv_690[7];//人员值守倒计时
-				Sta_IIE[6] = Data_Recv_690[8];//状态信息
-				Sta_IIE[7] = Data_Recv_690[9];//屏蔽状态信息
 			}
 		}
 	}
@@ -1763,7 +1612,7 @@ void reoilgasthread::send_data_690()
 		for(uchar i = 0 ; i < 2; i ++)  //三次通讯故障报通讯故障
 		{
 			ask_690();
-			msleep(90);
+			msleep(100);
 			if(Flag_690 == 0 )
 			{
 				break;
@@ -1943,9 +1792,6 @@ void reoilgasthread::send_data_690()
 					{
 						Count_Ask690_basindispener = 0;
 						Count_Ask690 = 0;
-
-						Flag_Ask_jingdian = 1;
-						Count_Ask_jingdian = 0;
 						for(uchar i=(count_dispener+24); i<32 ; i++)
 						{
 							if(i%2)
@@ -1959,9 +1805,6 @@ void reoilgasthread::send_data_690()
 		        {
 			        Count_Ask690_basindispener = 0;
 					Count_Ask690 = 0;
-					Flag_Ask_jingdian = 1;
-					Count_Ask_jingdian = 0;
-
 					for(uchar i=(count_dispener+24); i<32 ; i++)
 					{
 						if(i%2)
@@ -1973,10 +1816,16 @@ void reoilgasthread::send_data_690()
 	}
 
 	//准备发送数据
+	SendBuf.lock();
 	Data_Buf_Sencor_Pre[0] = 0xa0; //添加的手动校验
 	Data_Buf_Sencor_Pre[18] = 0xaa;
 	Data_Buf_Sencor_Pre[19] = 0xaa;
-	for(uchar i = 0;i < 20;i++)
+	for(uchar i = 0;i < 17;i++)
+	{
+		Ptr_Ask690[i] = Data_Buf_Sencor_Pre[i];
+	}
+	//Data_Buf_Sencor_Pre[17]从IIE_thread中获取
+	for(uchar i = 18;i < 20;i++)
 	{
 		Ptr_Ask690[i] = Data_Buf_Sencor_Pre[i];
 	}
@@ -1984,14 +1833,15 @@ void reoilgasthread::send_data_690()
 	{
 		Ptr_Ask690[i+20] = Receive_Pressure_Data[i];
 	}
-	Ptr_Ask690[36] = Sta_IIE[0];//IIE通讯
-	Ptr_Ask690[37] = Sta_IIE[6];//IIE状态信息
-	Ptr_Ask690[38] = Sta_IIE[7];//IIE屏蔽信息
-	Ptr_Ask690[39] = Sta_IIE[1];//IIE电压
-	Ptr_Ask690[40] = Sta_IIE[2];//IIE电阻
-	Ptr_Ask690[41] = Sta_IIE[3];//IIE稳油计时低位
-	Ptr_Ask690[42] = Sta_IIE[4];//IIE稳油计时高位
-	Ptr_Ask690[43] = Sta_IIE[5];//IIE人员值守计时
+	SendBuf.unlock();
+//	Ptr_Ask690[36] = Sta_IIE[0];//IIE通讯
+//	Ptr_Ask690[37] = Sta_IIE[6];//IIE状态信息
+//	Ptr_Ask690[38] = Sta_IIE[7];//IIE屏蔽信息
+//	Ptr_Ask690[39] = Sta_IIE[1];//IIE电压
+//	Ptr_Ask690[40] = Sta_IIE[2];//IIE电阻
+//	Ptr_Ask690[41] = Sta_IIE[3];//IIE稳油计时低位
+//	Ptr_Ask690[42] = Sta_IIE[4];//IIE稳油计时高位
+//	Ptr_Ask690[43] = Sta_IIE[5];//IIE人员值守计时
 
 //	for(unsigned char i = 0 ; i<44 ; i++)//加IIE变为44个数据
 //	{

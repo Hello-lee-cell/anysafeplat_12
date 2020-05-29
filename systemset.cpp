@@ -20,7 +20,7 @@
 #include"database_op.h"
 //************radar*********/
 #include"radar_485.h"
-#include"security.h"
+#include"safty/security.h"
 //add for 检查是否能连外网
 #include <string.h>
 #include <sys/types.h>
@@ -237,7 +237,7 @@ systemset::systemset(QWidget *parent) :
     //********************安全防护设置********************//
     ui->comboBox_num_cc->setStyleSheet("QScrollBar{ background: #F0F0F0; width:20px ;margin-top:0px;margin-bottom:0px }"
                                 "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 50px ;width:18px }");
-    if(Flag_xieyou)
+	if(Flag_Psa2)
     {
         ui->toolButton_kaiqi->setEnabled(0);
         ui->toolButton_guanbi->setEnabled(1);
@@ -257,7 +257,16 @@ systemset::systemset(QWidget *parent) :
         ui->toolButton_kaiqi_IIE->setEnabled(1);
         ui->toolButton_guanbi_IIE->setEnabled(0);
     }
-
+	if(Flag_Valve)
+	{
+		ui->toolButton_kaiqi_IIE_valve->setEnabled(0);
+		ui->toolButton_guanbi_IIE_valve->setEnabled(1);
+	}
+	else
+	{
+		ui->toolButton_kaiqi_IIE_valve->setEnabled(1);
+		ui->toolButton_guanbi_IIE_valve->setEnabled(0);
+	}
     if(Flag_Enable_liqiud == 1)
     {
         ui->toolButton_kaiqi_yewei->setEnabled(0);
@@ -620,8 +629,21 @@ void systemset::on_tabWidget_all_currentChanged(int index)
     }
 	if(index == 3)
     {
+		ui->comboBox_valuenum->setCurrentIndex(IIE_Value_Num);
 
-    }
+		if(IIE_SetModel_Time == 0x05){ui->comboBox_wenyou_time->setCurrentIndex(0);}
+		if(IIE_SetModel_Time == 0x06){ui->comboBox_wenyou_time->setCurrentIndex(1);}
+		if(IIE_SetModel_Time == 0x00){ui->comboBox_wenyou_time->setCurrentIndex(2);}
+		if(IIE_SetModel_Time == 0x02){ui->comboBox_wenyou_time->setCurrentIndex(3);}
+		if(IIE_SetModel_Time == 0x03){ui->comboBox_wenyou_time->setCurrentIndex(4);}
+		if(IIE_SetModel_Time == 0x04){ui->comboBox_wenyou_time->setCurrentIndex(5);}
+
+		if(IIE_SetModel_Warn == 0x03){ui->comboBox_closevalue->setCurrentIndex(0);}
+		if(IIE_SetModel_Warn == 0x04){ui->comboBox_closevalue->setCurrentIndex(1);}
+		if(IIE_SetModel_Warn == 0x05){ui->comboBox_closevalue->setCurrentIndex(2);}
+		if(IIE_SetModel_Warn == 0x06){ui->comboBox_closevalue->setCurrentIndex(3);}
+		if(IIE_SetModel_Warn == 0x00){ui->comboBox_closevalue->setCurrentIndex(4);}
+	}
 	if(index == 4)
     {
         //可燃气体数量初始化
@@ -4498,7 +4520,7 @@ void systemset::on_comboBox_Gas_type_currentIndexChanged(int index)
 void systemset::on_toolButton_kaiqi_clicked()   //人体静电开启
 {
     add_value_jingdianinfo("设备开启");
-    Flag_xieyou = 1;
+	Flag_Psa2 = 1;
     ui->toolButton_kaiqi->setEnabled(0);
     ui->toolButton_guanbi->setEnabled(1);
     config_jingdian_write();
@@ -4507,7 +4529,7 @@ void systemset::on_toolButton_kaiqi_clicked()   //人体静电开启
 
 void systemset::on_toolButton_guanbi_clicked()  //人体静电关闭
 {
-    Flag_xieyou = 0;
+	Flag_Psa2 = 0;
     add_value_jingdianinfo("设备关闭");
     ui->toolButton_kaiqi->setEnabled(1);
     ui->toolButton_guanbi->setEnabled(0);
@@ -4518,7 +4540,7 @@ void systemset::on_toolButton_guanbi_clicked()  //人体静电关闭
 void systemset::on_toolButton_kaiqi_IIE_clicked() //IIE开启
 {
     Flag_IIE = 1;
-    add_value_IIE("设备开启");
+	add_value_IIE("卸油流程控制器设备开启");
     ui->toolButton_kaiqi_IIE->setEnabled(0);
     ui->toolButton_guanbi_IIE->setEnabled(1);
     config_IIE_write();
@@ -4527,12 +4549,93 @@ void systemset::on_toolButton_kaiqi_IIE_clicked() //IIE开启
 
 void systemset::on_toolButton_guanbi_IIE_clicked()//IIE关闭
 {
-    add_value_IIE("设备关闭");
+	add_value_IIE("卸油流程控制器设备关闭");
     Flag_IIE = 0;
     ui->toolButton_kaiqi_IIE->setEnabled(1);
     ui->toolButton_guanbi_IIE->setEnabled(0);
     config_IIE_write();
     emit amount_safe_reset();
+}
+
+void systemset::on_toolButton_kaiqi_IIE_valve_clicked() //电磁阀开启
+{
+	Flag_Valve = 1;
+	add_value_IIE("卸油电磁阀设备开启");
+	ui->toolButton_kaiqi_IIE_valve->setEnabled(0);
+	ui->toolButton_guanbi_IIE_valve->setEnabled(1);
+	config_IIE_write();
+}
+
+void systemset::on_toolButton_guanbi_IIE_valve_clicked()//电磁阀关闭
+{
+	add_value_IIE("卸油电磁阀设备关闭");
+	Flag_Valve = 0;
+	ui->toolButton_kaiqi_IIE_valve->setEnabled(1);
+	ui->toolButton_guanbi_IIE_valve->setEnabled(0);
+	config_IIE_write();
+
+}
+
+void systemset::on_comboBox_valuenum_currentIndexChanged(int index)
+{
+	IIE_Value_Num = index;
+	config_IIE_write();
+}
+
+void systemset::on_comboBox_wenyou_time_currentIndexChanged(int index)
+{
+	if(index == 0){IIE_SetModel_Time = 0x05;} //5min
+	if(index == 1){IIE_SetModel_Time = 0x06;} //10min
+	if(index == 2){IIE_SetModel_Time = 0x00;} //15min
+	if(index == 3){IIE_SetModel_Time = 0x02;} //20min
+	if(index == 4){IIE_SetModel_Time = 0x03;} //25min
+	if(index == 5){IIE_SetModel_Time = 0x04;} //30min
+	config_IIE_write();
+}
+
+void systemset::on_comboBox_closevalue_currentIndexChanged(int index)
+{
+	if(index == 0){IIE_SetModel_Warn = 0x03;}
+	if(index == 1){IIE_SetModel_Warn = 0x04;}
+	if(index == 2){IIE_SetModel_Warn = 0x05;}
+	if(index == 3){IIE_SetModel_Warn = 0x06;}
+	if(index == 4){IIE_SetModel_Warn = 0x00;}
+	config_IIE_write();
+}
+
+void systemset::on_toolButton_kaiqi_yewei_clicked()
+{
+	Flag_Enable_liqiud = 1;
+	config_security();
+	add_value_liquid("设备监测开启");
+	ui->toolButton_kaiqi_yewei->setEnabled(0);
+	ui->toolButton_guanbi_yewei->setEnabled(1);
+}
+
+void systemset::on_toolButton_guanbi_yewei_clicked()
+{
+	Flag_Enable_liqiud = 0;
+	config_security();
+	ui->toolButton_kaiqi_yewei->setEnabled(1);
+	ui->toolButton_guanbi_yewei->setEnabled(0);
+}
+
+
+void systemset::on_toolButton_kaiqi_beng_clicked()
+{
+	Flag_Enable_pump = 1;
+	config_security();
+	add_value_pump("设备监测开启");
+	ui->toolButton_kaiqi_beng->setEnabled(0);
+	ui->toolButton_guanbi_beng->setEnabled(1);
+}
+
+void systemset::on_toolButton_guanbi_beng_clicked()
+{
+	Flag_Enable_pump = 0;
+	config_security();
+	ui->toolButton_kaiqi_beng->setEnabled(1);
+	ui->toolButton_guanbi_beng->setEnabled(0);
 }
 
 void systemset::on_pushButton_allclean_clicked()
@@ -4549,41 +4652,6 @@ void systemset::on_toolButton_warn_all_clean_queren_clicked()
 void systemset::on_toolButton_warn_allclean_quxiao_clicked()
 {
     ui->widget_warn_allclean->setHidden(1);
-}
-
-void systemset::on_toolButton_kaiqi_yewei_clicked()
-{
-    Flag_Enable_liqiud = 1;
-    config_security();
-    add_value_liquid("设备监测开启");
-    ui->toolButton_kaiqi_yewei->setEnabled(0);
-    ui->toolButton_guanbi_yewei->setEnabled(1);
-}
-
-void systemset::on_toolButton_guanbi_yewei_clicked()
-{
-    Flag_Enable_liqiud = 0;
-    config_security();
-    ui->toolButton_kaiqi_yewei->setEnabled(1);
-    ui->toolButton_guanbi_yewei->setEnabled(0);
-}
-
-
-void systemset::on_toolButton_kaiqi_beng_clicked()
-{
-    Flag_Enable_pump = 1;
-    config_security();
-    add_value_pump("设备监测开启");
-    ui->toolButton_kaiqi_beng->setEnabled(0);
-    ui->toolButton_guanbi_beng->setEnabled(1);
-}
-
-void systemset::on_toolButton_guanbi_beng_clicked()
-{
-    Flag_Enable_pump = 0;
-    config_security();
-    ui->toolButton_kaiqi_beng->setEnabled(1);
-    ui->toolButton_guanbi_beng->setEnabled(0);
 }
 
 void systemset::on_toolButton_warn_ip_wrong_enter_clicked()
@@ -5115,5 +5183,6 @@ void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pi
 	//放到油气回收设置里面了
 	//emit myserver_xielousetup(tank_num,tank_type,pipe_num,dispener_num,basin_num);
 }
+
 
 

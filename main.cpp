@@ -9,9 +9,10 @@
 #include "network/main_main.h"
 #include "uartthread.h"
 #include "warn_sound_thread.h"
-#include "security.h"
+#include "safty/security.h"
 #include "timer_pop.h"
 #include "file_op.h"
+#include "safty/iie_thread.h"
 //数据库头文件
 #include<database_set.h>
 #include<database_op.h>
@@ -78,9 +79,10 @@ unsigned char Alarm_Re_Flag[4];
 unsigned char Communication_Machine = 0;    //通信时的从机
 
 //serial.h
-unsigned char Data_Buf_Sencor[45] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+unsigned char Data_Buf_Sencor[50] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
                                      0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
-                                     0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF};  //19字节数组
+                                     0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,
+                                     0xFF,0xFF,0xFF,0xFF,0xFF};  //19字节数组
 unsigned char Test_Method = 0x03;                   //检测方法标志位，00其他方法，01压力法，02液媒法，03传感器法
 //systemset.h
 unsigned char Flag_Set_yuzhi = 0;
@@ -106,9 +108,15 @@ unsigned char count_dispener=0;
 float count_Pressure[8] = {0};//存储压力值
 unsigned char flag_silent = 0;
 //人体静电
-unsigned char Flag_xieyou = 1;  //人体静电使能
+unsigned char Flag_Psa2 = 1;  //人体静电使能
 //IIE
 unsigned char Flag_IIE = 1; //IIE使能
+//电磁阀
+unsigned char Flag_Valve = 1;//电磁阀使能
+unsigned char IIE_Electromagnetic_Sta[5][4] = {0};//电磁阀
+unsigned char IIE_SetModel_Time = 0x00;
+unsigned char IIE_SetModel_Warn = 0x02;
+unsigned char IIE_Value_Num = 0;//阀门数量
 //在线油气回收
 unsigned char Flag_Accumto[12][8] = {0};//油枪连续报警天数
 unsigned char Flag_Delay_State[12][8] = {0};//关枪继电器使能
@@ -208,16 +216,11 @@ int main(int argc, char *argv[])
 		qDebug()<<"HuBei XieLou";
 	}
 
-    //结束进程
-//    hbtcp->quit();
-//    hbtcp->wait();
-//    delete hbtcp;
+	IIE_thread *ask_safty = new IIE_thread;
+	ask_safty->start();
 
     warn_sound_thread *write_sound = new warn_sound_thread;
 	write_sound->start();
-
-	//myserver *myserver_thread = new myserver;
-	//myserver_thread->start();
 
     security *securitys = new security;
     QObject::connect(securitys,SIGNAL(liquid_close()),&w,SLOT(liquid_close_s()));

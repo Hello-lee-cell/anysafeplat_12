@@ -35,7 +35,7 @@ int IIE_oil_time = 0;//稳油倒计时
 int Flag_IIE_c = 6;//上一次是否开启
 
 unsigned char flag_syswro = 0;  //ask690进程检测位
-
+unsigned char IIE_Electromagnetic_Sta_Pre[5] = {3};
 #define SHASIZE 100
 #define SHMNAME "shareMem"
 #define SEMSIG  "signalMem"
@@ -66,7 +66,8 @@ void mythread::run()
     unsigned char count_renti = 0;
 //    unsigned char i_sound = 0;                //8tankpre    9tankwarn   10tankhigh  11tanklow
 //    unsigned char flag_sound[20] = {0};     //2223   //4tankoil  5tankwater  6tanksensor 7tankuart
-    while(1)                                //0pipeoil  1pipewater  2pipesensor 3tankuart
+	sleep(5);
+	while(1)                                //0pipeoil  1pipewater  2pipesensor 3tankuart
     {
         while(flag_waitsetup)
         {
@@ -84,17 +85,17 @@ void mythread::run()
 		}
 		else
 		{
-			for(uchar i = 0;i < 44;i++) //增加IIE后由36改为44
+			for(uchar i = 0;i < 49;i++) //增加IIE后由36改为44
 			{
 				Data_Buf_Sencor[i] = Ptr_Ask690[i];
 			}
 			sleep(1);
 		}
 
-//        for(uchar i = 0;i < 44;i++) //增加IIE后由36改为44
-//        {
-//            printf("%02x ",Data_Buf_Sencor[i]);  //打印接收数据
-//        }
+//		for(uchar i = 0;i < 49;i++) //增加IIE后由36改为44
+//		{
+//			printf("%02x ",Data_Buf_Sencor[i]);  //打印接收数据
+//		}
         //printf("receive from ask 690 44\n");
 
         //数据打包,计算压力值
@@ -105,7 +106,7 @@ void mythread::run()
         //状态检测入口
 
         //人体静电检测
-        if(Flag_xieyou)
+        if(Flag_Psa2)
         {
             emit set_renti(8,1);
             unsigned char flag_renti;
@@ -161,7 +162,8 @@ void mythread::run()
         }
         //IIE监控部分
         IIE_analysis();
-
+		//IIE电磁阀部分
+		IIE_Electromagnetic_Analysis();
         if(flag_mythread == 1)
         {
             for(int i = 0;i < 8;i++)
@@ -3033,7 +3035,168 @@ void mythread::IIE_analysis()
 
 }
 
+/*******************************
+ * 分析IIE电磁阀状态，二维数组第二位含义
+*0位	  故障状态	0-正常；1-故障报警
+*1位	  远程/就地	0-就地；1-远程
+*2位	  全关	    0-未全关；1-全关
+*3位	  全开	    0-未全开；1-全开
+ * *****************************/
+void mythread::IIE_Electromagnetic_Analysis()
+{
+	if(Flag_IIE == 1)//使能状态
+	{
+		unsigned char sta = 0;//电磁阀电路板状态
+		if((IIE_Electromagnetic_Sta_Pre[0] != Data_Buf_Sencor[44])||(IIE_Electromagnetic_Sta_Pre[1] != Data_Buf_Sencor[45])||
+		        (IIE_Electromagnetic_Sta_Pre[2] != Data_Buf_Sencor[46])||(IIE_Electromagnetic_Sta_Pre[3] != Data_Buf_Sencor[47])||
+		        (IIE_Electromagnetic_Sta_Pre[4] != Data_Buf_Sencor[48]))
+		{
+			IIE_Electromagnetic_Sta_Pre[0] = Data_Buf_Sencor[44];
+			IIE_Electromagnetic_Sta_Pre[1] = Data_Buf_Sencor[45];
+			IIE_Electromagnetic_Sta_Pre[2] = Data_Buf_Sencor[46];
+			IIE_Electromagnetic_Sta_Pre[3] = Data_Buf_Sencor[47];
+			IIE_Electromagnetic_Sta_Pre[4] = Data_Buf_Sencor[48];
 
+			if((IIE_Electromagnetic_Sta_Pre[0] == 0xff)&&(IIE_Electromagnetic_Sta_Pre[1] == 0xff)&&(IIE_Electromagnetic_Sta_Pre[2] == 0xff)&&
+			        (IIE_Electromagnetic_Sta_Pre[3] == 0xff)&&(IIE_Electromagnetic_Sta_Pre[4] == 0xff))
+			{
+				sta = 0xff;//通信故障
+			}
+			else {
+				sta = 0x00;//通信正常
+			}
+			emit IIE_Electromagnetic_Show(sta);//发送显示信号
+		}
+		if(Data_Buf_Sencor[44] != 0xff)
+		{
+			if((Data_Buf_Sencor[44]&0x10) == 0x10)//单个阀通信故障
+			{
+				IIE_Electromagnetic_Sta[0][0] = 0x0f;
+			}
+			else
+			{
+				if((Data_Buf_Sencor[44]&0x01) == 0x01){IIE_Electromagnetic_Sta[0][0] = 1;}
+				else{IIE_Electromagnetic_Sta[0][0] = 0;}
+				if((Data_Buf_Sencor[44]&0x02) == 0x02){IIE_Electromagnetic_Sta[0][1] = 1;}
+				else{IIE_Electromagnetic_Sta[0][1] = 0;}
+				if((Data_Buf_Sencor[44]&0x04) == 0x04){IIE_Electromagnetic_Sta[0][2] = 1;}
+				else{IIE_Electromagnetic_Sta[0][2] = 0;}
+				if((Data_Buf_Sencor[44]&0x08) == 0x08){IIE_Electromagnetic_Sta[0][3] = 1;}
+				else{IIE_Electromagnetic_Sta[0][3] = 0;}
+			}
+		}
+		else
+		{
+			IIE_Electromagnetic_Sta[0][0] = 0xff;IIE_Electromagnetic_Sta[0][1] = 0xff;
+			IIE_Electromagnetic_Sta[0][2] = 0xff;IIE_Electromagnetic_Sta[0][3] = 0xff;
+		}
+
+		if(Data_Buf_Sencor[45] != 0xff)
+		{
+			if((Data_Buf_Sencor[45]&0x10) == 0x10)//单个阀通信故障
+			{
+				IIE_Electromagnetic_Sta[1][0] = 0x0f;
+			}
+			else
+			{
+				if((Data_Buf_Sencor[45]&0x01) == 0x01){IIE_Electromagnetic_Sta[1][0] = 1;}
+				else{IIE_Electromagnetic_Sta[1][0] = 0;}
+				if((Data_Buf_Sencor[45]&0x02) == 0x02){IIE_Electromagnetic_Sta[1][1] = 1;}
+				else{IIE_Electromagnetic_Sta[1][1] = 0;}
+				if((Data_Buf_Sencor[45]&0x04) == 0x04){IIE_Electromagnetic_Sta[1][2] = 1;}
+				else{IIE_Electromagnetic_Sta[1][2] = 0;}
+				if((Data_Buf_Sencor[45]&0x08) == 0x08){IIE_Electromagnetic_Sta[1][3] = 1;}
+				else{IIE_Electromagnetic_Sta[1][3] = 0;}
+			}
+		}
+		else
+		{
+			IIE_Electromagnetic_Sta[1][0] = 0xff;IIE_Electromagnetic_Sta[1][1] = 0xff;
+			IIE_Electromagnetic_Sta[1][2] = 0xff;IIE_Electromagnetic_Sta[1][3] = 0xff;
+		}
+		if(Data_Buf_Sencor[46] != 0xff)
+		{
+			if((Data_Buf_Sencor[46]&0x10) == 0x10)//单个阀通信故障
+			{
+				IIE_Electromagnetic_Sta[2][0] = 0x0f;
+			}
+			else
+			{
+				if((Data_Buf_Sencor[46]&0x01) == 0x01){IIE_Electromagnetic_Sta[2][0] = 1;}
+				else{IIE_Electromagnetic_Sta[2][0] = 0;}
+				if((Data_Buf_Sencor[46]&0x02) == 0x02){IIE_Electromagnetic_Sta[2][1] = 1;}
+				else{IIE_Electromagnetic_Sta[2][1] = 0;}
+				if((Data_Buf_Sencor[46]&0x04) == 0x04){IIE_Electromagnetic_Sta[2][2] = 1;}
+				else{IIE_Electromagnetic_Sta[2][2] = 0;}
+				if((Data_Buf_Sencor[46]&0x08) == 0x08){IIE_Electromagnetic_Sta[2][3] = 1;}
+				else{IIE_Electromagnetic_Sta[2][3] = 0;}
+			}
+		}
+		else
+		{
+			IIE_Electromagnetic_Sta[2][0] = 0xff;IIE_Electromagnetic_Sta[2][1] = 0xff;
+			IIE_Electromagnetic_Sta[2][2] = 0xff;IIE_Electromagnetic_Sta[2][3] = 0xff;
+		}
+		if(Data_Buf_Sencor[47] != 0xff)
+		{
+			if((Data_Buf_Sencor[47]&0x10) == 0x10)//单个阀通信故障
+			{
+				IIE_Electromagnetic_Sta[3][0] = 0x0f;
+			}
+			else
+			{
+				if((Data_Buf_Sencor[47]&0x01) == 0x01){IIE_Electromagnetic_Sta[3][0] = 1;}
+				else{IIE_Electromagnetic_Sta[3][0] = 0;}
+				if((Data_Buf_Sencor[47]&0x02) == 0x02){IIE_Electromagnetic_Sta[3][1] = 1;}
+				else{IIE_Electromagnetic_Sta[3][1] = 0;}
+				if((Data_Buf_Sencor[47]&0x04) == 0x04){IIE_Electromagnetic_Sta[3][2] = 1;}
+				else{IIE_Electromagnetic_Sta[3][2] = 0;}
+				if((Data_Buf_Sencor[47]&0x08) == 0x08){IIE_Electromagnetic_Sta[3][3] = 1;}
+				else{IIE_Electromagnetic_Sta[3][3] = 0;}
+			}
+		}
+		else
+		{
+			IIE_Electromagnetic_Sta[3][0] = 0xff;IIE_Electromagnetic_Sta[3][1] = 0xff;
+			IIE_Electromagnetic_Sta[3][2] = 0xff;IIE_Electromagnetic_Sta[3][3] = 0xff;
+		}
+		if(Data_Buf_Sencor[48] != 0xff)
+		{
+			if((Data_Buf_Sencor[48]&0x10) == 0x10)//单个阀通信故障
+			{
+				IIE_Electromagnetic_Sta[4][0] = 0x0f;
+			}
+			else
+			{
+				if((Data_Buf_Sencor[48]&0x01) == 0x01){IIE_Electromagnetic_Sta[4][0] = 1;}
+				else{IIE_Electromagnetic_Sta[4][0] = 0;}
+				if((Data_Buf_Sencor[48]&0x02) == 0x02){IIE_Electromagnetic_Sta[4][1] = 1;}
+				else{IIE_Electromagnetic_Sta[4][1] = 0;}
+				if((Data_Buf_Sencor[48]&0x04) == 0x04){IIE_Electromagnetic_Sta[4][2] = 1;}
+				else{IIE_Electromagnetic_Sta[4][2] = 0;}
+				if((Data_Buf_Sencor[48]&0x08) == 0x08){IIE_Electromagnetic_Sta[4][3] = 1;}
+				else{IIE_Electromagnetic_Sta[4][3] = 0;}
+			}
+		}
+		else
+		{
+			IIE_Electromagnetic_Sta[4][0] = 0xff;IIE_Electromagnetic_Sta[4][1] = 0xff;
+			IIE_Electromagnetic_Sta[4][2] = 0xff;IIE_Electromagnetic_Sta[4][3] = 0xff;
+		}
+	}
+	else
+	{
+		if(IIE_Electromagnetic_Sta_Pre[0] != 0xf6)
+		{
+			emit IIE_Electromagnetic_Show(0);//发送显示信号 显示设备关闭
+		}
+		IIE_Electromagnetic_Sta_Pre[0] = 0xf6;
+		IIE_Electromagnetic_Sta_Pre[1] = 0xf6;
+		IIE_Electromagnetic_Sta_Pre[2] = 0xf6;
+		IIE_Electromagnetic_Sta_Pre[3] = 0xf6;
+		IIE_Electromagnetic_Sta_Pre[4] = 0xf6;
+	}
+}
 
 //0高液位报警状态：1：高液位报警；0：高液位正常
 //1静电报警状态   1：静电危险 0：静电安全

@@ -22,7 +22,8 @@
 #include"uart_main.h"
 #include"io_op.h"
 #include"database_op.h"
-#include"security.h"
+#include"safty/security.h"
+#include"file_op.h"
 unsigned char version[7]={0x05,0x99,0x99,0x99,0x99,0x99,0x99};   //协议版本号
 unsigned char LEAK_DETECTOR=0x02; //测漏报警控制器状态数据
 int PORT_UDP = 3486;       		// The port which is communicate with server     可设置
@@ -2031,6 +2032,141 @@ sleep(1);
                          printf("OK: Sent %d bytes sucessful, please enter again.\n", num_send);
                          sdbuf_count = 10;
                      }
+
+					 //IIE
+					 if(DB_Ad_Lg == 2 && DB_Ad[0] == 0xB2)
+					 {
+						 if(revbuf[5] == 0x00)//读设置信息
+						 {
+							 sdbuf[0] = 0x02;//把数据节点写死
+							 sdbuf[1] = 0x01;
+							 sdbuf[2] = 0x07;
+							 sdbuf[3] = ID_M;
+							 sdbuf[4] = 0;  //Mc
+							 sdbuf[5] = 0x20;
+							 sdbuf[6] = 0;  //M_Lg 高位
+							 sdbuf[8] = 2;  //DB_Ad_Lg
+							 sdbuf[9] = 0xB2; //DB_Ad
+							 sdbuf[sdbuf_count] = revbuf[10];//DB_Ad
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = 0x02;
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = 0x02;
+							 sdbuf_count++;
+							 if(Flag_IIE == 1 )//IIE开启
+							 {
+								 sdbuf[sdbuf_count] = Ptr_Ask690[37];//状态
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = Ptr_Ask690[38];//屏蔽状态
+								 sdbuf_count++;
+							 }
+							 else// 未开启
+							 {
+								 sdbuf[sdbuf_count] = 0;//油泵状态
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = 0;//油泵状态
+								 sdbuf_count++;
+							 }
+							 sdbuf[7] = sdbuf_count - 8;
+							 if((num_send = send(nsockfd,sdbuf,sdbuf_count,0)) == -1)
+							 {
+								 printf("ERROR: Failed to sent string.\n");
+								 Flag_TcpClose_FromTcp = 1; //close(nsockfd);
+								 break;
+							 }
+							 printf("OK: Sent %d bytes sucessful, please enter again.\n", num_send);
+							 sdbuf_count = 10;
+						 }
+						 else//写设置信息
+						 {
+							 sdbuf[0] = 0x02;//把数据节点写死
+							 sdbuf[1] = 0x01;
+							 sdbuf[2] = 0x07;
+							 sdbuf[3] = ID_M;
+							 sdbuf[4] = 0;  //Mc
+							 sdbuf[5] = 0x20;
+							 sdbuf[6] = 0;  //M_Lg 高位
+							 sdbuf[8] = 2;  //DB_Ad_Lg
+							 sdbuf[9] = 0xB2; //DB_Ad
+							 sdbuf[sdbuf_count] = revbuf[10];//DB_Ad
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = revbuf[11];
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = revbuf[12];
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = revbuf[13];
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = revbuf[14];
+							 sdbuf_count++;
+
+							 IIE_SetModel_Time = revbuf[13];
+							 IIE_SetModel_Warn = revbuf[14];
+							 //写设置信息（未完善）
+							 config_IIE_write();
+							 sdbuf[7] = sdbuf_count - 8;
+							 if((num_send = send(nsockfd,sdbuf,sdbuf_count,0)) == -1)
+							 {
+								 printf("ERROR: Failed to sent string.\n");
+								 Flag_TcpClose_FromTcp = 1; //close(nsockfd);
+								 break;
+							 }
+							 printf("OK: Sent %d bytes sucessful, please enter again.\n", num_send);
+							 sdbuf_count = 10;
+						 }
+					 }
+					 //IIE 电磁阀
+					 if(DB_Ad_Lg == 2 && DB_Ad[0] == 0xB3)
+					 {
+						 if(revbuf[5] == 0x00)//读设置信息
+						 {
+							 sdbuf[0] = 0x02;//把数据节点写死
+							 sdbuf[1] = 0x01;
+							 sdbuf[2] = 0x07;
+							 sdbuf[3] = ID_M;
+							 sdbuf[4] = 0;  //Mc
+							 sdbuf[5] = 0x20;
+							 sdbuf[6] = 0;  //M_Lg 高位
+							 sdbuf[8] = 2;  //DB_Ad_Lg
+							 sdbuf[9] = 0xB3; //DB_Ad
+							 sdbuf[sdbuf_count] = revbuf[10];//DB_Ad
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = 0x02;
+							 sdbuf_count++;
+							 sdbuf[sdbuf_count] = 0x04;
+							 sdbuf_count++;
+							 if(Flag_IIE == 1)//IIE开启
+							 {
+								 sdbuf[sdbuf_count] = Ptr_Ask690[44];//1号阀
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = Ptr_Ask690[45];//2号阀
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = Ptr_Ask690[46];//3号阀
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = Ptr_Ask690[47];//4号阀
+								 sdbuf_count++;
+							 }
+							 else// 未开启
+							 {
+								 sdbuf[sdbuf_count] = 0;//1号阀
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = 0;//2号阀
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = 0;//3号阀
+								 sdbuf_count++;
+								 sdbuf[sdbuf_count] = 0;//4号阀
+								 sdbuf_count++;
+							 }
+							 sdbuf[7] = sdbuf_count - 8;
+							 if((num_send = send(nsockfd,sdbuf,sdbuf_count,0)) == -1)
+							 {
+								 printf("ERROR: Failed to sent string.\n");
+								 Flag_TcpClose_FromTcp = 1; //close(nsockfd);
+								 break;
+							 }
+							 printf("OK: Sent %d bytes sucessful, please enter again.\n", num_send);
+							 sdbuf_count = 10;
+						 }
+					 }
                 }
 
             }
