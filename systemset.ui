@@ -1127,19 +1127,19 @@
        <widget class="QToolButton" name="toolButton_gunamount_enter">
         <property name="geometry">
          <rect>
-          <x>410</x>
-          <y>50</y>
-          <width>111</width>
-          <height>41</height>
+          <x>270</x>
+          <y>5</y>
+          <width>101</width>
+          <height>31</height>
          </rect>
         </property>
         <property name="font">
          <font>
-          <pointsize>18</pointsize>
+          <pointsize>15</pointsize>
          </font>
         </property>
         <property name="text">
-         <string/>
+         <string>加油机确认</string>
         </property>
        </widget>
        <widget class="QToolButton" name="toolButton_gundetail_enter">
@@ -1292,6 +1292,9 @@
           <pointsize>17</pointsize>
          </font>
         </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::AllEditTriggers</set>
+        </property>
        </widget>
        <widget class="QTableView" name="tableView_gundetailset">
         <property name="geometry">
@@ -1306,6 +1309,9 @@
          <font>
           <pointsize>17</pointsize>
          </font>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::AllEditTriggers</set>
         </property>
        </widget>
        <widget class="QLabel" name="label_146">
@@ -1349,7 +1355,6 @@
        </widget>
        <zorder>label_91</zorder>
        <zorder>comboBox_dispen_sumset</zorder>
-       <zorder>toolButton_gunamount_enter</zorder>
        <zorder>label_92</zorder>
        <zorder>label_reoilgas_factorset_state</zorder>
        <zorder>toolButton_gundetail_enter</zorder>
@@ -1360,6 +1365,7 @@
        <zorder>tableView_gundetailset</zorder>
        <zorder>label_146</zorder>
        <zorder>pushButton_sync</zorder>
+       <zorder>toolButton_gunamount_enter</zorder>
       </widget>
       <widget class="QFrame" name="frame_9">
        <property name="geometry">
@@ -1425,6 +1431,9 @@
          <font>
           <pointsize>17</pointsize>
          </font>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::AllEditTriggers</set>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButtonsave_yingshe_copy">
@@ -2764,6 +2773,21 @@
       </widget>
      </widget>
     </widget>
+    <widget class="QPushButton" name="pushButton_testnetwork">
+     <property name="geometry">
+      <rect>
+       <x>1030</x>
+       <y>50</y>
+       <width>89</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>N</string>
+     </property>
+    </widget>
+    <zorder>pushButton_testnetwork</zorder>
+    <zorder>scrollArea</zorder>
    </widget>
    <widget class="QWidget" name="tab_xielou">
     <attribute name="title">
@@ -8264,6 +8288,19 @@ background-color: rgb(189,223,255);
          </property>
         </widget>
        </widget>
+       <widget class="QPushButton" name="pushButton_StationInfo">
+        <property name="geometry">
+         <rect>
+          <x>350</x>
+          <y>24</y>
+          <width>89</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>油站详情</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QFrame" name="frame_IFSF">
        <property name="geometry">
@@ -8467,6 +8504,16 @@ background-color: rgb(189,223,255);
         <item>
          <property name="text">
           <string>江门油气回收上传协议</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>佛山油气回收上传协议</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>合肥油气回收上传协议</string>
          </property>
         </item>
         <item>
@@ -9252,13 +9299,13 @@ background-color: rgb(189,223,255);
       </widget>
       <zorder>frame_network_verselect</zorder>
       <zorder>frame_ip</zorder>
-      <zorder>frame_fujian</zorder>
       <zorder>frame_IFSF</zorder>
       <zorder>frame_12</zorder>
       <zorder>frame_guangzhou</zorder>
       <zorder>frame_hubei</zorder>
       <zorder>frame_5</zorder>
       <zorder>frame_8</zorder>
+      <zorder>frame_fujian</zorder>
      </widget>
     </widget>
    </widget>

@@ -45,8 +45,8 @@
 #define DEV_NAME    "/dev/ttymxc6"   //uart7 泄漏
 #define REOILGAS_SERI   "/dev/ttymxc4"  //uart5 加油机
 #define FGA_SERI    "/dev/ttymxc3"  //uart4  气体监测
-#define SAFTY_IIE "/dev/ttymxc2"  //uart3  IIE
-#define CRASH_COLUMN "/dev/ttymxc1"  //uart2  防撞柱
+#define SAFTY_IIE "/dev/ttymxc1"  //uart2  IIE
+#define CRASH_COLUMN "/dev/ttymxc2"  //uart3  防撞柱
 
 #define CONFIG_SENSORAMOUNT "/opt/config.txt"
 #define HISTORY_NET "/opt/net_info.txt"
@@ -221,6 +221,11 @@ extern QString POSTPASSWORD_HUNAN;
 extern unsigned char Flag_Shield_Network;                //屏蔽网络上传的报警信息，只上传正常数据
 extern unsigned char Flag_CommunicateError_Maindisp[48]; //加油机通信故障报警，用来一天结束判断是否需要报警
 extern unsigned char Flag_Postsend_Enable;               //网络上传使能位，1 上传  0不上传
+//post佛山
+extern QString Account_Foshan ;                                           //全局 会变
+extern QString Pwdcode_Foshan ;                                           //全局 会变
+extern QString UserId_FoShan ;//	区域代码标识（6位）+ 加油站标识（4位）      //全局 会变
+extern QString PostAdd_FoShan;   //地址，会不会变不一定，作成可变的           //全局 会变
 //isoosi
 extern QString IsoOis_MN ;      //"440111301A52TWUF73000001";
 extern QString IsoOis_PW ;      //"758534";

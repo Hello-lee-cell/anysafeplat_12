@@ -188,7 +188,7 @@ void net_isoosi::tcp_client()
 				qDebug()<<"IP changed! So break!";
 				break;
 			}
-            qDebug()<<"ready to send!";
+			//qDebug()<<"ready to send!";
         }
         //如果不要该协议则退出
         if(Flag_Network_Send_Version != 1)
@@ -498,6 +498,14 @@ void net_isoosi::gun_warn_data(QString gun_data,QString TightAlm,QString DynbPAl
     send_data = "QN="+IsoOis_QN+";"+"MN="+IsoOis_MN+";"+IsoOis_ST+";"+"CN=2041;"+"PW="+IsoOis_PW+";"+"CP=&&DataTime="+date+";"
                  +send_gun_data+";"+send_TightAlm+";"+send_DynbPAlm+";"+send_TankPAlm+";"+send_DeviceAlm+";"+send_PVTapAlm+";"
                  +send_DevOpenAlm+";"+send_DevStopAlm+"&&";
+
+	if(Flag_Shield_Network == 1)//屏蔽状态
+	{
+		send_data = send_data.replace(QRegExp("\\=1;"),"=0;");
+		send_data = send_data.replace(QRegExp("\\=2;"),"=0;"); //报警预警全部替换为正常
+		send_data = send_data.replace(QRegExp("\\=1&&"),"=0&&");
+		send_data = send_data.replace(QRegExp("\\=2&&"),"=0&&"); //报警预警全部替换为正常
+	}
 
     unsigned int long_data = send_data.length();
     QString send_dada_length = QString("%1").arg(long_data,4,10,QLatin1Char('0'));

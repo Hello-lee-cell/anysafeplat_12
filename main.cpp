@@ -17,6 +17,7 @@
 #include<database_set.h>
 #include<database_op.h>
 #include"myserver/myserver.h"
+#include"new_keyboard/SoftKeyBoardContext.h"
 //char IP_DES[20] = {0};
 //main_main
 char IP_BRO[32] = {0};
@@ -177,11 +178,16 @@ int main(int argc, char *argv[])
 	setvbuf(stdout, NULL, _IONBF, 0);//使printf可以立刻输出到控制台
  //   QWSServer::setBackground(QColor(0,0,0,0));  //去掉绿屏
     QApplication a(argc, argv,QApplication::GuiServer);
+
+	QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+	QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 //    QWSServer::setCursorVisible(false);//取消鼠标显   位置qapplication实例化之后
     //数据库初始化
-	QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
     creatConnection();
     creat_table();
+
+
     MainWindow w;
     w.setWindowFlags(Qt::FramelessWindowHint);
 
@@ -236,6 +242,9 @@ int main(int argc, char *argv[])
     QObject::connect(pop_ups,SIGNAL(show_reoilgas_pop(int)),&w,SLOT(show_pop_ups(int)));
     QObject::connect(pop_ups,SIGNAL(refresh_dispener_data()),&w,SLOT(refresh_dispener_data_slot()));
     pop_ups->start();
+
+	SoftKeyBoardContext * ic = new SoftKeyBoardContext();
+	a.setInputContext(ic);
 
     w.show();
     return a.exec();

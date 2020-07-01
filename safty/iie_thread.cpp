@@ -34,22 +34,29 @@ void IIE_thread::run()
 	uart_init();//初始化串口
 	while (is_runnable)
 	{
-		if(Flag_Psa2 == 1)
+		if(Flag_Controller_Version == 1)//新版本控制器
 		{
-			ask_psa2();
+			if(Flag_Psa2 == 1)
+			{
+				ask_psa2();
+			}
+			msleep(10);
+			if(Flag_IIE == 1)
+			{
+				ask_IIE();
+			}
+			msleep(10);
+			if(Flag_Valve == 1)
+			{
+				ask_valve();
+			}
+			msleep(10);
+			send_data();
 		}
-		msleep(10);
-		if(Flag_IIE == 1)
+		else
 		{
-			ask_IIE();
+			sleep(1);
 		}
-		msleep(10);
-		if(Flag_Valve == 1)
-		{
-			ask_valve();
-		}
-		msleep(10);
-		send_data();
 	}
 	qDebug()<<"IIE Thread Will Quit!!";
 }
@@ -74,7 +81,7 @@ void IIE_thread::ask_psa2()
 	send_buf[7] = (SCRC & 0x00ff);
 	len_uart_IIE = write(fd_uart_IIE,send_buf,8);
 
-	msleep(200);
+	msleep(350);
 	memset(receive_buf,0,sizeof(char)*16);//清空数据
 
 	len_uart_IIE = read(fd_uart_IIE, receive_buf, sizeof(receive_buf));        //读取串口发来的数据
@@ -124,7 +131,7 @@ void IIE_thread::ask_IIE()
 	send_buf[7] = (SCRC & 0x00ff);
 	len_uart_IIE = write(fd_uart_IIE,send_buf,8);
 
-	msleep(250);
+	msleep(350);
 	memset(receive_buf,0,sizeof(char)*16);//清空数据
 	len_uart_IIE = read(fd_uart_IIE, receive_buf, sizeof(receive_buf));        //读取串口发来的数据
 	if(len_uart_IIE > 0)
@@ -177,7 +184,7 @@ void IIE_thread::ask_valve()
 	send_buf[7] = (SCRC & 0x00ff);
 	len_uart_IIE = write(fd_uart_IIE,send_buf,8);
 
-	msleep(200);
+	msleep(350);
 	memset(receive_buf,0,sizeof(char)*16);//清空数据
 	len_uart_IIE = read(fd_uart_IIE, receive_buf, sizeof(receive_buf));        //读取串口发来的数据
 	if(len_uart_IIE > 0)

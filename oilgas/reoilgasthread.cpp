@@ -86,12 +86,12 @@ void reoilgasthread::run()
 	{
 		if(Flag_Reoilgas_Version == 1)
 		{
-			msleep(100);
+			msleep(50);
 			SendDataReoilgas();
 		}
 		else if((Flag_Reoilgas_Version == 2)||(Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//有线无线气液比采集器
 		{
-			msleep(100);
+			msleep(50);
 			SendDataReoilgas_v2();
 		}
 		else
@@ -112,7 +112,7 @@ void reoilgasthread::run()
 				len_uart_reoilgas = read(fd_uart_reoilgas,Refresh_Receivebuf,sizeof(Refresh_Receivebuf));
 				len_uart_reoilgas = 0;
 				memset(Refresh_Receivebuf,0,sizeof(char)*256);
-
+				//测试网络发送油枪数据是否正确
 				//network_oilgundata(DATAID_POST,"1","1","1.1","40","25","40","25","200");
 				if(Flag_Controller_Version == 1)//压力表无线模式  且是新版控制器
 				{
@@ -136,14 +136,17 @@ void reoilgasthread::run()
 					memset(Refresh_Receivebuf,0,sizeof(char)*256);
 					msleep(10);
 
-					for(unsigned int i = 0;i<((unsigned int)count_basin+count_dispener+count_pipe+count_tank);i++)
+					if((count_basin+count_dispener+count_pipe+count_tank)!=0)
 					{
-						ask_690();
-						msleep(100);
-						read_690();
-						msleep(5);
-						send_data_690();
-						msleep(5);
+						for(unsigned int i = 0;i<8;i++)
+						{
+							ask_690();
+							msleep(100);
+							read_690();
+							msleep(5);
+							send_data_690();
+							msleep(5);
+						}
 					}
 					msleep(200);
 				}
@@ -612,11 +615,11 @@ void reoilgasthread::SendDataReoilgas_v2()
 			//                    printf("ask oilgas!\n");
 			if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 			{
-				msleep(1300);
+				msleep(1500);
 			}
 			else
 			{
-				msleep(500);
+				msleep(620);
 			}
 			ReadDataReoilgas_v2();
 			break;
@@ -638,11 +641,11 @@ void reoilgasthread::SendDataReoilgas_v2()
 		write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
 		if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 		{
-			msleep(1400);
+			msleep(1500);
 		}
 		else
 		{
-			msleep(500);
+			msleep(650);
 		}
 		ReadDataReoilgas_Version();
 		Flag_Askagain = 0;
@@ -743,7 +746,7 @@ void reoilgasthread::SendDataReoilgas_v2()
 				}
 				else
 				{
-					msleep(500);
+					msleep(650);
 				}
 				//msleep(500);  //200改为500，写设置的时候能够看到设置信息，不然刷新太快
 				len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_Oilgas,sizeof(RecvBuff_Oilgas));
@@ -816,11 +819,11 @@ void reoilgasthread::SendDataReoilgas_v2()
 		write(fd_uart_reoilgas,SendBuff_Oilgas,sizeof(SendBuff_Oilgas));
 		if((Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 5)) //无线
 		{
-			msleep(1300);
+			msleep(1500);
 		}
 		else
 		{
-			msleep(500);
+			msleep(650);
 		}
 		ReadDataReoilgas_Setinfo();
 	}
@@ -1166,7 +1169,7 @@ void reoilgasthread::ask_fga1000()
 		}
 		else //校验失败
 		{
-			printf("fga1000 jiaoiyan shibai \n");
+			//printf("fga1000 jiaoiyan shibai \n");
 			Flag_FgaUartWrong[Fga1000_AskNum-1]++;
 			if(Flag_FgaUartWrong[Fga1000_AskNum-1] >= 3)
 			{
@@ -1492,8 +1495,8 @@ void reoilgasthread::read_690()
 	//qDebug()<<"ask690 read "<< len_uart;
 	if (len_uart_reoilgas <= 0)
 	{
-		printf("read error \n");
-		qDebug()<<"ask690 read "<< Count_Ask690<<Count_Ask690_basindispener<<Count_Ask690_pipetank;
+		//printf("read error \n");
+		//qDebug()<<"ask690 read "<< Count_Ask690<<Count_Ask690_basindispener<<Count_Ask690_pipetank;
 	}
 
 	if(len_uart_reoilgas == 7)                          //如果接收到的数据长度7，则进行数据处理，ＣＲＣ校验调试阶段不开
@@ -1955,7 +1958,27 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 		{
 			emit Send_Oilgundata(DATAID_POST,jyjid,jyqid,al,qls,qll,yls,yll,yz);
 		}
-
+		if(Flag_Network_Send_Version == 6)
+		{
+			//用来获取上传的序号
+			unsigned int gun_num_true = 0;
+			unsigned int gun_num_send = 0;
+			for(int i = 0;i<Amount_Dispener;i++)
+			{
+				for(int j = 0;j<Amount_Gasgun[i];j++)
+				{
+					gun_num_true++;
+					if((jyjid.toInt()-1 == i)&&((jyqid.toInt()-1) == j))
+					{
+						//qDebug()<<i<<j<<"break"<<gun_num_true;
+						gun_num_send = gun_num_true;
+						break;
+					}
+				}
+			}
+			emit send_gundata_foshan(DATAID_POST,"",jyjid,QString::number(gun_num_send),QString::number(al.toFloat()/100,'f',2),
+									 qls,qll,yls,yll,"NULL","NULL",yz,"");
+		}
 
 		if(Flag_MyServerEn == 1)  //myserver协议
 		{

@@ -89,7 +89,7 @@ void add_value_reoilgas(int whichone_i,int whichgun_j, int howlong, int countofg
     QSqlQuery qry;
     QDateTime current_datetime = QDateTime::currentDateTime();
     QString current_datetime_qstr = current_datetime.toString("yyyy-MM-dd  hh:mm:ss");
-    if(Flag_Reoilgas_Version == 2)//第二版气液比采集器 时间是气液比采集器上传来的
+	if((Flag_Reoilgas_Version == 2)||(Flag_Reoilgas_Version == 3)||(Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//第二版气液比采集器 时间是气液比采集器上传来的
     {
         QString year,mon,day,hour,min,sec;
         year = Time_Reoilgas.mid(0,4);

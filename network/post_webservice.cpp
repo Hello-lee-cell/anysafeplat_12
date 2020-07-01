@@ -133,7 +133,7 @@ void post_webservice::requestFinished(QNetworkReply* reply)
     {
         if(network_wrong == 0)
         {
-            add_value_netinfo("在线监测服务器访问失败");
+			add_value_netinfo("福州、唐山在线监测服务器访问失败");
 			Flag_Ifsend = 0;//在这里把全局变量置0，之后时间到了要再重新发送零点的信息
             network_wrong = 1;
             qDebug() << "webservice fail~!!";
@@ -150,6 +150,7 @@ void post_webservice::requestFinished(QNetworkReply* reply)
 /*************post请求槽函数********************/
 void post_webservice::post_message(QString xml_data)
 {
+	//qDebug()<<xml_data;
     post_data.lock();//上锁
     if(net_state == 0)
     {

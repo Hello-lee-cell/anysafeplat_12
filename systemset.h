@@ -36,6 +36,8 @@ private:
 private slots:
     bool eventFilter(QObject *, QEvent *);
 
+	/****************发送加油站信息***********/
+	void SendStationMessage();
     void on_pushButton_3_clicked();
 
     void on_pushButton_autoip_clicked();
@@ -494,6 +496,11 @@ private slots:
 
 	void on_comboBox_closevalue_currentIndexChanged(int index);
 
+
+	void on_pushButton_StationInfo_clicked();
+
+	void on_pushButton_testnetwork_clicked();
+
 signals:
 
     void amount_basin_reset(int t);
@@ -530,6 +537,8 @@ signals:
     void Tem_Tank_Close();
     /***************防撞柱信号******/
     void crash_num_reset();
+	/********佛山协议发送加油站信息************/
+	void SendStationFoShan();
 private:
     QTimer *timer_Check_temp;   //temp与master交换论寻
     QTimer *timer_doublauto_linedrw;    //双路自动设置曲线刷新
@@ -542,6 +551,8 @@ signals:
     //post添加
     void Send_Configurationdata(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString yzqh);   //发送配置数据报文
 	void Send_Configurationdata_HuNan(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString yzqh);   //发送配置数据报文
+	void Send_Setinfo_Foshan(QString DataId,QString Date,QString JYQS,QString PVZ,QString PVF,
+						 QString HCLK,QString HCLT,QString YZQH);
 	//isoosi添加
     void setup_data(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);
 	//isoosi添加重庆
@@ -554,6 +565,8 @@ signals:
 
 	//同步带屏气液比采集器脉冲当量
 	void signal_sync_factor_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2);
+
+
 
 };
 

@@ -81,5 +81,7 @@
         <file>picture/waterwro.png</file>
         <file>picture/window.png</file>
         <file>picture/valve.png</file>
+        <file>picture/gashighwarn.png</file>
+        <file>picture/gaslowwarn.png</file>
     </qresource>
 </RCC>

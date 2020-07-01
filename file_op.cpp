@@ -1819,7 +1819,7 @@ void config_security()
     fsync(fp);
     close(fp);
 }
-//将安全post net写入文本  增加ifis配置
+//将安全post net写入文本
 void config_post_network()
 {
     QFile file(CONFIG_POSTNETWORK);
@@ -1836,6 +1836,33 @@ void config_post_network()
     int fp = open(CONFIG_POSTNETWORK,O_RDONLY);
     fsync(fp);
     close(fp);
+}
+void init_post_network()//服务器网络上传相关参数读取
+{
+	QFile config_LR(CONFIG_POSTNETWORK);
+	if(!config_LR.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		qDebug() <<"can not open config_post_network.txt"<<endl;
+	}
+	QTextStream in(&config_LR);
+	QString line;
+	line = in.readLine();
+	Post_Address = line;
+	line = in.readLine();
+	USERID_POST = line;
+	line = in.readLine();
+	DATAID_POST = line;
+	line = in.readLine();
+	VERSION_POST = line;
+	line = in.readLine();
+	POSTUSERNAME_HUNAN = line;
+	line = in.readLine();
+	POSTPASSWORD_HUNAN = line;
+
+	Account_Foshan = POSTUSERNAME_HUNAN;
+	Pwdcode_Foshan = POSTPASSWORD_HUNAN;
+	PostAdd_FoShan = Post_Address;
+	UserId_FoShan = USERID_POST;
 }
 //写入界面显示相关设置
 void config_tabwidget()

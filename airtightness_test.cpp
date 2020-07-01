@@ -30,7 +30,7 @@ Airtightness_Test::Airtightness_Test(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Airtightness_Test)
 {
-
+	setWindowModality(Qt::WindowModal);
 	this->setWindowFlags(Qt::WindowStaysOnTopHint);
 	ui->setupUi(this);
 	this->setAttribute(Qt::WA_DeleteOnClose,true);//立即释放缓存
@@ -41,7 +41,7 @@ Airtightness_Test::Airtightness_Test(QWidget *parent) :
 	connect(time_500ms,SIGNAL(timeout()),this,SLOT(delay_500ms()));
 	time_500ms->start();
 
-	ui->lineEdit_oilgas_space->installEventFilter(this);
+	//ui->lineEdit_oilgas_space->installEventFilter(this);
 	ui->pushButton_start_text->setEnabled(0);  //开始时测试按钮不可点
 	ui->label_oilgas_space->setText("0");      //初始油气空间显示0
 	ui->label_result_text->setText("待测试");   //检测结果显示为待检测

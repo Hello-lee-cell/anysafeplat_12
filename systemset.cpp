@@ -18,6 +18,7 @@
 #include"warn.h"
 #include"keyboard.h"
 #include"database_op.h"
+#include "station_message.h"
 //************radar*********/
 #include"radar_485.h"
 #include"safty/security.h"
@@ -28,6 +29,7 @@
 #include <netdb.h>
 #include <QTcpSocket>
 #include <qnetworkinterface.h>
+#include "oilgas/fga1000_485.h"
 
 
 unsigned char hang = 0;
@@ -65,15 +67,16 @@ systemset::systemset(QWidget *parent) :
     ui(new Ui::systemset)
 {
     ui->setupUi(this);
+	setWindowModality(Qt::WindowModal);
     this->setAttribute(Qt::WA_DeleteOnClose,true);
+	setWindowFlags(Qt::FramelessWindowHint);
     Flag_Timeto_CloseNeeded[0] = 1;
 	move(0,85);
     ui->tabWidget_all->setStyleSheet("QTabBar::tab{max-height:33px;min-width:80px;background-color: rgb(170,170,255,255);border: 2px solid;padding:9px;}\
                                      QTabBar::tab:selected {background-color: white}\
                                      QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}");
     touchkey = new keyboard;
-    setAttribute(Qt::WA_TranslucentBackground,true);    //窗体透明
-    setWindowFlags(Qt::Tool|Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
+	setAttribute(Qt::WA_TranslucentBackground,true);    //窗体透明
 
     delay10s = new QTimer;
     delay10s->setInterval(1500);
@@ -130,19 +133,19 @@ systemset::systemset(QWidget *parent) :
 
 
     //********************雷达设置********************//
-    ui->lineEdit_x1->installEventFilter(this);
-    ui->lineEdit_x2->installEventFilter(this);
-    ui->lineEdit_x3->installEventFilter(this);
-    ui->lineEdit_x4->installEventFilter(this);
-    ui->lineEdit_x5->installEventFilter(this);
-    ui->lineEdit_x6->installEventFilter(this);
-    ui->lineEdit_y1->installEventFilter(this);
-    ui->lineEdit_y2->installEventFilter(this);
-    ui->lineEdit_y3->installEventFilter(this);
-    ui->lineEdit_y4->installEventFilter(this);
-    ui->lineEdit_y5->installEventFilter(this);
-    ui->lineEdit_y6->installEventFilter(this);
-    ui->lineEdit_yuzhi_handinput->installEventFilter(this);
+//    ui->lineEdit_x1->installEventFilter(this);
+//    ui->lineEdit_x2->installEventFilter(this);
+//    ui->lineEdit_x3->installEventFilter(this);
+//    ui->lineEdit_x4->installEventFilter(this);
+//    ui->lineEdit_x5->installEventFilter(this);
+//    ui->lineEdit_x6->installEventFilter(this);
+//    ui->lineEdit_y1->installEventFilter(this);
+//    ui->lineEdit_y2->installEventFilter(this);
+//    ui->lineEdit_y3->installEventFilter(this);
+//    ui->lineEdit_y4->installEventFilter(this);
+//    ui->lineEdit_y5->installEventFilter(this);
+//    ui->lineEdit_y6->installEventFilter(this);
+//    ui->lineEdit_yuzhi_handinput->installEventFilter(this);
     area_point_disp(0);
     //智能设置当前状态显示
     ui->comboBox_starttime_h->setStyleSheet("QScrollBar{ background: #F0F0F0; width:20px ;margin-top:0px;margin-bottom:0px }"
@@ -325,13 +328,13 @@ systemset::systemset(QWidget *parent) :
 
 
     //********************其他设置********************//
-    ui->lineEdit_manid->installEventFilter(this);
-    ui->lineEdit_manpw->installEventFilter(this);
-    ui->lineEdit_username->installEventFilter(this);
-    ui->lineEdit_userpw->installEventFilter(this);
-    ui->lineEdit_adduser->installEventFilter(this);
-    ui->lineEdit_adduser_2->installEventFilter(this);
-    ui->lineEdit_deluser->installEventFilter(this);
+//    ui->lineEdit_manid->installEventFilter(this);
+//    ui->lineEdit_manpw->installEventFilter(this);
+//    ui->lineEdit_username->installEventFilter(this);
+//    ui->lineEdit_userpw->installEventFilter(this);
+//    ui->lineEdit_adduser->installEventFilter(this);
+//    ui->lineEdit_adduser_2->installEventFilter(this);
+//    ui->lineEdit_deluser->installEventFilter(this);
     ui->scrollArea_other->setStyleSheet("QScrollArea#scrollArea_other, QWidget#scrollAreaWidgetContents_other{background-color:rgb(172,214,248);}");
     ui->scrollArea_other->verticalScrollBar()->setStyleSheet("QScrollBar{ background: #F0F0F0; width:25px ;margin-top:0px;margin-bottom:0px }"
                                                        "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:21px }");
@@ -409,8 +412,8 @@ systemset::systemset(QWidget *parent) :
     //********************其他设置********************//
 
     //********************油气回收设置********************//
-    ui->lineEdit_pv->installEventFilter(this);
-    ui->lineEdit_pv_nega->installEventFilter(this);
+//    ui->lineEdit_pv->installEventFilter(this);
+//    ui->lineEdit_pv_nega->installEventFilter(this);
 
     ui->comboBox_dispen_sumset->setStyleSheet("QScrollBar{ background: #F0F0F0; width:20px ;margin-top:0px;margin-bottom:0px }"
                                 "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:18px }");
@@ -493,33 +496,33 @@ systemset::systemset(QWidget *parent) :
 	ui->pushButton_sync->setHidden(1);//一键同步按钮只在3.0 或 3.1版本才能用
     //********************油气回收设置********************//
 
-    //********************网络设置********************//
-    ui->lineEdit_ifisport_udp->installEventFilter(this);
-    ui->lineEdit_ifisport_tcp->installEventFilter(this);
-    ui->lineEdit_ip->installEventFilter(this);
-    ui->lineEdit_mask->installEventFilter(this);
-    ui->lineEdit_bcast->installEventFilter(this);
-    //post添加
-	ui->lineEdit_postaddress->installEventFilter(this);
-    ui->lineEdit_postdataid->installEventFilter(this);
-    ui->lineEdit_postuserid->installEventFilter(this);
-    ui->lineEdit_postversion->installEventFilter(this);
-	ui->lineEdit_postusername->installEventFilter(this);
-	ui->lineEdit_postpassword->installEventFilter(this);
-    //isoosi
-	ui->lineEdit_isoosi_UrlIp->installEventFilter(this);
-	ui->lineEdit_isoosi_UrlPort->installEventFilter(this);
-    ui->lineEdit_isoosi_mn->installEventFilter(this);
-	ui->lineEdit_isoosi_pw->installEventFilter(this);
-	//isoosi 重庆
-	ui->lineEdit_isoosi_cqid->installEventFilter(this);
-    //泄漏
-    ui->lineEdit_hubei_station_id->installEventFilter(this);
-	//服务器
-	ui->lineEdit_MyServerId->installEventFilter(this);
-	ui->lineEdit_MyServerPW->installEventFilter(this);
-	ui->lineEdit_MyServerIp->installEventFilter(this);
-	ui->lineEdit_MyServerPort->installEventFilter(this);
+//    //********************网络设置********************//
+//    ui->lineEdit_ifisport_udp->installEventFilter(this);
+//    ui->lineEdit_ifisport_tcp->installEventFilter(this);
+//    ui->lineEdit_ip->installEventFilter(this);
+//    ui->lineEdit_mask->installEventFilter(this);
+//    ui->lineEdit_bcast->installEventFilter(this);
+//    //post添加
+//	ui->lineEdit_postaddress->installEventFilter(this);
+//    ui->lineEdit_postdataid->installEventFilter(this);
+//    ui->lineEdit_postuserid->installEventFilter(this);
+//    ui->lineEdit_postversion->installEventFilter(this);
+//	ui->lineEdit_postusername->installEventFilter(this);
+//	ui->lineEdit_postpassword->installEventFilter(this);
+//    //isoosi
+//	ui->lineEdit_isoosi_UrlIp->installEventFilter(this);
+//	ui->lineEdit_isoosi_UrlPort->installEventFilter(this);
+//    ui->lineEdit_isoosi_mn->installEventFilter(this);
+//	ui->lineEdit_isoosi_pw->installEventFilter(this);
+//	//isoosi 重庆
+//	ui->lineEdit_isoosi_cqid->installEventFilter(this);
+//    //泄漏
+//    ui->lineEdit_hubei_station_id->installEventFilter(this);
+//	//服务器
+//	ui->lineEdit_MyServerId->installEventFilter(this);
+//	ui->lineEdit_MyServerPW->installEventFilter(this);
+//	ui->lineEdit_MyServerIp->installEventFilter(this);
+//	ui->lineEdit_MyServerPort->installEventFilter(this);
 
 	ui->scrollArea_network->setStyleSheet("QScrollArea#scrollArea_network, QWidget#scrollAreaWidgetContents_network{background-color:rgb(172,214,248);}");
 	ui->scrollArea_network->verticalScrollBar()->setStyleSheet("QScrollBar{ background: #F0F0F0; width:25px ;margin-top:0px;margin-bottom:0px }"
@@ -542,7 +545,8 @@ systemset::systemset(QWidget *parent) :
 	ui->lineEdit_postdataid->setText(DATAID_POST.toUtf8());
 	ui->lineEdit_postuserid->setText(USERID_POST.toUtf8());
 	QString data = VERSION_POST.right(VERSION_POST.size() - 1);  /* 取data左边size - 1长度的数据 */
-	ui->lineEdit_postversion->setText(data);
+	ui->lineEdit_postversion->setText(data.toUtf8());
+
     //isoosi添加
 	ui->lineEdit_isoosi_UrlIp->setText(IsoOis_UrlIp);
 	ui->lineEdit_isoosi_UrlPort->setText(IsoOis_UrlPort);
@@ -697,7 +701,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 		get_local_ip(if_name,IP);
 		ui->label_14->setText(IP);
 
-		if(Flag_Network_Send_Version<=5)
+		if(Flag_Network_Send_Version<=8)
         {
             ui->comboBox_network_version->setCurrentIndex(Flag_Network_Send_Version);
         }
@@ -714,7 +718,8 @@ void systemset::on_tabWidget_all_currentChanged(int index)
             ui->frame_guangzhou->setHidden(1);
             ui->frame_network_verselect->setHidden(1);
 			ui->frame_hunan_login->setHidden(1);//湖南的登录信息
-			ui->label_post_name->setText("广州油气回收上传");
+			ui->label_post_name->setText("福州油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
         }
 		if(Flag_Network_Send_Version == 1) //广州
         {
@@ -723,6 +728,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->frame_isoosi_chongqing->setHidden(1);
             ui->frame_network_verselect->setHidden(1);
 			ui->label_isoosi_name->setText("广州油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
         }
 		if(Flag_Network_Send_Version == 2) //重庆  与广州同一个界面
         {
@@ -731,6 +737,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->frame_isoosi_chongqing->setHidden(0);
 			ui->frame_network_verselect->setHidden(1);
 			ui->label_isoosi_name->setText("重庆油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
         }
 		if(Flag_Network_Send_Version == 3) //唐山  与福州相同
 		{
@@ -739,6 +746,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->frame_network_verselect->setHidden(1);
 			ui->frame_hunan_login->setHidden(1);//湖南的登录信息
 			ui->label_post_name->setText("唐山油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
 		}
 		if(Flag_Network_Send_Version == 4) //湖南协议 与福州类似
 		{
@@ -749,6 +757,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->lineEdit_postusername->setText(POSTUSERNAME_HUNAN);
 			ui->lineEdit_postpassword->setText(POSTPASSWORD_HUNAN);
 			ui->label_post_name->setText("湖南油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
 		}
 		if(Flag_Network_Send_Version == 5) //江门 与唐山  与福州相同
 		{
@@ -757,8 +766,29 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->frame_network_verselect->setHidden(1);
 			ui->frame_hunan_login->setHidden(1);//湖南的登录信息
 			ui->label_post_name->setText("江门油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
 		}
-		if(Flag_Network_Send_Version >= 6)//其他
+		if(Flag_Network_Send_Version == 6)//佛山协议
+		{
+			ui->frame_fujian->setHidden(0);
+			ui->frame_guangzhou->setHidden(1);
+			ui->frame_network_verselect->setHidden(1);
+			ui->frame_hunan_login->setHidden(0);//湖南的登录信息
+			ui->lineEdit_postusername->setText(Account_Foshan);
+			ui->lineEdit_postpassword->setText(Pwdcode_Foshan);
+			ui->label_post_name->setText("佛山油气回收上传");
+			ui->pushButton_StationInfo->setHidden(0);
+		}
+		if(Flag_Network_Send_Version == 7) //合肥 与广州同一个界面
+		{
+			ui->frame_fujian->setHidden(1);
+			ui->frame_guangzhou->setHidden(0);
+			ui->frame_isoosi_chongqing->setHidden(1);
+			ui->frame_network_verselect->setHidden(1);
+			ui->label_isoosi_name->setText("合肥油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
+		}
+		if(Flag_Network_Send_Version >= 8)//其他
 		{
 			ui->frame_fujian->setHidden(1);
 			ui->frame_guangzhou->setHidden(1);
@@ -3707,18 +3737,18 @@ void systemset::tableview_2_replay()//油量校准因子显示
 }
 void systemset::on_tableView_dispenerset_clicked(const QModelIndex &index)
 {
-    //获取是第几行第几列
-    hang = index.row();
-    lie = index.column();
-    emit closeing_touchkey();
-    if(lie == 1)
-    {
-        touchkey = new keyboard;
-        connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(set_amount_gun(const QString&)));
+//    //获取是第几行第几列
+//    hang = index.row();
+//    lie = index.column();
+//    emit closeing_touchkey();
+//    if(lie == 1)
+//    {
+//        touchkey = new keyboard;
+//        connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(set_amount_gun(const QString&)));
 
-        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
-        touchkey->show();
-    }
+//        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+//        touchkey->show();
+//    }
 }
 
 void systemset::set_amount_gun(const QString &text)
@@ -3743,6 +3773,10 @@ void systemset::on_toolButton_gunamount_enter_clicked()
         index = model->index(i,1);
         data = model->data(index);
         Amount_Gasgun[i] = data.toInt();
+		if(Amount_Gasgun[i]>=9)
+		{
+			Amount_Gasgun[i] = 8;
+		}
         qDebug()<<data.toString();
     }
     Amount_Dispener = ui->comboBox_dispen_sumset->currentIndex();
@@ -3758,17 +3792,17 @@ void systemset::on_toolButton_gunamount_enter_clicked()
 //油气量校正因子设置
 void systemset::on_tableView_gundetailset_clicked(const QModelIndex &index)
 {
-    hang_gun = index.row();
-    lie_gun = index.column();
-    emit closeing_touchkey();
-    if((lie_gun == 1) || (lie_gun == 2))
-    {
-        touchkey = new keyboard;
-        connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(set_detailof_gun(const QString&)));
-        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_detailof_gun_backspace()));
-        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
-        touchkey->show();
-    }
+//    hang_gun = index.row();
+//    lie_gun = index.column();
+//    emit closeing_touchkey();
+//    if((lie_gun == 1) || (lie_gun == 2))
+//    {
+//        touchkey = new keyboard;
+//        connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(set_detailof_gun(const QString&)));
+//        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_detailof_gun_backspace()));
+//        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+//        touchkey->show();
+//    }
 }
 void systemset::set_detailof_gun(const QString &text)
 {
@@ -4121,18 +4155,18 @@ void systemset::on_toolButton_gun_off_guanbi_clicked()
 }
 void systemset::on_tableView_yingshe_clicked(const QModelIndex &index)//映射表
 {
-    //获取是第几行第几列
-    hang_mapping = index.row();
-    lie_mapping = index.column();
-    emit closeing_touchkey();
-	if(lie_mapping == 1 || lie_mapping == 2 || lie_mapping == 3)
-    {
-        touchkey = new keyboard;
-        connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(set_yingshe_gun(const QString&)));
-        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_yingshe_gun_backspace()));
-        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
-        touchkey->show();
-    }
+//    //获取是第几行第几列
+//    hang_mapping = index.row();
+//    lie_mapping = index.column();
+//    emit closeing_touchkey();
+//	if(lie_mapping == 1 || lie_mapping == 2 || lie_mapping == 3)
+//    {
+//        touchkey = new keyboard;
+//        connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(set_yingshe_gun(const QString&)));
+//        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_yingshe_gun_backspace()));
+//        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+//        touchkey->show();
+//    }
 }
 void systemset::tableView_yingshe_replay()//映射表绘制
 {
@@ -4699,6 +4733,12 @@ void systemset::on_toolButton_postdataid_clicked()
 
 	POSTPASSWORD_HUNAN = ui->lineEdit_postpassword->text();
 	POSTUSERNAME_HUNAN = ui->lineEdit_postusername->text();
+	//佛山中的dataid和version就用现成的，之前的
+	Account_Foshan = ui->lineEdit_postusername->text();
+	Pwdcode_Foshan = ui->lineEdit_postpassword->text();
+	UserId_FoShan = ui->lineEdit_postuserid->text();
+	PostAdd_FoShan = ui->lineEdit_postaddress->text();
+	//qDebug()<<Post_Address<<USERID_POST<<VERSION_POST<<DATAID_POST<<POSTPASSWORD_HUNAN<<POSTUSERNAME_HUNAN;
     config_post_network();
 }
 
@@ -4875,7 +4915,8 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->frame_guangzhou->setHidden(1);
 		ui->frame_network_verselect->setHidden(1);
 		ui->frame_hunan_login->setHidden(1);//湖南的登录信息
-		ui->label_post_name->setText("广州油气回收上传");
+		ui->label_post_name->setText("福州油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
 	}
 	if(Flag_Network_Send_Version == 1) //广州
 	{
@@ -4884,6 +4925,7 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->frame_isoosi_chongqing->setHidden(1);
 		ui->frame_network_verselect->setHidden(1);
 		ui->label_isoosi_name->setText("广州油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
 	}
 	if(Flag_Network_Send_Version == 2) //重庆  与广州同一个界面
 	{
@@ -4892,6 +4934,7 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->frame_isoosi_chongqing->setHidden(0);
 		ui->frame_network_verselect->setHidden(1);
 		ui->label_isoosi_name->setText("重庆油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
 	}
 	if(Flag_Network_Send_Version == 3) //唐山  与福州相同
 	{
@@ -4900,6 +4943,7 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->frame_network_verselect->setHidden(1);
 		ui->frame_hunan_login->setHidden(1);//湖南的登录信息
 		ui->label_post_name->setText("唐山油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
 	}
 	if(Flag_Network_Send_Version == 4) //湖南协议 与福州类似
 	{
@@ -4910,6 +4954,7 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->lineEdit_postusername->setText(POSTUSERNAME_HUNAN);
 		ui->lineEdit_postpassword->setText(POSTPASSWORD_HUNAN);
 		ui->label_post_name->setText("湖南油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
 	}
 	if(Flag_Network_Send_Version == 5) //江门  与  唐山  与福州相同
 	{
@@ -4918,13 +4963,45 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->frame_network_verselect->setHidden(1);
 		ui->frame_hunan_login->setHidden(1);//湖南的登录信息
 		ui->label_post_name->setText("江门油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
 	}
-	if(Flag_Network_Send_Version >= 6)//其他
+	if(Flag_Network_Send_Version == 6)//佛山协议
+	{
+		ui->frame_fujian->setHidden(0);
+		ui->frame_guangzhou->setHidden(1);
+		ui->frame_network_verselect->setHidden(1);
+		ui->frame_hunan_login->setHidden(0);//湖南的登录信息 佛山公用
+		ui->lineEdit_postusername->setText(Account_Foshan);
+		ui->lineEdit_postpassword->setText(Pwdcode_Foshan);
+		ui->label_post_name->setText("佛山油气回收上传");
+		ui->pushButton_StationInfo->setHidden(0);
+	}
+	if(Flag_Network_Send_Version == 7) //合肥
+	{
+		ui->frame_fujian->setHidden(1);
+		ui->frame_guangzhou->setHidden(0);
+		ui->frame_isoosi_chongqing->setHidden(1);
+		ui->frame_network_verselect->setHidden(1);
+		ui->label_isoosi_name->setText("合肥油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
+	}
+	if(Flag_Network_Send_Version >= 8)//其他
 	{
 		ui->frame_fujian->setHidden(1);
 		ui->frame_guangzhou->setHidden(1);
 		ui->frame_network_verselect->setHidden(0);
 	}
+}
+//加油站详细信息输入，联系人什么的
+void systemset::on_pushButton_StationInfo_clicked()
+{
+	station_message *StationInfo = new station_message;
+	connect(StationInfo,SIGNAL(SendStationMessage()),this,SLOT(SendStationMessage()));
+	StationInfo->show();
+}
+void systemset::SendStationMessage()
+{
+	emit SendStationFoShan();
 }
 //isoosi屏蔽气液比不合格
 void systemset::on_toolButton_isoosi_pb_clicked()
@@ -5162,6 +5239,10 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		{
 			Send_Configurationdata(DATAID_POST,jyqs,pvz,pvf,hclk,yzqh);
 		}
+		if(Flag_Network_Send_Version == 6) //佛山协议
+		{
+			emit Send_Setinfo_Foshan(DATAID_POST,"",jyqs,pvz,pvf,"0","0",yzqh);
+		}
 
 		if(Flag_MyServerEn == 1) //myserver协议
 		{
@@ -5185,4 +5266,9 @@ void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pi
 }
 
 
+//测试发送整点数据是否正确的函数
 
+void systemset::on_pushButton_testnetwork_clicked()
+{
+	Flag_MyserverFirstSend = 1;
+}

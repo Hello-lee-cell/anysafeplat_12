@@ -74,7 +74,7 @@ void mytcpclient_zhongyou::run()         //线程创建函数要求 void* 类型
 		else
 		{
 			sleep(1);
-			qDebug()<<"tcp not client client client!";
+			//qDebug()<<"tcp not client client client!";
 		}
 	}
 	this->exec();
@@ -452,7 +452,7 @@ void mytcpclient_zhongyou::reset_sem()//重置信号量  10秒超时，防止tcp
 	sem_post(&sem);//信号量可用资源+1
 	int num = 0;
 	sem_getvalue(&sem,&num);
-	printf("sem is**************%d\n",num);
+	//printf("sem is**************%d\n",num);
 	if(num>10)
 	{
 		sem_wait(&sem);//可用资源-1，阻塞

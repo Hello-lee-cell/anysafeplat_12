@@ -3,7 +3,7 @@
 
 #include <QThread>
 #include <QTimer>
-
+extern unsigned char Flag_MyserverFirstSend;
 class FGA1000_485 :public QThread
 {
     Q_OBJECT
@@ -73,6 +73,16 @@ signals:
 	void Send_Wrongsdata_HuNan(QString id,QString type);       //发送故障数据报文
 	void Send_Closegunsdata_HuNan(QString id,QString jyjid,QString jyqid,QString operate,QString event);       //发送关枪数据报文
 	void Send_Stagundata_HuNan(QString id,QString status);      //发送油枪状态报文
+	//佛山
+	void send_setinfo_foshan(QString DataId,QString Date,QString JYQS,QString PVZ,QString PVF,
+						 QString HCLK,QString HCLT,QString YZQH);
+	void send_warninfo_foshan(QString DataId,QString Date,QString AL,QString MB,QString YZ,QString YGYL
+						  ,QString YGLY,QString PVZT,QString PVLJZT,QString HCLZT,QString HCLND,QString XYHQG);
+	void send_environment_foshan(QString DataId,QString Date,QString YGYL,QString YZYL,QString YQKJ,QString XND,QString HCLND,QString YQWD);
+	void send_wrong_foshan(QString DataId,QString Date,QString TYPE);
+	void send_gunoperate_foshan(QString DataId,QString Date,QString JYJID,QString JYQID,QString OPERATE,QString EVENT);
+	void send_gunsta_foshan(QString DataId,QString Date,QString STATUS);
+
 
     //isoosi添加
     void environmental_data(QString dynbPress,QString tankPress,QString unloadgasCon,QString DevicegasCon,QString GasTemp,QString GasVolume);
@@ -94,6 +104,8 @@ signals:
 	void refueling_gun_stop_myserver(QString gun_num,QString operate,QString Event);
 	void setup_data_myserver(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);//用来每天上传一次设置数据
 
+	//isoosi合肥测试
+	void Send_Surroundingsdata_HeFei(QString YGYL,QString YZYL,QString YQWD);
 private slots:
     void SendDataFGA();  //发送数据
     void ReadDataFGA();  //接收数据
@@ -110,6 +122,7 @@ private slots:
     void Fga_StaPostSend();
 	//myserver添加
 	void Myserver_First_Client();//服务器第一次连接，需要上传一次所有状态
+	void First_Send(); //服务器第一次连接，需要上传一次所有状态
 };
 
 #endif // FGA1000_485_H

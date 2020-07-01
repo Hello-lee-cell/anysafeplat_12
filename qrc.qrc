@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>new_keyboard/FontLibrary.txt</file>
+    </qresource>
+</RCC>

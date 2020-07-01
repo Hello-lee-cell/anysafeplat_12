@@ -60,7 +60,20 @@ SOURCES += main.cpp\
     network/udp.cpp \
     oilgas/one_click_sync.cpp \
     safty/security.cpp \
-    safty/iie_thread.cpp
+    safty/iie_thread.cpp \
+    network/post_foshan.cpp \
+    json/json_parser.cc \
+    json/json_scanner.cc \
+    json/json_scanner.cpp \
+    json/parser.cpp \
+    json/parserrunnable.cpp \
+    json/qobjecthelper.cpp \
+    json/serializer.cpp \
+    json/serializerrunnable.cpp \
+    new_keyboard/SoftKeyBoard.cpp \
+    new_keyboard/SoftKeyBoardContext.cpp \
+    station_message.cpp \
+    network/net_isoosi_hefei.cpp
 
 HEADERS  += mainwindow.h \
     keyboard.h \
@@ -107,7 +120,28 @@ HEADERS  += mainwindow.h \
     network/udp.h \
     oilgas/one_click_sync.h \
     safty/security.h \
-    safty/iie_thread.h
+    safty/iie_thread.h \
+    network/post_foshan.h \
+    json/FlexLexer.h \
+    json/json_parser.hh \
+    json/json_parser.yy \
+    json/json_scanner.h \
+    json/json_scanner.yy \
+    json/location.hh \
+    json/parser.h \
+    json/parser_p.h \
+    json/parserrunnable.h \
+    json/position.hh \
+    json/qjson_debug.h \
+    json/qjson_export.h \
+    json/qobjecthelper.h \
+    json/serializer.h \
+    json/serializerrunnable.h \
+    json/stack.hh \
+    new_keyboard/SoftKeyBoard.h \
+    new_keyboard/SoftKeyBoardContext.h \
+    station_message.h \
+    network/net_isoosi_hefei.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
@@ -118,10 +152,13 @@ FORMS    += mainwindow.ui \
     connectus.ui \
     reoilgas_pop.ui \
     airtightness_test.ui \
-    oilgas/one_click_sync.ui
+    oilgas/one_click_sync.ui \
+    new_keyboard/SoftKeyBoard.ui \
+    station_message.ui
 
 RESOURCES += \
-    picture_.qrc
+    picture_.qrc \
+    qrc.qrc
 
 DISTFILES += \
     file_op.gcc

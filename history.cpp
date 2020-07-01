@@ -725,10 +725,10 @@ void history::on_pushButton_gasre_warn_clicked() //报警信息
     model->select();
 
 	ui->tableView->setModel(model);
-	ui->tableView->setColumnWidth(0,90);
-	ui->tableView->setColumnWidth(1,290);
+	ui->tableView->setColumnWidth(0,60);
+	ui->tableView->setColumnWidth(1,180);
 	ui->tableView->setColumnWidth(2,90);
-	ui->tableView->setColumnWidth(3,150);
+	ui->tableView->setColumnWidth(3,530);
 
     ui->pushButton_gasre_huanjing->setStyleSheet("background-color: rgb(60,164,252)");
     ui->pushButton_gasre_oilgun->setStyleSheet("background-color: rgb(60,164,252)");

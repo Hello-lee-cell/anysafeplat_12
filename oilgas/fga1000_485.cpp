@@ -111,6 +111,11 @@ unsigned char Flag_PipePre_Type = 1;
 unsigned char Flag_TankTem_Type = 1;
 unsigned char Flag_Gas_Type = 1;
 
+unsigned char Flag_MyserverFirstSend = 0;
+QString his_tem = "";//历史记录缓存.压力报警类型
+
+unsigned char Flag_SendOnceGunCloseOperate = 0;
+
 FGA1000_485::FGA1000_485(QObject *parent):
     QThread(parent)
 {
@@ -1291,6 +1296,10 @@ void FGA1000_485::time_time()
 	{
 		Flag_Ifsend = 0;
 	}
+	if(Flag_MyserverFirstSend == 1)//我的服务器第一次连接发送数据
+	{
+		First_Send();
+	}
 	//下面用来发送各类信息，因为卡顿造成发送不成功在发送一次
 	if((time_h == 0)&&(time_m == 0)&&(time_s == 0))//每天凌晨0点  有时候在这个函数进不来，所有后面又加了标志位，再发两次
 	{
@@ -1722,7 +1731,19 @@ void FGA1000_485::time_time()
 					{
 						emit alarm_early_pre(1);
 						Flag_StaPre_Temp[i] = sta_pre[i];
-						add_value_reoilgaswarn("油罐压力","压力预警");
+						if(Sta_Tank_Postsend == 1)
+						{
+							his_tem = "零压预警，油罐压力处于-50～+50Pa时间大于12小时";
+						}
+						else if(Sta_Tank_Postsend == 3)
+						{
+							his_tem = "压力预警，油罐压力大于泄压阀开启压力+200Pa";
+						}
+						else if(Sta_Tank_Postsend == 5)
+						{
+							his_tem = "压力预警，在24小时内，油罐压力数据在-1000Pa～+600Pa(或-1000Pa～压力/真空阀正压开启压力的80%)之外的次数超过总次数的25%";
+						}
+						add_value_reoilgaswarn("油罐压力",his_tem);
 						//post添加
 						network_Warndata("0",QString::number(Sta_Tank_Postsend),"N","N");
 					}
@@ -1734,7 +1755,19 @@ void FGA1000_485::time_time()
 					{
 						emit alarm_warn_pre(1);
 						Flag_StaPre_Temp[i] = sta_pre[i];
-						add_value_reoilgaswarn("油罐压力","压力报警");
+						if(Sta_Tank_Postsend == 2)
+						{
+							his_tem = "零压报警，连续5天零压预警";
+						}
+						else if(Sta_Tank_Postsend == 4)
+						{
+							his_tem = "压力报警，连续5分钟油罐压力大于泄压阀开启压力+200Pa";
+						}
+						else if(Sta_Tank_Postsend == 6)
+						{
+							his_tem = "压力报警，连续7天在24小时内，油罐压力数据在-1000Pa～+600Pa(或-1000Pa～压力/真空阀正压开启压力的80%)之外的次数超过总次数的25%";
+						}
+						add_value_reoilgaswarn("油罐压力",his_tem);
 						network_Warndata("0",QString::number(Sta_Tank_Postsend),"N","N");
 					}
 					flag_timeto_temp+=sta_pre[i];
@@ -3091,6 +3124,164 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 				/**************end***网络报警数据*******************/
 			}
 		}
+		if(Flag_Network_Send_Version == 6)
+		{
+			if(id.toInt() == 0)//单次报警数据
+			{
+				if(sta_yg != "N")//发送油罐相关的报警
+				{
+					if(sta_yg == "0")
+					{
+						emit send_warninfo_foshan(DATAID_POST,"","N","0","N","0","0","0","0","N","N","N");
+					}
+					if(sta_yg == "1")//油罐零压预警
+					{
+						emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","1","N","N","N","N","N");
+					}
+					if(sta_yg == "2")//油罐零压报警
+					{
+						emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","2","N","N","N","N","N");
+					}
+					if(sta_yg == "3")//压力真空阀临界预警
+					{
+						emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","N","N","1","N","N","N");
+					}
+					if(sta_yg == "4")//压力真空阀临界报警
+					{
+						emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","N","N","2","N","N","N");
+					}
+					if(sta_yg == "5")//压力真空阀预警
+					{
+						emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","N","1","N","N","N","N");
+					}
+					if(sta_yg == "6")//压力真空阀报警
+					{
+						emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","N","2","N","N","N","N");
+					}
+				}
+				if(sta_yz != "N")//发送液阻报警
+				{
+					emit send_warninfo_foshan(DATAID_POST,"","N","N",sta_yz,"N","N","N","N","N","N","N");
+				}
+				if(hclzt != "N")//浓度报警
+				{
+					emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","N","N","N","N",hclzt,"N");
+				}
+			}
+			if(id.toInt() == 1)//当天报警数据
+			{
+				/**************begin***网络报警数据*******************/
+				printf("ready send one day data !!\n");
+				STA_YGLY = "0";
+				STA_PVLJZT = "0";
+				STA_PVZT = "0";
+				STA_YZ = "0";
+				if(Pre_tank_en == 1)
+				{
+
+					if(Sta_Tank_Postsend == 0)  //正常
+					{
+						STA_YGLY = "0";
+						STA_PVLJZT = "0";
+						STA_PVZT = "0";
+					}
+					if(Sta_Tank_Postsend == 1)//零压预警
+					{
+						STA_YGLY = "1";
+					}
+					if(Sta_Tank_Postsend == 2)//零压报警
+					{
+						STA_YGLY = "2";
+					}
+					if(Sta_Tank_Postsend == 3)//泄压阀极限压力状态预警
+					{
+						STA_PVLJZT = "1";
+					}
+					if(Sta_Tank_Postsend == 4)//泄压阀极限压力状态报警
+					{
+						STA_PVLJZT = "2";
+					}
+					if(Sta_Tank_Postsend == 5)//压力真空阀状态预警
+					{
+						STA_PVZT = "1";
+					}
+					if(Sta_Tank_Postsend == 9)//压力真空阀状态报警
+					{
+						STA_PVZT = "2";
+					}
+				}
+				else
+				{
+					STA_YGLY = "N";
+					STA_PVLJZT = "N";
+					STA_PVZT = "N";
+				}
+				if(Pre_pipe_en == 1)
+				{
+					if(sta_pre[1] == 0)
+					{
+						STA_YZ = "0";
+					}
+					if(sta_pre[1] == 1)
+					{
+						STA_YZ = "1";
+					}
+					if(sta_pre[1] == 2)
+					{
+						STA_YZ = "2";
+					}
+				}
+				else
+				{
+					STA_YZ = "N";
+				}
+				if(Env_Gas_en == 1)
+				{
+					if(Flag_StaFga_Temp[1] == 0)
+					{
+						STA_ND = "0";
+					}
+					if(Flag_StaFga_Temp[1] == 1)
+					{
+						STA_ND = "1";
+					}
+					if(Flag_StaFga_Temp[1] == 2)
+					{
+						STA_ND = "2";
+					}
+				}
+				else
+				{
+					STA_ND = "N";
+				}
+
+				for(unsigned int i = 0;i < Amount_Dispener;i++)
+				{
+					printf("!!!!!!!!!%d",Amount_Gasgun[i]);
+					for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
+					{
+						num_gun++;
+						if(Flag_Accumto[i][j] == 0)
+						{
+							sta_gun = "0";
+						}
+						if((Flag_Accumto[i][j] > 0)&&(Flag_Accumto[i][j] <= 5))
+						{
+							sta_gun = "1";
+						}
+						if(Flag_Accumto[i][j] > 5)
+						{
+							sta_gun = "2";
+						}
+						al_post.append(QString::number(num_gun).append(":").append(sta_gun).append(";"));
+					}
+				}
+				num_gun = 0;
+				//密闭性和油罐零压公用一个，油罐压力和压力真空阀报警状态用一个,后处理装置状态没有，卸油回气管状态没有
+				emit send_warninfo_foshan(DATAID_POST,"",al_post,STA_YGLY,STA_YZ,STA_PVZT,STA_YGLY,STA_PVZT,STA_PVLJZT,"N",STA_ND,"N");
+				/**************end***网络报警数据*******************/
+			}
+		}
 
 		if(Flag_MyServerEn == 1) //myserver协议
 		{
@@ -3387,7 +3578,27 @@ void FGA1000_485:: network_Surroundingsdata(QString id,QString ygyl,QString yzyl
 		{
 			Send_Surroundingsdata(DATAID_POST,ygyl,yzyl,"NULL");
 		}
+		if(Flag_Network_Send_Version == 6) //佛山协议
+		{
+			send_environment_foshan(DATAID_POST,"date",ygyl,yzyl,yqkj,xynd,hclnd,yqwd);
+		}
+		if(Flag_Network_Send_Version == 7) //合肥协议，只有这一个
+		{
+			QString ygyl_hefei,yzyl_hefei,yqwd_hefei;
 
+			if(ygyl == "NULL"){ygyl_hefei == "0";}
+			else {ygyl_hefei = QString::number(ygyl.toFloat(),'f',1);}
+
+			if(yzyl == "NULL"){yzyl_hefei == "0";}
+			else{yzyl_hefei = QString::number(yzyl.toFloat(),'f',1);}
+
+			if(yqwd == "NULL"){yqwd_hefei == "0";}
+			else{yqwd_hefei = QString::number(yqwd.toFloat(),'f',1);}
+			//ygyl = "100";
+			//yzyl = "1.1";
+			//yqwd = "2.2";
+			Send_Surroundingsdata_HeFei(ygyl_hefei,yzyl_hefei,yqwd_hefei);
+		}
 		if(Flag_MyServerEn == 1) //myserver协议
 		{
 			QString postdata_tank;
@@ -3453,6 +3664,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				        &&( (Pre_pipe_en==1&&sta_pre[1] == 0)||(Pre_pipe_en==0)))
 				{
 					QString wrongdata_post = "0111";//post添加
+					unsigned int sensor_id = 0;
 					//qDebug() << "biao zhengchang!!!!!!";
 					for(int i = 0;i < Amount_Dispener;i++)
 					{
@@ -3462,7 +3674,11 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
-								Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
+								if((i*8+j)%2==0)//采集器的第一把枪
+								{
+									sensor_id = (i*8+j)/2+1;//采集器编号
+									Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(sensor_id, 2, 10, QLatin1Char('0'))));
+								}
 								flag_uartwrong = 1;
 							}
 						}
@@ -3471,7 +3687,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				else
 				{
 					flag_uartwrong = 1;
-					Send_Wrongsdata(DATAID_POST,"031000");
+					//Send_Wrongsdata(DATAID_POST,"031000");
 				}
 				if(flag_uartwrong == 0)
 				{
@@ -3503,6 +3719,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				        &&( (Pre_pipe_en==1&&sta_pre[1] == 0)||(Pre_pipe_en==0)))
 				{
 					QString wrongdata_post = "0111";//post添加
+					unsigned int sensor_id = 0;
 					//qDebug() << "biao zhengchang!!!!!!";
 					for(int i = 0;i < Amount_Dispener;i++)
 					{
@@ -3512,7 +3729,11 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
-								refueling_wrongdata_cq(wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
+								if((i*8+j)%2==0)//采集器的第一把枪
+								{
+									sensor_id = (i*8+j)/2+1;//采集器编号
+									refueling_wrongdata_cq(wrongdata_post.append(QString("%1").arg(sensor_id, 2, 10, QLatin1Char('0'))));
+								}
 								flag_uartwrong = 1;
 							}
 						}
@@ -3548,6 +3769,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				        &&( (Pre_pipe_en==1&&sta_pre[1] == 0)||(Pre_pipe_en==0)))
 				{
 					QString wrongdata_post = "0111";//post添加
+					unsigned int sensor_id = 0;
 					//qDebug() << "biao zhengchang!!!!!!";
 					for(int i = 0;i < Amount_Dispener;i++)
 					{
@@ -3557,7 +3779,11 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
-								Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
+								if((i*8+j)%2==0)//采集器的第一把枪
+								{
+									sensor_id = (i*8+j)/2+1;//采集器编号
+									Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(sensor_id, 2, 10, QLatin1Char('0'))));
+								}
 								flag_uartwrong = 1;
 							}
 						}
@@ -3593,6 +3819,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				        &&( (Pre_pipe_en==1&&sta_pre[1] == 0)||(Pre_pipe_en==0)))
 				{
 					QString wrongdata_post = "0111";//post添加
+					unsigned int sensor_id = 0;
 					//qDebug() << "biao zhengchang!!!!!!";
 					for(int i = 0;i < Amount_Dispener;i++)
 					{
@@ -3602,7 +3829,11 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
-								Send_Wrongsdata_HuNan(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
+								if((i*8+j)%2==0)//采集器的第一把枪
+								{
+									sensor_id = (i*8+j)/2+1;//采集器编号
+									Send_Wrongsdata_HuNan(DATAID_POST,wrongdata_post.append(QString("%1").arg(sensor_id, 2, 10, QLatin1Char('0'))));
+								}
 								flag_uartwrong = 1;
 							}
 						}
@@ -3637,6 +3868,7 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				        &&( (Pre_pipe_en==1&&sta_pre[1] == 0)||(Pre_pipe_en==0)))
 				{
 					QString wrongdata_post = "0111";//post添加
+					unsigned int sensor_id = 0;
 					//qDebug() << "biao zhengchang!!!!!!";
 					for(int i = 0;i < Amount_Dispener;i++)
 					{
@@ -3646,7 +3878,11 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
 							{
 								wrongdata_post = "0111";
-								Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[i*8+j], 2, 10, QLatin1Char('0'))));
+								if((i*8+j)%2==0)//采集器的第一把枪
+								{
+									sensor_id = (i*8+j)/2+1;//采集器编号
+									Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(sensor_id, 2, 10, QLatin1Char('0'))));
+								}
 								flag_uartwrong = 1;
 							}
 						}
@@ -3671,7 +3907,57 @@ void FGA1000_485:: network_Wrongsdata(QString id,QString type) //发送故障数
 				Send_Wrongsdata(DATAID_POST,type);
 			}
 		}
-
+		if(Flag_Network_Send_Version == 6)
+		{
+			if(id == "1")
+			{
+				//发送通讯是否正常
+				unsigned char flag_uartwrong = 0;
+				unsigned int send_gun_num = 0;
+				if( ( (Env_Gas_en==1&&sta_fga[1]==0)||(Env_Gas_en == 0) )
+						&&( (Pre_tank_en==1&&sta_pre[0] == 0)||(Pre_tank_en==0))
+						&&( (Pre_pipe_en==1&&sta_pre[1] == 0)||(Pre_pipe_en==0)))
+				{
+					QString wrongdata_post = "0111";//post添加
+					unsigned int sensor_id = 0;
+					//qDebug() << "biao zhengchang!!!!!!";
+					for(int i = 0;i < Amount_Dispener;i++)
+					{
+						for(int j = 0;j < (Amount_Gasgun[i]);j++)
+						{
+							//qDebug() << i*4+j<< "!!!" << Flag_CommunicateError_Maindisp[i*4+j]<< "???";
+							if(ReoilgasPop_GunSta[i*8+j] >= 10)//如果有通信故障
+							{
+								wrongdata_post = "0111";
+								if((i*8+j)%2==0)//采集器的第一把枪
+								{
+									sensor_id = (i*8+j)/2+1;//采集器编号
+									send_wrong_foshan(DATAID_POST,"date",wrongdata_post.append(QString("%1").arg(sensor_id, 2, 10, QLatin1Char('0'))));
+								}
+								flag_uartwrong = 1;
+							}
+						}
+					}
+				}
+				else
+				{
+					flag_uartwrong = 1;
+				}
+				if(flag_uartwrong == 0)
+				{
+					send_wrong_foshan(DATAID_POST,"","000000");
+				}
+				else  //不正常则不上传
+				{
+					qDebug()<<"have uart wrong!";
+				}
+				send_gun_num = 0;
+			}
+			if(id == "0")
+			{
+				send_wrong_foshan(DATAID_POST,"date",type);
+			}
+		}
 
 		if(Flag_MyServerEn == 1)//myserver协议
 		{
@@ -3787,7 +4073,21 @@ void FGA1000_485:: network_Stagundata(QString id,QString status)//发送油枪�
 			}
 			Send_Stagundata(DATAID_POST,sta_postgundata);
 		}
-
+		if(Flag_Network_Send_Version == 6) //佛山协议
+		{
+			//发送加油枪关停状态  全部是开启状态
+			QString sta_postgundata = "";
+			unsigned int num_gun = 0;
+			for(unsigned int i = 0;i < Amount_Dispener;i++)
+			{
+				for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
+				{
+					num_gun++;
+					sta_postgundata.append(QString::number(num_gun).append(":").append("1").append(";"));
+				}
+			}
+			send_gunsta_foshan(DATAID_POST,"date",sta_postgundata);
+		}
 		if(Flag_MyServerEn == 1) //myserver协议
 		{
 			QString send_gun_sta;
@@ -3825,20 +4125,20 @@ void FGA1000_485:: network_Closegunsdata(QString id,QString jyjid,QString jyqid,
 		qDebug()<<"network send Closegunsdata!"<< Flag_Network_Send_Version;
 		if(Flag_Network_Send_Version == 0)//福建协议
 		{
-			if(id == "3")//该协议并没有是要上传整点关枪
+			if(Flag_SendOnceGunCloseOperate == 0)//该协议并没有是要上传整点关枪
 			{
 				//发送加油枪关停状态  全部是开启状态
-				QString sta_postgundata = "";
 				unsigned int num_gun = 0;
 				for(unsigned int i = 0;i < Amount_Dispener;i++)
 				{
 					for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
 					{
 						num_gun++;
-						sta_postgundata.append(QString::number(num_gun).append(":").append("1").append(";"));
+						//sta_postgundata.append(QString::number(num_gun).append(":").append("1").append(";"));
+						Send_Closegunsdata(DATAID_POST,QString::number(i+1),QString::number(num_gun),"1","N");
 					}
 				}
-				Send_Stagundata(DATAID_POST,sta_postgundata);
+			Flag_SendOnceGunCloseOperate = 1;
 			}
 		}
 		if(Flag_Network_Send_Version == 1)//广州协议
@@ -3859,20 +4159,19 @@ void FGA1000_485:: network_Closegunsdata(QString id,QString jyjid,QString jyqid,
 		}
 		if(Flag_Network_Send_Version == 3)//唐山协议，与福建相同
 		{
-			if(id == "3")//该协议并没有是要上传整点关枪
+			if( Flag_SendOnceGunCloseOperate == 0)//该协议并没有是要上传整点关枪
 			{
 				//发送加油枪关停状态  全部是开启状态
-				QString sta_postgundata = "";
 				unsigned int num_gun = 0;
 				for(unsigned int i = 0;i < Amount_Dispener;i++)
 				{
 					for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
 					{
 						num_gun++;
-						sta_postgundata.append(QString::number(num_gun).append(":").append("1").append(";"));
+						Send_Closegunsdata(DATAID_POST,QString::number(i+1),QString::number(num_gun),"1","N");
 					}
 				}
-				Send_Stagundata(DATAID_POST,sta_postgundata);
+				Flag_SendOnceGunCloseOperate = 1;
 			}
 		}
 		if(Flag_Network_Send_Version == 4)//湖南协议  没有
@@ -3898,20 +4197,36 @@ void FGA1000_485:: network_Closegunsdata(QString id,QString jyjid,QString jyqid,
 		}
 		if(Flag_Network_Send_Version == 5)//江门协议 与唐山协议，与福建相同
 		{
-			if(id == "3")//该协议并没有是要上传整点关枪
+			if(Flag_SendOnceGunCloseOperate == 0)//该协议并没有是要上传整点关枪
 			{
 				//发送加油枪关停状态  全部是开启状态
-				QString sta_postgundata = "";
 				unsigned int num_gun = 0;
 				for(unsigned int i = 0;i < Amount_Dispener;i++)
 				{
 					for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
 					{
 						num_gun++;
-						sta_postgundata.append(QString::number(num_gun).append(":").append("1").append(";"));
+						Send_Closegunsdata(DATAID_POST,QString::number(i+1),QString::number(num_gun),"1","N");
 					}
 				}
-				Send_Stagundata(DATAID_POST,sta_postgundata);
+				Flag_SendOnceGunCloseOperate = 1;
+			}
+		}
+		if(Flag_Network_Send_Version == 6)
+		{
+			if(Flag_SendOnceGunCloseOperate == 0)//该协议并没有是要上传整点关枪
+			{
+				//发送加油枪关停状态  全部是开启状态
+				unsigned int num_gun = 0;
+				for(unsigned int i = 0;i < Amount_Dispener;i++)
+				{
+					for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
+					{
+						num_gun++;
+						Send_Closegunsdata(DATAID_POST,QString::number(i+1),QString::number(num_gun),"1","N");
+					}
+				}
+				Flag_SendOnceGunCloseOperate = 1;
 			}
 		}
 
@@ -3966,7 +4281,12 @@ void FGA1000_485::network_Configurationdata(QString id)//设置数据，每天�
 			Send_Configurationdata(DATAID_POST,jyqs,QString::number(Positive_Pres,'f',1),QString::number(Negative_Pres,'f',1),
 			                       "600.0",QString::number(Far_Dispener));
 		}
-
+		if(Flag_Network_Send_Version == 6) //佛山协议
+		{
+			QString jyqs = QString::number(Amount_Gasgun[0]+Amount_Gasgun[1]+Amount_Gasgun[2]+Amount_Gasgun[3]+Amount_Gasgun[4]+Amount_Gasgun[5]+
+					Amount_Gasgun[6]+Amount_Gasgun[7]+Amount_Gasgun[8]+Amount_Gasgun[9]+Amount_Gasgun[10]+Amount_Gasgun[11]);
+			emit send_setinfo_foshan(DATAID_POST,"",jyqs,QString::number(Positive_Pres,'f',1),QString::number(Negative_Pres,'f',1),"0","0",QString::number(Far_Dispener));
+		}
 		if(Flag_MyServerEn == 1) //mysetver协议
 		{
 			emit setup_data_myserver(QString::number(Positive_Pres,'f',2),QString::number(-Negative_Pres,'f',2),"0.00","0.00");
@@ -3980,6 +4300,11 @@ void FGA1000_485::network_Configurationdata(QString id)//设置数据，每天�
  * ***************************/
 void FGA1000_485::Myserver_First_Client()//服务器第一次连接，需要上传一次所有状态
 {
+	Flag_MyserverFirstSend = 1;
+
+}
+void FGA1000_485::First_Send()
+{
 	network_Configurationdata("N");   //日设置信息
 	sleep(1);
 	network_Warndata("1","N","N","N");//发送日报警信息
@@ -3990,4 +4315,5 @@ void FGA1000_485::Myserver_First_Client()//服务器第一次连接，需要上�
 	sleep(1);
 	network_Closegunsdata("0","N","N","N","N");//关枪数据
 	sleep(1);
+	Flag_MyserverFirstSend = 0;
 }

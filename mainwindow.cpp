@@ -1378,52 +1378,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	Controller_Version_init();//控制器硬件版本初始化
 	PreTemGasSensor_Type_init();//在线监测传感器类型初始化
 	//网络相关初始化
-	QFile config_postnet(CONFIG_POSTNETWORK);
-	if(!config_postnet.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		qDebug() <<"Can't open config_pre file!"<<endl;
-	}
-	QTextStream in_postnet(&config_postnet);
-	QString line_postnet;
-	for(uchar i = 0; i < 7; i ++)
-	{
-		line_postnet = in_postnet.readLine();
-		if(i == 0)
-		{
-			Post_Address = line_postnet;
-			qDebug()<<"post address is "<<Post_Address;
-			//if(USERID_POST == ""){USERID_POST = "3501040007";}
-		}
-		if(i == 1)
-		{
-			USERID_POST = line_postnet;
-			//if(USERID_POST == ""){USERID_POST = "3501040007";}
-		}
-		if(i == 2)
-		{
-			DATAID_POST = line_postnet;
-			//if(DATAID_POST == ""){DATAID_POST = "000001";}
-		}
-		if(i == 3)
-		{
-			VERSION_POST = line_postnet;
-			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
-			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
-		}
-		if(i == 4)
-		{
-			POSTUSERNAME_HUNAN = line_postnet;
-			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
-			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
-		}
-		if(i == 5)
-		{
-			POSTPASSWORD_HUNAN = line_postnet;
-			//if(VERSION_POST == ""){VERSION_POST = "V1.1";}
-			//if(VERSION_POST == "V"){VERSION_POST = "V1.1";}
-		}
-	}
-	config_postnet.close();
+	init_post_network();
+
 	QFile if_post("/opt/reoilgas/Post_Enable");
 	if(if_post.exists())//如果存在，网络开启
 	{
@@ -1662,12 +1618,17 @@ MainWindow::MainWindow(QWidget *parent) :
     thread_isoosi = new net_isoosi;
 	//isoosi添加 重庆
 	thread_isoosi_cq = new net_isoosi_cq;
+	//合肥协议，暂时使用
+	thread_isoosi_hefei = new net_isoosi_hefei;
 	//服务器上传泄漏数据
 	myserver_thread = new myserver;
 	//post 添加 唐山
 	post_message = new post_webservice;
 	//post 湖南
 	post_message_hunan = new post_webservice_hunan;
+	//post 佛山
+	post_message_foshan = new post_foshan;
+	post_message_foshan->moveToThread(post_message_foshan);
 	//oilgas线程
 	uart_reoilgas = new reoilgasthread();
 	//可燃气体线程
@@ -1700,6 +1661,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //发送网络故障数据
 	connect(this,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)));
 	connect(this,SIGNAL(Send_Wrongsdat_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)));
+	connect(this,SIGNAL(send_wrong_foshan(QString,QString,QString)),post_message_foshan,SLOT(send_wrong(QString,QString,QString)));
 	//isoosi添加 重庆
 	connect(this,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)));
 
@@ -1707,11 +1669,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	//post添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	//post佛山
+	connect(uart_reoilgas,SIGNAL(send_gundata_foshan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_gundata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 	//isoosi添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	//isoosi添加重庆 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_cq(QString,QString,QString,QString,QString,QString,QString,QString,QString)),thread_isoosi_cq,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
-
 	//myserver添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_myserver(QString,QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 
@@ -1731,6 +1694,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)));
 	connect(uart_fga,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)));
 
+	//post佛山
+	connect(uart_fga,SIGNAL(send_environment_foshan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_environment(QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(send_gunoperate_foshan(QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_gunoperate(QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(send_gunsta_foshan(QString,QString,QString)),post_message_foshan,SLOT(send_gunsta(QString,QString,QString)));
+	connect(uart_fga,SIGNAL(send_setinfo_foshan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_setinfo(QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(send_warninfo_foshan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_warninfo(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(send_wrong_foshan(QString,QString,QString)),post_message_foshan,SLOT(send_wrong(QString,QString,QString)));
+
 //isoosi形式发送网络数据
 	//isoosi添加  槽函数直连
 	connect(uart_fga,SIGNAL(environmental_data(QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(environmental_data(QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
@@ -1744,7 +1715,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(refueling_gun_stop_cq(QString,QString,QString)),thread_isoosi_cq,SLOT(refueling_gun_stop(QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(setup_data_cq(QString,QString,QString,QString)),thread_isoosi_cq,SLOT(setup_data(QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)),Qt::DirectConnection);
-
+	//isoosi合肥添加
+	connect(uart_fga,SIGNAL(Send_Surroundingsdata_HeFei(QString,QString,QString)),thread_isoosi_hefei,SLOT(send_surround_message(QString,QString,QString)));
 	//myserver添加  槽函数直连
 	connect(uart_fga,SIGNAL(environmental_data_myserver(QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(environmental_data(QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	connect(uart_fga,SIGNAL(gun_warn_data_myserver(QString,QString,QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(gun_warn_data(QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
@@ -1756,9 +1728,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	thread_isoosi_cq->start();
 	thread_isoosi->start();
+	thread_isoosi_hefei->start();
 	myserver_thread->start();
 	uart_reoilgas->start();
 	uart_fga->start();
+	post_message_foshan->start();//佛山协议需要启动
 
 	timer_thread *delay_time = new timer_thread;
 	connect(delay_time,SIGNAL(delay_1000ms()),uart_fga,SLOT(time_time()),Qt::DirectConnection);
@@ -1865,6 +1839,9 @@ void MainWindow::login_enter_set(int t)
 	//post添加
 	connect(systemset_exec,SIGNAL(Send_Configurationdata(QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)));
 	connect(systemset_exec,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)));
+	//post佛山
+	connect(systemset_exec,SIGNAL(Send_Setinfo_Foshan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_setinfo(QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(systemset_exec,SIGNAL(SendStationFoShan()),post_message_foshan,SLOT(send_station_message()));
 	//isoosi添加
 	connect(systemset_exec,SIGNAL(setup_data(QString,QString,QString,QString)),thread_isoosi,SLOT(setup_data(QString,QString,QString,QString)));
 	//isoosi添加重庆
@@ -13659,22 +13636,27 @@ void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络�
 		if(Flag_Network_Send_Version == 2)//重庆协议
 		{
 			QString wrongdata_post = "0111";//post添加
-			refueling_wrongdata_cq(wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0'))));//只发送采集器第一把枪
+			refueling_wrongdata_cq(wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0'))));//只发送采集器第一把枪
 		}
 		if(Flag_Network_Send_Version == 3)//唐山协议，与福建相同
 		{
 			QString wrongdata_post = "0111";//post添加
-			emit Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
+			emit Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
 		}
 		if(Flag_Network_Send_Version == 4)//湖南协议，与福建类似
 		{
 			QString wrongdata_post = "0111";//post添加
-			emit Send_Wrongsdat_HuNan(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0'))));//只发送采集器第一把枪
+			emit Send_Wrongsdat_HuNan(DATAID_POST,wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0'))));//只发送采集器第一把枪
 		}
 		if(Flag_Network_Send_Version == 5)//江门协议，与唐山协议，与福建相同
 		{
 			QString wrongdata_post = "0111";//post添加
-			emit Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
+			emit Send_Wrongsdata(DATAID_POST,wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
+		}
+		if(Flag_Network_Send_Version == 6)//佛山协议
+		{
+			QString wrongdata_post = "0111";//post添加
+			emit send_wrong_foshan(DATAID_POST,"date",wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
 		}
 
 	}

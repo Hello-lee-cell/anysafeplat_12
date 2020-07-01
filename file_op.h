@@ -80,6 +80,7 @@ void init_jingdian_write();
 void init_IIE();
 //post添加
 void config_post_network();
+void init_post_network();//服务器网络上传相关参数读取
 void config_network_Version_write();//油气回收网络上传版本写入
 void init_network_Version();//油气回收网络上传版本读取
 void config_isoosi_write();//油气回收网络上传相关参数

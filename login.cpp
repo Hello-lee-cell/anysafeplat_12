@@ -14,14 +14,15 @@ login::login(QWidget *parent) :
     ui(new Ui::login)
 {
     ui->setupUi(this);
+	setWindowModality(Qt::WindowModal);
     Flag_Timeto_CloseNeeded[0] = 1;
     this->setAttribute(Qt::WA_DeleteOnClose,true);
   //  setAttribute(Qt::WA_DeleteOnClose); //关闭变量之后立即释放
-    setWindowFlags(Qt::Tool|Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
+	setWindowFlags(Qt::FramelessWindowHint);
   //  setWindowFlags(windowFlags()&~Qt::WindowCloseButtonHint&~Qt::WindowContextHelpButtonHint);   //去掉对话框帮助按钮
     ui->label->setHidden(1);
-    ui->lineEdit->installEventFilter(this);
-    ui->lineEdit_2->installEventFilter(this);//安装eventfilter
+	//ui->lineEdit->installEventFilter(this);
+	//ui->lineEdit_2->installEventFilter(this);//安装eventfilter
     touchkey = new keyboard;
     connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
 
