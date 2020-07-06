@@ -1818,12 +1818,12 @@ void CommunicationProcess(unsigned char* rcvbuff,unsigned char rcvcount)
 							(rcvbuff[1]==3)&&
 							(rcvbuff[2]==18) 
 						   )//如果回应正确
-                             for(unsigned char i = 0; i < len_uart; i++)           //DEBUG
-                             {                                       //DEBUG
-                                 printf("%02x ",rcvbuff[i]); //DEBUG       //12.27
+//                             for(unsigned char i = 0; i < len_uart; i++)           //DEBUG
+//                             {                                       //DEBUG
+//                                 printf("%02x ",rcvbuff[i]); //DEBUG       //12.27
 
-                             }
-                           printf("^^^\n");
+//                             }
+						   printf("^^^radar\n");
 						   {
                               Rec_Flag[Communication_Machine] = 1;
 	

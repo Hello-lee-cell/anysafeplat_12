@@ -2244,3 +2244,61 @@ void Controller_Version_write()
 	fsync(fp);
 	close(fp);
 }
+//油站信息初始化
+void StationMessageInit()
+{
+	QFileInfo fileInfo("/opt/StationMessage.ini");
+	if(fileInfo.isFile())
+	{
+	}
+	else
+	{
+		QString CityCode = "000001";
+		QString AreaCode = "000001";
+		QString TownCode = "4425";
+		QString StationName = "某某站";
+		QString Company = "某某企业";
+		QString Lon = "116.397128";
+		QString Lat = "39.916527";
+		QString Address = "某某街某某路";
+		QString Contact = "某某";
+		QString Phone = "13112345678";
+		QString JYJNum = QString::number(Amount_Dispener);
+		QString JYQNum = QString::number(Amount_Gasgun[0]+Amount_Gasgun[1]+Amount_Gasgun[2]+Amount_Gasgun[3]+Amount_Gasgun[4]+Amount_Gasgun[5]+Amount_Gasgun[6]
+				+Amount_Gasgun[7]+Amount_Gasgun[8]+Amount_Gasgun[9]+Amount_Gasgun[10]+Amount_Gasgun[11]);
+		QString Scale = "1";
+		QString OwnerType = "1";
+		QString HasSystem = "1";
+		QString Manufacturer = "公司";
+		QString IsAcceptance = "1";
+		QString OperateStaff = "某";
+		QString JYJID = "1";
+		QString JYQID = "1";
+		//将信息写入文件ini
+		QSettings *configIniWrite = new QSettings("/opt/StationMessage.ini", QSettings::IniFormat);
+		//向ini文件中写入内容,setValue函数的两个参数是键值对
+		configIniWrite->setValue("StationMessage/CityCode", CityCode);
+		configIniWrite->setValue("StationMessage/AreaCode", AreaCode);
+		configIniWrite->setValue("StationMessage/TownCode", TownCode);
+		configIniWrite->setValue("StationMessage/StationName", StationName);
+		configIniWrite->setValue("StationMessage/Company", Company);
+		configIniWrite->setValue("StationMessage/Lon", Lon);
+		configIniWrite->setValue("StationMessage/Lat", Lat);
+		configIniWrite->setValue("StationMessage/Address", Address);
+		configIniWrite->setValue("StationMessage/Contact", Contact);
+		configIniWrite->setValue("StationMessage/Phone", Phone);
+		configIniWrite->setValue("StationMessage/JYJNum", JYJNum);
+		configIniWrite->setValue("StationMessage/JYQNum", JYQNum);
+		configIniWrite->setValue("StationMessage/Scale", Scale);
+		configIniWrite->setValue("StationMessage/OwnerType", OwnerType);
+		configIniWrite->setValue("StationMessage/HasSystem", HasSystem);
+		configIniWrite->setValue("StationMessage/Manufacturer", Manufacturer);
+		configIniWrite->setValue("StationMessage/IsAcceptance", IsAcceptance);
+		configIniWrite->setValue("StationMessage/OperateStaff", OperateStaff);
+
+		configIniWrite->setValue("JYJMessage/JYJID", JYJID);
+		configIniWrite->setValue("JYJMessage/JYQID", JYQID);
+		//写入完成后删除指针
+		delete configIniWrite;
+	}
+}

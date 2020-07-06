@@ -95,11 +95,11 @@ int Gas_Concentration_Threshold = 40;//油气浓度报警阈值，20 g/m3, ××�
 //post添加 用于区分罐压报警类型
 unsigned char Sta_Tank_Postsend = 0;
 //0正常；1零压预警；2零压报警；3真空阀临界压力预警；4真空阀临界压力报警；5真空阀预警；6真空阀报警
-QString STA_YZ;
-QString STA_YGLY;
-QString STA_PVZT;
-QString STA_PVLJZT;
-QString STA_ND;
+QString STA_YZ = "0";
+QString STA_YGLY = "0";
+QString STA_PVZT = "0";
+QString STA_PVLJZT = "0";
+QString STA_ND = "0";
 
 unsigned char Pre_tank_en_change = 0;//如果设置改变  要及时发信号标志位
 unsigned char Pre_pipe_en_change = 0;
@@ -3241,13 +3241,16 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					{
 						STA_ND = "0";
 					}
-					if(Flag_StaFga_Temp[1] == 1)
+					else if(Flag_StaFga_Temp[1] == 1)
 					{
 						STA_ND = "1";
 					}
-					if(Flag_StaFga_Temp[1] == 2)
+					else if(Flag_StaFga_Temp[1] == 2)
 					{
 						STA_ND = "2";
+					}
+					else {
+						STA_ND = "0";
 					}
 				}
 				else
@@ -3278,6 +3281,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 				}
 				num_gun = 0;
 				//密闭性和油罐零压公用一个，油罐压力和压力真空阀报警状态用一个,后处理装置状态没有，卸油回气管状态没有
+				//qDebug()<<"*************************"<<STA_ND;
 				emit send_warninfo_foshan(DATAID_POST,"",al_post,STA_YGLY,STA_YZ,STA_PVZT,STA_YGLY,STA_PVZT,STA_PVLJZT,"N",STA_ND,"N");
 				/**************end***网络报警数据*******************/
 			}
@@ -4223,7 +4227,8 @@ void FGA1000_485:: network_Closegunsdata(QString id,QString jyjid,QString jyqid,
 					for(unsigned int j = 0;j < Amount_Gasgun[i];j++)
 					{
 						num_gun++;
-						Send_Closegunsdata(DATAID_POST,QString::number(i+1),QString::number(num_gun),"1","N");
+						//Send_Closegunsdata(DATAID_POST,QString::number(i+1),QString::number(num_gun),"1","N");
+						send_gunoperate_foshan(DATAID_POST,"date",QString::number(i+1),QString::number(num_gun),"1","N");
 					}
 				}
 				Flag_SendOnceGunCloseOperate = 1;
@@ -4285,7 +4290,8 @@ void FGA1000_485::network_Configurationdata(QString id)//设置数据，每天�
 		{
 			QString jyqs = QString::number(Amount_Gasgun[0]+Amount_Gasgun[1]+Amount_Gasgun[2]+Amount_Gasgun[3]+Amount_Gasgun[4]+Amount_Gasgun[5]+
 					Amount_Gasgun[6]+Amount_Gasgun[7]+Amount_Gasgun[8]+Amount_Gasgun[9]+Amount_Gasgun[10]+Amount_Gasgun[11]);
-			emit send_setinfo_foshan(DATAID_POST,"",jyqs,QString::number(Positive_Pres,'f',1),QString::number(Negative_Pres,'f',1),"0","0",QString::number(Far_Dispener));
+			emit send_setinfo_foshan(DATAID_POST,"0",jyqs,QString::number(Positive_Pres,'f',1),QString::number(Negative_Pres,'f',1),"0","0",QString::number(Far_Dispener));
+			//第二位date为0时，不上传加油机和加油枪对应编号信息，为1时上传。
 		}
 		if(Flag_MyServerEn == 1) //mysetver协议
 		{

@@ -979,7 +979,7 @@ void systemset::on_pushButton_3_clicked()       //保存 退出
 {
 	ui->label_2->setHidden(0);
 	qApp->processEvents();//立刻显示
-    closeing_touchkey();
+	//closeing_touchkey();
     Flag_Timeto_CloseNeeded[0] = 0;
     config_backgroundvalue_machine1();
     toolButton_areaset_enter_clicked();
@@ -2516,6 +2516,23 @@ void systemset::history_ipset()
 }
 //*******************added for radar*********/
 //区域设置-》手动设置-》输入
+void systemset::radar_area_set()//整体输入，用来代替后面的 函数
+{
+	uchar which_one = ui->comboBox_whicharea->currentIndex();
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][0][0] = (ui->lineEdit_x1->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][1][0] = (ui->lineEdit_x2->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][2][0] = (ui->lineEdit_x3->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][3][0] = (ui->lineEdit_x4->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][4][0] = (ui->lineEdit_x5->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][5][0] = (ui->lineEdit_x6->text().toFloat())*10;
+
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][0][1] = (ui->lineEdit_y1->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][1][1] = (ui->lineEdit_y2->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][2][1] = (ui->lineEdit_y3->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][3][1] = (ui->lineEdit_y4->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][4][1] = (ui->lineEdit_y5->text().toFloat())*10;
+	Master_Boundary_Point_Disp[Communication_Machine][which_one][5][1] = (ui->lineEdit_y6->text().toFloat())*10;
+}
 void systemset::setText_area_x1(const QString &text)
 {
     if((text == "0")||(text == "1")||(text == "2")||(text == "3")||(text == "4")||(text == "5")||
@@ -2539,7 +2556,6 @@ void systemset::setText_area_x1(const QString &text)
 
     }
     uchar which_one = ui->comboBox_whicharea->currentIndex();
-
     Master_Boundary_Point_Disp[Communication_Machine][which_one][0][0] = (ui->lineEdit_x1->text().toFloat())*10;
 }
 void systemset::setText_area_x2(const QString &text)
@@ -2963,6 +2979,7 @@ void systemset::toolButton_areaset_enter_clicked()       //区域设置重绘 �
 {
     emit mainwindow_repainting();
     Flag_Set_SendMode = 5;
+    radar_area_set();
     config_boundary_machine1_area1();
     config_boundary_machine1_area2();
     config_boundary_machine1_area3();
@@ -5241,7 +5258,7 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		}
 		if(Flag_Network_Send_Version == 6) //佛山协议
 		{
-			emit Send_Setinfo_Foshan(DATAID_POST,"",jyqs,pvz,pvf,"0","0",yzqh);
+			emit Send_Setinfo_Foshan(DATAID_POST,"1",jyqs,pvz,pvf,"0","0",yzqh);
 		}
 
 		if(Flag_MyServerEn == 1) //myserver协议

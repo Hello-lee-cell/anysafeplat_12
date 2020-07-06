@@ -33,6 +33,7 @@ private:
     QStandardItemModel *model_gundetail;
     QStandardItemModel *model_yingshe;
     bool IPLive(QString ip, int port);
+	void radar_area_set();
 private slots:
     bool eventFilter(QObject *, QEvent *);
 

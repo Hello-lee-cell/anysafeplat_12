@@ -133,7 +133,9 @@ void post_webservice::requestFinished(QNetworkReply* reply)
     {
         if(network_wrong == 0)
         {
-			add_value_netinfo("福州、唐山在线监测服务器访问失败");
+			if(Flag_Network_Send_Version == 0){add_value_netinfo("福州在线监测服务器访问失败");}
+			if(Flag_Network_Send_Version == 3){add_value_netinfo("唐山在线监测服务器访问失败");}
+			if(Flag_Network_Send_Version == 5){add_value_netinfo("江门在线监测服务器访问失败");}
 			Flag_Ifsend = 0;//在这里把全局变量置0，之后时间到了要再重新发送零点的信息
             network_wrong = 1;
             qDebug() << "webservice fail~!!";

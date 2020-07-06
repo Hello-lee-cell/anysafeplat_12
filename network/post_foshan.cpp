@@ -144,8 +144,8 @@ void post_foshan::requestFinished(QNetworkReply* reply)
 			qFatal("An error occurred during parsing");
 		}
 
-		qDebug() << "code:" << json_receive["code"].toString();
-		qDebug() << "data:" << json_receive["data"].toString();
+		//qDebug() << "code:" << json_receive["code"].toString();
+		//qDebug() << "data:" << json_receive["data"].toString();
 		qDebug() << "message:" << json_receive["message"].toString();
 		//history_comsta_write((json_receive["message"].toString()));
 		if((json_receive["message"].toString() == "登录成功")||
@@ -337,12 +337,37 @@ YZQH	Varchar1(1)	否	安装液阻传感器加油机编号（无后处理装置�
 void post_foshan::send_setinfo(QString DataId,QString Date,QString JYQS,QString PVZ,QString PVF,
 					 QString HCLK,QString HCLT,QString YZQH)
 {
+	unsigned char FlagSendGunInfo = 0;
+	if(Date == "1")
+	{
+		FlagSendGunInfo = 1;
+	}
 	send_login(Account_Foshan,Pwdcode_Foshan );//每次发送前登陆一次
 	QString json_data;
 	QDateTime current_datetime = QDateTime::currentDateTime();
 	Date = current_datetime.toString("yyyy-MM-dd#hh:mm:ss");//#替换成空格
 	json_data = json_setinfo(DataId,Date,JYQS,PVZ,PVF,HCLK,HCLT,YZQH);
 	Data_Pack(3,json_data);
+
+//发送油枪匹配
+	if(FlagSendGunInfo == 1)
+	{
+		unsigned int GunNumCount = Amount_Gasgun[0]+Amount_Gasgun[1]+Amount_Gasgun[2]+Amount_Gasgun[3]+Amount_Gasgun[4]+Amount_Gasgun[5]
+				+Amount_Gasgun[6]+Amount_Gasgun[7]+Amount_Gasgun[8]+Amount_Gasgun[9]+Amount_Gasgun[10]+Amount_Gasgun[11];
+		unsigned int gunnum_send = 0;//油枪编号
+		unsigned int jiayouji_send = 0;//加油机编号
+		for(unsigned int i=0;i<Amount_Dispener;i++)
+		{
+			jiayouji_send++;
+			for(unsigned int j = 0;j<GunNumCount;j++)
+			{
+				msleep(1);
+				gunnum_send++;
+				send_guninfo(DATAID_POST,"date",QString::number(jiayouji_send),QString::number(gunnum_send));
+			}
+		}
+	}
+
 }
 
 /********4、send报警信息**************
@@ -638,7 +663,21 @@ void post_foshan::send_station_message()
 
 	send_stationinfo(DATAID_POST,"date",CityCode,AreaCode,TownCode,StationName,Company,Lon,Lat,Address,Contact,Phone,JYJNum,JYQNum,
 					 Scale,OwnerType,HasSystem,Manufacturer,IsAcceptance,OperateStaff);
-	send_guninfo(DATAID_POST,"date",JYJID,JYQID);
+	unsigned int GunNumCount = Amount_Gasgun[0]+Amount_Gasgun[1]+Amount_Gasgun[2]+Amount_Gasgun[3]+Amount_Gasgun[4]+Amount_Gasgun[5]
+			+Amount_Gasgun[6]+Amount_Gasgun[7]+Amount_Gasgun[8]+Amount_Gasgun[9]+Amount_Gasgun[10]+Amount_Gasgun[11];
+	unsigned int gunnum_send = 0;//油枪编号
+	unsigned int jiayouji_send = 0;//加油机编号
+	for(unsigned int i=0;i<Amount_Dispener;i++)
+	{
+		jiayouji_send++;
+		for(unsigned int j = 0;j<GunNumCount;j++)
+		{
+			msleep(1);
+			gunnum_send++;
+			send_guninfo(DATAID_POST,"date",QString::number(jiayouji_send),QString::number(gunnum_send));
+		}
+	}
+
 }
 
 /*********以下json数据转换函数****************/

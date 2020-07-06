@@ -94,5 +94,7 @@ void init_myserver_network();//服务器网络上传相关参数读取
 //控制器硬件版本
 void Controller_Version_init();//控制器硬件版本初始化
 void Controller_Version_write();//控制器硬件版本写入
+//油站信息初始化
+void StationMessageInit();
 #endif // FILE_OP_H
 

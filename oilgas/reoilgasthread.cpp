@@ -113,7 +113,7 @@ void reoilgasthread::run()
 				len_uart_reoilgas = 0;
 				memset(Refresh_Receivebuf,0,sizeof(char)*256);
 				//测试网络发送油枪数据是否正确
-				//network_oilgundata(DATAID_POST,"1","1","1.1","40","25","40","25","200");
+				//network_oilgundata(DATAID_POST,"1","1","110","40","25","40","25","200");
 				if(Flag_Controller_Version == 1)//压力表无线模式  且是新版控制器
 				{
 					Flag_ask_PreAndTem = 0;

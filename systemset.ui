@@ -2773,21 +2773,6 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QPushButton" name="pushButton_testnetwork">
-     <property name="geometry">
-      <rect>
-       <x>1030</x>
-       <y>50</y>
-       <width>89</width>
-       <height>131</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>N</string>
-     </property>
-    </widget>
-    <zorder>pushButton_testnetwork</zorder>
-    <zorder>scrollArea</zorder>
    </widget>
    <widget class="QWidget" name="tab_xielou">
     <attribute name="title">
@@ -11965,6 +11950,19 @@ p, li { white-space: pre-wrap; }
     </property>
    </widget>
   </widget>
+  <widget class="QPushButton" name="pushButton_testnetwork">
+   <property name="geometry">
+    <rect>
+     <x>1040</x>
+     <y>100</y>
+     <width>89</width>
+     <height>131</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>N</string>
+   </property>
+  </widget>
   <zorder>label_20</zorder>
   <zorder>tabWidget_all</zorder>
   <zorder>widget_warn_user_del</zorder>
@@ -11983,6 +11981,7 @@ p, li { white-space: pre-wrap; }
   <zorder>label_2</zorder>
   <zorder>widget_warn_allclean</zorder>
   <zorder>widget_warn_ip_wrong</zorder>
+  <zorder>pushButton_testnetwork</zorder>
  </widget>
  <customwidgets>
   <customwidget>
