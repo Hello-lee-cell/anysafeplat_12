@@ -1,4 +1,4 @@
-#ifndef DATABASE_OP_H
+﻿#ifndef DATABASE_OP_H
 #define DATABASE_OP_H
 #include<qstring.h>
 
@@ -39,4 +39,9 @@ void output_table();
 void add_value_liquid(QString state);
 void add_value_pump(QString state);
 void add_value_crash(QString state);
+
+//液位仪
+void add_yeweiyi_alarminfo(QString whichone, QString state);
+void add_yeweiyi_addOil_Record_Write(QString start_time,QString whichone, QString sumall);
+
 #endif // DATABASE_OP_H

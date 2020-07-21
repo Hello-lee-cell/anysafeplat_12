@@ -1,4 +1,4 @@
-#ifndef CONFIG
+﻿#ifndef CONFIG
 #define CONFIG
 
 #include<qmutex.h>
@@ -12,6 +12,12 @@
 #define CONFIG_MAPPING   "/opt/reoilgas/config_mapping.txt"
 #define CONFIG_MAPPING_SHOW   "/opt/reoilgas/config_mapping_show.txt"
 #define CONFIG_MAPPING_OILNO   "/opt/reoilgas/config_mapping_oilno.txt"
+//液位仪
+#define config_OilTank_Amount "/opt/configeration/config_OilTank_Amount.txt"
+#define config_Tangan_Amount "/opt/configeration/config_Tangan_Amount.txt"
+#define config_OilTank_Set "/opt/configeration/config_OilTank_Set.txt"
+#define config_Oil_Kind    "/opt/configeration/config_Oil_Kind_Set.txt"
+#define config_OilTank_Table    "/opt/configeration/config_OilTank_Table.txt"
 
 //数据库列表名称
 #define CONTROLINFO     "controlinfo"
@@ -145,6 +151,7 @@ extern unsigned char Flag_screen_safe;
 extern unsigned char Flag_screen_burngas;
 extern unsigned char Flag_screen_zaixian;
 extern unsigned char Flag_screen_cc;
+extern unsigned char Flag_screen_ywy;
 extern unsigned char Mapping[96];
 extern QString Mapping_Show[96];
 extern QString Mapping_OilNo[96];
@@ -309,6 +316,51 @@ extern unsigned char Flag_MyServerEn;
 
 //one_click_sync
 extern unsigned char Flag_WaitSync;//等待数据同步，阻断正常的问询进程，全局变量
+//液位仪 thread
+
+
+//探杆命令 读取
+#define ASK_Height   0x40
+#define ASK_TEMP     0x41
+#define ASK_average  0x42
+#define ASK_Range_KB      0x43
+#define ASK_OIL_compensation    0x44  //油面零点补偿
+#define ASK_Water_compensation  0x47  //水面零点补偿
+//探杆命令 写入
+#define Write_OIL_compensation  0x71
+#define Write_Water_compensation  0x72
+
+extern float OilTank_50[300];
+extern float OilTank_40[300];
+
+extern struct Display_HeightData Dis_HeightData;
+extern struct Tangan_Configuration Tangan_Config;
+
+extern unsigned char Tanggan_ADD[30];
+extern unsigned char i_Tanggan_ADD;
+extern unsigned char i_Ask_Tanggan;
+extern unsigned char Flag_Communicate_YWY_Error[20];
+extern unsigned char Ask_Tanggan[30];
+extern unsigned char Uart_Channel;
+extern unsigned char Tanggan_SET_ADD;
+extern unsigned char len_Tangan_Config_CompOIL;
+extern unsigned char len_Tangan_Config_CompWater;
+extern unsigned char Flag_alarm_off_on;
+extern unsigned char i_alarm_record[12][6];
+
+extern float add_Oil_array[10][3];
+
+extern unsigned char Amount_OilTank;
+extern unsigned char Tangan_Amount[12];
+extern unsigned char sum_Tangan_Amount;
+extern float OilTank_Set[12][6];
+extern unsigned char Oil_Kind[12][9];
+extern float Compension[12][2];
+extern float Oil_Tank_Table[12][300];
+extern unsigned char index_Oil_Tank_Table;
+
+extern float OilTank_50[300];
+extern float OilTank_40[300];
 #endif // CONFIG
 
 //传感器法  sensor   液媒法  liquid  压力法   pressure

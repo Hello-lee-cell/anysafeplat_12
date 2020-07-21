@@ -96,6 +96,7 @@ private:
 	void IIE_analysis();
 	void IIE_Electromagnetic_Analysis();//IIE电磁阀数据分析
 	int net_history(int num,int sta);
+	void Warn_Filtering();
 };
 
 #endif // MYTHREAD_H

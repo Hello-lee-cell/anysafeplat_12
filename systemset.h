@@ -1,4 +1,4 @@
-#ifndef SYSTEMSET_H
+﻿#ifndef SYSTEMSET_H
 #define SYSTEMSET_H
 
 #include <QDialog>
@@ -34,6 +34,13 @@ private:
     QStandardItemModel *model_yingshe;
     bool IPLive(QString ip, int port);
 	void radar_area_set();
+
+	void systemset_AuthorizeCancel_and_show();
+
+    //液位仪
+    QStandardItemModel *model_Oil_Tank;
+    QStandardItemModel *model_Tangan;
+    QStandardItemModel *model_OilTank_table;
 private slots:
     bool eventFilter(QObject *, QEvent *);
 
@@ -502,6 +509,70 @@ private slots:
 
 	void on_pushButton_testnetwork_clicked();
 
+	void on_pushButton_Authorize_clicked();
+
+	void on_pushButton_AuthorizeConfirm_clicked();
+
+	void on_pushButton_AuthorizeCancel_clicked();
+
+    void on_btn_OilTank_Table_Set_clicked();
+
+    // 液位仪
+    //油罐设置
+    void tableview_OilTank_Replay(int t);
+    void on_comboBox_OilTank_sumset_currentIndexChanged(int index);
+    void set_backspace_Oil_Tank();
+    void Set_Tangan_Amount(const QString&);
+    void Set_OilTank_aboutLength(const QString &text);
+    void Set_OilTank_table(const QString &text);
+    void on_tableView_Oiltank_clicked(const QModelIndex &index);
+    void Get_Info_ON_tableview_OilTank();
+    void on_btn_save_OilTank_clicked();
+
+    //探杆设置
+    void tableView_Tangan_Replay();
+    void on_tableView_Tangan_clicked(const QModelIndex &index);
+    void set_backspace_Tangan();
+    void Set_Oil_Kind(const QString&);
+    void Set_Tangan_aboutLength(const QString &text);
+    void Get_Info_ON_tableview_Tangan();
+    void get_compension_info();
+    void on_btn_save_Tangan_clicked();
+    void display_compension(unsigned char command,unsigned char hang,float data);
+    void display_compensation_set_result(unsigned char command,unsigned char add,QString str);
+
+    //设置探杆地址
+    void setText_setadd(const QString &text);
+    void setBackspace_setadd();
+
+    void on_btn_alarm_off_on_clicked();
+    void set_Tangan_add_success(unsigned char add);
+
+
+    //罐表
+    void on_btn_Table_close_clicked();
+
+    void on_comboBox_OilTank_table_currentIndexChanged(int index);
+
+    void tableView_OilTank_Table_Replay(int t);
+
+    void on_btn_save_table_clicked();
+
+    void Get_Info_ON_tableview_OilTank_Table();
+
+    void on_btn_clear_table_clicked();
+
+    void on_btn_setadd_clicked();
+
+    void set_backspace_Oil_Tank_Table();
+
+    void Set_Oil_Tank_Table(const QString &text);
+
+
+    void on_tableView_OilTank_Table_clicked(const QModelIndex &index);
+
+    void on_btn_get_compension_clicked();
+
 signals:
 
     void amount_basin_reset(int t);
@@ -567,7 +638,9 @@ signals:
 	//同步带屏气液比采集器脉冲当量
 	void signal_sync_factor_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2);
 
-
+    //液位仪
+    void amount_Oil_Tank_draw(int t);
+    void amount_Tangan_draw();
 
 };
 

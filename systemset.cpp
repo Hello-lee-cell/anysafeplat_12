@@ -1,4 +1,4 @@
-#include "systemset.h"
+﻿#include "systemset.h"
 #include "ui_systemset.h"
 #include<stdint.h>
 #include<stdio.h>
@@ -7,6 +7,14 @@
 #include<errno.h>
 #include<fcntl.h>
 #include<unistd.h>
+#include<net/if.h>
+//add for 检查是否能连外网
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <QTcpSocket>
+#include <qnetworkinterface.h>
 
 #include"serial.h"
 #include"mainwindow.h"
@@ -19,16 +27,8 @@
 #include"keyboard.h"
 #include"database_op.h"
 #include "station_message.h"
-//************radar*********/
 #include"radar_485.h"
 #include"safty/security.h"
-//add for 检查是否能连外网
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <QTcpSocket>
-#include <qnetworkinterface.h>
 #include "oilgas/fga1000_485.h"
 
 
@@ -53,15 +53,14 @@ unsigned char flag_hide_red = 1;
 //**************added for radar*************/<-
 unsigned int ip[4];        //四位ip地址中的每一位
 char IP_DES[32] = {0};   //系统设置地址 system所需的字符串
-
 unsigned char flag_mythread_temp = 0;   //一次写入，每个选项的检测
-
 unsigned char Mapping[96] = {0};//加油枪编号映射数组，全局变量yignshe，用于数据上传编号
 QString Mapping_Show[96] = {""};//加油枪编号映射数组，全局变量yignshe,用于显示
 QString Mapping_OilNo[96] = {""};//加油枪油品号映射数组，全局变量yingshe，用于显示抢的油品号
 //post添加
 unsigned char flag_post_Configuration = 0;//如果置1，则在设置退出时上传油气回收设置信息
-
+//授权相关
+unsigned char Flag_IfAuthorize = 0;//是否授权
 systemset::systemset(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::systemset)
@@ -496,6 +495,53 @@ systemset::systemset(QWidget *parent) :
 	ui->pushButton_sync->setHidden(1);//一键同步按钮只在3.0 或 3.1版本才能用
     //********************油气回收设置********************//
 
+
+
+    /***************************  液位仪  ******************************************/
+
+
+    ui->scrollArea_ywy->setStyleSheet("QScrollArea#scrollArea, QWidget#scrollAreaWidgetContents{background-color:rgb(172,214,248);}");
+    ui->scrollArea_ywy->verticalScrollBar()->setStyleSheet("QScrollBar{ background: #F0F0F0; width:25px ;margin-top:0px;margin-bottom:0px }"
+                                                           "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:21px }");
+    ui->tableView_OilTank_Table->verticalScrollBar()->setStyleSheet( "QScrollBar{ background: #F0F0F0; width:25px ;margin-top:0px;margin-bottom:0px }"
+                                                                     "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:21px }");
+
+    ui->label_compension_set_state->setHidden(1);
+    ui->widget_OilTank_Table->setHidden(1);
+
+    ui->lineEdit_setadd->installEventFilter(this);
+
+    if(Flag_alarm_off_on)  //判断报警允许位
+    {
+        ui->btn_alarm_off_on->setText("报警已开启");
+    }
+    else
+    {
+        ui->btn_alarm_off_on->setText("报警已关闭");
+    }
+
+    ui->comboBox_OilTank_sumset->setCurrentIndex(Amount_OilTank);
+    tableview_OilTank_Replay(Amount_OilTank);
+    tableView_Tangan_Replay();
+
+    tableView_OilTank_Table_Replay(index_Oil_Tank_Table);
+
+    if(Flag_alarm_off_on)  //判断报警允许位  不包括通讯故障
+    {
+        ui->btn_alarm_off_on->setText("报警已开启");
+    }
+    else
+    {
+        ui->btn_alarm_off_on->setText("报警已关闭");
+    }
+
+
+
+
+
+
+
+
 //    //********************网络设置********************//
 //    ui->lineEdit_ifisport_udp->installEventFilter(this);
 //    ui->lineEdit_ifisport_tcp->installEventFilter(this);
@@ -596,6 +642,7 @@ systemset::systemset(QWidget *parent) :
 
 
     //其他
+	systemset_AuthorizeCancel_and_show();//授权相关显示
     on_tabWidget_all_currentChanged(0);
 	ui->comboBox_Controller_Version->setCurrentIndex(Flag_Controller_Version);
 	ui->comboBox_TankPre_type->setCurrentIndex(Flag_TankPre_Type);
@@ -622,17 +669,115 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 	//index = 4     可燃气体
 	//index = 5     网络设置
     //index = 6     其他设置：用户管理  升级 时间设置
-    emit closeing_touchkey();
-	if(index == 1)
-    {
+	//emit closeing_touchkey();
+	if(index == 0) //post添加
+	{
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_zaixian == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
+		//post
+		flag_post_Configuration = 1;
+		printf("we will send oilgun set to webservice!!\n");
+		ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
+		if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//带屏版本的采集器才有这个一键同步的功能
+		{
+			ui->pushButton_sync->setHidden(0);
+		}
+		else
+		{
+			ui->pushButton_sync->setHidden(1);
+		}
+		ui->comboBox_pressure_transmitters_mode_mode->setCurrentIndex(Flag_Pressure_Transmitters_Mode);
+		if(Flag_Reoilgas_NeverShow == 0)
+		{
+			ui->toolButton_pop_show->setText("已开启");
+		}
+		if(Flag_Reoilgas_NeverShow == 1)
+		{
+			ui->toolButton_pop_show->setText("点击开启");
+		}
+		//关枪使能
+		if(Flag_Gun_off == 0)
+		{
+			ui->toolButton_gun_off_guanbi->setEnabled(0);
+			ui->toolButton_gun_off_guanbi->setText("已关闭");
+			ui->toolButton_gun_off_kaiqi->setEnabled(1);
+			ui->toolButton_gun_off_kaiqi->setText("点击开启");
+		}
+		if(Flag_Gun_off == 1)
+		{
+			ui->toolButton_gun_off_guanbi->setEnabled(1);
+			ui->toolButton_gun_off_guanbi->setText("点击关闭");
+			ui->toolButton_gun_off_kaiqi->setEnabled(0);
+			ui->toolButton_gun_off_kaiqi->setText("已开启");
+		}
 
+	}
+	if(index == 1)
+	{
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_xielou == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(1);
+		}
     }
 	if(index == 2)
     {
-
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_radar == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
     }
 	if(index == 3)
     {
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_safe == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
 		ui->comboBox_valuenum->setCurrentIndex(IIE_Value_Num);
 
 		if(IIE_SetModel_Time == 0x05){ui->comboBox_wenyou_time->setCurrentIndex(0);}
@@ -650,53 +795,30 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 	}
 	if(index == 4)
     {
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_burngas == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
         //可燃气体数量初始化
         ui->comboBox_burngas->setStyleSheet("QScrollBar{ background: #F0F0F0; width:20px ;margin-top:0px;margin-bottom:0px }"
                                     "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:18px }");
         ui->comboBox_burngas->setCurrentIndex(Num_Fga-2);
     }
-	if(index == 0) //post添加
-    {
-        //post
-        flag_post_Configuration = 1;
-        printf("we will send oilgun set to webservice!!\n");
-        ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
-		if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//带屏版本的采集器才有这个一键同步的功能
-		{
-			ui->pushButton_sync->setHidden(0);
-		}
-		else
-		{
-			ui->pushButton_sync->setHidden(1);
-		}
-        ui->comboBox_pressure_transmitters_mode_mode->setCurrentIndex(Flag_Pressure_Transmitters_Mode);
-        if(Flag_Reoilgas_NeverShow == 0)
-        {
-            ui->toolButton_pop_show->setText("已开启");
-        }
-		if(Flag_Reoilgas_NeverShow == 1)
-        {
-            ui->toolButton_pop_show->setText("点击开启");
-        }
-        //关枪使能
-        if(Flag_Gun_off == 0)
-        {
-            ui->toolButton_gun_off_guanbi->setEnabled(0);
-            ui->toolButton_gun_off_guanbi->setText("已关闭");
-            ui->toolButton_gun_off_kaiqi->setEnabled(1);
-            ui->toolButton_gun_off_kaiqi->setText("点击开启");
-        }
-        if(Flag_Gun_off == 1)
-        {
-            ui->toolButton_gun_off_guanbi->setEnabled(1);
-            ui->toolButton_gun_off_guanbi->setText("点击关闭");
-            ui->toolButton_gun_off_kaiqi->setEnabled(0);
-            ui->toolButton_gun_off_kaiqi->setText("已开启");
-        }
-
-    }
     if(index == 5)
     {
+		ui->frame_AuthorizeNo->setHidden(1);
+
 		char IP[32] = {0};
 		get_local_ip(if_name,IP);
 		ui->label_14->setText(IP);
@@ -888,6 +1010,9 @@ void systemset::on_tabWidget_all_currentChanged(int index)
     }
     if(index == 6)
     {
+		ui->frame_AuthorizeNo->setHidden(1);
+		ui->widget_Authorize->setHidden(1);//授权界面不显示
+
         ui->textBrowser->clear();
         unsigned char i = 0;
         QString Line[20];
@@ -972,6 +1097,14 @@ void systemset::on_tabWidget_all_currentChanged(int index)
             ui->toolButton_screen_cc->setText("已开启");
         }
 
+        if(Flag_screen_ywy == 0)
+        {
+
+        }
+        else
+        {
+
+        }
     }
 }
 
@@ -1029,6 +1162,13 @@ void systemset::on_pushButton_3_clicked()       //保存 退出
 		delay10s->setInterval(500);
 		delay10s->start();
 	}
+
+    //液位仪
+    closeing_touchkey();
+    ui->label_setadd_indicate->setHidden(1);   //地址设置成功指示按键
+    Config_OilTank_Amount_Write();            //存报警标志位
+    emit amount_Oil_Tank_draw( Amount_OilTank );
+    emit amount_Tangan_draw();
 }
 void systemset::setok_delay10sclose()
 {
@@ -1750,6 +1890,21 @@ bool systemset::eventFilter(QObject *watched, QEvent *event)
             return true;
         }
     }
+
+    //液位仪
+    if(watched == ui->lineEdit_setadd)
+    {
+        if(event->type() == QEvent::MouseButtonPress)
+        {
+           emit closeing_touchkey();
+           touchkey = new keyboard;
+           connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(setText_setadd(const QString&)));
+           connect(touchkey,SIGNAL(display_backspace()),this,SLOT(setBackspace_setadd()));
+           connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+           touchkey->show();
+           return true;
+        }
+    }
     return QWidget::eventFilter(watched,event);
 
 }
@@ -2412,6 +2567,7 @@ void systemset::whoareyou_userset(unsigned char t)         //判断为非管理�
         ui->pushButton_shield_network->setHidden(1);//网络上传报警数据修正
         ui->toolButton_isoosi_pb->setHidden(1);
         ui->widget_alset->setHidden(1);//气液比相关设置
+		ui->frame_WindowHideSet->setHidden(1);//界面开启关闭
     }
     if(t == 2)
     {
@@ -2422,6 +2578,7 @@ void systemset::whoareyou_userset(unsigned char t)         //判断为非管理�
         ui->pushButton_shield_network->setHidden(1);//网络上传报警数据修正
         ui->toolButton_isoosi_pb->setHidden(1);
         ui->widget_alset->setHidden(1);//气液比相关设置
+		ui->frame_WindowHideSet->setHidden(1);//界面开启关闭
     }
     if(t == 3)
     {
@@ -2430,6 +2587,26 @@ void systemset::whoareyou_userset(unsigned char t)         //判断为非管理�
         ui->pushButton_shield_network->setHidden(0);//网络上传报警数据修正
         ui->toolButton_isoosi_pb->setHidden(0);
         ui->widget_alset->setHidden(0);//气液比相关设置
+		ui->frame_WindowHideSet->setHidden(0);//界面开启关闭
+		if(Flag_IfAuthorize)//如果已经授权
+		{
+			ui->toolButton_screen_burngas->setEnabled(1);
+			ui->toolButton_screen_cc->setEnabled(1);
+			ui->toolButton_screen_radar->setEnabled(1);
+			ui->toolButton_screen_safe->setEnabled(1);
+			ui->toolButton_screen_xielou->setEnabled(1);
+			ui->toolButton_screen_zaixian->setEnabled(1);
+		}
+		else
+		{
+			ui->toolButton_screen_burngas->setEnabled(0);
+			ui->toolButton_screen_cc->setEnabled(0);
+			ui->toolButton_screen_radar->setEnabled(0);
+			ui->toolButton_screen_safe->setEnabled(0);
+			ui->toolButton_screen_xielou->setEnabled(0);
+			ui->toolButton_screen_zaixian->setEnabled(0);
+		}
+
     }
 }
 void systemset::dispset_for_managerid(const QString &text)
@@ -5216,6 +5393,114 @@ void systemset::sync_factor_data(unsigned int idi,unsigned int idj,float oil_fac
 	emit signal_sync_factor_data(idi,idj,oil_factor1,gas_factor1,oil_factor2,gas_factor2);
 }
 
+//****************授权相关***********************
+void systemset::on_pushButton_Authorize_clicked()
+{
+	int MacID = 0;
+	int MacNum1 = 0;
+	int MacNum2 = 0;
+	int MacNum3 = 0;
+	//获取mac地址
+	QFile devicd_id("/sys/class/net/eth1/address");
+	if(!devicd_id.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		printf("read device MAC file\n");
+	}
+	QTextStream in(&devicd_id);
+	QString line_id;
+	line_id = in.readLine();
+//    QByteArray read_id = line.toLatin1();
+//    char *read_id_data = read_id;
+	devicd_id.close();
+	//获取mac地址
+	MacNum1 = line_id.section(QRegExp(":"), 3, 3).toInt(0,16);
+	MacNum2 = line_id.section(QRegExp(":"), 4, 4).toInt(0,16);
+	MacNum3 = line_id.section(QRegExp(":"), 5, 5).toInt(0,16);
+	qDebug()<<line_id<<MacNum1<<MacNum2<<MacNum3;
+	MacID = MacNum1*65536+MacNum2*256+MacNum3;
+	ui->widget_Authorize->setHidden(0);
+	ui->label_AuthorizeMessage->setText("");
+	ui->label_AuthorizeID->setText(QString::number(MacID));
+}
+void systemset::on_pushButton_AuthorizeConfirm_clicked()
+{
+	int AuthorizeMacId = 0;
+	int AuthorizeEnter = 0;//输入授权码
+	int enter1 = 0,enter2 = 0,enter3 = 0;
+	int MacNum1 = 0,MacNum2 = 0,MacNum3 = 0;
+	AuthorizeMacId = (ui->label_AuthorizeID->text()).toInt();
+	MacNum1 = AuthorizeMacId/65536;
+	MacNum2 = (AuthorizeMacId-MacNum1*65536)/256;
+	MacNum3 = AuthorizeMacId % 256;
+	AuthorizeEnter = (ui->lineEdit_AuthorizeNum->text()).toInt();
+	enter1 = AuthorizeEnter/65536;
+	enter2 = (AuthorizeEnter-enter1*65536)/256;
+	enter3 = AuthorizeEnter % 256;
+
+	qDebug()<<MacNum1<<MacNum2<<MacNum3;
+	qDebug()<<enter1<<enter2<<enter3;
+
+	if((enter1 == MacNum2)&&(enter2 == MacNum3)&&(enter3 == MacNum1))
+	{
+		qDebug()<<"ji huo cheng gong############\n";
+		ui->label_AuthorizeMessage->setText("授权成功！");
+		system("touch /opt/shouquan");
+		system("sync");
+		Flag_IfAuthorize = 1;
+	}
+	else
+	{
+		ui->label_AuthorizeMessage->setText("授权失败！");
+		system("rm /opt/shouquan");
+		system("sync");
+		Flag_IfAuthorize = 0;
+	}
+	systemset_AuthorizeCancel_and_show();
+}
+void systemset::on_pushButton_AuthorizeCancel_clicked()
+{
+	ui->widget_Authorize->setHidden(1);
+}
+void systemset::systemset_AuthorizeCancel_and_show()
+{
+	//判断授权文件是否存在
+	QFile if_file("/opt/shouquan");
+	if(if_file.exists())
+	{
+		ui->frame_WindowHideSet->setHidden(0);
+		ui->comboBox->setEnabled(1);
+		ui->comboBox_2->setEnabled(1);
+		ui->comboBox_3->setEnabled(1);
+
+		//隐藏提示授权界面
+		ui->toolButton_screen_burngas->setEnabled(1);
+		ui->toolButton_screen_cc->setEnabled(1);
+		ui->toolButton_screen_radar->setEnabled(1);
+		ui->toolButton_screen_safe->setEnabled(1);
+		ui->toolButton_screen_xielou->setEnabled(1);
+		ui->toolButton_screen_zaixian->setEnabled(1);
+
+		Flag_IfAuthorize = 1;
+	}
+	else
+	{
+		ui->comboBox->setEnabled(0);
+		ui->comboBox_2->setEnabled(0);
+		ui->comboBox_3->setEnabled(0);
+
+		//显示提示授权界面 由当前是哪一页决定
+		ui->toolButton_screen_burngas->setEnabled(0);
+		ui->toolButton_screen_cc->setEnabled(0);
+		ui->toolButton_screen_radar->setEnabled(0);
+		ui->toolButton_screen_safe->setEnabled(0);
+		ui->toolButton_screen_xielou->setEnabled(0);
+		ui->toolButton_screen_zaixian->setEnabled(0);
+
+		Flag_IfAuthorize = 0;
+	}
+}
+//****************授权相关***********************
+
 /************配置信息网络上传*****************
  * id     没有用
  * jyqs   加油枪数量
@@ -5288,4 +5573,904 @@ void systemset::myserver_xielouset(QString tank_num,QString tank_type,QString pi
 void systemset::on_pushButton_testnetwork_clicked()
 {
 	Flag_MyserverFirstSend = 1;
+}
+
+
+/***************************   液位仪    ***********************************************/
+
+void systemset::on_btn_alarm_off_on_clicked()
+{
+    Flag_alarm_off_on = ~Flag_alarm_off_on;
+   if(Flag_alarm_off_on)
+   {
+        ui->btn_alarm_off_on->setText("报警已开启");
+   }
+   else
+   {
+       ui->btn_alarm_off_on->setText("报警已关闭");
+   }
+}
+
+//油罐设置
+void systemset::tableview_OilTank_Replay(int t)
+{
+    model_Oil_Tank = new QStandardItemModel();
+    model_Oil_Tank->setColumnCount(7);
+    ui->tableView_Oiltank->verticalHeader()->setHidden(1);//隐藏行号
+    model_Oil_Tank->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg("油罐编号"));
+    model_Oil_Tank->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("探杆数目"));
+    model_Oil_Tank->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("直径"));
+    model_Oil_Tank->setHeaderData(3,Qt::Horizontal,QObject::tr("%1").arg("水位报警高度"));
+    model_Oil_Tank->setHeaderData(4,Qt::Horizontal,QObject::tr("%1").arg("油位报警下限"));
+    model_Oil_Tank->setHeaderData(5,Qt::Horizontal,QObject::tr("%1").arg("油位报警上限"));
+    model_Oil_Tank->setHeaderData(6,Qt::Horizontal,QObject::tr("%1").arg("对应罐表"));
+    int i = 0;
+    while(i < t)
+    {
+        model_Oil_Tank->setItem(i,0,new QStandardItem(QString("%1#油罐").arg(i+1)));
+        model_Oil_Tank->item(i,0)->setTextAlignment(Qt::AlignCenter);
+        model_Oil_Tank->setItem(i,1,new QStandardItem(QString("%1").arg(Tangan_Amount[i])));
+        model_Oil_Tank->item(i,1)->setTextAlignment(Qt::AlignCenter);
+
+        if(OilTank_Set[i][0] ==0)
+        {
+            model_Oil_Tank->setItem(i,2,new QStandardItem(QString("0")));
+            model_Oil_Tank->item(i,2)->setTextAlignment(Qt::AlignCenter);
+        }
+        else
+        {
+            model_Oil_Tank->setItem(i,2,new QStandardItem(QString::number(OilTank_Set[i][0], 'f', 1)));
+            model_Oil_Tank->item(i,2)->setTextAlignment(Qt::AlignCenter);
+        }
+
+        if(OilTank_Set[i][1] ==0)
+        {
+            model_Oil_Tank->setItem(i,3,new QStandardItem(QString("0")));
+            model_Oil_Tank->item(i,3)->setTextAlignment(Qt::AlignCenter);
+        }
+        else
+        {
+            model_Oil_Tank->setItem(i,3,new QStandardItem(QString::number(OilTank_Set[i][1], 'f', 1)));
+            model_Oil_Tank->item(i,3)->setTextAlignment(Qt::AlignCenter);
+        }
+
+        if(OilTank_Set[i][2] ==0)
+        {
+            model_Oil_Tank->setItem(i,4,new QStandardItem(QString("0")));
+            model_Oil_Tank->item(i,4)->setTextAlignment(Qt::AlignCenter);
+        }
+        else
+        {
+            model_Oil_Tank->setItem(i,4,new QStandardItem(QString::number(OilTank_Set[i][2], 'f', 1)));
+            model_Oil_Tank->item(i,4)->setTextAlignment(Qt::AlignCenter);
+        }
+
+        if(OilTank_Set[i][3] ==0)
+        {
+            model_Oil_Tank->setItem(i,5,new QStandardItem(QString("0")));
+            model_Oil_Tank->item(i,5)->setTextAlignment(Qt::AlignCenter);
+        }
+        else
+        {
+            model_Oil_Tank->setItem(i,5,new QStandardItem(QString::number(OilTank_Set[i][3], 'f', 1)));
+            model_Oil_Tank->item(i,5)->setTextAlignment(Qt::AlignCenter);
+        }
+
+        model_Oil_Tank->setItem(i,6,new QStandardItem(QString("%1").arg(OilTank_Set[i][4])));
+        model_Oil_Tank->item(i,6)->setTextAlignment(Qt::AlignCenter);
+
+        i++;
+    }
+    ui->tableView_Oiltank->setModel(model_Oil_Tank);
+
+}
+
+void systemset::on_comboBox_OilTank_sumset_currentIndexChanged(int index)
+{
+    tableview_OilTank_Replay(index);
+}
+
+void systemset::on_tableView_Oiltank_clicked(const QModelIndex &index)
+{
+    hang = index.row();
+    lie = index.column();
+    emit closeing_touchkey();
+    if(lie)
+    {
+        touchkey = new keyboard;
+
+        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Oil_Tank()));
+
+        if(lie ==1)
+        {
+            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Tangan_Amount(const QString&)));
+        }
+        else if(lie>1 && lie <6)
+        {
+            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_OilTank_aboutLength(const QString&)));
+        }
+        else if(lie==6)
+        {
+           connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_OilTank_table(const QString&)));
+        }
+
+        touchkey->show();
+    }
+}
+
+void systemset::set_backspace_Oil_Tank()
+{
+    model_Oil_Tank->setItem(hang,lie,new QStandardItem("0"));
+    model_Oil_Tank->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+}
+
+void systemset::Set_Tangan_Amount(const QString &text)
+{
+    std::string temp = text.toStdString();
+    if((temp[0] <= '1') && (temp[0] >= '0'))
+    {
+//        printf("%d\n",text.toInt());
+        model_Oil_Tank->setItem(hang,lie,new QStandardItem(text));
+        model_Oil_Tank->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+        this->clearFocus();
+    }
+}
+
+void systemset::Set_OilTank_aboutLength(const QString &text)
+{
+    //判断是否是合法输入：数字
+    std::string temp = text.toStdString();
+    unsigned char len_dot;
+    if(((temp[0] >= '0') && (temp[0] <= '9'))||(text == "."))
+    {
+        //获取当前单元格中的数字
+        QModelIndex index = model_Oil_Tank->index(hang,lie);
+        QVariant data = model_Oil_Tank->data(index);
+        QString Q_temp = data.toString();
+
+        if(Q_temp == "0")
+        {
+            if(text == ".")  // 0.
+            {
+                Q_temp = Q_temp.append(text);
+                model_Oil_Tank->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_Oil_Tank->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+            else    //获取第一个数字
+            {
+                Q_temp = text;
+                model_Oil_Tank->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_Oil_Tank->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+        }
+        else  //原有值不为0   如果接收到 dot  ，就限制之后只能输入1位，否则只能输入4位
+        {
+            len_dot = Q_temp.indexOf(".");
+            if(len_dot>0 && len_dot<5) //
+            {
+                if(text != ".")  //如果有 doc 就不再接收 doc
+                {
+                   if(Q_temp[len_dot+1].isNull())
+                   {
+                       Q_temp = Q_temp.append(text);
+                       model_Oil_Tank->setItem(hang,lie,new QStandardItem(Q_temp));
+                       model_Oil_Tank->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                       this->clearFocus();
+                   }
+                }
+            }
+            else //如果没有 doc
+            {
+                Q_temp = Q_temp.append(text);
+                int a = Q_temp.toInt();
+                if(a < 9999)
+                {
+                    model_Oil_Tank->setItem(hang,lie,new QStandardItem(Q_temp));
+                    model_Oil_Tank->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                    this->clearFocus();
+                }
+            }
+        }
+    }
+}
+
+void systemset::Set_OilTank_table(const QString &text)
+{
+    std::string temp = text.toStdString();
+    if((temp[0] <= '6') && (temp[0] >= '0'))
+    {
+        model_Oil_Tank->setItem(hang,lie,new QStandardItem(text));
+        model_Oil_Tank->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+        this->clearFocus();
+    }
+}
+
+void systemset::Get_Info_ON_tableview_OilTank()
+{
+    QModelIndex index;
+    QVariant data;
+
+    Amount_OilTank = ui->comboBox_OilTank_sumset->currentIndex();   //探杆数量
+    for(unsigned char i = 0;i < 12;i++)    //第一列  int型
+    {
+        index = model_Oil_Tank->index(i,1);
+        data = model_Oil_Tank->data(index);
+        Tangan_Amount[i] = data.toInt();
+    }
+    for(unsigned char i = 0;i < 12;i++)    //后边  float型
+    {
+        for(unsigned char j = 0;j < 5;j++)
+        {
+            index = model_Oil_Tank->index(i,j+2);
+            data = model_Oil_Tank->data(index);
+            OilTank_Set[i][j] = data.toFloat();
+//            printf("%f    ",OilTank_Set[i][j]);fflush(stdout);
+        }
+    }
+}
+
+void systemset::on_btn_save_OilTank_clicked()
+{
+    Get_Info_ON_tableview_OilTank();
+    sum_Tangan_Amount = 0;
+    for(unsigned char i = 0;i < Amount_OilTank;i++)
+    {
+        sum_Tangan_Amount = sum_Tangan_Amount + Tangan_Amount[i];
+    }
+    Config_OilTank_Amount_Write();
+//    Config_Tangan_Amount_Write();
+    config_OilTank_Set_Write();
+    closeing_touchkey();
+    tableView_Tangan_Replay();
+}
+
+
+//探杆设置
+void systemset::tableView_Tangan_Replay()
+{
+    model_Tangan = new QStandardItemModel();
+    model_Tangan->setColumnCount(5);
+    ui->tableView_Tangan->verticalHeader()->setHidden(1);//隐藏行号
+    model_Tangan->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg("所属油罐"));
+    model_Tangan->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("探杆地址"));
+    model_Tangan->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("储存油品"));
+    model_Tangan->setHeaderData(3,Qt::Horizontal,QObject::tr("%1").arg("油位补偿值"));
+    model_Tangan->setHeaderData(4,Qt::Horizontal,QObject::tr("%1").arg("水位补偿值"));
+
+    int i = 0;
+    unsigned char i_hang = 0;
+    while(i < Amount_OilTank)
+    {
+        for(unsigned char j = 0;j < Tangan_Amount[i];j++)
+        {
+            model_Tangan->setItem(i_hang,0,new QStandardItem(QString("%1#油罐").arg(i+1))); //
+            model_Tangan->item(i_hang,0)->setTextAlignment(Qt::AlignCenter);
+            model_Tangan->setItem(i_hang,1,new QStandardItem(QString("%1").arg(i_hang+1))); //
+            model_Tangan->item(i_hang,1)->setTextAlignment(Qt::AlignCenter);
+            model_Tangan->setItem(i_hang,2,new QStandardItem(QString("%1").arg(Oil_Kind[i][j]))); //
+            model_Tangan->item(i_hang,2)->setTextAlignment(Qt::AlignCenter);
+            i_hang++;
+        }
+        i++;
+    }
+    ui->tableView_Tangan->setModel(model_Tangan);
+}
+
+void systemset::on_tableView_Tangan_clicked(const QModelIndex &index)
+{
+    hang = index.row();
+    lie = index.column();
+    emit closeing_touchkey();
+    if(lie)
+    {
+        touchkey = new keyboard;
+
+        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Tangan()));
+
+        if(lie ==2)
+        {
+           connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Oil_Kind(const QString&)));
+        }
+        else if(lie == 3 || lie == 4)
+        {
+            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Tangan_aboutLength(const QString&)));
+        }
+
+        touchkey->show();
+    }
+}
+
+void systemset::set_backspace_Tangan()
+{
+    model_Tangan->setItem(hang,lie,new QStandardItem("0"));
+    model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+}
+
+void systemset::Set_Oil_Kind(const QString &text)
+{
+    std::string temp = text.toStdString();
+    if(temp[0] == '9' || temp[0] == '2'||temp[0] == '5'||temp[0] == '8'||temp[0] == '0' )
+    {
+        //获取当前单元格中的数字
+        QModelIndex index = model_Tangan->index(hang,lie);
+        QVariant data = model_Tangan->data(index);
+        QString Q_temp = data.toString();
+
+        if(Q_temp == "0")
+        {
+            if(temp[0] == '9')
+            {
+                Q_temp = text;
+//                printf("%d\n",text.toInt());fflush(stdout);
+                model_Tangan->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+        }
+        else if(Q_temp == "9")
+        {
+            if(temp[0] == '2'||temp[0] == '5'||temp[0] == '8')
+            {
+                Q_temp = Q_temp.append(text);
+                model_Tangan->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+            else if(temp[0] == '0')
+            {
+                model_Tangan->setItem(hang,lie,new QStandardItem(text));
+                model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+        }
+        else
+        {
+            if(temp[0] == '9')
+            {
+                Q_temp = text;
+//                printf("%d\n",text.toInt());fflush(stdout);
+                model_Tangan->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+            else if(temp[0] == '0')
+            {
+                model_Tangan->setItem(hang,lie,new QStandardItem(text));
+                model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+        }
+    }
+}
+
+void systemset::Set_Tangan_aboutLength(const QString &text)
+{
+    //判断是否是合法输入：数字
+    std::string temp = text.toStdString();
+    unsigned char len_dot;
+    if(((temp[0] >= '0') && (temp[0] <= '9'))||(text == "."))
+    {
+        //获取当前单元格中的数字
+        QModelIndex index = model_Tangan->index(hang,lie);
+        QVariant data = model_Tangan->data(index);
+        QString Q_temp = data.toString();
+
+        if(Q_temp == "0")
+        {
+            if(text == ".")  // 0.
+            {
+                Q_temp = Q_temp.append(text);
+                model_Tangan->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+            else    //获取第一个数字
+            {
+                Q_temp = text;
+                model_Tangan->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+        }
+        else  //原有值不为0   如果接收到 dot  ，就限制之后只能输入1位，否则只能输入4位
+        {
+            len_dot = Q_temp.indexOf(".");
+            if(len_dot>0 && len_dot<5) //
+            {
+                if(text != ".")  //如果有 doc 就不再接收 doc
+                {
+                   if(Q_temp[len_dot+1].isNull())
+                   {
+                       Q_temp = Q_temp.append(text);
+                       model_Tangan->setItem(hang,lie,new QStandardItem(Q_temp));
+                       model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                       this->clearFocus();
+                   }
+                }
+            }
+            else //如果没有 doc
+            {
+                Q_temp = Q_temp.append(text);
+                int a = Q_temp.toInt();
+                if(a < 9999)
+                {
+                    model_Tangan->setItem(hang,lie,new QStandardItem(Q_temp));
+                    model_Tangan->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                    this->clearFocus();
+                }
+            }
+        }
+    }
+}
+
+//补偿值表
+void systemset::Get_Info_ON_tableview_Tangan()
+{
+    QModelIndex index;
+    QVariant data;
+    unsigned char count_temp = 0;
+
+    for(unsigned char i = 0;i < 12;i++)    //油品
+    {
+        for(unsigned char j = 0;j < Tangan_Amount[i];j++)
+        {
+            index = model_Tangan->index(count_temp,2);
+            data = model_Tangan->data(index);
+            Oil_Kind[i][j] = data.toInt();
+            count_temp++;
+        }
+    }
+//    printf("%d ",(model_Tangan->rowCount()));fflush(stdout);
+}
+
+void systemset::get_compension_info()
+{
+    QModelIndex index;
+    QVariant data;
+
+    for(unsigned char i = 1;i < Amount_OilTank;i++)    //后边  float型
+    {
+        for(unsigned char j = 0;j < 2;j++)
+        {
+            index = model_Tangan->index(i-1,j+3);
+            data = model_Tangan->data(index);
+            Compension[i][j] = data.toFloat();
+        }
+    }
+}
+
+void systemset::on_btn_save_Tangan_clicked()
+{
+    Get_Info_ON_tableview_Tangan();
+    config_Oil_Kind_Write();
+    closeing_touchkey();
+
+    Uart_Channel = 11;
+    i_Ask_Tanggan = 0;
+    i_Tanggan_ADD = 1;
+    for(unsigned char i=0;i<=Amount_OilTank;i++)
+    {
+        Flag_Communicate_YWY_Error[i] = 0;
+    }
+    get_compension_info();
+}
+
+//罐表设置
+void systemset::tableView_OilTank_Table_Replay(int t )
+{
+    model_OilTank_table = new QStandardItemModel();
+    model_OilTank_table->setColumnCount(11);
+    ui->tableView_OilTank_Table->verticalHeader()->setHidden(1);//隐藏行号
+    model_OilTank_table->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg(""));
+    model_OilTank_table->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("0"));
+    model_OilTank_table->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("1"));
+    model_OilTank_table->setHeaderData(3,Qt::Horizontal,QObject::tr("%1").arg("2"));
+    model_OilTank_table->setHeaderData(4,Qt::Horizontal,QObject::tr("%1").arg("3"));
+    model_OilTank_table->setHeaderData(5,Qt::Horizontal,QObject::tr("%1").arg("4"));
+    model_OilTank_table->setHeaderData(6,Qt::Horizontal,QObject::tr("%1").arg("5"));
+    model_OilTank_table->setHeaderData(7,Qt::Horizontal,QObject::tr("%1").arg("6"));
+    model_OilTank_table->setHeaderData(8,Qt::Horizontal,QObject::tr("%1").arg("7"));
+    model_OilTank_table->setHeaderData(9,Qt::Horizontal,QObject::tr("%1").arg("8"));
+    model_OilTank_table->setHeaderData(10,Qt::Horizontal,QObject::tr("%1").arg("9"));
+    for(unsigned char i=0;i<30;i++)
+    {
+        model_OilTank_table->setItem(i,0,new QStandardItem(QString("%1").arg(i*10)));
+        model_OilTank_table->item(i,0)->setTextAlignment(Qt::AlignCenter);
+    }
+
+    for(unsigned char i=0;i<30;i++)
+    {
+        for(unsigned char j = 0;j < 10;j++)
+        {
+            if(Oil_Tank_Table[index_Oil_Tank_Table][(i*10)+j]==0)
+            {
+                model_OilTank_table->setItem(i,j+1,new QStandardItem(QString("0")));
+                model_OilTank_table->item(i,j+1)->setTextAlignment(Qt::AlignCenter);
+            }
+            else
+            {
+                model_OilTank_table->setItem(i,j+1,new QStandardItem(QString::number(Oil_Tank_Table[index_Oil_Tank_Table][(i*10)+j], 'f', 4)));
+                model_OilTank_table->item(i,j+1)->setTextAlignment(Qt::AlignCenter);
+            }
+        }
+    }
+
+    ui->tableView_OilTank_Table->setModel(model_OilTank_table);
+
+    ui->tableView_OilTank_Table->setColumnWidth(0,50);
+    ui->tableView_OilTank_Table->setColumnWidth(1,80);
+    ui->tableView_OilTank_Table->setColumnWidth(2,80);
+    ui->tableView_OilTank_Table->setColumnWidth(3,80);
+    ui->tableView_OilTank_Table->setColumnWidth(4,80);
+    ui->tableView_OilTank_Table->setColumnWidth(5,80);
+    ui->tableView_OilTank_Table->setColumnWidth(6,80);
+    ui->tableView_OilTank_Table->setColumnWidth(7,80);
+    ui->tableView_OilTank_Table->setColumnWidth(8,80);
+    ui->tableView_OilTank_Table->setColumnWidth(9,80);
+    ui->tableView_OilTank_Table->setColumnWidth(10,80);
+}
+
+
+
+void systemset::on_btn_OilTank_Table_Set_clicked()
+{
+    ui->widget_OilTank_Table->setHidden(0);
+}
+
+
+
+void systemset::on_btn_Table_close_clicked()
+{
+    ui->widget_OilTank_Table->setHidden(1);
+}
+
+void systemset::on_comboBox_OilTank_table_currentIndexChanged(int index)
+{
+    index_Oil_Tank_Table = index;
+    tableView_OilTank_Table_Replay(index_Oil_Tank_Table);
+}
+
+void systemset::Get_Info_ON_tableview_OilTank_Table()
+{
+    QModelIndex index;
+    QVariant data;
+    for(unsigned char i = 0;i < 30;i++)    //
+    {
+        for(unsigned char j = 0;j < 10;j++)
+        {
+            index = model_OilTank_table->index(i,j+1);
+            data = model_OilTank_table->data(index);
+            Oil_Tank_Table[index_Oil_Tank_Table][(i*10)+j] = data.toFloat();
+        }
+    }
+}
+
+void systemset::on_btn_save_table_clicked()
+{
+    closeing_touchkey();
+    Get_Info_ON_tableview_OilTank_Table();
+    config_OilTank_Table_Write();
+}
+
+void systemset::on_btn_clear_table_clicked()
+{
+    for(unsigned char i=0;i<30;i++)
+    {
+        for(unsigned char j = 0;j < 10;j++)
+        {
+            Oil_Tank_Table[index_Oil_Tank_Table][(i*10)+j] = 0;
+            model_OilTank_table->setItem(i,j+1,new QStandardItem(QString("0")));
+            model_OilTank_table->item(i,j+1)->setTextAlignment(Qt::AlignCenter);
+        }
+    }
+    config_OilTank_Table_Clear();
+}
+
+void systemset::Set_Oil_Tank_Table(const QString &text)
+{
+    //判断是否是合法输入：数字
+    std::string temp = text.toStdString();
+    unsigned char len_dot;
+    if(((temp[0] >= '0') && (temp[0] <= '9'))||(text == "."))
+    {
+        //获取当前单元格中的数字
+        QModelIndex index = model_OilTank_table->index(hang,lie);
+        QVariant data = model_OilTank_table->data(index);
+        QString Q_temp = data.toString();
+
+        if(Q_temp == "0")
+        {
+            if(text == ".")  // 0.
+            {
+                Q_temp = Q_temp.append(text);
+                model_OilTank_table->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+            else    //获取第一个数字
+            {
+                Q_temp = text;
+                model_OilTank_table->setItem(hang,lie,new QStandardItem(Q_temp));
+                model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                this->clearFocus();
+            }
+        }
+        else  //原有值不为0   如果接收到 dot  ，就限制之后只能输入4位，否则只能输入2位
+        {
+            len_dot = Q_temp.indexOf(".");
+            if(len_dot>0 && len_dot<3) //
+            {
+                if(text != ".")  //如果有 doc 就不再接收 doc
+                {
+                    if(Q_temp[len_dot+1].isNull())
+                    {
+                        Q_temp = Q_temp.append(text);
+                        model_OilTank_table->setItem(hang,lie,new QStandardItem(Q_temp));
+                        model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                        this->clearFocus();
+                    }
+                    else if(Q_temp[len_dot+2].isNull())
+                    {
+                        Q_temp = Q_temp.append(text);
+                        model_OilTank_table->setItem(hang,lie,new QStandardItem(Q_temp));
+                        model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                        this->clearFocus();
+                    }
+                    else if(Q_temp[len_dot+3].isNull())
+                    {
+                        Q_temp = Q_temp.append(text);
+                        model_OilTank_table->setItem(hang,lie,new QStandardItem(Q_temp));
+                        model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                        this->clearFocus();
+                    }
+                    else if(Q_temp[len_dot+4].isNull())
+                    {
+                        Q_temp = Q_temp.append(text);
+                        model_OilTank_table->setItem(hang,lie,new QStandardItem(Q_temp));
+                        model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                        this->clearFocus();
+                    }
+                }
+            }
+            else //如果没有 doc
+            {
+                Q_temp = Q_temp.append(text);
+                int a = Q_temp.toInt();
+                if(a < 99)
+                {
+                    model_OilTank_table->setItem(hang,lie,new QStandardItem(Q_temp));
+                    model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+                    this->clearFocus();
+                }
+            }
+        }
+    }
+}
+
+void systemset::set_backspace_Oil_Tank_Table()
+{
+    model_OilTank_table->setItem(hang,lie,new QStandardItem("0"));
+    model_OilTank_table->item(hang,lie)->setTextAlignment(Qt::AlignCenter);
+}
+
+void systemset::on_tableView_OilTank_Table_clicked(const QModelIndex &index)
+{
+    hang = index.row();
+    lie = index.column();
+    emit closeing_touchkey();
+    if(lie>0 && lie <10)
+    {
+        touchkey = new keyboard;
+
+        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Oil_Tank_Table()));
+
+       connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Oil_Tank_Table(const QString&)));
+    }
+    touchkey->show();
+}
+
+//设置探杆地址
+void systemset::setText_setadd(const QString &text)
+{
+    ui->label_setadd_indicate->setHidden(1);
+    if(text > "0" && text < "7")
+    {
+        ui->lineEdit_setadd->backspace();
+        ui->lineEdit_setadd->insert(text);
+    }
+}
+
+void systemset::setBackspace_setadd()
+{
+    ui->lineEdit_setadd->backspace();
+}
+void systemset::on_btn_setadd_clicked()
+{
+    emit closeing_touchkey();
+    char *setvalue;
+    QByteArray Q_setvalue = ui->lineEdit_setadd->text().toLatin1();
+    setvalue = Q_setvalue.data();
+    Tanggan_SET_ADD = setvalue[0] - 0x30 + 0xD0;
+    Uart_Channel = 10;
+}
+
+void systemset::set_Tangan_add_success(unsigned char add)
+{
+    add = add - 0xD0;
+    ui->label_setadd_indicate->setHidden(0);
+    ui->label_setadd_indicate->setText(QString("%1设置成功").arg(add));
+}
+
+void systemset::display_compension(unsigned char command,unsigned char hang,float data)
+{
+    hang = hang - 1;
+   if(command == ASK_OIL_compensation)
+   {
+       if(data == 0)
+       {
+           model_Tangan->setItem(hang,3,new QStandardItem(QString("0"))); //
+           model_Tangan->item(hang,3)->setTextAlignment(Qt::AlignCenter);
+       }
+       else
+       {
+           model_Tangan->setItem(hang,3,new QStandardItem(QString::number(data, 'f', 1))); //
+           model_Tangan->item(hang,3)->setTextAlignment(Qt::AlignCenter);
+       }
+   }
+   else if(command == ASK_Water_compensation)
+   {
+       if(data == 0)
+       {
+           model_Tangan->setItem(hang,4,new QStandardItem(QString("0"))); //
+           model_Tangan->item(hang,4)->setTextAlignment(Qt::AlignCenter);
+       }
+       else
+       {
+           model_Tangan->setItem(hang,4,new QStandardItem(QString::number(data, 'f', 1))); //
+           model_Tangan->item(hang,4)->setTextAlignment(Qt::AlignCenter);
+       }
+
+   }
+}
+
+void systemset::display_compensation_set_result(unsigned char command,unsigned char add, QString str)
+{
+    if(command == ASK_OIL_compensation)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿获取成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿获取失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+    }
+    else if(command == ASK_Water_compensation)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿获取成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿获取失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "完成问询")
+        {
+            ui->label_compension_set_state->setHidden(1);
+        }
+    }
+/*******************************    写入油补偿      ****************************************/
+    else if(command == Write_OIL_compensation)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿写入命令成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿写入命令失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+    }
+    else if(command == Write_OIL_compensation + SOH +4)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿写入数据成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿写入数据失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+    }
+    else if(command == Write_OIL_compensation + STX)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿设置成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#油补偿返回验证失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+    }
+/*******************************    写入水补偿      ****************************************/
+    else if(command == Write_Water_compensation)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿写入命令成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿写入命令失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "完成问询")
+        {
+            ui->label_compension_set_state->setHidden(1);
+        }
+    }
+    else if(command == Write_Water_compensation + SOH + 6)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿写入数据成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿写入数据失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+    }
+    else if(command == Write_Water_compensation + STX)
+    {
+        if(str == "成功")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿设置成功").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+        else if(str == "失败")
+        {
+            ui->label_compension_set_state->setText(QString("%1#水补偿返回验证失败").arg(add));
+            ui->label_compension_set_state->setHidden(0);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+void systemset::on_btn_get_compension_clicked()
+{
+    Uart_Channel = 3;
+    i_Ask_Tanggan = 0;
+    i_Tanggan_ADD = 1;
+    for(unsigned char i=0;i<=Amount_OilTank;i++)
+    {
+        Flag_Communicate_YWY_Error[i] = 0;
+    }
 }

@@ -1,4 +1,4 @@
-#ifndef HISTORY_H
+﻿#ifndef HISTORY_H
 #define HISTORY_H
 
 #include <QDialog>
@@ -64,6 +64,18 @@ private slots:
 
     void on_toolButton_reoilgas_detail_2_clicked();
 
+    void on_btn_alarm_ywy_clicked();
+
+    void on_btn_importOil_ywy_clicked();
+
+    void on_btn_open_condition_quary_ywy_clicked();
+
+    void which_checkbox_ywy_show();
+
+    void on_toolbtn_Tangan_detail_clicked();
+
+    void on_toolbtn_Tangan_detail_output_clicked();
+
 signals:
     void pushButton_history_enable();
 
@@ -72,6 +84,7 @@ signals:
 
 private:
     Ui::history *ui;
+
 };
 
 #endif // HISTORY_H

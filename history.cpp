@@ -1,4 +1,4 @@
-#include <QFile>
+﻿#include <QFile>
 #include <QDebug>
 #include <QTextCodec>
 #include <QDir>
@@ -42,6 +42,7 @@ history::history(QWidget *parent) :
 		ui->tabWidget->setTabEnabled(3,1);
 	}
 	ui->tabWidget->setTabEnabled(4,Flag_screen_burngas);
+    ui->tabWidget->setTabEnabled(5,Flag_screen_ywy);
 	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {min-height:40px;max-width:150px;background-color: rgb(170,170,255,255);border: 1px solid;padding:4px;}\
 	                             QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
 	                             QTabBar::tab:selected {background-color: white}\
@@ -104,6 +105,16 @@ history::history(QWidget *parent) :
 	//QString mem_sta = "已用: "+mem_used+"\r\n"+"可用: "+mem_available+"\n"+"使用率: "+mem_percentage ;
 	QString mem_sta = "使用率: "+mem_percentage;
 	ui->label_mem->setText(mem_sta);
+
+
+
+
+
+    //液位仪
+    ui->dateEdit_from_ywy->setDate(QDate::currentDate().addDays(-1));
+    ui->dateEdit_to_ywy->setDate(QDate::currentDate());
+    ui->timeEdit_to_ywy->setTime(QTime::currentTime());
+    ui->widget_conditional_query_ywy->setHidden(1);
 
 }
 
@@ -547,6 +558,55 @@ void history::on_pushButton_copy_clicked()
 	}
 	csvFile_gunwarn_details.close();
 
+    //液位仪报警记录
+    QFile csvFile_yeweiyi_alarm(QString("%1/His_yeweiyi_alarmInfo_%2.csv").arg(Udisk_fullname).arg((QDateTime::currentDateTime().toString("dd-mm-ss"))));
+    //导出表yeweiyi_alarminfo
+    outputModel->setTable("yeweiyi_alarminfo");
+    outputModel->setFilter(Filter);
+    outputModel->select();
+    while(outputModel->canFetchMore())
+    {
+        outputModel->fetchMore();
+    }
+    csvFile_yeweiyi_alarm.open(QIODevice::ReadWrite);
+    strString = QString("ID,时间，探杆编号，状态");
+    csvFile_yeweiyi_alarm.write(strString.toUtf8());
+    for(int i = 0;i < outputModel->rowCount();i++)
+    {
+        for(int j = 0;j < outputModel->columnCount();j++)
+        {
+            strList.insert(j,outputModel->data(outputModel->index(i,j)).toString());
+        }
+        strString = strList.join(",") + "\n";
+        strList.clear();
+        csvFile_yeweiyi_alarm.write(strString.toUtf8());
+    }
+    csvFile_yeweiyi_alarm.close();
+
+    //进油记录
+    QFile csvFile_yeweiyi_addOil_Record(QString("%1/His_yeweiyi_addOilInfo_%2.csv").arg(Udisk_fullname).arg((QDateTime::currentDateTime().toString("dd-mm-ss"))));
+    //导出表yeweiyi_alarminfo
+    outputModel->setTable("yeweiyi_alarminfo");
+    outputModel->setFilter(Filter);
+    outputModel->select();
+    while(outputModel->canFetchMore())
+    {
+        outputModel->fetchMore();
+    }
+    csvFile_yeweiyi_addOil_Record.open(QIODevice::ReadWrite);
+    strString = QString("ID,进油时间，结束时间，探杆编号，进油量");
+    csvFile_yeweiyi_addOil_Record.write(strString.toUtf8());
+    for(int i = 0;i < outputModel->rowCount();i++)
+    {
+        for(int j = 0;j < outputModel->columnCount();j++)
+        {
+            strList.insert(j,outputModel->data(outputModel->index(i,j)).toString());
+        }
+        strString = strList.join(",") + "\n";
+        strList.clear();
+        csvFile_yeweiyi_addOil_Record.write(strString.toUtf8());
+    }
+    csvFile_yeweiyi_addOil_Record.close();
     //
     system("sync");
     outputModel->deleteLater();
@@ -2140,4 +2200,250 @@ void history::on_pushButton_crash_clicked()//防撞柱
 void history::on_toolButton_reoilgas_detail_2_clicked()
 {
     ui->widget_conditional_query->setHidden(1);
+}
+
+/**************************************    液位仪   ***************************************/
+
+void history::on_btn_alarm_ywy_clicked()
+{
+    ui->tableView->verticalHeader()->setHidden(1);//隐藏行号
+    model->clear();
+    model->setTable("yeweiyi_alarminfo");
+    model->setSort(0,Qt::DescendingOrder);
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg("ID"));
+    model->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("时间"));
+    model->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("探杆地址"));
+    model->setHeaderData(3,Qt::Horizontal,QObject::tr("%1").arg("状态"));
+    model->select();
+
+    ui->tableView->setModel(model);
+    ui->tableView->setColumnWidth(0,90);
+    ui->tableView->setColumnWidth(1,200);
+    ui->tableView->setColumnWidth(2,90);
+    ui->tableView->setColumnWidth(3,100);
+
+    ui->widget_conditional_query_ywy->setHidden(1);
+}
+
+void history::on_btn_importOil_ywy_clicked()
+{
+    ui->tableView->verticalHeader()->setHidden(1);//隐藏行号
+    model->clear();
+    model->setTable("yeweiyi_addOil_Record");
+    model->setSort(0,Qt::DescendingOrder);
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg("ID"));
+    model->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("开始时间"));
+    model->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("结束时间"));
+    model->setHeaderData(3,Qt::Horizontal,QObject::tr("%1").arg("油罐编号"));
+    model->setHeaderData(4,Qt::Horizontal,QObject::tr("%1").arg("进油量"));
+    model->select();
+
+    ui->tableView->setModel(model);
+    ui->tableView->setColumnWidth(0,90);
+    ui->tableView->setColumnWidth(1,180);
+    ui->tableView->setColumnWidth(2,180);
+    ui->tableView->setColumnWidth(3,100);
+
+    ui->widget_conditional_query_ywy->setHidden(1);
+}
+
+void history::which_checkbox_ywy_show()
+{
+    unsigned char flag_checkbox[12][8] = {0};
+    for(unsigned char i = 0;i< Amount_OilTank;i++)
+    {
+        for(unsigned char j = 0;j<Tangan_Amount[i];j++)
+        {
+            flag_checkbox[i][j] = 1;
+        }
+    }
+    ui->checkBox_ywy_1_1->setEnabled(flag_checkbox[0][0]);
+    ui->checkBox_ywy_2_1->setEnabled(flag_checkbox[1][0]);
+    ui->checkBox_ywy_3_1->setEnabled(flag_checkbox[2][0]);
+    ui->checkBox_ywy_4_1->setEnabled(flag_checkbox[3][0]);
+    ui->checkBox_ywy_5_1->setEnabled(flag_checkbox[4][0]);
+    ui->checkBox_ywy_6_1->setEnabled(flag_checkbox[5][0]);
+}
+
+void history::on_btn_open_condition_quary_ywy_clicked()
+{
+    which_checkbox_ywy_show();
+    ui->widget_conditional_query_ywy->setHidden(0);
+}
+
+
+void history::on_toolbtn_Tangan_detail_clicked()
+{
+    unsigned char flag_filter[12][8] = {0};     //筛选
+    unsigned int sum_flag_filter = 0;           //筛选
+    unsigned int sum_flag_filter_temp = 0;      //筛选
+
+    model->clear();
+    Filter.clear();
+    model->setTable("yeweiyi_alarminfo");
+    model->setSort(0,Qt::DescendingOrder);
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
+    model->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg("ID"));
+    model->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("时间"));
+    model->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("探杆地址"));
+    model->setHeaderData(3,Qt::Horizontal,QObject::tr("%1").arg("状态"));
+
+    if(ui->checkBox_ywy_1_1->isChecked())
+    {
+        flag_filter[0][0] = 1;
+    }
+    if(ui->checkBox_ywy_2_1->isChecked())
+    {
+        flag_filter[1][0] = 1;
+    }
+    if(ui->checkBox_ywy_3_1->isChecked())
+    {
+        flag_filter[2][0] = 1;
+    }
+    if(ui->checkBox_ywy_4_1->isChecked())
+    {
+        flag_filter[3][0] = 1;
+    }
+    if(ui->checkBox_ywy_5_1->isChecked())
+    {
+        flag_filter[4][0] = 1;
+    }
+    if(ui->checkBox_ywy_6_1->isChecked())
+    {
+        flag_filter[5][0] = 1;
+    }
+
+    for(uchar i = 0;i<12;i++)
+    {
+        for(uchar j = 0;j<3;j++)
+        {
+           sum_flag_filter+=flag_filter[i][j];
+           if(sum_flag_filter > sum_flag_filter_temp)
+           {
+               if(sum_flag_filter_temp > 0)
+               {
+                   Filter.append(QString("or whichone = '%1 #罐'").arg(i+1));
+               }
+               else
+               {
+                   Filter.append(QString("(whichone = '%1 #罐'").arg(i+1));
+               }
+               sum_flag_filter_temp = sum_flag_filter;
+           }
+        }
+    }
+    if(sum_flag_filter_temp > 0)
+    {
+       Filter.append(QString(") and time between '20%1  %2' and '20%3  %4' ").arg(ui->dateEdit_from->text()).arg(ui->timeEdit_from->text()).arg(ui->dateEdit_to->text()).arg(ui->timeEdit_to->text()));
+    }
+    else
+    {
+       Filter.append(QString("time between '20%1  %2' and '20%3  %4' ").arg(ui->dateEdit_from->text()).arg(ui->timeEdit_from->text()).arg(ui->dateEdit_to->text()).arg(ui->timeEdit_to->text()));
+    }
+    model->setFilter(Filter);
+    model->select();
+
+    ui->tableView->setModel(model);
+    ui->tableView->setColumnWidth(0,90);
+    ui->tableView->setColumnWidth(1,200);
+    ui->tableView->setColumnWidth(2,90);
+    ui->tableView->setColumnWidth(3,100);
+
+    ui->widget_conditional_query_ywy->setHidden(1);
+}
+
+void history::on_toolbtn_Tangan_detail_output_clicked()
+{
+    printf("i am in copy\n");fflush(stdout);
+    int fd_des;
+    //取消sda1的限制，盘符通用
+    char Udisk_fullname[20] = {"sda1"};
+    //定义浏览的文件夹及所含文件
+    QString U_Disk;
+    QDir *dir = new QDir("/media/");
+    foreach(QFileInfo list_file,dir->entryInfoList())  //遍历所有对象
+    {
+        if(list_file.isDir())  //判断是一个目录
+        {
+            U_Disk = list_file.fileName();
+            QByteArray Q_lastname = U_Disk.toLatin1();
+            char *U_lastname = Q_lastname.data();
+            if((strcmp(".",U_lastname)) && (strcmp("..",U_lastname)))   // ？？
+            {
+                sprintf(Udisk_fullname,"/media/%s",U_lastname);
+            }
+        }
+    }
+
+    //打开合成之后的路径,验证是否存在
+    fd_des = ::open(Udisk_fullname,O_RDONLY);
+    if(fd_des < 0)
+    {
+        printf("no U!!\n");fflush(stdout);
+        fflush(stdout);
+        ::close(fd_des);
+        emit export_noU();
+        return;
+    }
+    ::close(fd_des);
+    emit export_ing();
+
+    QSqlTableModel *outputModel = new QSqlTableModel();
+    QStringList strList;//记录数据库中的一行报警数据
+    QString strString;
+
+    //液位仪报警记录
+    QFile csvFile_yeweiyi_alarm(QString("%1/His_yeweiyi_alarmInfo_%2.csv").arg(Udisk_fullname).arg((QDateTime::currentDateTime().toString("dd-mm-ss"))));
+    //导出表yeweiyi_alarminfo
+    outputModel->setTable("yeweiyi_alarminfo");
+    outputModel->setFilter(Filter);
+    outputModel->select();
+    while(outputModel->canFetchMore())
+    {
+        outputModel->fetchMore();
+    }
+    csvFile_yeweiyi_alarm.open(QIODevice::ReadWrite);
+    strString = QString("ID,时间，探杆编号，状态");
+    csvFile_yeweiyi_alarm.write(strString.toUtf8());
+    for(int i = 0;i < outputModel->rowCount();i++)
+    {
+        for(int j = 0;j < outputModel->columnCount();j++)
+        {
+            strList.insert(j,outputModel->data(outputModel->index(i,j)).toString());
+        }
+        strString = strList.join(",") + "\n";
+        strList.clear();
+        csvFile_yeweiyi_alarm.write(strString.toUtf8());
+    }
+    csvFile_yeweiyi_alarm.close();
+
+    //进油记录
+    QFile csvFile_yeweiyi_addOil_Record(QString("%1/His_yeweiyi_addOilInfo_%2.csv").arg(Udisk_fullname).arg((QDateTime::currentDateTime().toString("dd-mm-ss"))));
+    //导出表yeweiyi_alarminfo
+    outputModel->setTable("yeweiyi_alarminfo");
+    outputModel->setFilter(Filter);
+    outputModel->select();
+    while(outputModel->canFetchMore())
+    {
+        outputModel->fetchMore();
+    }
+    csvFile_yeweiyi_addOil_Record.open(QIODevice::ReadWrite);
+    strString = QString("ID,进油时间，结束时间，探杆编号，进油量");
+    csvFile_yeweiyi_addOil_Record.write(strString.toUtf8());
+    for(int i = 0;i < outputModel->rowCount();i++)
+    {
+        for(int j = 0;j < outputModel->columnCount();j++)
+        {
+            strList.insert(j,outputModel->data(outputModel->index(i,j)).toString());
+        }
+        strString = strList.join(",") + "\n";
+        strList.clear();
+        csvFile_yeweiyi_addOil_Record.write(strString.toUtf8());
+    }
+    csvFile_yeweiyi_addOil_Record.close();
+
+    system("sync");
+    outputModel->deleteLater();
 }

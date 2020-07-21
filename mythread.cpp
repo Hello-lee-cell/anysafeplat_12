@@ -34,6 +34,15 @@ unsigned int IIE_people_time = 0;//人员值守倒计时
 int IIE_oil_time = 0;//稳油倒计时
 int Flag_IIE_c = 6;//上一次是否开启
 
+//泄漏滤波
+unsigned char data_buf_receive[20] = {0}; //串口接收到的原始数据
+unsigned char data_buf_receive_pre[20] = {0};//串口接收到的上一次数据
+unsigned char flag_data_buf_receive_h[20] = {0};//记录两次串口读到的数据是否一致的标志位高四位
+unsigned char flag_data_buf_receive_l[20] = {0};//记录两次串口读到的数据是否一致的标志位低四位
+int flag_uart_wro[40] = {0};//检测通讯故障次数的标志位
+unsigned char flag_yujing = 0; //压力法预警和报警标志位，当出现跳动的时候用于缓冲
+//泄漏滤波
+
 unsigned char flag_syswro = 0;  //ask690进程检测位
 unsigned char IIE_Electromagnetic_Sta_Pre[5] = {3};
 #define SHASIZE 100
@@ -85,7 +94,7 @@ void mythread::run()
 		}
 		else
 		{
-			for(uchar i = 0;i < 49;i++) //增加IIE后由36改为44
+			for(uchar i = 0;i < 49;i++) //有效位数任然是44
 			{
 				Data_Buf_Sencor[i] = Ptr_Ask690[i];
 			}
@@ -3198,6 +3207,149 @@ void mythread::IIE_Electromagnetic_Analysis()
 	}
 }
 
+//泄漏报警滤波
+void mythread::Warn_Filtering()
+{
+	//后来添加，用来过滤突发报警状态
+	for(uchar i=1; i<17; i++)
+	{
+		//printf("%02x*",data_buf_receive[i]>>4);
+		//printf("%02x*",data_buf_receive[i]&0x0f);
+		//printf("%02x*",data_buf_receive[i]);
+		if(((data_buf_receive[i]>>4) == (data_buf_receive_pre[i]>>4)) && (data_buf_receive[i]>>4!=0x0f))//高四位相等且不是通讯故障
+		{
+			flag_data_buf_receive_h[i]++;
+		}
+		else
+		{
+			flag_data_buf_receive_h[i] = 0;
+		}
+		if(((data_buf_receive[i]&0x0f) == (data_buf_receive_pre[i]&0x0f)) && ((data_buf_receive[i]&0x0f)!=0x0f))//低四位相等且不是通讯故障
+		{
+			flag_data_buf_receive_l[i]++;
+		}
+		else
+		{
+			flag_data_buf_receive_l[i] = 0;
+		}
+		if(Test_Method == 1)//如果是压力法//需要滤波
+		{
+
+			if(flag_data_buf_receive_h[i] >= 2)//先全部延时  如果5次高四位相等则赋值//如果连续5次高四位相等，则赋值处理（非通讯故障）
+			{
+
+				Data_Buf_Sencor[i] &= 0x0f;
+				Data_Buf_Sencor[i] |= (data_buf_receive[i] & 0xf0);
+				Data_Buf_Sencor[0] = data_buf_receive[0];
+				Data_Buf_Sencor[17] = data_buf_receive[17];
+				Data_Buf_Sencor[18] = data_buf_receive[18];
+				flag_data_buf_receive_h[i] = 9;
+				//flag_uart_wro[i*2-2] = 0;
+			}
+
+			if( ((data_buf_receive[i]&0xf0)==0x00) || ((data_buf_receive[i]&0xf0)==0x40) )//正常或传感器故障则不需要延时，立刻赋值
+			{
+				if((flag_data_buf_receive_h[i] >= 0)&& (data_buf_receive[i]>>4!=0xf))
+				{
+
+					Data_Buf_Sencor[i] &= 0x0f;
+					Data_Buf_Sencor[i] |= (data_buf_receive[i] & 0xf0);
+					Data_Buf_Sencor[0] = data_buf_receive[0];
+					Data_Buf_Sencor[17] = data_buf_receive[17];
+					Data_Buf_Sencor[18] = data_buf_receive[18];
+					flag_data_buf_receive_h[i] = 9;
+					//flag_uart_wro[i*2-2] = 0;
+				}
+			}
+
+			if(flag_data_buf_receive_l[i] >= 2) //如果连续5次低四位相等，则赋值处理（非通讯故障）
+			{
+				Data_Buf_Sencor[i] &= 0xf0;
+				Data_Buf_Sencor[i] |= (data_buf_receive[i] & 0x0f);
+				Data_Buf_Sencor[0] = data_buf_receive[0];
+				Data_Buf_Sencor[17] = data_buf_receive[17];
+				Data_Buf_Sencor[18] = data_buf_receive[18];
+				flag_data_buf_receive_l[i] = 9;
+				//flag_uart_wro[i*2-1] = 0;
+			}
+
+			if( ((data_buf_receive[i]&0x0f)==0x00) || ((data_buf_receive[i]&0x0f)==0x04) ) //如果是正常状态或者传感器故障，则立刻赋值
+			{
+				if((flag_data_buf_receive_l[i] >= 0)&& ((data_buf_receive[i]&0x0f)!=0xf))
+				{
+
+					Data_Buf_Sencor[i] &= 0x0f;
+					Data_Buf_Sencor[i] |= (data_buf_receive[i] & 0xf0);
+					Data_Buf_Sencor[0] = data_buf_receive[0];
+					Data_Buf_Sencor[17] = data_buf_receive[17];
+					Data_Buf_Sencor[18] = data_buf_receive[18];
+					flag_data_buf_receive_l[i] = 9;
+					//flag_uart_wro[i*2-2] = 0;
+				}
+			}
+
+		}
+		else//其他方法
+		{
+			if((flag_data_buf_receive_h[i] >= 0) && (data_buf_receive[i]>>4!=0x0f))  //如果连续4次高四位相等，则赋值处理(非通讯故障)
+			{
+
+				Data_Buf_Sencor[i] &= 0x0f;
+				Data_Buf_Sencor[i] |= (data_buf_receive[i] & 0xf0);
+				Data_Buf_Sencor[0] = data_buf_receive[0];
+				Data_Buf_Sencor[17] = data_buf_receive[17];
+				Data_Buf_Sencor[18] = data_buf_receive[18];
+				flag_data_buf_receive_h[i] = 9;
+				//flag_uart_wro[i*2-2] = 0;
+
+			}
+			if((flag_data_buf_receive_l[i] >= 0) && ((data_buf_receive[i]&0x0f)!=0x0f)) //如果连续4次低四位相等，则赋值处理（非通讯故障）
+			{
+
+				Data_Buf_Sencor[i] &= 0xf0;
+				Data_Buf_Sencor[i] |= (data_buf_receive[i] & 0x0f);
+				Data_Buf_Sencor[0] = data_buf_receive[0];
+				Data_Buf_Sencor[17] = data_buf_receive[17];
+				Data_Buf_Sencor[18] = data_buf_receive[18];
+				flag_data_buf_receive_l[i] = 9;
+				//flag_uart_wro[i*2-1] = 0;
+
+			}
+		}
+
+		if(data_buf_receive[i]>>4 == 0xf)//如果是通讯故障(高位)
+		{
+			flag_uart_wro[i*2-2]++;
+			//printf("%d*",i);
+			//printf("%d ",flag_uart_wro[i*2-2]);
+		}
+		else
+		{
+			flag_uart_wro[i*2-2] = 0;
+		}
+		if((data_buf_receive[i]&0x0f) == 0xf)//如果是通讯故障（低位）
+		{
+			flag_uart_wro[i*2-1]++;
+			//printf("%d*",i);
+			//printf("%d ",flag_uart_wro[i*2-1]);
+		}
+		else
+		{
+			flag_uart_wro[i*2-1] = 0;
+		}
+		if(flag_uart_wro[i*2-2] >= 4) //如果连续大概10秒钟通讯故障
+		{
+			Data_Buf_Sencor[i] |= 0xf0;//高位赋f
+			flag_uart_wro[i*2-2] = 10;
+		}
+		if(flag_uart_wro[i*2-1] >= 4) //如果连续大概10秒钟通讯故障
+		{
+			Data_Buf_Sencor[i] |= 0x0f;//低位赋f
+			flag_uart_wro[i*2-1] = 10;
+		}
+		data_buf_receive_pre[i] = data_buf_receive[i];
+	}
+}
 //0高液位报警状态：1：高液位报警；0：高液位正常
 //1静电报警状态   1：静电危险 0：静电安全
 //2触摸状态      1：触摸     0：未触摸
@@ -3333,6 +3485,10 @@ int mythread::net_history(int num,int sta)
 	}
 	if(sta == 4) //通信
 	{
+//		sta1 = 0x00;
+//		sta2 = 0x04;
+		sta1 = 0x20;
+		sta2 = 0x00;//广州中石化
 		sta1 = 0x00;
 		sta2 = 0x04;
 		hubei_sta = 0xff;

@@ -1,4 +1,4 @@
-#include<sys/types.h>
+﻿#include<sys/types.h>
 #include<sys/stat.h>
 #include<fcntl.h>
 #include<unistd.h>
@@ -1876,6 +1876,7 @@ void config_tabwidget()
     in<<QString::number(Flag_screen_burngas)+"\r\n";
     in<<QString::number(Flag_screen_zaixian)+"\r\n";
     in<<QString::number(Flag_screen_cc)+"\r\n";
+    in<<QString::number(Flag_screen_ywy)+"\r\n";
     file.close();
 
     int fp = open("/opt/config_tabwidget.txt",O_RDONLY);
@@ -1892,7 +1893,7 @@ void init_tabwidget()
     }
     QTextStream in(&config_LR);
     QString line;
-    for(uchar i = 0; i < 6; i ++)
+    for(uchar i = 0; i < 7; i ++)
     {
         line = in.readLine();
         QByteArray read_config = line.toLatin1();
@@ -1921,6 +1922,10 @@ void init_tabwidget()
         {
             Flag_screen_cc = atoi(read_data);
         }
+        if(i == 6)
+        {
+            Flag_screen_ywy = atoi(read_data);
+        }
     }
     config_LR.close();
     QFileInfo fileInfo("/opt/config_tabwidget.txt");
@@ -1935,6 +1940,7 @@ void init_tabwidget()
         Flag_screen_burngas = 1;
         Flag_screen_zaixian = 1;
         Flag_screen_cc= 1;
+        Flag_screen_ywy = 1;
     }
 }
 void config_Pressure_Transmitters_Mode_write()//压力变送器模式设置写入
@@ -2302,3 +2308,373 @@ void StationMessageInit()
 		delete configIniWrite;
 	}
 }
+
+
+/*******************************************  液位仪    **********************************************************************/
+
+void Initialization_Data(void)
+{
+    Amount_OilTank_Initialization();
+    Tangan_Amount_Initialization();
+    config_OilTank_Set_Initialization();
+    config_Oil_Kind_Initialization();
+    config_OilTank_Table_Initialization();
+}
+
+//油罐数量  报警开启标志位
+void Amount_OilTank_Initialization(void)
+{
+    QFileInfo fileInfo(config_OilTank_Amount);
+    if(fileInfo.isFile())   //是否是文件 true 说明存在
+    {
+        QFile file(config_OilTank_Amount);
+        if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
+        {
+            qDebug()<<"Can't open the config_OilTank file!"<<endl;
+        }
+        QTextStream out_TextStream(&file);
+        QString line_String;
+        line_String = out_TextStream.readLine();
+        QByteArray ByteArray_config = line_String.toLatin1();
+        char *ra_oiltank = ByteArray_config.data();
+        Amount_OilTank = atoi(ra_oiltank);
+
+        line_String = out_TextStream.readLine();
+        ByteArray_config = line_String.toLatin1();
+        char *ra_Flag = ByteArray_config.data();
+        Flag_alarm_off_on = atoi(ra_Flag);
+
+        printf("Initialization Amount Of oiltank: %d\n",Amount_OilTank);fflush(stdout);
+        file.close();
+    }
+    else
+    {
+        QFile file(config_OilTank_Amount);
+        file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+        QTextStream in(&file);
+        in<<QString::number(0)+"\r\n";
+        in<<QString::number(0)+"\r\n";
+        file.close();
+
+        int fp = open(config_OilTank_Amount,O_RDONLY);
+        fsync(fp);
+        close(fp);
+    }
+}
+
+void Config_OilTank_Amount_Write()
+{
+   char OilTanks_config[10] = {0};
+   sprintf(OilTanks_config,"%d\n%d\n",Amount_OilTank,Flag_alarm_off_on);//,Amount_Tangan[0],Amount_Tangan[1],Amount_Tangan[2],
+//           Amount_Tangan[3],Amount_Tangan[4],Amount_Tangan[5],Amount_Tangan[6],Amount_Tangan[7],Amount_Tangan[8],Amount_Tangan[9],Amount_Tangan[10],
+//           Amount_Tangan[11]);
+
+   QString OilTanks_config_str;
+   OilTanks_config_str = QString(QLatin1String(OilTanks_config));
+
+   QFile file(config_OilTank_Amount);
+   file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+   QTextStream in(&file);
+   in<<OilTanks_config_str;
+   file.close();
+
+   int fp = open(config_OilTank_Amount,O_RDONLY);
+   fsync(fp);
+   close(fp);
+}
+
+//探杆数量
+void Tangan_Amount_Initialization(void)
+{
+    QFileInfo fileInfo(config_Tangan_Amount);
+    if(fileInfo.isFile())   //是否是文件 true 说明存在
+    {
+        QFile file(config_Tangan_Amount);
+        if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
+        {
+            qDebug()<<"Can't open the config_Tangan_Amount file!"<<endl;
+        }
+        QTextStream out_TextStream(&file);
+        QString line_String;
+        QByteArray ByteArray_config;
+        for(unsigned char i = 0;i < 12;i++)
+        {
+            line_String = out_TextStream.readLine();
+            ByteArray_config = line_String.toLatin1();
+            char *ra = ByteArray_config.data();
+            Tangan_Amount[i] = atof(ra);
+        }
+        file.close();
+    }
+    else
+    {
+        QFile file(config_Tangan_Amount);
+        file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+        QTextStream in(&file);
+        for(unsigned char i = 0;i < 15;i++)
+        {
+          in<<QString::number(1)+"\r\n";
+        }
+        file.close();
+
+        int fp = open(config_Tangan_Amount,O_RDONLY);
+        fsync(fp);
+        close(fp);
+    }
+}
+
+void Config_Tangan_Amount_Write()
+{
+    QString str;
+    for(unsigned char i = 0;i < 12;i++)
+    {
+       str.append(QString("%1\n").arg(Tangan_Amount[i]));
+    }
+
+    QFile file(config_Tangan_Amount);
+    file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+    QTextStream in(&file);
+    in<<str;
+    file.close();
+
+    int fp = open(config_Tangan_Amount,O_RDONLY);
+    fsync(fp);
+    close(fp);
+}
+
+//油罐信息  长度  直径 报警阈值  对应罐表
+void config_OilTank_Set_Initialization(void)
+{
+    QFileInfo fileInfo(config_OilTank_Set);
+    if(fileInfo.isFile())   //是否是文件 true 说明存在
+    {
+        QFile file(config_OilTank_Set);
+        if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
+        {
+            qDebug()<<"Can't open the config_OilTank_Set file!"<<endl;
+        }
+        QTextStream out_TextStream(&file);
+        QString line_String;
+        QByteArray ByteArray_config;
+        for(unsigned char i = 0;i < 12;i++)
+        {
+            for(unsigned char j = 0;j < 5;j++)
+            {
+                line_String = out_TextStream.readLine();
+                ByteArray_config = line_String.toLatin1();
+                char *ra = ByteArray_config.data();
+                OilTank_Set[i][j] = atof(ra);
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        QFile file(config_OilTank_Set);
+        file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+        QTextStream in(&file);
+        for(unsigned char i = 0;i < 15;i++)
+        {
+            for(unsigned char j = 0;j < 6;j++)
+            {
+                in<<QString::number(0)+"\r\n";
+            }
+        }
+        file.close();
+
+        int fp = open(config_OilTank_Set,O_RDONLY);
+        fsync(fp);
+        close(fp);
+    }
+}
+
+void config_OilTank_Set_Write()
+{
+    QString str;
+    for(unsigned char i = 0;i < 12;i++)
+    {
+        for(unsigned char j = 0;j < 5;j++)
+        {
+            str.append(QString("%1\n").arg(OilTank_Set[i][j]));
+        }
+    }
+
+    QFile file(config_OilTank_Set);
+    file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+    QTextStream in(&file);
+    in<<str;
+    file.close();
+
+    int fp = open(config_OilTank_Set,O_RDONLY);
+    fsync(fp);
+    close(fp);
+}
+
+//油品
+void config_Oil_Kind_Initialization(void)
+{
+    QFileInfo fileInfo(config_Oil_Kind);
+    if(fileInfo.isFile())   //是否是文件 true 说明存在
+    {
+        QFile file(config_Oil_Kind);
+        if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
+        {
+            qDebug()<<"Can't open the config_Tangan_Amount file!"<<endl;
+        }
+        QTextStream out_TextStream(&file);
+        QString line_String;
+        QByteArray ByteArray_config;
+        for(unsigned char i = 0;i < 12;i++)
+        {
+            for(unsigned char j = 0;j < 9;j++)
+            {
+                line_String = out_TextStream.readLine();
+                ByteArray_config = line_String.toLatin1();
+                char *ra = ByteArray_config.data();
+                Oil_Kind[i][j] = atof(ra);
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        QFile file(config_Oil_Kind);
+        file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+        QTextStream in(&file);
+        for(unsigned char i = 0;i < 12;i++)
+        {
+            for(unsigned char j = 0;j < 9;j++)
+            {
+               in<<QString::number(0)+"\r\n";
+            }
+        }
+        file.close();
+
+        int fp = open(config_Oil_Kind,O_RDONLY);
+        fsync(fp);
+        close(fp);
+    }
+}
+
+void config_Oil_Kind_Write()
+{
+    QString str;
+    for(unsigned char i = 0;i < 12;i++)
+    {
+        for(unsigned char j = 0;j < 9;j++)
+        {
+            str.append(QString("%1\n").arg(Oil_Kind[i][j]));
+        }
+    }
+    QFile file(config_Oil_Kind);
+    file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+    QTextStream in(&file);
+    in<<str;
+    file.close();
+
+    int fp = open(config_Oil_Kind,O_RDONLY);
+    fsync(fp);
+    close(fp);
+}
+
+//罐表
+void config_OilTank_Table_Initialization(void)
+{
+   QFileInfo fileInfo(config_OilTank_Table);
+   if(fileInfo.isFile())   //是否是文件 true 说明存在
+   {
+       QFile file(config_OilTank_Table);
+       if(!file.open(QIODevice::ReadOnly|QIODevice::Text))
+       {
+           qDebug()<<"Can't open the config_OilTank_Table file!"<<endl;
+       }
+       QTextStream out_TextStream(&file);
+       QString line_String;
+       QByteArray ByteArray_config;
+       for(unsigned char i = 0;i < 12;i++)
+       {
+           for(unsigned int j = 0;j < 300;j++)
+           {
+               line_String = out_TextStream.readLine();
+               ByteArray_config = line_String.toLatin1();
+               char *ra = ByteArray_config.data();
+               Oil_Tank_Table[i][j] = atof(ra);
+           }
+       }
+       file.close();
+   }
+   else
+   {
+       QFile file(config_OilTank_Table);
+       file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+       QTextStream in(&file);
+       for(unsigned char i = 0;i < 12;i++)
+       {
+           for(unsigned int j = 0;j < 300;j++)
+           {
+               in<<QString::number(0)+"\r\n";
+           }
+       }
+       file.close();
+
+       int fp = open(config_OilTank_Table,O_RDONLY);
+       fsync(fp);
+       close(fp);
+   }
+}
+
+void config_OilTank_Table_Write()
+{
+    QString str;
+    for(unsigned char i = 0;i < 12;i++)
+    {
+        for(unsigned int j = 0;j < 300;j++)
+        {
+            str.append(QString("%1\n").arg(Oil_Tank_Table[i][j]));
+        }
+    }
+
+    QFile file(config_OilTank_Table);
+    file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+    QTextStream in(&file);
+    in<<str;
+    file.close();
+
+    int fp = open(config_OilTank_Table,O_RDONLY);
+    fsync(fp);
+    close(fp);
+}
+
+void config_OilTank_Table_Clear()
+{
+    QFile file(config_OilTank_Table);
+    file.open(QIODevice::WriteOnly |QIODevice::Text |QIODevice::Truncate);
+    QTextStream in(&file);
+    for(unsigned char i = 0;i < 12;i++)
+    {
+        for(unsigned int j = 0;j < 300;j++)
+        {
+            in<<QString::number(0)+"\r\n";
+        }
+    }
+    file.close();
+
+    int fp = open(config_OilTank_Table,O_RDONLY);
+    fsync(fp);
+    close(fp);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

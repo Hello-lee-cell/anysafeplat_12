@@ -1,4 +1,4 @@
-#include <QSqlRecord>
+﻿#include <QSqlRecord>
 #include <QSqlQuery>
 #include <qsqlerror.h>
 #include <QDebug>
@@ -78,7 +78,13 @@ void creat_table()
     qry.prepare("CREATE TABLE IF NOT EXISTS history_crash (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),state VARCHAR(30)) ");
     qry.exec();
     //加油枪报警详情    表
-    qry.prepare("CREATE TABLE IF NOT EXISTS gunwarn_details (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),gunid VARCHAR(30),gunnum VARCHAR(30),state VARCHAR(30)) ");
+	qry.prepare("CREATE TABLE IF NOT EXISTS gunwarn_details (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),gunid VARCHAR(30),gunnum VARCHAR(30),state VARCHAR(100)) ");
+    qry.exec();
+    //液位仪报警详情    表
+    qry.prepare("CREATE TABLE IF NOT EXISTS yeweiyi_alarminfo (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),whichone VARCHAR(30),state VARCHAR(30)) ");
+    qry.exec();
+    //液位仪进油详情    表
+    qry.prepare("CREATE TABLE IF NOT EXISTS yeweiyi_addOil_Record (id INTEGER PRIMARY KEY AUTOINCREMENT,start_time VARCHAR(30),end_time VARCHAR(30),whichone VARCHAR(30),sumall VARCHAR(30)) ");
     qry.exec();
 }
 
@@ -2032,6 +2038,40 @@ void output_table()
 {}
 
 
+//液位仪
 
+void add_yeweiyi_alarminfo(QString whichone, QString state)
+{
+    QSqlQuery qry;
+    QDateTime current_datetime = QDateTime::currentDateTime();
+    QString current_datetime_qstr = current_datetime.toString("yyyy-MM-dd  hh:mm:ss");
 
+    qry.prepare(QString("INSERT INTO yeweiyi_alarminfo (id,time,whichone,state) values (NULL,'%1','%2','%3')").arg(current_datetime_qstr).arg(whichone).arg(state));
 
+    if(!qry.exec())
+    {
+        qDebug()<<qry.lastError();
+    }
+    else
+    {
+        qDebug("Data Inserted!");
+    }
+}
+
+void add_yeweiyi_addOil_Record_Write(QString start_time,QString whichone, QString sumall)
+{
+    QSqlQuery qry;
+    QDateTime current_datetime = QDateTime::currentDateTime();
+    QString current_datetime_qstr = current_datetime.toString("yyyy-MM-dd  hh:mm:ss");
+
+    qry.prepare(QString("INSERT INTO yeweiyi_addOil_Record (id,start_time,end_time,whichone,sumall) values (NULL,'%1','%2','%3','%4')").arg(start_time).arg(current_datetime_qstr).arg(whichone).arg(sumall));
+
+    if(!qry.exec())
+    {
+        qDebug()<<qry.lastError();
+    }
+    else
+    {
+        qDebug("Data Inserted!");
+    }
+}

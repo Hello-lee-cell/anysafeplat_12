@@ -73,7 +73,10 @@ SOURCES += main.cpp\
     new_keyboard/SoftKeyBoard.cpp \
     new_keyboard/SoftKeyBoardContext.cpp \
     station_message.cpp \
-    network/net_isoosi_hefei.cpp
+    network/net_isoosi_hefei.cpp \
+    drawheight.cpp \
+    ywythread.cpp \
+    oil_volume_table.cpp
 
 HEADERS  += mainwindow.h \
     keyboard.h \
@@ -141,7 +144,9 @@ HEADERS  += mainwindow.h \
     new_keyboard/SoftKeyBoard.h \
     new_keyboard/SoftKeyBoardContext.h \
     station_message.h \
-    network/net_isoosi_hefei.h
+    network/net_isoosi_hefei.h \
+    drawheight.h \
+    ywythread.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \

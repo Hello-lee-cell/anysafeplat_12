@@ -1,4 +1,4 @@
-#ifndef FILE_OP_H
+﻿#ifndef FILE_OP_H
 #define FILE_OP_H
 
 #include<QDebug>
@@ -96,5 +96,18 @@ void Controller_Version_init();//控制器硬件版本初始化
 void Controller_Version_write();//控制器硬件版本写入
 //油站信息初始化
 void StationMessageInit();
+//液位仪
+void Initialization_Data(void);
+void Amount_OilTank_Initialization(void);
+void Config_OilTank_Amount_Write();
+void Tangan_Amount_Initialization(void);
+void Config_Tangan_Amount_Write();
+void config_OilTank_Set_Initialization(void);
+void config_OilTank_Set_Write();
+void config_Oil_Kind_Initialization(void);
+void config_Oil_Kind_Write();
+void config_OilTank_Table_Initialization(void);
+void config_OilTank_Table_Write();
+void config_OilTank_Table_Clear();
 #endif // FILE_OP_H
 

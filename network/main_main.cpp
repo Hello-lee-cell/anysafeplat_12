@@ -36,7 +36,7 @@ unsigned char Logic_Add_S = 0x01;
 unsigned char Logic_Add_N = 0x01;
 
 char *IP_local = "192.168.1.1";
-int net_detect(char* net_name);
+
 //  tcp长连接保活
 void keep_ali(int sockfd)
 {
@@ -475,6 +475,13 @@ sleep(1);
                                 sdbuf_count++;
                                 OIL_BASIN_count++;
                                 sdbuf[sdbuf_count] = OIL_BASIN_TEMP[OIL_BASIN_count];
+								//中石化 通信故障  变为20 00   不是00 04
+								if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+								{
+									sdbuf[sdbuf_count-1] = 0x20;
+									sdbuf[sdbuf_count] = 0x00;
+								}
+								//中石化 通信故障  变为20 00   不是00 04
                                 sdbuf_count++;
                                 OIL_BASIN_count++;
                                 sdbuf[sdbuf_count] = 0x03;      //测漏类型
@@ -661,6 +668,13 @@ sleep(1);
                                     sdbuf_count++;
                                     OIL_BASIN_count++;
                                     sdbuf[sdbuf_count] = OIL_BASIN_TEMP[OIL_BASIN_count]&0x7f;  //&0111 1111
+									//中石化 通信故障  变为20 00   不是00 04
+									if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+									{
+										sdbuf[sdbuf_count-1] = 0x20;
+										sdbuf[sdbuf_count] = 0x00;
+									}
+									//中石化 通信故障  变为20 00   不是00 04
                                     sdbuf_count++;
                                     OIL_BASIN_count++;
                                 }
@@ -850,6 +864,13 @@ sleep(1);
                                 sdbuf_count++;
                                 OIL_PIPE_count++;
                                 sdbuf[sdbuf_count] = OIL_PIPE_TEMP[OIL_PIPE_count];
+								//中石化 通信故障  变为20 00   不是00 04
+								if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+								{
+									sdbuf[sdbuf_count-1] = 0x20;
+									sdbuf[sdbuf_count] = 0x00;
+								}
+								//中石化 通信故障  变为20 00   不是00 04
                                 sdbuf_count++;
                                 OIL_PIPE_count++;
                                 sdbuf[sdbuf_count] = 0x03;//测漏类型
@@ -1036,6 +1057,13 @@ sleep(1);
                                     sdbuf_count++;
                                     OIL_PIPE_count++;
                                     sdbuf[sdbuf_count] = OIL_PIPE_TEMP[OIL_PIPE_count]&0x7f;  //&0111 1111;
+									//中石化 通信故障  变为20 00   不是00 04
+									if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+									{
+										sdbuf[sdbuf_count-1] = 0x20;
+										sdbuf[sdbuf_count] = 0x00;
+									}
+									//中石化 通信故障  变为20 00   不是00 04
                                     sdbuf_count++;
                                     OIL_PIPE_count++;
                                 }
@@ -1224,6 +1252,13 @@ sleep(1);
                                 sdbuf_count++;
                                 OIL_TANK_count++;
                                 sdbuf[sdbuf_count] = OIL_TANK_TEMP[OIL_TANK_count];
+								//中石化 通信故障  变为20 00   不是00 04
+								if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+								{
+									sdbuf[sdbuf_count-1] = 0x20;
+									sdbuf[sdbuf_count] = 0x00;
+								}
+								//中石化 通信故障  变为20 00   不是00 04
                                 sdbuf_count++;
                                 OIL_TANK_count++;
                                 sdbuf[sdbuf_count] = 0x03;//测漏类型
@@ -1409,6 +1444,13 @@ sleep(1);
                                     sdbuf_count++;
                                     OIL_TANK_count++;
                                     sdbuf[sdbuf_count] = OIL_TANK_TEMP[OIL_TANK_count]&0x7f;  //&0111 1111;
+									//中石化 通信故障  变为20 00   不是00 04
+									if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+									{
+										sdbuf[sdbuf_count-1] = 0x20;
+										sdbuf[sdbuf_count] = 0x00;
+									}
+									//中石化 通信故障  变为20 00   不是00 04
                                     sdbuf_count++;
                                     OIL_TANK_count++;
                                 }
@@ -1618,6 +1660,13 @@ sleep(1);
                                 sdbuf_count++;
                                 OIL_DISPENER_count++;
                                 sdbuf[sdbuf_count] = OIL_DISPENER_TEMP[OIL_DISPENER_count];
+								//中石化 通信故障  变为20 00   不是00 04
+								if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+								{
+									sdbuf[sdbuf_count-1] = 0x20;
+									sdbuf[sdbuf_count] = 0x00;
+								}
+								//中石化 通信故障  变为20 00   不是00 04
                                 sdbuf_count++;
                                 OIL_DISPENER_count++;
                                 sdbuf[sdbuf_count] = 0x03;//测漏类型
@@ -1801,6 +1850,13 @@ sleep(1);
                                     sdbuf_count++;
                                     OIL_DISPENER_count++;
                                     sdbuf[sdbuf_count] = OIL_DISPENER_TEMP[OIL_DISPENER_count]&0x7f;  //&0111 1111;
+									//中石化 通信故障  变为20 00   不是00 04
+									if((sdbuf[sdbuf_count] == 0x04)&&(sdbuf[sdbuf_count-1] == 0x00))
+									{
+										sdbuf[sdbuf_count-1] = 0x20;
+										sdbuf[sdbuf_count] = 0x00;
+									}
+									//中石化 通信故障  变为20 00   不是00 04
                                     sdbuf_count++;
                                     OIL_DISPENER_count++;
                                 }

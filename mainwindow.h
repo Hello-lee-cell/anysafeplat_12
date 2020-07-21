@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -20,6 +20,8 @@
 #include "oilgas/fga1000_485.h"
 #include "network/post_foshan.h"
 #include "network/net_isoosi_hefei.h"
+
+#include"ywythread.h"
 
 class QLineEdit;
 namespace Ui {
@@ -63,6 +65,7 @@ private:
     reoilgas_pop *reoilgas_pop_exec;
 	reoilgasthread *uart_reoilgas;
 	FGA1000_485 *uart_fga;
+    ywythread *uart_ywy;
 
     //post添加
     post_webservice *post_message;
@@ -81,6 +84,8 @@ uartthread *uart_run;
     QTimer *timer;//定时器
     QTimer *timer_lcd;//时间显示倒计时
     QTimer *timer_drw;//区域刷新计时
+
+    QStandardItemModel *model;
 private slots:
     bool eventFilter(QObject *, QEvent *);
 
@@ -290,6 +295,30 @@ private slots:
 
 	void on_pushButton_IIEDetails_close_clicked();
 
+    /**************** 液位仪**********************/
+    //与MainWindow相关
+    void Initialization_label();
+
+    void draw_OilTank(int t);
+    void draw_Tangan();
+    void Display_Height_Data(unsigned char add, QString str1, QString str2, QString str3);
+    void Display_alarm_Tangan_Data(unsigned char add, unsigned char flag);
+
+    //与systemset相关
+    void set_Tangan_add_success_slot(unsigned char add);
+    void Send_compensation_slot(unsigned char command,unsigned char hang,float data);
+    void compensation_set_result_slot(unsigned char command,unsigned char add,QString str);
+
+    void on_btn_enter_add_Oil_clicked();
+
+    void on_comboBox_addoil_currentIndexChanged(int index);
+
+    void on_btn_addoil_start_clicked();
+
+    void on_btn_addoil_end_clicked();
+
+    void on_toolbtn_addoil_close_clicked();
+
 signals:
     void config_sensoramount();
     void closeing_connect();
@@ -315,6 +344,14 @@ signals:
     void Time_calibration();
     //加油机详情页
     void refresh_dispener_data_signal();
+
+    /**************** 液位仪**********************/
+    //与systemset相关
+    void set_Tangan_add_success_signal(unsigned char add);
+    void Send_compensation_Signal(unsigned char command,unsigned char hang,float data);
+    void compensation_set_result_Signal(unsigned char command,unsigned char add,QString str);
+    void amount_Oil_Tank_draw(int t);
+    void amount_Tangan_draw();
 };
 
 #endif // MAINWINDOW_H

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <unistd.h>
@@ -21,6 +21,8 @@
 #include <QElapsedTimer>
 #include <timer_thread.h>
 #include "oilgas/one_click_sync.h"
+#include "ywythread.h"
+#include"database_op.h"
 
 unsigned char Flag_Draw_Type = 0;       //1-12×8=96对应加油机 101油罐压力  102管线压力  103油罐温度  104油气浓度
 unsigned char flag_exchange_history = 0;
@@ -63,6 +65,25 @@ unsigned char Flag_Reoilgas_NeverShow = 0;//弹窗不在显示 0显示 1不显�
 
 long debug_send = 0;
 long debug_read = 0;
+
+/********************* 液位仪   ***********************************/
+//进油记录
+struct add_oil
+{
+   QString height_str;
+   QString volume_str;
+};
+
+struct add_oil add_oil_start;
+struct add_oil add_oil_end;
+
+QString start_datetime_str;
+QString end_datetime_str;
+
+unsigned char addoil_add_num;
+
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -166,6 +187,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->tabWidget->setTabEnabled(3,Flag_screen_safe);
 	ui->tabWidget->setTabEnabled(4,Flag_screen_burngas);
 	ui->tabWidget->setTabEnabled(5,Flag_screen_cc);
+    ui->tabWidget->setTabEnabled(6,Flag_screen_ywy);
 	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {max-height:82px;min-width:147px;background-color: rgb(170,170,255,255);border: 0px solid;border-top-left-radius: 0px;border-top-right-radius: 0px;padding:0px;}\
 	                                QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
                                     QTabBar::tab:selected {background-color: white}\
@@ -1636,6 +1658,33 @@ MainWindow::MainWindow(QWidget *parent) :
 	//可燃气体线程
 	uart_fga = new FGA1000_485();
 
+    /********************** 液位仪初始化 ***********************************/
+    Initialization_label();
+    Initialization_Data();
+
+    for(unsigned char i = 0;i < Amount_OilTank;i++)
+    {
+        sum_Tangan_Amount = sum_Tangan_Amount + Tangan_Amount[i];
+    }
+
+    draw_OilTank( Amount_OilTank );
+    draw_Tangan();
+
+    uart_ywy = new ywythread();
+    connect(uart_ywy,SIGNAL(Send_Height_Signal(unsigned char,QString,QString,QString)),SLOT(Display_Height_Data(unsigned char,QString,QString,QString)));
+    connect(uart_ywy,SIGNAL(Send_alarm_info(unsigned char,unsigned char)),SLOT(Display_alarm_Tangan_Data(unsigned char,unsigned char)));
+    connect(uart_ywy,SIGNAL(Set_tangan_add_success(unsigned char)),SLOT(set_Tangan_add_success_slot(unsigned char)));
+    connect(uart_ywy,SIGNAL(Send_compensation_Signal(unsigned char,unsigned char,float)),SLOT(Send_compensation_slot(unsigned char,unsigned char,float)));
+    connect(uart_ywy,SIGNAL(compensation_set_result(unsigned char,unsigned char,QString)),SLOT(compensation_set_result_slot(unsigned char,unsigned char,QString)));
+
+    uart_ywy->start();
+
+    ui->widget_add_oil->setHidden(1);
+
+
+
+
+
 //界面显示的一些数据
 	connect(uart_reoilgas,SIGNAL(Version_To_Mainwindow(unsigned char,unsigned char)),this,SLOT(Version_Recv_FromReoilgas(unsigned char,unsigned char)));
 	connect(uart_reoilgas,SIGNAL(Setinfo_To_Mainwindow(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)),this,SLOT(Setinfo_Recv_FromReoilgas(unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char,unsigned char)));
@@ -1732,7 +1781,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	thread_isoosi->start();
 	thread_isoosi_hefei->start();
 	myserver_thread->start();
-	uart_reoilgas->start();
+//	uart_reoilgas->start(); //ywy 暂时占用
 	uart_fga->start();
 	post_message_foshan->start();//佛山协议需要启动
 
@@ -1851,6 +1900,13 @@ void MainWindow::login_enter_set(int t)
 	//服务器上传
 	connect(systemset_exec,SIGNAL(setup_data_myserver(QString,QString,QString,QString)),myserver_thread,SLOT(setup_data(QString,QString,QString,QString)));
 	connect(systemset_exec,SIGNAL(myserver_xielousetup(QString,QString,QString,QString,QString)),myserver_thread,SLOT(xielousetup(QString,QString,QString,QString,QString)));
+
+//液位仪
+    connect(systemset_exec,SIGNAL(amount_Oil_Tank_draw(int)),this,SLOT(draw_OilTank(int)));
+    connect(systemset_exec,SIGNAL(amount_Tangan_draw()),this,SLOT(draw_Tangan()));
+    connect(this,SIGNAL(set_Tangan_add_success_signal(unsigned char)),systemset_exec,SLOT(set_Tangan_add_success(unsigned char)));
+    connect(this,SIGNAL(Send_compensation_Signal(unsigned char,unsigned char,float)),systemset_exec,SLOT(display_compension(unsigned char,unsigned char,float)));
+    connect(this,SIGNAL(compensation_set_result_Signal(unsigned char,unsigned char,QString)),systemset_exec,SLOT(display_compensation_set_result(unsigned char,unsigned char,QString)));
 
 	systemset_exec->show();
 }
@@ -13564,6 +13620,7 @@ void MainWindow::hide_tablewidget(unsigned char which, unsigned char sta)
 	ui->tabWidget->setTabEnabled(3,Flag_screen_safe);
 	ui->tabWidget->setTabEnabled(4,Flag_screen_burngas);
     ui->tabWidget->setTabEnabled(5,Flag_screen_cc);
+    ui->tabWidget->setTabEnabled(6,Flag_screen_ywy);
 	ui->tabWidget->setStyleSheet("QTabBar::tab:abled {max-height:82px;min-width:147px;background-color: rgb(170,170,255,255);border: 0px solid;border-top-left-radius: 0px;border-top-right-radius: 0px;padding:0px;}\
 	                                QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
 	                                QTabBar::tab:selected {background-color: white}\
@@ -13664,4 +13721,614 @@ void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络�
 	}
 }
 
+/*****************************************************************************
+ * 液位仪
+*******************************************************************************/
+//与MainWindow相关
 
+void MainWindow::Initialization_label()
+{
+   ui->label_alarm_11->setHidden(1);
+   ui->label_alarm_21->setHidden(1);
+   ui->label_alarm_31->setHidden(1);
+   ui->label_alarm_41->setHidden(1);
+   ui->label_alarm_51->setHidden(1);
+   ui->label_alarm_61->setHidden(1);
+}
+
+void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str2,QString str3)
+{
+    add = add -0xD0;
+    float volume,volumeused;
+    unsigned int i_oil,i_water,r_table,g_diameter;
+    if(((int)(str1.toFloat())%10) >= 5)
+    {
+        i_oil = str1.toFloat()/10 + 1;
+    }
+    else
+    {
+        i_oil = str1.toFloat()/10;
+    }
+    if(((int)(str2.toFloat())%10) >= 5)
+    {
+        i_water = str2.toFloat()/10 + 1;
+    }
+    else
+    {
+        i_water = str2.toFloat()/10;
+    }
+
+    volume = (OilTank_50[i_oil] - OilTank_50[i_water]) * 1000;
+    volumeused = (OilTank_50[280] - OilTank_50[i_oil]) * 1000;
+    add_Oil_array[add][0] = str1.toFloat();
+    add_Oil_array[add][1] = OilTank_50[i_oil] * 1000;
+
+//    QString strvolume = QString::number(volume, 'f', 1);//限制 float 小数位数
+//    QString strvolume = QString("%1").arg(volume);
+//    printf("%s \n",strvolume);fflush(stdout);
+
+    switch (add)
+    {
+        case 1:
+            r_table = OilTank_Set[0][4];    //对应罐表
+            g_diameter = OilTank_Set[0][0] /10;    //对应罐直径  CM
+            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+
+            add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
+
+            ui->drawHeight_11->setValue(g_diameter,0,i_oil,i_water);
+
+            ui->label_volume_11->setText(QString(" 油品体积：%1%2").arg(volume).arg(" L"));
+            ui->label_OilHeight_11->setText(QString(" 油高：%1%2").arg(str1.toStdString().data()).arg(" mm"));
+            ui->label_WaterHeight_11->setText(QString(" 水高：%1%2").arg(str2.toStdString().data()).arg(" mm"));
+            ui->label_Temp_11->setText(QString(" 温度：%1%2").arg(str3.toStdString().data()).arg(" ℃"));
+            ui->label_volumeused_11->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
+            break;
+        case 2:
+            r_table = OilTank_Set[1][4];    //对应罐表
+            g_diameter = OilTank_Set[1][0] /10;    //对应罐直径  CM
+            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+
+            add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
+
+            ui->drawHeight_21->setValue(g_diameter,0,i_oil,i_water);
+
+            ui->label_volume_21->setText(QString(" 油品体积：%1%2").arg(volume).arg(" L"));
+            ui->label_OilHeight_21->setText(QString(" 油高：%1%2").arg(str1.toStdString().data()).arg(" mm"));
+            ui->label_WaterHeight_21->setText(QString(" 水高：%1%2").arg(str2.toStdString().data()).arg(" mm"));
+            ui->label_Temp_21->setText(QString(" 温度：%1%2").arg(str3.toStdString().data()).arg(" ℃"));
+            ui->label_volumeused_21->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
+            break;
+        case 3:
+            r_table = OilTank_Set[2][4];    //对应罐表
+            g_diameter = OilTank_Set[2][0] /10;    //对应罐直径  CM
+            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+
+            add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
+
+            ui->drawHeight_31->setValue(g_diameter,0,i_oil,i_water);
+
+            ui->label_volume_31->setText(QString(" 油品体积：%1%2").arg(volume).arg(" L"));
+            ui->label_OilHeight_31->setText(QString(" 油高：%1%2").arg(str1.toStdString().data()).arg(" mm"));
+            ui->label_WaterHeight_31->setText(QString(" 水高：%1%2").arg(str2.toStdString().data()).arg(" mm"));
+            ui->label_Temp_31->setText(QString(" 温度：%1%2").arg(str3.toStdString().data()).arg(" ℃"));
+            ui->label_volumeused_31->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
+            break;
+        case 4:
+            r_table = OilTank_Set[3][4];    //对应罐表
+            g_diameter = OilTank_Set[3][0] /10;    //对应罐直径  CM
+            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+
+            add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
+
+            ui->drawHeight_41->setValue(g_diameter,0,i_oil,i_water);
+
+            ui->label_volume_41->setText(QString(" 油品体积：%1%2").arg(volume).arg(" L"));
+            ui->label_OilHeight_41->setText(QString(" 油高：%1%2").arg(str1.toStdString().data()).arg(" mm"));
+            ui->label_WaterHeight_41->setText(QString(" 水高：%1%2").arg(str2.toStdString().data()).arg(" mm"));
+            ui->label_Temp_41->setText(QString(" 温度：%1%2").arg(str3.toStdString().data()).arg(" ℃"));
+            ui->label_volumeused_41->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
+            break;
+        case 5:
+            r_table = OilTank_Set[4][4];    //对应罐表
+            g_diameter = OilTank_Set[4][0] /10;    //对应罐直径  CM
+            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+
+            add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
+
+            ui->drawHeight_51->setValue(g_diameter,0,i_oil,i_water);
+
+            ui->label_volume_51->setText(QString(" 油品体积：%1%2").arg(volume).arg(" L"));
+            ui->label_OilHeight_51->setText(QString(" 油高：%1%2").arg(str1.toStdString().data()).arg(" mm"));
+            ui->label_WaterHeight_51->setText(QString(" 水高：%1%2").arg(str2.toStdString().data()).arg(" mm"));
+            ui->label_Temp_51->setText(QString(" 温度：%1%2").arg(str3.toStdString().data()).arg(" ℃"));
+            ui->label_volumeused_51->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
+            break;
+        case 6:
+            r_table = OilTank_Set[5][4];    //对应罐表
+            g_diameter = OilTank_Set[5][0] /10;    //对应罐直径  CM
+            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+
+            add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
+
+            ui->drawHeight_61->setValue(g_diameter,0,i_oil,i_water);
+
+            ui->label_volume_61->setText(QString(" 油品体积：%1%2").arg(volume).arg(" L"));
+            ui->label_OilHeight_61->setText(QString(" 油高：%1%2").arg(str1.toStdString().data()).arg(" mm"));
+            ui->label_WaterHeight_61->setText(QString(" 水高：%1%2").arg(str2.toStdString().data()).arg(" mm"));
+            ui->label_Temp_61->setText(QString(" 温度：%1%2").arg(str3.toStdString().data()).arg(" ℃"));
+            ui->label_volumeused_61->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
+            break;
+        default:
+            break;
+    }
+}
+
+void MainWindow::Display_alarm_Tangan_Data(unsigned char add, unsigned char flag)   //0 通讯正常 1 通讯故障  2 油溢出  3 水过高  4 浮子故障  5 温度传感器故障
+{
+    add = add -0xD0;
+    if(add == 1)
+    {
+        switch (flag)
+        {
+            case 0:
+                ui->label_alarm_11->setHidden(0);
+                ui->label_alarm_11->setText(" 通讯故障");
+
+                ui->label_volume_11->setText(QString(" 油品体积：%1%2").arg("0.0").arg(" L"));
+                ui->label_OilHeight_11->setText(QString(" 油高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_WaterHeight_11->setText(QString(" 水高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_Temp_11->setText(QString(" 温度：%1%2").arg("0.0").arg(" ℃"));
+                ui->label_volumeused_11->setText(QString(" 可卸量：%1%2").arg("0.0").arg(" L"));
+                break;
+            case 1:
+                ui->label_alarm_11->setHidden(0);
+                ui->label_alarm_11->setText(" 油位过高");
+                break;
+            case 2:
+                ui->label_alarm_11->setHidden(0);
+                ui->label_alarm_11->setText(" 油位过低");
+                break;
+            case 3:
+                ui->label_alarm_11->setHidden(0);
+                ui->label_alarm_11->setText(" 浮子故障");
+                break;
+            case 4:
+                ui->label_alarm_11->setHidden(0);
+                ui->label_alarm_11->setText(" 温度传感器故障");
+                break;
+            case 5:
+                ui->label_alarm_11->setHidden(0);
+                ui->label_alarm_11->setText(" 高水位报警");
+                break;
+            case 6:
+                ui->label_alarm_11->setText("正常");
+                ui->label_alarm_11->setHidden(1);
+                break;
+            default:
+                break;
+        }
+    }
+    else if(add ==2)
+    {
+        switch (flag)
+        {
+            case 0:
+                ui->label_alarm_21->setHidden(0);
+                ui->label_alarm_21->setText(" 通讯故障");
+
+                ui->label_volume_21->setText(QString(" 油品体积：%1%2").arg("0.0").arg(" L"));
+                ui->label_OilHeight_21->setText(QString(" 油高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_WaterHeight_21->setText(QString(" 水高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_Temp_21->setText(QString(" 温度：%1%2").arg("0.0").arg(" ℃"));
+                ui->label_volumeused_21->setText(QString(" 可卸量：%1%2").arg("0.0").arg(" L"));
+                break;
+            case 1:
+                ui->label_alarm_21->setHidden(0);
+                ui->label_alarm_21->setText(" 油位过高");
+                break;
+            case 2:
+                ui->label_alarm_21->setHidden(0);
+                ui->label_alarm_21->setText(" 油位过低");
+                break;
+            case 3:
+                ui->label_alarm_21->setHidden(0);
+                ui->label_alarm_21->setText(" 浮子故障");
+                break;
+            case 4:
+                ui->label_alarm_21->setHidden(0);
+                ui->label_alarm_21->setText(" 温度传感器故障");
+                break;
+            case 5:
+                ui->label_alarm_21->setHidden(0);
+                ui->label_alarm_21->setText(" 高水位报警");
+                break;
+            case 6:
+                ui->label_alarm_21->setText("正常");
+                ui->label_alarm_21->setHidden(1);
+                break;
+                default:
+                    break;
+        }
+    }
+    else if(add ==3)
+    {
+        switch (flag)
+        {
+            case 0:
+                ui->label_alarm_31->setHidden(0);
+                ui->label_alarm_31->setText(" 通讯故障");
+
+                ui->label_volume_31->setText(QString(" 油品体积：%1%2").arg("0.0").arg(" L"));
+                ui->label_OilHeight_31->setText(QString(" 油高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_WaterHeight_31->setText(QString(" 水高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_Temp_31->setText(QString(" 温度：%1%2").arg("0.0").arg(" ℃"));
+                ui->label_volumeused_31->setText(QString(" 可卸量：%1%2").arg("0.0").arg(" L"));
+                break;
+            case 1:
+                ui->label_alarm_31->setHidden(0);
+                ui->label_alarm_31->setText(" 油位过高");
+                break;
+            case 2:
+                ui->label_alarm_31->setHidden(0);
+                ui->label_alarm_31->setText(" 油位过低");
+                break;
+            case 3:
+                ui->label_alarm_31->setHidden(0);
+                ui->label_alarm_31->setText(" 浮子故障");
+                break;
+            case 4:
+                ui->label_alarm_31->setHidden(0);
+                ui->label_alarm_31->setText(" 温度传感器故障");
+                break;
+            case 5:
+                ui->label_alarm_31->setHidden(0);
+                ui->label_alarm_31->setText(" 高水位报警");
+                break;
+            case 6:
+                ui->label_alarm_31->setText("正常");
+                ui->label_alarm_31->setHidden(1);
+                break;
+                default:
+                    break;
+        }
+    }
+    else if(add ==4)
+    {
+        switch (flag)
+        {
+            case 0:
+                ui->label_alarm_41->setHidden(0);
+                ui->label_alarm_41->setText(" 通讯故障");
+
+                ui->label_volume_41->setText(QString(" 油品体积：%1%2").arg("0.0").arg(" L"));
+                ui->label_OilHeight_41->setText(QString(" 油高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_WaterHeight_41->setText(QString(" 水高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_Temp_41->setText(QString(" 温度：%1%2").arg("0.0").arg(" ℃"));
+                ui->label_volumeused_41->setText(QString(" 可卸量：%1%2").arg("0.0").arg(" L"));
+                break;
+            case 1:
+                ui->label_alarm_41->setHidden(0);
+                ui->label_alarm_41->setText(" 油位过高");
+                break;
+            case 2:
+                ui->label_alarm_41->setHidden(0);
+                ui->label_alarm_41->setText(" 油位过低");
+                break;
+            case 3:
+                ui->label_alarm_41->setHidden(0);
+                ui->label_alarm_41->setText(" 浮子故障");
+                break;
+            case 4:
+                ui->label_alarm_41->setHidden(0);
+                ui->label_alarm_41->setText(" 温度传感器故障");
+                break;
+            case 5:
+                ui->label_alarm_41->setHidden(0);
+                ui->label_alarm_41->setText(" 高水位报警");
+                break;
+            case 6:
+                ui->label_alarm_41->setText("正常");
+                ui->label_alarm_41->setHidden(1);
+                break;
+                default:
+                    break;
+        }
+    }
+    else if(add ==5)
+    {
+        switch (flag)
+        {
+            case 0:
+                ui->label_alarm_51->setHidden(0);
+                ui->label_alarm_51->setText(" 通讯故障");
+
+                ui->label_volume_51->setText(QString(" 油品体积：%1%2").arg("0.0").arg(" L"));
+                ui->label_OilHeight_51->setText(QString(" 油高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_WaterHeight_51->setText(QString(" 水高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_Temp_51->setText(QString(" 温度：%1%2").arg("0.0").arg(" ℃"));
+                ui->label_volumeused_51->setText(QString(" 可卸量：%1%2").arg("0.0").arg(" L"));
+                break;
+            case 1:
+                ui->label_alarm_51->setHidden(0);
+                ui->label_alarm_51->setText(" 油位过高");
+                break;
+            case 2:
+                ui->label_alarm_51->setHidden(0);
+                ui->label_alarm_51->setText(" 油位过低");
+                break;
+            case 3:
+                ui->label_alarm_51->setHidden(0);
+                ui->label_alarm_51->setText(" 浮子故障");
+                break;
+            case 4:
+                ui->label_alarm_51->setHidden(0);
+                ui->label_alarm_51->setText(" 温度传感器故障");
+                break;
+            case 5:
+                ui->label_alarm_51->setHidden(0);
+                ui->label_alarm_51->setText(" 高水位报警");
+                break;
+            case 6:
+                ui->label_alarm_51->setText("正常");
+                ui->label_alarm_51->setHidden(1);
+                break;
+                default:
+                    break;
+        }
+    }
+    else if(add ==6)
+    {
+        switch (flag)
+        {
+            case 0:
+                ui->label_alarm_61->setHidden(0);
+                ui->label_alarm_61->setText(" 通讯故障");
+
+                ui->label_volume_61->setText(QString(" 油品体积：%1%2").arg("0.0").arg(" L"));
+                ui->label_OilHeight_61->setText(QString(" 油高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_WaterHeight_61->setText(QString(" 水高：%1%2").arg("0.0").arg(" mm"));
+                ui->label_Temp_61->setText(QString(" 温度：%1%2").arg("0.0").arg(" ℃"));
+                ui->label_volumeused_61->setText(QString(" 可卸量：%1%2").arg("0.0").arg(" L"));
+                break;
+            case 1:
+                ui->label_alarm_61->setHidden(0);
+                ui->label_alarm_61->setText(" 油位过高");
+                break;
+            case 2:
+                ui->label_alarm_61->setHidden(0);
+                ui->label_alarm_61->setText(" 油位过低");
+                break;
+            case 3:
+                ui->label_alarm_61->setHidden(0);
+                ui->label_alarm_61->setText(" 浮子故障");
+                break;
+            case 4:
+                ui->label_alarm_61->setHidden(0);
+                ui->label_alarm_61->setText(" 温度传感器故障");
+                break;
+            case 5:
+                ui->label_alarm_61->setHidden(0);
+                ui->label_alarm_61->setText(" 高水位报警");
+                break;
+            case 6:
+                ui->label_alarm_61->setText("正常");
+                ui->label_alarm_61->setHidden(1);
+                break;
+                default:
+                    break;
+        }
+    }
+}
+
+//与systemset相关
+void MainWindow::draw_OilTank(int t)
+{
+    switch(t)
+    {
+       case 0:
+            ui->widget_OilTank_1->setHidden(1);
+            ui->widget_OilTank_2->setHidden(1);
+            ui->widget_OilTank_3->setHidden(1);
+            ui->widget_OilTank_4->setHidden(1);
+            ui->widget_OilTank_5->setHidden(1);
+            ui->widget_OilTank_6->setHidden(1);
+            break;
+        case 1:
+             ui->widget_OilTank_1->setHidden(0);
+             ui->widget_OilTank_2->setHidden(1);
+             ui->widget_OilTank_3->setHidden(1);
+             ui->widget_OilTank_4->setHidden(1);
+             ui->widget_OilTank_5->setHidden(1);
+             ui->widget_OilTank_6->setHidden(1);
+             break;
+        case 2:
+             ui->widget_OilTank_1->setHidden(0);
+             ui->widget_OilTank_2->setHidden(0);
+             ui->widget_OilTank_3->setHidden(1);
+             ui->widget_OilTank_4->setHidden(1);
+             ui->widget_OilTank_5->setHidden(1);
+             ui->widget_OilTank_6->setHidden(1);
+             break;
+        case 3:
+             ui->widget_OilTank_1->setHidden(0);
+             ui->widget_OilTank_2->setHidden(0);
+             ui->widget_OilTank_3->setHidden(0);
+             ui->widget_OilTank_4->setHidden(1);
+             ui->widget_OilTank_5->setHidden(1);
+             ui->widget_OilTank_6->setHidden(1);
+             break;
+        case 4:
+             ui->widget_OilTank_1->setHidden(0);
+             ui->widget_OilTank_2->setHidden(0);
+             ui->widget_OilTank_3->setHidden(0);
+             ui->widget_OilTank_4->setHidden(0);
+             ui->widget_OilTank_5->setHidden(1);
+             ui->widget_OilTank_6->setHidden(1);
+             break;
+        case 5:
+             ui->widget_OilTank_1->setHidden(0);
+             ui->widget_OilTank_2->setHidden(0);
+             ui->widget_OilTank_3->setHidden(0);
+             ui->widget_OilTank_4->setHidden(0);
+             ui->widget_OilTank_5->setHidden(0);
+             ui->widget_OilTank_6->setHidden(1);
+             break;
+        case 6:
+             ui->widget_OilTank_1->setHidden(0);
+             ui->widget_OilTank_2->setHidden(0);
+             ui->widget_OilTank_3->setHidden(0);
+             ui->widget_OilTank_4->setHidden(0);
+             ui->widget_OilTank_5->setHidden(0);
+             ui->widget_OilTank_6->setHidden(0);
+             break;
+    }
+}
+
+void MainWindow::draw_Tangan()
+{
+    unsigned char flag_enable[12][3] = {0};
+    for(unsigned char i = 0;i < Amount_OilTank;i++)
+    {
+        for(unsigned char j = 0;j < 3;j++)
+        {
+            if(Tangan_Amount[i] > 0)
+            {
+                if(Tangan_Amount[i] > j)
+                {
+                    flag_enable[i][j] = 1;
+                }
+            }
+        }
+    }
+
+    ui->frame_11->setVisible(flag_enable[0][0]);
+
+    ui->frame_21->setVisible(flag_enable[1][0]);
+
+    ui->frame_31->setVisible(flag_enable[2][0]);
+
+    ui->frame_41->setVisible(flag_enable[3][0]);
+
+    ui->frame_51->setVisible(flag_enable[4][0]);
+
+    ui->frame_61->setVisible(flag_enable[5][0]);
+
+    if(flag_enable[0][0]){ui->label_OilTank_1->setText(QString(" 1#油罐: %1%2").arg(Oil_Kind[0][0]).arg("#"));}//ui->label_OilTank_1->adjustSize();
+    if(flag_enable[1][0]){ui->label_OilTank_2->setText(QString(" 2#油罐: %1%2").arg(Oil_Kind[1][0]).arg("#"));}
+    if(flag_enable[2][0]){ui->label_OilTank_3->setText(QString(" 3#油罐: %1%2").arg(Oil_Kind[2][0]).arg("#"));}
+    if(flag_enable[3][0]){ui->label_OilTank_4->setText(QString(" 4#油罐: %1%2").arg(Oil_Kind[3][0]).arg("#"));}
+    if(flag_enable[4][0]){ui->label_OilTank_5->setText(QString(" 5#油罐: %1%2").arg(Oil_Kind[4][0]).arg("#"));}
+    if(flag_enable[5][0]){ui->label_OilTank_6->setText(QString(" 6#油罐: %1%2").arg(Oil_Kind[5][0]).arg("#"));}
+
+}
+
+void MainWindow::set_Tangan_add_success_slot(unsigned char add)
+{
+    emit set_Tangan_add_success_signal(add);
+}
+
+void MainWindow::Send_compensation_slot(unsigned char command,unsigned char hang,float data)
+{
+    emit Send_compensation_Signal(command,hang,data);
+}
+
+void MainWindow::compensation_set_result_slot(unsigned char command,unsigned char add,QString str)
+{
+    emit compensation_set_result_Signal(command,add,str);
+}
+
+//进油管理
+void MainWindow::on_btn_enter_add_Oil_clicked()
+{
+    ui->btn_enter_add_Oil->setDisabled(1);
+    ui->comboBox_addoil->clear();
+
+    for(int i=0; i<=Amount_OilTank;i++)
+    {
+        if(i_alarm_record[i][0] == 0)
+        {
+           ui->comboBox_addoil->addItem(QString("%1").arg(i));
+        }
+    }
+    ui->widget_add_oil->setHidden(0);
+}
+
+void MainWindow::on_comboBox_addoil_currentIndexChanged(int index)
+{
+    addoil_add_num = index;
+    model =  new QStandardItemModel(); //进油记录
+    model->setColumnCount(3);
+    ui->tableView_addoil->verticalHeader()->setHidden(1);//隐藏行号
+    ui->tableView_addoil->horizontalHeader()->setDefaultSectionSize(150);
+
+    model->setHeaderData(0,Qt::Horizontal,QObject::tr("%1").arg(""));
+    model->setHeaderData(1,Qt::Horizontal,QObject::tr("%1").arg("开始"));
+    model->setHeaderData(2,Qt::Horizontal,QObject::tr("%1").arg("结束"));
+    model->setItem(0,0,new QStandardItem(QString("时间")));
+    model->item(0,0)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(1,0,new QStandardItem(QString("高度")));
+    model->item(1,0)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(2,0,new QStandardItem(QString("体积")));
+    model->item(2,0)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(3,0,new QStandardItem(QString("进油量")));
+    model->item(3,0)->setTextAlignment(Qt::AlignCenter);
+
+    ui->tableView_addoil->setSpan(3,1,3,2);
+
+    ui->tableView_addoil->setModel(model);
+
+    ui->tableView_addoil->setColumnWidth(0,100);
+    ui->tableView_addoil->setColumnWidth(1,220);
+    ui->tableView_addoil->setColumnWidth(2,220);
+}
+
+void MainWindow::on_btn_addoil_start_clicked()
+{
+    QDateTime current_datetime = QDateTime::currentDateTime();
+    start_datetime_str = current_datetime.toString("yyyy-MM-dd  hh:mm:ss");
+
+    add_oil_start.height_str = QString::number(add_Oil_array[addoil_add_num][0], 'f', 1);
+    add_oil_start.volume_str = QString::number(add_Oil_array[addoil_add_num][1], 'f', 1);
+
+    model->setItem(0,1,new QStandardItem(start_datetime_str));
+    model->item(0,1)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(1,1,new QStandardItem(add_oil_start.height_str));
+    model->item(1,1)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(2,1,new QStandardItem(add_oil_start.volume_str));
+    model->item(2,1)->setTextAlignment(Qt::AlignCenter);
+}
+
+
+void MainWindow::on_btn_addoil_end_clicked()
+{
+    QDateTime current_datetime = QDateTime::currentDateTime();
+    end_datetime_str = current_datetime.toString("yyyy-MM-dd  hh:mm:ss");
+
+    add_oil_end.height_str = QString::number(add_Oil_array[addoil_add_num][0], 'f', 1);
+    add_oil_end.volume_str = QString::number(add_Oil_array[addoil_add_num][1], 'f', 1);
+    float volume = add_oil_end.volume_str.toFloat() - add_oil_start.volume_str.toFloat();
+
+    model->setItem(0,2,new QStandardItem(end_datetime_str));
+    model->item(0,2)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(1,2,new QStandardItem(add_oil_end.height_str));
+    model->item(1,2)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(2,2,new QStandardItem(add_oil_end.volume_str));
+    model->item(2,2)->setTextAlignment(Qt::AlignCenter);
+    model->setItem(3,1,new QStandardItem(QString::number(volume, 'f', 1)));
+    model->item(3,1)->setTextAlignment(Qt::AlignCenter);
+
+    add_yeweiyi_addOil_Record_Write(start_datetime_str,QString("%1").arg(addoil_add_num),QString::number(volume, 'f', 1));
+}
+
+void MainWindow::on_toolbtn_addoil_close_clicked()
+{
+    ui->widget_add_oil->setHidden(1);
+    ui->btn_enter_add_Oil->setEnabled(1);
+}
