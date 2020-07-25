@@ -2230,6 +2230,18 @@ void Controller_Version_init()
 	{
 		Flag_Controller_Version = 0;//默认是最旧版的控制器
 	}
+	if(Flag_Controller_Version == 0)
+	{
+		system("cd /opt");
+		system("chmod +x ask690");
+		system("sync");
+	}
+	else if(Flag_Controller_Version == 1)
+	{
+		system("cd /opt");
+		system("chmod -x ask690");
+		system("sync");
+	}
 }
 //控制器硬件版本写入
 void Controller_Version_write()
