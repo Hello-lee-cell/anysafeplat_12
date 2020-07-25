@@ -3489,8 +3489,8 @@ int mythread::net_history(int num,int sta)
 //		sta2 = 0x04;
 		sta1 = 0x20;
 		sta2 = 0x00;//广州中石化
-		sta1 = 0x00;
-		sta2 = 0x04;
+//		sta1 = 0x00;
+//		sta2 = 0x04;
 		hubei_sta = 0xff;
 		SensorSta = "3";
 	}

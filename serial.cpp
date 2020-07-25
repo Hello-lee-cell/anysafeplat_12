@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Program:     serial.c
  * Author:      Paul Dean
  * Version:     0.0.3
@@ -202,8 +202,12 @@ int  set_port_attr (
         opt.c_lflag   &=   ~(ECHO   |   ICANON   |   IEXTEN   |   ISIG);
         opt.c_iflag   &=   ~(BRKINT   |   ICRNL   |   INPCK   |   ISTRIP   |   IXON);
         opt.c_oflag   &=   ~(OPOST);
-        opt.c_cflag   &=   ~(CSIZE   |   PARENB);
+//        opt.c_cflag   &=   ~(CSIZE   |   PARENB);
         opt.c_cflag   |=   CS8;
+
+        opt.c_oflag = 0;
+        opt.c_lflag |= 0;
+        opt.c_oflag &= ~OPOST;
 
         opt.c_cc[VTIME]     	 = vtime;//设置非规范模式下的超时时长和最小字符数：
         opt.c_cc[VMIN]         	 = vmin;//VTIME与VMIN配合使用，是指限定的传输或等待的最长时间

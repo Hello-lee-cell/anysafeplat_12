@@ -164,7 +164,16 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(warn,SIGNAL(IIE_display(unsigned char, int,int,int,int)),this,SLOT(IIE_show(unsigned char, int,int,int,int)));
 	//IIE电磁阀信号
 	QObject::connect(warn,SIGNAL(IIE_Electromagnetic_Show(unsigned char)),this,SLOT(show_IIE_electromagnetic(unsigned char)));
-	warn->start();
+    warn->start();
+
+
+
+
+
+
+
+
+
 	ui->widget_iie_electromagnetic->setHidden(1);
 	ui->label_tongxinguzhang->setHidden(1);
     qDebug()<<"my thread is start!";
@@ -1660,7 +1669,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     /********************** 液位仪初始化 ***********************************/
     Initialization_label();
-    Initialization_Data();
+    YWY_Initialization_Data();
 
     for(unsigned char i = 0;i < Amount_OilTank;i++)
     {
@@ -1728,6 +1737,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_cq(QString,QString,QString,QString,QString,QString,QString,QString,QString)),thread_isoosi_cq,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	//myserver添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_myserver(QString,QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+    //isoosi合肥添加
+    connect(uart_reoilgas,SIGNAL(refueling_gun_data_hefei(QString)),thread_isoosi_hefei,SLOT(send_gundata(QString)));
 
 //post形式发送网络数据
 	//post添加 槽函数直连
@@ -13738,7 +13749,6 @@ void MainWindow::Initialization_label()
 
 void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str2,QString str3)
 {
-    add = add -0xD0;
     float volume,volumeused;
     unsigned int i_oil,i_water,r_table,g_diameter;
     if(((int)(str1.toFloat())%10) >= 5)

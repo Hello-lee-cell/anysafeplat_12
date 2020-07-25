@@ -1,4 +1,4 @@
-/*中油泄漏协议 与mytcpclient_zhongyou.cpp一起使用
+﻿/*中油泄漏协议 与mytcpclient_zhongyou.cpp一起使用
  *
  * */
 #include <QApplication>
@@ -2179,7 +2179,7 @@ void* talk_udp_zy(void*)
 	memset (addr_remote.sin_zero,0,8);
 
 	add_value_netinfo("UDP客户端广播中");
-	char sdbuf[10]={(char)ipa,(char)ipb,(char)ipc,(char)ipd,0x0d,0x9f,0x07,(char)ID_M,0x01,UDP_STATE_ZY};
+    char sdbuf[10]={(char)ipa,(char)ipb,(char)ipc,(char)ipd,0x0d,0x9f,0x07,(char)ID_M,0x01,UDP_STATE_ZY};
 	while(1)
 	{
 		sleep(heartbeat_time);      //3486端口设置

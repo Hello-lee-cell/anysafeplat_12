@@ -83,8 +83,8 @@
         <file>picture/valve.png</file>
         <file>picture/gashighwarn.png</file>
         <file>picture/gaslowwarn.png</file>
-        <file>picture/单个系统未选中按钮/油罐监测系统未选中.png</file>
-        <file>picture/单个系统选中/油罐监测系统选中.png</file>
         <file>picture/进油管理.png</file>
+        <file>picture/单个系统选中/油罐监测选中.png</file>
+        <file>picture/单个系统未选中按钮/油罐监测未选中.png</file>
     </qresource>
 </RCC>

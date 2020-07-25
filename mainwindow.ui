@@ -17578,13 +17578,11 @@ border-image: url(:/picture/底板背景图片.png);
     <widget class="QWidget" name="tab_7">
      <attribute name="icon">
       <iconset resource="picture_.qrc">
-       <normaloff>:/picture/单个系统未选中按钮/油罐监测系统未选中.png</normaloff>
-       <normalon>:/picture/单个系统选中/油罐监测系统选中.png</normalon>
-       <disabledoff>:/picture/touming.png</disabledoff>
-       <disabledon>:/picture/touming.png</disabledon>:/picture/单个系统未选中按钮/油罐监测系统未选中.png</iconset>
+       <normaloff>:/picture/单个系统未选中按钮/油罐监测未选中.png</normaloff>
+       <normalon>:/picture/单个系统选中/油罐监测选中.png</normalon>:/picture/单个系统未选中按钮/油罐监测未选中.png</iconset>
      </attribute>
      <attribute name="title">
-      <string>页</string>
+      <string/>
      </attribute>
      <widget class="QWidget" name="widget" native="true">
       <property name="geometry">
@@ -17811,6 +17809,11 @@ border-image: url(:/picture/底板背景图片.png);
           <height>17</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string> 2#油罐</string>
         </property>
@@ -17844,7 +17847,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -17862,7 +17865,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -17880,7 +17883,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -17898,7 +17901,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -17916,7 +17919,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -17931,6 +17934,11 @@ border-image: url(:/picture/底板背景图片.png);
            <width>151</width>
            <height>17</height>
           </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">color: rgb(239, 41, 41);</string>
@@ -17972,6 +17980,11 @@ border-image: url(:/picture/底板背景图片.png);
           <height>17</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string> 3#油罐</string>
         </property>
@@ -18010,7 +18023,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18028,7 +18041,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18046,7 +18059,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18064,7 +18077,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18082,7 +18095,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18097,6 +18110,11 @@ border-image: url(:/picture/底板背景图片.png);
            <width>151</width>
            <height>17</height>
           </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">color: rgb(239, 41, 41);</string>
@@ -18138,6 +18156,11 @@ border-image: url(:/picture/底板背景图片.png);
           <height>17</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string> 4#油罐</string>
         </property>
@@ -18171,7 +18194,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18189,7 +18212,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18207,7 +18230,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18225,7 +18248,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18243,7 +18266,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18258,6 +18281,11 @@ border-image: url(:/picture/底板背景图片.png);
            <width>151</width>
            <height>17</height>
           </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">color: rgb(239, 41, 41);</string>
@@ -18302,6 +18330,11 @@ border-image: url(:/picture/底板背景图片.png);
           <height>17</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string> 5#油罐</string>
         </property>
@@ -18335,7 +18368,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18353,7 +18386,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18371,7 +18404,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18389,7 +18422,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18407,7 +18440,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18422,6 +18455,11 @@ border-image: url(:/picture/底板背景图片.png);
            <width>151</width>
            <height>17</height>
           </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">color: rgb(239, 41, 41);</string>
@@ -18463,6 +18501,11 @@ border-image: url(:/picture/底板背景图片.png);
           <height>17</height>
          </rect>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>15</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string> 6#油罐</string>
         </property>
@@ -18496,7 +18539,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18514,7 +18557,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18532,7 +18575,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18550,7 +18593,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18568,7 +18611,7 @@ border-image: url(:/picture/底板背景图片.png);
          </property>
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="text">
@@ -18583,6 +18626,11 @@ border-image: url(:/picture/底板背景图片.png);
            <width>151</width>
            <height>17</height>
           </rect>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
          </property>
          <property name="styleSheet">
           <string notr="true">color: rgb(239, 41, 41);</string>
@@ -21332,7 +21380,10 @@ border-style:outset;</string>
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(114, 159, 207);</string>
+     <string notr="true">#widget_add_oil
+{
+background-color: rgb(114, 159, 207);
+}</string>
     </property>
     <widget class="QTableView" name="tableView_addoil">
      <property name="geometry">
@@ -21363,7 +21414,7 @@ border-style:outset;</string>
      </property>
      <property name="font">
       <font>
-       <pointsize>18</pointsize>
+       <pointsize>20</pointsize>
       </font>
      </property>
      <property name="focusPolicy">
@@ -21384,7 +21435,7 @@ border-style:outset;</string>
      </property>
      <property name="font">
       <font>
-       <pointsize>18</pointsize>
+       <pointsize>20</pointsize>
       </font>
      </property>
      <property name="focusPolicy">
@@ -21418,7 +21469,7 @@ border-style:outset;</string>
      </property>
      <property name="font">
       <font>
-       <pointsize>18</pointsize>
+       <pointsize>20</pointsize>
       </font>
      </property>
      <property name="focusPolicy">
@@ -21426,8 +21477,6 @@ border-style:outset;</string>
      </property>
     </widget>
    </widget>
-   <zorder>widget_dispen_details</zorder>
-   <zorder>widget_gundetail</zorder>
    <zorder>label_debug_read</zorder>
    <zorder>label_debug_send</zorder>
    <zorder>pushButton_4</zorder>
@@ -21440,13 +21489,15 @@ border-style:outset;</string>
    <zorder>pushButton_3</zorder>
    <zorder>label_9</zorder>
    <zorder>label_warn_rom</zorder>
-   <zorder>widget_warn_rom</zorder>
    <zorder>label_delay_data</zorder>
    <zorder>label_delay_jilu</zorder>
-   <zorder>widget_warn_zaixianjiance</zorder>
    <zorder>label_touch_calibration</zorder>
    <zorder>tabWidget</zorder>
    <zorder>widget_add_oil</zorder>
+   <zorder>widget_dispen_details</zorder>
+   <zorder>widget_gundetail</zorder>
+   <zorder>widget_warn_rom</zorder>
+   <zorder>widget_warn_zaixianjiance</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

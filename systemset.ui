@@ -7538,8 +7538,8 @@ background-color: rgb(189,223,255);
       <widget class="QComboBox" name="comboBox_OilTank_sumset">
        <property name="geometry">
         <rect>
-         <x>100</x>
-         <y>30</y>
+         <x>120</x>
+         <y>20</y>
          <width>71</width>
          <height>36</height>
         </rect>
@@ -7592,14 +7592,14 @@ background-color: rgb(189,223,255);
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>40</y>
-         <width>67</width>
-         <height>17</height>
+         <y>26</y>
+         <width>91</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="text">
@@ -7611,13 +7611,13 @@ background-color: rgb(189,223,255);
         <rect>
          <x>120</x>
          <y>350</y>
-         <width>67</width>
-         <height>17</height>
+         <width>111</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="text">
@@ -7633,29 +7633,35 @@ background-color: rgb(189,223,255);
          <height>271</height>
         </rect>
        </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::AllEditTriggers</set>
+       </property>
       </widget>
       <widget class="QTableView" name="tableView_Tangan">
        <property name="geometry">
         <rect>
          <x>120</x>
-         <y>380</y>
+         <y>400</y>
          <width>511</width>
          <height>251</height>
         </rect>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::AllEditTriggers</set>
        </property>
       </widget>
       <widget class="QPushButton" name="btn_save_OilTank">
        <property name="geometry">
         <rect>
-         <x>620</x>
-         <y>40</y>
-         <width>111</width>
-         <height>25</height>
+         <x>610</x>
+         <y>34</y>
+         <width>121</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="focusPolicy">
@@ -7668,15 +7674,15 @@ background-color: rgb(189,223,255);
       <widget class="QPushButton" name="btn_save_Tangan">
        <property name="geometry">
         <rect>
-         <x>520</x>
-         <y>350</y>
-         <width>111</width>
-         <height>25</height>
+         <x>500</x>
+         <y>345</y>
+         <width>131</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="focusPolicy">
@@ -7689,8 +7695,8 @@ background-color: rgb(189,223,255);
       <widget class="QLineEdit" name="lineEdit_setadd">
        <property name="geometry">
         <rect>
-         <x>820</x>
-         <y>200</y>
+         <x>750</x>
+         <y>560</y>
          <width>113</width>
          <height>25</height>
         </rect>
@@ -7699,15 +7705,15 @@ background-color: rgb(189,223,255);
       <widget class="QPushButton" name="btn_setadd">
        <property name="geometry">
         <rect>
-         <x>830</x>
-         <y>260</y>
+         <x>760</x>
+         <y>620</y>
          <width>89</width>
          <height>21</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="focusPolicy">
@@ -7720,8 +7726,8 @@ background-color: rgb(189,223,255);
       <widget class="QLabel" name="label_setadd_indicate">
        <property name="geometry">
         <rect>
-         <x>840</x>
-         <y>160</y>
+         <x>760</x>
+         <y>510</y>
          <width>101</width>
          <height>17</height>
         </rect>
@@ -7738,15 +7744,15 @@ background-color: rgb(189,223,255);
       <widget class="QPushButton" name="btn_get_compension">
        <property name="geometry">
         <rect>
-         <x>360</x>
-         <y>350</y>
-         <width>111</width>
-         <height>25</height>
+         <x>330</x>
+         <y>345</y>
+         <width>141</width>
+         <height>41</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="focusPolicy">
@@ -7759,15 +7765,15 @@ background-color: rgb(189,223,255);
       <widget class="QPushButton" name="btn_alarm_off_on">
        <property name="geometry">
         <rect>
-         <x>840</x>
+         <x>838</x>
          <y>100</y>
-         <width>89</width>
-         <height>25</height>
+         <width>91</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="focusPolicy">
@@ -7798,15 +7804,15 @@ background-color: rgb(189,223,255);
       <widget class="QPushButton" name="btn_OilTank_Table_Set">
        <property name="geometry">
         <rect>
-         <x>840</x>
+         <x>838</x>
          <y>40</y>
-         <width>89</width>
-         <height>25</height>
+         <width>91</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <pointsize>16</pointsize>
         </font>
        </property>
        <property name="text">
@@ -7819,26 +7825,29 @@ background-color: rgb(189,223,255);
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>0</y>
+       <y>-10</y>
        <width>981</width>
        <height>581</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: white;</string>
+      <string notr="true">#widget_OilTank_Table
+{
+	background-color: rgb(114, 159, 207);
+}</string>
      </property>
      <widget class="QPushButton" name="btn_clear_table">
       <property name="geometry">
        <rect>
-        <x>720</x>
+        <x>718</x>
         <y>30</y>
-        <width>89</width>
-        <height>25</height>
+        <width>91</width>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>11</pointsize>
+        <pointsize>18</pointsize>
        </font>
       </property>
       <property name="focusPolicy">
@@ -7933,19 +7942,22 @@ background-color: rgb(189,223,255);
         <pointsize>13</pointsize>
        </font>
       </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::AllEditTriggers</set>
+      </property>
      </widget>
      <widget class="QPushButton" name="btn_save_table">
       <property name="geometry">
        <rect>
-        <x>590</x>
+        <x>588</x>
         <y>30</y>
-        <width>89</width>
-        <height>25</height>
+        <width>91</width>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>11</pointsize>
+        <pointsize>18</pointsize>
        </font>
       </property>
       <property name="focusPolicy">
@@ -7958,11 +7970,16 @@ background-color: rgb(189,223,255);
      <widget class="QPushButton" name="btn_Table_close">
       <property name="geometry">
        <rect>
-        <x>850</x>
-        <y>30</y>
-        <width>89</width>
-        <height>31</height>
+        <x>870</x>
+        <y>20</y>
+        <width>91</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>20</pointsize>
+       </font>
       </property>
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
@@ -12671,26 +12688,26 @@ border-image: url(:/picture/setbeijing.png);
     </property>
    </widget>
   </widget>
-  <zorder>widget_warn_gujian</zorder>
-  <zorder>widget_warn_man_id</zorder>
-  <zorder>widget_warn_update</zorder>
-  <zorder>widget_warn_allclean</zorder>
-  <zorder>widget_warn_ip_wrong</zorder>
   <zorder>frame_AuthorizeNo</zorder>
   <zorder>label_20</zorder>
-  <zorder>widget_warn_user_del</zorder>
-  <zorder>widget_warn_man_pw</zorder>
-  <zorder>widget_warn_inputerror</zorder>
-  <zorder>widget_warn_histclr</zorder>
-  <zorder>widget_warn_user_add</zorder>
-  <zorder>widget_warn_user_noexist</zorder>
-  <zorder>widget_warn_poweroff</zorder>
-  <zorder>widget_warn_user_pw</zorder>
   <zorder>label_2</zorder>
   <zorder>pushButton_testnetwork</zorder>
   <zorder>frame_3</zorder>
   <zorder>tabWidget_all</zorder>
   <zorder>pushButton_3</zorder>
+  <zorder>widget_warn_allclean</zorder>
+  <zorder>widget_warn_histclr</zorder>
+  <zorder>widget_warn_gujian</zorder>
+  <zorder>widget_warn_inputerror</zorder>
+  <zorder>widget_warn_ip_wrong</zorder>
+  <zorder>widget_warn_man_id</zorder>
+  <zorder>widget_warn_man_pw</zorder>
+  <zorder>widget_warn_poweroff</zorder>
+  <zorder>widget_warn_update</zorder>
+  <zorder>widget_warn_user_add</zorder>
+  <zorder>widget_warn_user_del</zorder>
+  <zorder>widget_warn_user_noexist</zorder>
+  <zorder>widget_warn_user_pw</zorder>
  </widget>
  <customwidgets>
   <customwidget>

@@ -17,17 +17,15 @@ signals:
     void Set_tangan_add_success(unsigned char add);
     void compensation_set_result(unsigned char command,unsigned char add,QString str);
 
+private:
+    void ConvertDexToIEE754(float fpointer,unsigned char *a);
+    float ConvertIEE754ToDex(unsigned char *SpModRegister);
+
 private slots:
     void Asking_Handle_YWY();
     void Data_Handle_YWY ();
     void Recving_Handle_YWY();
 };
-
-//ASCII
-#define SOH  0x01
-#define STX  0x02
-#define ETX  0x03
-#define EOH  0x04
 
 struct Display_HeightData
 {
@@ -38,6 +36,20 @@ struct Display_HeightData
     char OIL_compensation[7] = {0,0,0,0,0,0};
     char Water_compensation[7] = {0,0,0,0,0,0};
 
+    uint OIL_Height_int = 0;
+    uint Water_Height_int = 0;
+    int TEMP_Height_int_1 = 0;
+    int TEMP_Height_int_2 = 0;
+    int TEMP_Height_int_3 = 0;
+    uchar OIL_compensation_ucahr[10] = {0};
+    uchar Water_compensation_uchar[10] = {0};
+
+    float OIL_Height_float = 0;
+    float Water_Height_float = 0;
+    float TEMP_Height_float_1 = 0;
+    float TEMP_Height_float_2 = 0;
+    float TEMP_Height_float_3 = 0;
+
     QString strOIL_Height;
     QString strWater_Height;
     QString strTEMP;
@@ -45,8 +57,8 @@ struct Display_HeightData
 };
 struct Tangan_Configuration
 {
-    char OIL_compensation[30] ;
-    char Water_compensation[30] ;
+    uchar OIL_compensation[30] ;
+    uchar Water_compensation[30] ;
 };
 
 

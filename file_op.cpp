@@ -2312,8 +2312,14 @@ void StationMessageInit()
 
 /*******************************************  液位仪    **********************************************************************/
 
-void Initialization_Data(void)
+void YWY_Initialization_Data(void)
 {
+    QDir dir;
+    if(!dir.exists("/opt/configeration"))
+    {
+        dir.mkdir("/opt/configeration");
+    }
+
     Amount_OilTank_Initialization();
     Tangan_Amount_Initialization();
     config_OilTank_Set_Initialization();

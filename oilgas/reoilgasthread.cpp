@@ -114,7 +114,7 @@ void reoilgasthread::run()
 				memset(Refresh_Receivebuf,0,sizeof(char)*256);
 				//测试网络发送油枪数据是否正确
 				//network_oilgundata(DATAID_POST,"1","1","110","40","25","40","25","200");
-				if(Flag_Controller_Version == 1)//新版控制器
+				if(Flag_Controller_Version == 1)//压力表无线模式  且是新版控制器
 				{
 					Flag_ask_PreAndTem = 0;
 					msleep(200);
@@ -1026,15 +1026,15 @@ void reoilgasthread::ask_pressure()
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
 		if((Pressure_AskNum == 1)&&(Flag_TankPre_Type == 1))//油罐压力且为无线
 		{
-			msleep(1500);
+			msleep(1300);
 		}
 		else if((Pressure_AskNum == 2)&&(Flag_PipePre_Type == 1))//管线且为无线
 		{
-			msleep(1500);
+			msleep(1300);
 		}
 		else //有线
 		{
-			msleep(300);
+			msleep(200);
 		}
 		//读
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
@@ -1124,11 +1124,11 @@ void reoilgasthread::ask_fga1000()
 		write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
 		if(Flag_Gas_Type == 1) //无线模式
 		{
-			msleep(1500);
+			msleep(1300);
 		}
 		else //有线模式
 		{
-			msleep(300);
+			msleep(200);
 		}
 
 		len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
@@ -1194,7 +1194,7 @@ void reoilgasthread::ask_fga1000()
 void reoilgasthread::ask_temperature()
 {
 	unsigned char Flag_AskTem_Over = 1;
-	unsigned char SendBuff_init[8] = {0x01,0x03,0x00,0x01,0x00,0x01,0x00,0x00};
+	unsigned char SendBuff_init[8] = {0x01,0x03,0x00,0x00,0x00,0x02,0x00,0x00};
 	unsigned char RecvBuff_init[9] = {0};
 	//写  //只问一个地址0x13
 	Temperature_AskNum = 1;//只有1个温度
@@ -1202,7 +1202,7 @@ void reoilgasthread::ask_temperature()
 	{
 		if(Tem_tank_en == 1) //如果开启了
 		{
-			SendBuff_init[0] = Temperature_AskNum+0x2B; //温度地址从0x2C开始
+			SendBuff_init[0] = Temperature_AskNum+0x2B; //温度地址从0x13开始
 			unsigned int SCRC = 0;
 			SCRC = CRC_Test(SendBuff_init,8);
 			SendBuff_init[6] = (SCRC & 0xff00) >> 8;
@@ -1210,11 +1210,11 @@ void reoilgasthread::ask_temperature()
 			write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
 			if(Flag_TankTem_Type == 1) //无线模式
 			{
-				msleep(1500);
+				msleep(1300);
 			}
 			else //有线模式
 			{
-				msleep(300);
+				msleep(200);
 			}
 			len_uart_reoilgas = read(fd_uart_reoilgas,RecvBuff_init,sizeof(RecvBuff_init));
 			SCRC = CRC_Test(RecvBuff_init,len_uart_reoilgas);
@@ -1224,7 +1224,7 @@ void reoilgasthread::ask_temperature()
 				ReoilgasTemSta[Temperature_AskNum-1] = 0;
 				Flag_TemUartWrong[Temperature_AskNum-1] = 0;
 				//温度读取
-				Tem[0] = (float(RecvBuff_init[3]*256+RecvBuff_init[4]))/10;
+				Tem[0] = 0;
 				Tem[1] = 0;
 				//温度读取
 				Temperature_AskNum++;
@@ -1980,6 +1980,27 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 									 qls,qll,yls,yll,"NULL","NULL",yz,"");
 		}
 
+		if(Flag_Network_Send_Version == 7) //合肥协议，只有这一个
+		{
+			float send_al = (al.toFloat())/100;
+			if(Flag_Shield_Network == 1)//屏蔽状态
+			{
+				if((send_al<=120)&&(send_al>=100))
+				{
+					refueling_gun_data_hefei(QString::number(send_al,'f',2));
+				}
+				else
+				{
+					int al_num = qrand()%(12000-10000);//用1.0~1.2之间的随机数代替
+					float al_xiuzheng = al_num+10000;
+					refueling_gun_data_hefei(QString::number((al_xiuzheng/10000),'f',2));
+				}
+			}
+			else
+			{
+				refueling_gun_data_hefei(QString::number(send_al,'f',2));
+			}
+		}
 		if(Flag_MyServerEn == 1)  //myserver协议
 		{
 			float send_al = al.toFloat();

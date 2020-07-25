@@ -318,17 +318,15 @@ extern unsigned char Flag_MyServerEn;
 extern unsigned char Flag_WaitSync;//等待数据同步，阻断正常的问询进程，全局变量
 //液位仪 thread
 
+#define YWY_Read  0x03
+#define YWY_Write  0x06
 
-//探杆命令 读取
-#define ASK_Height   0x40
-#define ASK_TEMP     0x41
-#define ASK_average  0x42
-#define ASK_Range_KB      0x43
-#define ASK_OIL_compensation    0x44  //油面零点补偿
-#define ASK_Water_compensation  0x47  //水面零点补偿
-//探杆命令 写入
-#define Write_OIL_compensation  0x71
-#define Write_Water_compensation  0x72
+//探杆寄存器地址
+
+#define Tangan_Height_register   0x02  //高度
+#define Tangan_Address_register   0x20  //地址
+#define OIL_compensation_register    0x26  //油面零点补偿
+#define Water_compensation_register  0x28  //水面零点补偿
 
 extern float OilTank_50[300];
 extern float OilTank_40[300];
@@ -343,8 +341,6 @@ extern unsigned char Flag_Communicate_YWY_Error[20];
 extern unsigned char Ask_Tanggan[30];
 extern unsigned char Uart_Channel;
 extern unsigned char Tanggan_SET_ADD;
-extern unsigned char len_Tangan_Config_CompOIL;
-extern unsigned char len_Tangan_Config_CompWater;
 extern unsigned char Flag_alarm_off_on;
 extern unsigned char i_alarm_record[12][6];
 

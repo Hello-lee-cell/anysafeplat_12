@@ -71,9 +71,19 @@ systemset::systemset(QWidget *parent) :
 	setWindowFlags(Qt::FramelessWindowHint);
     Flag_Timeto_CloseNeeded[0] = 1;
 	move(0,85);
-    ui->tabWidget_all->setStyleSheet("QTabBar::tab{max-height:33px;min-width:80px;background-color: rgb(170,170,255,255);border: 2px solid;padding:9px;}\
+
+    ui->tabWidget_all->setTabEnabled(0,Flag_screen_zaixian);
+    ui->tabWidget_all->setTabEnabled(1,Flag_screen_xielou);
+    ui->tabWidget_all->setTabEnabled(2,Flag_screen_radar);
+    ui->tabWidget_all->setTabEnabled(3,Flag_screen_safe);
+    ui->tabWidget_all->setTabEnabled(4,Flag_screen_burngas);
+    ui->tabWidget_all->setTabEnabled(5,Flag_screen_ywy);
+
+    ui->tabWidget_all->setStyleSheet("QTabBar::tab:abled {max-height:33px;max-width:150px;background-color: rgb(170,170,255,255);border: 2px solid;padding:9px;}\
+                                     QTabBar::tab:!selected {margin-top: 0px;background-color:transparent;}\
                                      QTabBar::tab:selected {background-color: white}\
-                                     QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}");
+                                     QTabWidget::pane {border-top:0px solid #e8f3f9;background:  transparent;}\
+                                     QTabBar::tab:disabled {width: 0; height: 0; color: transparent;padding:0px;border: 0px solid}");
     touchkey = new keyboard;
 	setAttribute(Qt::WA_TranslucentBackground,true);    //窗体透明
 
@@ -509,7 +519,7 @@ systemset::systemset(QWidget *parent) :
     ui->label_compension_set_state->setHidden(1);
     ui->widget_OilTank_Table->setHidden(1);
 
-    ui->lineEdit_setadd->installEventFilter(this);
+    //ui->lineEdit_setadd->installEventFilter(this);
 
     if(Flag_alarm_off_on)  //判断报警允许位
     {
@@ -534,7 +544,6 @@ systemset::systemset(QWidget *parent) :
     {
         ui->btn_alarm_off_on->setText("报警已关闭");
     }
-
 
 
 
@@ -5672,31 +5681,31 @@ void systemset::on_comboBox_OilTank_sumset_currentIndexChanged(int index)
 
 void systemset::on_tableView_Oiltank_clicked(const QModelIndex &index)
 {
-    hang = index.row();
-    lie = index.column();
-    emit closeing_touchkey();
-    if(lie)
-    {
-        touchkey = new keyboard;
+//    hang = index.row();
+//    lie = index.column();
+//    emit closeing_touchkey();
+//    if(lie)
+//    {
+//        touchkey = new keyboard;
 
-        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
-        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Oil_Tank()));
+//        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+//        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Oil_Tank()));
 
-        if(lie ==1)
-        {
-            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Tangan_Amount(const QString&)));
-        }
-        else if(lie>1 && lie <6)
-        {
-            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_OilTank_aboutLength(const QString&)));
-        }
-        else if(lie==6)
-        {
-           connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_OilTank_table(const QString&)));
-        }
+//        if(lie ==1)
+//        {
+//            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Tangan_Amount(const QString&)));
+//        }
+//        else if(lie>1 && lie <6)
+//        {
+//            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_OilTank_aboutLength(const QString&)));
+//        }
+//        else if(lie==6)
+//        {
+//           connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_OilTank_table(const QString&)));
+//        }
 
-        touchkey->show();
-    }
+//        touchkey->show();
+//    }
 }
 
 void systemset::set_backspace_Oil_Tank()
@@ -5790,26 +5799,26 @@ void systemset::Set_OilTank_table(const QString &text)
 
 void systemset::Get_Info_ON_tableview_OilTank()
 {
-    QModelIndex index;
-    QVariant data;
+//    QModelIndex index;
+//    QVariant data;
 
-    Amount_OilTank = ui->comboBox_OilTank_sumset->currentIndex();   //探杆数量
-    for(unsigned char i = 0;i < 12;i++)    //第一列  int型
-    {
-        index = model_Oil_Tank->index(i,1);
-        data = model_Oil_Tank->data(index);
-        Tangan_Amount[i] = data.toInt();
-    }
-    for(unsigned char i = 0;i < 12;i++)    //后边  float型
-    {
-        for(unsigned char j = 0;j < 5;j++)
-        {
-            index = model_Oil_Tank->index(i,j+2);
-            data = model_Oil_Tank->data(index);
-            OilTank_Set[i][j] = data.toFloat();
-//            printf("%f    ",OilTank_Set[i][j]);fflush(stdout);
-        }
-    }
+//    Amount_OilTank = ui->comboBox_OilTank_sumset->currentIndex();   //探杆数量
+//    for(unsigned char i = 0;i < 12;i++)    //第一列  int型
+//    {
+//        index = model_Oil_Tank->index(i,1);
+//        data = model_Oil_Tank->data(index);
+//        Tangan_Amount[i] = data.toInt();
+//    }
+//    for(unsigned char i = 0;i < 12;i++)    //后边  float型
+//    {
+//        for(unsigned char j = 0;j < 5;j++)
+//        {
+//            index = model_Oil_Tank->index(i,j+2);
+//            data = model_Oil_Tank->data(index);
+//            OilTank_Set[i][j] = data.toFloat();
+////            printf("%f    ",OilTank_Set[i][j]);fflush(stdout);
+//        }
+//    }
 }
 
 void systemset::on_btn_save_OilTank_clicked()
@@ -5861,27 +5870,27 @@ void systemset::tableView_Tangan_Replay()
 
 void systemset::on_tableView_Tangan_clicked(const QModelIndex &index)
 {
-    hang = index.row();
-    lie = index.column();
-    emit closeing_touchkey();
-    if(lie)
-    {
-        touchkey = new keyboard;
+//    hang = index.row();
+//    lie = index.column();
+//    emit closeing_touchkey();
+//    if(lie)
+//    {
+//        touchkey = new keyboard;
 
-        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
-        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Tangan()));
+//        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+//        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Tangan()));
 
-        if(lie ==2)
-        {
-           connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Oil_Kind(const QString&)));
-        }
-        else if(lie == 3 || lie == 4)
-        {
-            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Tangan_aboutLength(const QString&)));
-        }
+//        if(lie ==2)
+//        {
+//           connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Oil_Kind(const QString&)));
+//        }
+//        else if(lie == 3 || lie == 4)
+//        {
+//            connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Tangan_aboutLength(const QString&)));
+//        }
 
-        touchkey->show();
-    }
+//        touchkey->show();
+//    }
 }
 
 void systemset::set_backspace_Tangan()
@@ -6032,13 +6041,13 @@ void systemset::get_compension_info()
     QModelIndex index;
     QVariant data;
 
-    for(unsigned char i = 1;i < Amount_OilTank;i++)    //后边  float型
+    for(unsigned char i = 0;i < Amount_OilTank;i++)    //后边  float型
     {
         for(unsigned char j = 0;j < 2;j++)
         {
-            index = model_Tangan->index(i-1,j+3);
+            index = model_Tangan->index(i,j+3);
             data = model_Tangan->data(index);
-            Compension[i][j] = data.toFloat();
+            Compension[i+1][j] = data.toFloat();
         }
     }
 }
@@ -6049,14 +6058,14 @@ void systemset::on_btn_save_Tangan_clicked()
     config_Oil_Kind_Write();
     closeing_touchkey();
 
+    get_compension_info();
     Uart_Channel = 11;
     i_Ask_Tanggan = 0;
     i_Tanggan_ADD = 1;
     for(unsigned char i=0;i<=Amount_OilTank;i++)
     {
         Flag_Communicate_YWY_Error[i] = 0;
-    }
-    get_compension_info();
+    }    
 }
 
 //罐表设置
@@ -6309,7 +6318,7 @@ void systemset::set_Tangan_add_success(unsigned char add)
 void systemset::display_compension(unsigned char command,unsigned char hang,float data)
 {
     hang = hang - 1;
-   if(command == ASK_OIL_compensation)
+   if(command == OIL_compensation_register)
    {
        if(data == 0)
        {
@@ -6322,7 +6331,7 @@ void systemset::display_compension(unsigned char command,unsigned char hang,floa
            model_Tangan->item(hang,3)->setTextAlignment(Qt::AlignCenter);
        }
    }
-   else if(command == ASK_Water_compensation)
+   else if(command == Water_compensation_register)
    {
        if(data == 0)
        {
@@ -6340,7 +6349,7 @@ void systemset::display_compension(unsigned char command,unsigned char hang,floa
 
 void systemset::display_compensation_set_result(unsigned char command,unsigned char add, QString str)
 {
-    if(command == ASK_OIL_compensation)
+    if(command == OIL_compensation_register)
     {
         if(str == "成功")
         {
@@ -6353,7 +6362,7 @@ void systemset::display_compensation_set_result(unsigned char command,unsigned c
             ui->label_compension_set_state->setHidden(0);
         }
     }
-    else if(command == ASK_Water_compensation)
+    else if(command == Water_compensation_register)
     {
         if(str == "成功")
         {
@@ -6371,33 +6380,8 @@ void systemset::display_compensation_set_result(unsigned char command,unsigned c
         }
     }
 /*******************************    写入油补偿      ****************************************/
-    else if(command == Write_OIL_compensation)
-    {
-        if(str == "成功")
-        {
-            ui->label_compension_set_state->setText(QString("%1#油补偿写入命令成功").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-        else if(str == "失败")
-        {
-            ui->label_compension_set_state->setText(QString("%1#油补偿写入命令失败").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-    }
-    else if(command == Write_OIL_compensation + SOH +4)
-    {
-        if(str == "成功")
-        {
-            ui->label_compension_set_state->setText(QString("%1#油补偿写入数据成功").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-        else if(str == "失败")
-        {
-            ui->label_compension_set_state->setText(QString("%1#油补偿写入数据失败").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-    }
-    else if(command == Write_OIL_compensation + STX)
+
+    else if(command == OIL_compensation_register + 3 )
     {
         if(str == "成功")
         {
@@ -6406,42 +6390,13 @@ void systemset::display_compensation_set_result(unsigned char command,unsigned c
         }
         else if(str == "失败")
         {
-            ui->label_compension_set_state->setText(QString("%1#油补偿返回验证失败").arg(add));
+            ui->label_compension_set_state->setText(QString("%1#油补偿设置失败").arg(add));
             ui->label_compension_set_state->setHidden(0);
         }
     }
 /*******************************    写入水补偿      ****************************************/
-    else if(command == Write_Water_compensation)
-    {
-        if(str == "成功")
-        {
-            ui->label_compension_set_state->setText(QString("%1#水补偿写入命令成功").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-        else if(str == "失败")
-        {
-            ui->label_compension_set_state->setText(QString("%1#水补偿写入命令失败").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-        else if(str == "完成问询")
-        {
-            ui->label_compension_set_state->setHidden(1);
-        }
-    }
-    else if(command == Write_Water_compensation + SOH + 6)
-    {
-        if(str == "成功")
-        {
-            ui->label_compension_set_state->setText(QString("%1#水补偿写入数据成功").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-        else if(str == "失败")
-        {
-            ui->label_compension_set_state->setText(QString("%1#水补偿写入数据失败").arg(add));
-            ui->label_compension_set_state->setHidden(0);
-        }
-    }
-    else if(command == Write_Water_compensation + STX)
+
+    else if(command == Water_compensation_register +4)
     {
         if(str == "成功")
         {
@@ -6450,19 +6405,11 @@ void systemset::display_compensation_set_result(unsigned char command,unsigned c
         }
         else if(str == "失败")
         {
-            ui->label_compension_set_state->setText(QString("%1#水补偿返回验证失败").arg(add));
+            ui->label_compension_set_state->setText(QString("%1#水补偿设置失败").arg(add));
             ui->label_compension_set_state->setHidden(0);
         }
     }
 }
-
-
-
-
-
-
-
-
 
 void systemset::on_btn_get_compension_clicked()
 {

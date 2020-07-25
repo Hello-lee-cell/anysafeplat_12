@@ -1,4 +1,4 @@
-#include "login.h"
+﻿#include "login.h"
 #include "ui_login.h"
 #include<QDialog>
 #include<stdio.h>       //sprintf
@@ -52,8 +52,8 @@ void login::on_pushButton_clicked()             //enter
     //密码验证
     char *username;     //提取用户输入
     char *passwd;
-	char username_temp[9] = {0};   //username 与路径合成，打开文本文件
-	char passwd_temp[7] = {0};
+    char username_temp[9] = {0};   //username 与路径合成，打开文本文件  9    7
+    char passwd_temp[7] = {0};
     unsigned char flag_right = 0;
 
     //提取输入的用户名

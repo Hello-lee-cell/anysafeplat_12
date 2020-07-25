@@ -525,7 +525,7 @@ void add_value_gunwarn_details(QString whichone,QString state)
 	{
 		gunid = QString::number(which_dis+1).append("-").append(QString::number(which_gun+1));
 	}
-	qry.prepare(QString("INSERT INTO gunwarn_details (id,time,gunid,gunnum,state) values (NULL,'%1','%2','%3','%4')").arg(current_datetime_qstr).arg(gunid).arg(Mapping_OilNo[which_dis*8+which_gun]).arg(state));
+	qry.prepare(QString("INSERT INTO gunwarn_details (id,time,gunid,gunnum,state) values (NULL,'%1','%2','%3','%4')").arg(current_datetime_qstr).arg(gunid).arg(Mapping_Show[which_dis*8+which_gun]).arg(state));
     if(!qry.exec())
     {
         qDebug()<<qry.lastError();
@@ -2036,6 +2036,7 @@ void delete_table()
 //预留  输出表格
 void output_table()
 {}
+
 
 
 //液位仪
