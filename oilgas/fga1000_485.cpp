@@ -2103,7 +2103,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 
 		if(Flag_Network_Send_Version == 0) //福建协议
 		{
-			if(id.toInt() == 0)//单次报警数据
+			if(id.toInt() == 10)//单次报警数据
 			{
 				if(sta_yg != "N")//发送油罐相关的报警
 				{
@@ -2167,7 +2167,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					}
 				}
 			}
-			if(id.toInt() == 1)//当天报警数据
+			if((id.toInt() == 1)||(id.toInt() == 0))//当天报警数据
 			{
 				/**************begin***网络报警数据*******************/
 				printf("ready send one day data !!\n");
@@ -2282,7 +2282,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 		}
 		if(Flag_Network_Send_Version == 1) //广州协议
 		{
-			if(id.toInt() == 0)//单次报警数据
+			if(id.toInt() == 10)//单次报警数据
 			{
 				if(sta_yg != "N")//发送油罐相关的报警
 				{
@@ -2346,7 +2346,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					}
 				}
 			}
-			if(id.toInt() == 1)//当天报警数据
+			if((id.toInt() == 1)||(id.toInt() == 0))//当天报警数据
 			{
 				/**************begin***网络报警数据*******************/
 				printf("ready send one day data !!\n");
@@ -2448,7 +2448,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 		}
 		if(Flag_Network_Send_Version == 2) //重庆协议
 		{
-			if(id.toInt() == 0)//单次报警数据
+			if(id.toInt() == 10)//单次报警数据
 			{
 				if(sta_yg != "N")//发送油罐相关的报警
 				{
@@ -2512,7 +2512,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					}
 				}
 			}
-			if(id.toInt() == 1)//当天报警数据
+			if((id.toInt() == 1)||(id.toInt() == 0))//当天报警数据
 			{
 				/**************begin***网络报警数据*******************/
 				printf("ready send one day data !!\n");
@@ -2587,7 +2587,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 		}
 		if(Flag_Network_Send_Version == 3) //唐山协议，与福建相同
 		{
-			if(id.toInt() == 0)//单次报警数据
+			if(id.toInt() == 10)//单次报警数据
 			{
 				if(sta_yg != "N")//发送油罐相关的报警
 				{
@@ -2651,7 +2651,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					}
 				}
 			}
-			if(id.toInt() == 1)//当天报警数据
+			if((id.toInt() == 1)||(id.toInt() == 0))//当天报警数据
 			{
 				/**************begin***网络报警数据*******************/
 				printf("ready send one day data !!\n");
@@ -2766,7 +2766,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 		}
 		if(Flag_Network_Send_Version == 4) //湖南协议，与福建类似
 		{
-			if(id.toInt() == 0)//单次报警数据
+			if(id.toInt() == 10)//单次报警数据
 			{
 				if(sta_yg != "N")//发送油罐相关的报警
 				{
@@ -2830,7 +2830,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					}
 				}
 			}
-			if(id.toInt() == 1)//当天报警数据
+			if((id.toInt() == 1)||(id.toInt() == 0))//当天报警数据
 			{
 				/**************begin***网络报警数据*******************/
 				printf("ready send one day data !!\n");
@@ -2941,13 +2941,13 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 				}
 				num_gun = 0;
 				                                    //时间、气液比、 密闭性、 液阻、油罐压力、 后处理浓度、 pv阀、  后处理启动、后处理停止、回气管
-				Send_Warndata_HuNan(DATAID_POST,"date_kong",al_post,"N", STA_YZ,STA_PVLJZT,STA_ND,STA_PVZT,"N",   "N", "N");
+				Send_Warndata_HuNan(DATAID_POST,"date_kong",al_post,STA_YGLY, STA_YZ,STA_PVLJZT,STA_ND,STA_PVZT,"N",   "N", "N");
 				/**************end***网络报警数据*******************/
 			}
 		}
 		if(Flag_Network_Send_Version == 5) //江门协议  与 唐山协议，与福建相同
 		{
-			if(id.toInt() == 0)//单次报警数据
+			if(id.toInt() == 10)//单次报警数据
 			{
 				if(sta_yg != "N")//发送油罐相关的报警
 				{
@@ -3011,7 +3011,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					}
 				}
 			}
-			if(id.toInt() == 1)//当天报警数据
+			if((id.toInt() == 1)||(id.toInt() == 0))//当天报警数据
 			{
 				/**************begin***网络报警数据*******************/
 				printf("ready send one day data !!\n");
@@ -3124,9 +3124,9 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 				/**************end***网络报警数据*******************/
 			}
 		}
-		if(Flag_Network_Send_Version == 6)
+		if(Flag_Network_Send_Version == 6)  //佛山协议
 		{
-			if(id.toInt() == 0)//单次报警数据
+			if(id.toInt() == 10)//单次报警数据
 			{
 				if(sta_yg != "N")//发送油罐相关的报警
 				{
@@ -3168,7 +3168,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
 					emit send_warninfo_foshan(DATAID_POST,"","N","N","N","N","N","N","N","N",hclzt,"N");
 				}
 			}
-			if(id.toInt() == 1)//当天报警数据
+			if((id.toInt() == 1)||(id.toInt() == 0))//当天报警数据
 			{
 				/**************begin***网络报警数据*******************/
 				printf("ready send one day data !!\n");

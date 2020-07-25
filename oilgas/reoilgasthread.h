@@ -44,6 +44,8 @@ signals:
 
 	//myserver添加
 	void refueling_gun_data_myserver(QString gun_num,QString AlvR,QString GasCur,QString GasFlow,QString FuelCur,QString FuelFlow,QString DynbPrs);
+	//isoosi合肥添加
+	void refueling_gun_data_hefei(QString al);
 
 	//同步采集器脉冲当量
 	void signal_sync_data(unsigned int idi,unsigned int idj,float oil_factor1,float gas_factor1,float oil_factor2,float gas_factor2);

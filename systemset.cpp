@@ -7,6 +7,14 @@
 #include<errno.h>
 #include<fcntl.h>
 #include<unistd.h>
+#include<net/if.h>
+//add for 检查是否能连外网
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <QTcpSocket>
+#include <qnetworkinterface.h>
 
 #include"serial.h"
 #include"mainwindow.h"
@@ -19,16 +27,8 @@
 #include"keyboard.h"
 #include"database_op.h"
 #include "station_message.h"
-//************radar*********/
 #include"radar_485.h"
 #include"safty/security.h"
-//add for 检查是否能连外网
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <QTcpSocket>
-#include <qnetworkinterface.h>
 #include "oilgas/fga1000_485.h"
 
 
@@ -53,15 +53,14 @@ unsigned char flag_hide_red = 1;
 //**************added for radar*************/<-
 unsigned int ip[4];        //四位ip地址中的每一位
 char IP_DES[32] = {0};   //系统设置地址 system所需的字符串
-
 unsigned char flag_mythread_temp = 0;   //一次写入，每个选项的检测
-
 unsigned char Mapping[96] = {0};//加油枪编号映射数组，全局变量yignshe，用于数据上传编号
 QString Mapping_Show[96] = {""};//加油枪编号映射数组，全局变量yignshe,用于显示
 QString Mapping_OilNo[96] = {""};//加油枪油品号映射数组，全局变量yingshe，用于显示抢的油品号
 //post添加
 unsigned char flag_post_Configuration = 0;//如果置1，则在设置退出时上传油气回收设置信息
-
+//授权相关
+unsigned char Flag_IfAuthorize = 0;//是否授权
 systemset::systemset(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::systemset)
@@ -596,6 +595,7 @@ systemset::systemset(QWidget *parent) :
 
 
     //其他
+	systemset_AuthorizeCancel_and_show();//授权相关显示
     on_tabWidget_all_currentChanged(0);
 	ui->comboBox_Controller_Version->setCurrentIndex(Flag_Controller_Version);
 	ui->comboBox_TankPre_type->setCurrentIndex(Flag_TankPre_Type);
@@ -622,17 +622,115 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 	//index = 4     可燃气体
 	//index = 5     网络设置
     //index = 6     其他设置：用户管理  升级 时间设置
-    emit closeing_touchkey();
-	if(index == 1)
-    {
+	//emit closeing_touchkey();
+	if(index == 0) //post添加
+	{
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_zaixian == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
+		//post
+		flag_post_Configuration = 1;
+		printf("we will send oilgun set to webservice!!\n");
+		ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
+		if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//带屏版本的采集器才有这个一键同步的功能
+		{
+			ui->pushButton_sync->setHidden(0);
+		}
+		else
+		{
+			ui->pushButton_sync->setHidden(1);
+		}
+		ui->comboBox_pressure_transmitters_mode_mode->setCurrentIndex(Flag_Pressure_Transmitters_Mode);
+		if(Flag_Reoilgas_NeverShow == 0)
+		{
+			ui->toolButton_pop_show->setText("已开启");
+		}
+		if(Flag_Reoilgas_NeverShow == 1)
+		{
+			ui->toolButton_pop_show->setText("点击开启");
+		}
+		//关枪使能
+		if(Flag_Gun_off == 0)
+		{
+			ui->toolButton_gun_off_guanbi->setEnabled(0);
+			ui->toolButton_gun_off_guanbi->setText("已关闭");
+			ui->toolButton_gun_off_kaiqi->setEnabled(1);
+			ui->toolButton_gun_off_kaiqi->setText("点击开启");
+		}
+		if(Flag_Gun_off == 1)
+		{
+			ui->toolButton_gun_off_guanbi->setEnabled(1);
+			ui->toolButton_gun_off_guanbi->setText("点击关闭");
+			ui->toolButton_gun_off_kaiqi->setEnabled(0);
+			ui->toolButton_gun_off_kaiqi->setText("已开启");
+		}
 
+	}
+	if(index == 1)
+	{
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_xielou == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(1);
+		}
     }
 	if(index == 2)
     {
-
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_radar == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
     }
 	if(index == 3)
     {
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_safe == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
 		ui->comboBox_valuenum->setCurrentIndex(IIE_Value_Num);
 
 		if(IIE_SetModel_Time == 0x05){ui->comboBox_wenyou_time->setCurrentIndex(0);}
@@ -650,53 +748,30 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 	}
 	if(index == 4)
     {
+		if(Flag_IfAuthorize)
+		{
+			if(Flag_screen_burngas == 0)
+			{
+				ui->frame_AuthorizeNo->setHidden(0);
+			}
+			else
+			{
+				ui->frame_AuthorizeNo->setHidden(1);
+			}
+		}
+		else
+		{
+			ui->frame_AuthorizeNo->setHidden(0);
+		}
         //可燃气体数量初始化
         ui->comboBox_burngas->setStyleSheet("QScrollBar{ background: #F0F0F0; width:20px ;margin-top:0px;margin-bottom:0px }"
                                     "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:18px }");
         ui->comboBox_burngas->setCurrentIndex(Num_Fga-2);
     }
-	if(index == 0) //post添加
-    {
-        //post
-        flag_post_Configuration = 1;
-        printf("we will send oilgun set to webservice!!\n");
-        ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
-		if((Flag_Reoilgas_Version == 4)||(Flag_Reoilgas_Version == 5))//带屏版本的采集器才有这个一键同步的功能
-		{
-			ui->pushButton_sync->setHidden(0);
-		}
-		else
-		{
-			ui->pushButton_sync->setHidden(1);
-		}
-        ui->comboBox_pressure_transmitters_mode_mode->setCurrentIndex(Flag_Pressure_Transmitters_Mode);
-        if(Flag_Reoilgas_NeverShow == 0)
-        {
-            ui->toolButton_pop_show->setText("已开启");
-        }
-		if(Flag_Reoilgas_NeverShow == 1)
-        {
-            ui->toolButton_pop_show->setText("点击开启");
-        }
-        //关枪使能
-        if(Flag_Gun_off == 0)
-        {
-            ui->toolButton_gun_off_guanbi->setEnabled(0);
-            ui->toolButton_gun_off_guanbi->setText("已关闭");
-            ui->toolButton_gun_off_kaiqi->setEnabled(1);
-            ui->toolButton_gun_off_kaiqi->setText("点击开启");
-        }
-        if(Flag_Gun_off == 1)
-        {
-            ui->toolButton_gun_off_guanbi->setEnabled(1);
-            ui->toolButton_gun_off_guanbi->setText("点击关闭");
-            ui->toolButton_gun_off_kaiqi->setEnabled(0);
-            ui->toolButton_gun_off_kaiqi->setText("已开启");
-        }
-
-    }
     if(index == 5)
     {
+		ui->frame_AuthorizeNo->setHidden(1);
+
 		char IP[32] = {0};
 		get_local_ip(if_name,IP);
 		ui->label_14->setText(IP);
@@ -888,6 +963,9 @@ void systemset::on_tabWidget_all_currentChanged(int index)
     }
     if(index == 6)
     {
+		ui->frame_AuthorizeNo->setHidden(1);
+		ui->widget_Authorize->setHidden(1);//授权界面不显示
+
         ui->textBrowser->clear();
         unsigned char i = 0;
         QString Line[20];
@@ -971,7 +1049,6 @@ void systemset::on_tabWidget_all_currentChanged(int index)
         {
             ui->toolButton_screen_cc->setText("已开启");
         }
-
     }
 }
 
@@ -2412,6 +2489,7 @@ void systemset::whoareyou_userset(unsigned char t)         //判断为非管理�
         ui->pushButton_shield_network->setHidden(1);//网络上传报警数据修正
         ui->toolButton_isoosi_pb->setHidden(1);
         ui->widget_alset->setHidden(1);//气液比相关设置
+		ui->frame_WindowHideSet->setHidden(1);//界面开启关闭
     }
     if(t == 2)
     {
@@ -2422,6 +2500,7 @@ void systemset::whoareyou_userset(unsigned char t)         //判断为非管理�
         ui->pushButton_shield_network->setHidden(1);//网络上传报警数据修正
         ui->toolButton_isoosi_pb->setHidden(1);
         ui->widget_alset->setHidden(1);//气液比相关设置
+		ui->frame_WindowHideSet->setHidden(1);//界面开启关闭
     }
     if(t == 3)
     {
@@ -2430,6 +2509,26 @@ void systemset::whoareyou_userset(unsigned char t)         //判断为非管理�
         ui->pushButton_shield_network->setHidden(0);//网络上传报警数据修正
         ui->toolButton_isoosi_pb->setHidden(0);
         ui->widget_alset->setHidden(0);//气液比相关设置
+		ui->frame_WindowHideSet->setHidden(0);//界面开启关闭
+		if(Flag_IfAuthorize)//如果已经授权
+		{
+			ui->toolButton_screen_burngas->setEnabled(1);
+			ui->toolButton_screen_cc->setEnabled(1);
+			ui->toolButton_screen_radar->setEnabled(1);
+			ui->toolButton_screen_safe->setEnabled(1);
+			ui->toolButton_screen_xielou->setEnabled(1);
+			ui->toolButton_screen_zaixian->setEnabled(1);
+		}
+		else
+		{
+			ui->toolButton_screen_burngas->setEnabled(0);
+			ui->toolButton_screen_cc->setEnabled(0);
+			ui->toolButton_screen_radar->setEnabled(0);
+			ui->toolButton_screen_safe->setEnabled(0);
+			ui->toolButton_screen_xielou->setEnabled(0);
+			ui->toolButton_screen_zaixian->setEnabled(0);
+		}
+
     }
 }
 void systemset::dispset_for_managerid(const QString &text)
@@ -5216,6 +5315,114 @@ void systemset::sync_factor_data(unsigned int idi,unsigned int idj,float oil_fac
 	emit signal_sync_factor_data(idi,idj,oil_factor1,gas_factor1,oil_factor2,gas_factor2);
 }
 
+//****************授权相关***********************
+void systemset::on_pushButton_Authorize_clicked()
+{
+	int MacID = 0;
+	int MacNum1 = 0;
+	int MacNum2 = 0;
+	int MacNum3 = 0;
+	//获取mac地址
+	QFile devicd_id("/sys/class/net/eth1/address");
+	if(!devicd_id.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		printf("read device MAC file\n");
+	}
+	QTextStream in(&devicd_id);
+	QString line_id;
+	line_id = in.readLine();
+//    QByteArray read_id = line.toLatin1();
+//    char *read_id_data = read_id;
+	devicd_id.close();
+	//获取mac地址
+	MacNum1 = line_id.section(QRegExp(":"), 3, 3).toInt(0,16);
+	MacNum2 = line_id.section(QRegExp(":"), 4, 4).toInt(0,16);
+	MacNum3 = line_id.section(QRegExp(":"), 5, 5).toInt(0,16);
+	qDebug()<<line_id<<MacNum1<<MacNum2<<MacNum3;
+	MacID = MacNum1*65536+MacNum2*256+MacNum3;
+	ui->widget_Authorize->setHidden(0);
+	ui->label_AuthorizeMessage->setText("");
+	ui->label_AuthorizeID->setText(QString::number(MacID));
+}
+void systemset::on_pushButton_AuthorizeConfirm_clicked()
+{
+	int AuthorizeMacId = 0;
+	int AuthorizeEnter = 0;//输入授权码
+	int enter1 = 0,enter2 = 0,enter3 = 0;
+	int MacNum1 = 0,MacNum2 = 0,MacNum3 = 0;
+	AuthorizeMacId = (ui->label_AuthorizeID->text()).toInt();
+	MacNum1 = AuthorizeMacId/65536;
+	MacNum2 = (AuthorizeMacId-MacNum1*65536)/256;
+	MacNum3 = AuthorizeMacId % 256;
+	AuthorizeEnter = (ui->lineEdit_AuthorizeNum->text()).toInt();
+	enter1 = AuthorizeEnter/65536;
+	enter2 = (AuthorizeEnter-enter1*65536)/256;
+	enter3 = AuthorizeEnter % 256;
+
+	qDebug()<<MacNum1<<MacNum2<<MacNum3;
+	qDebug()<<enter1<<enter2<<enter3;
+
+	if((enter1 == MacNum2)&&(enter2 == MacNum3)&&(enter3 == MacNum1))
+	{
+		qDebug()<<"ji huo cheng gong############\n";
+		ui->label_AuthorizeMessage->setText("授权成功！");
+		system("touch /opt/shouquan");
+		system("sync");
+		Flag_IfAuthorize = 1;
+	}
+	else
+	{
+		ui->label_AuthorizeMessage->setText("授权失败！");
+		system("rm /opt/shouquan");
+		system("sync");
+		Flag_IfAuthorize = 0;
+	}
+	systemset_AuthorizeCancel_and_show();
+}
+void systemset::on_pushButton_AuthorizeCancel_clicked()
+{
+	ui->widget_Authorize->setHidden(1);
+}
+void systemset::systemset_AuthorizeCancel_and_show()
+{
+	//判断授权文件是否存在
+	QFile if_file("/opt/shouquan");
+	if(if_file.exists())
+	{
+		ui->frame_WindowHideSet->setHidden(0);
+		ui->comboBox->setEnabled(1);
+		ui->comboBox_2->setEnabled(1);
+		ui->comboBox_3->setEnabled(1);
+
+		//隐藏提示授权界面
+		ui->toolButton_screen_burngas->setEnabled(1);
+		ui->toolButton_screen_cc->setEnabled(1);
+		ui->toolButton_screen_radar->setEnabled(1);
+		ui->toolButton_screen_safe->setEnabled(1);
+		ui->toolButton_screen_xielou->setEnabled(1);
+		ui->toolButton_screen_zaixian->setEnabled(1);
+
+		Flag_IfAuthorize = 1;
+	}
+	else
+	{
+		ui->comboBox->setEnabled(0);
+		ui->comboBox_2->setEnabled(0);
+		ui->comboBox_3->setEnabled(0);
+
+		//显示提示授权界面 由当前是哪一页决定
+		ui->toolButton_screen_burngas->setEnabled(0);
+		ui->toolButton_screen_cc->setEnabled(0);
+		ui->toolButton_screen_radar->setEnabled(0);
+		ui->toolButton_screen_safe->setEnabled(0);
+		ui->toolButton_screen_xielou->setEnabled(0);
+		ui->toolButton_screen_zaixian->setEnabled(0);
+
+		Flag_IfAuthorize = 0;
+	}
+}
+//****************授权相关***********************
+
 /************配置信息网络上传*****************
  * id     没有用
  * jyqs   加油枪数量
@@ -5289,3 +5496,5 @@ void systemset::on_pushButton_testnetwork_clicked()
 {
 	Flag_MyserverFirstSend = 1;
 }
+
+

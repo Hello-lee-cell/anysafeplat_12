@@ -289,6 +289,31 @@ void net_isoosi_hefei::send_surround_message(QString YGYL,QString YZYL,QString Y
 	send_tcpclient_data(data);
 
 }
+/************发送加油信息************
+ * al  气液比
+ * ********************************/
+void net_isoosi_hefei::send_gundata(QString al)
+{
+	QString dataSegment = "";
+	QString MN = "34012131UZAL01";
+	QString PW = "123456";
+	MN = IsoOis_MN;
+	PW = IsoOis_PW;
+
+	QStringList contaminantLists;
+	contaminantLists.append("Wq4");//气液比
+	QStringList dataNums;
+	QString wq4 = al;
+	dataNums.append(wq4);//气液比
+	//构建数据区信息
+	QString dataArea = buildRealtimeData(contaminantLists,"Rtd",dataNums);
+	//构建数据段信息
+	dataSegment = buildUploadDataSegment("31","2011",MN,PW,dataArea);
+
+	//构建通用完整信息
+	QString data = buildNormalMsg(dataSegment);
+   send_tcpclient_data(data);
+}
 //构建##长度CRC等，最后和数据表拼接成完整信息，需要传入经过buildDataSegment()后的内容
 QString net_isoosi_hefei::buildNormalMsg(QString preMsg){
 	QDateTime dateTime = QDateTime::currentDateTime();

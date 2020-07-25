@@ -9301,7 +9301,7 @@ background-color: rgb(189,223,255);
     <widget class="QScrollArea" name="scrollArea_other">
      <property name="geometry">
       <rect>
-       <x>-1</x>
+       <x>0</x>
        <y>-1</y>
        <width>951</width>
        <height>511</height>
@@ -10727,6 +10727,61 @@ background-color: rgb(189,223,255);
          <string>时</string>
         </property>
        </widget>
+       <widget class="QToolButton" name="pushButton_Authorize">
+        <property name="geometry">
+         <rect>
+          <x>310</x>
+          <y>10</y>
+          <width>91</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="palette">
+         <palette>
+          <active>
+           <colorrole role="ButtonText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>239</red>
+              <green>41</green>
+              <blue>41</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </active>
+          <inactive>
+           <colorrole role="ButtonText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>239</red>
+              <green>41</green>
+              <blue>41</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </inactive>
+          <disabled>
+           <colorrole role="ButtonText">
+            <brush brushstyle="SolidPattern">
+             <color alpha="255">
+              <red>190</red>
+              <green>190</green>
+              <blue>190</blue>
+             </color>
+            </brush>
+           </colorrole>
+          </disabled>
+         </palette>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>软件授权</string>
+        </property>
+       </widget>
       </widget>
       <widget class="QFrame" name="frame_user_guanli">
        <property name="geometry">
@@ -11397,7 +11452,7 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </widget>
-      <widget class="QFrame" name="frame_14">
+      <widget class="QFrame" name="frame_WindowHideSet">
        <property name="geometry">
         <rect>
          <x>490</x>
@@ -11730,6 +11785,153 @@ p, li { white-space: pre-wrap; }
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="widget_Authorize" native="true">
+       <property name="geometry">
+        <rect>
+         <x>310</x>
+         <y>90</y>
+         <width>421</width>
+         <height>291</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#widget_Authorize
+{
+border-image: url(:/picture/window.png);
+}</string>
+       </property>
+       <widget class="QLabel" name="label_162">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>100</y>
+          <width>67</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>本机ID:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_163">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>140</y>
+          <width>67</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>授权码:</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_AuthorizeMessage">
+        <property name="geometry">
+         <rect>
+          <x>80</x>
+          <y>180</y>
+          <width>261</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>13</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>message</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_165">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>10</y>
+          <width>67</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#ffffff;&quot;&gt;软件授权&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_AuthorizeConfirm">
+        <property name="geometry">
+         <rect>
+          <x>70</x>
+          <y>210</y>
+          <width>89</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>确认</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_AuthorizeCancel">
+        <property name="geometry">
+         <rect>
+          <x>250</x>
+          <y>210</y>
+          <width>89</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>取消</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_AuthorizeID">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>100</y>
+          <width>151</width>
+          <height>17</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_AuthorizeNum">
+        <property name="geometry">
+         <rect>
+          <x>170</x>
+          <y>140</y>
+          <width>141</width>
+          <height>25</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_AuthorizeMessage_2">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>50</y>
+          <width>311</width>
+          <height>41</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>授权成功后若再次授权并失败，则会取消该软件的授权，谨慎操作！ </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </widget>
    </widget>
@@ -11953,7 +12155,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QPushButton" name="pushButton_testnetwork">
    <property name="geometry">
     <rect>
-     <x>1040</x>
+     <x>1030</x>
      <y>100</y>
      <width>89</width>
      <height>131</height>
@@ -11962,6 +12164,49 @@ p, li { white-space: pre-wrap; }
    <property name="text">
     <string>N</string>
    </property>
+  </widget>
+  <widget class="QFrame" name="frame_AuthorizeNo">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>50</y>
+     <width>1031</width>
+     <height>581</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#frame_AuthorizeNo
+{
+border-image: url(:/picture/setbeijing.png);
+}</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <widget class="QLabel" name="label_164">
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>210</y>
+      <width>891</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>当前软件未授权或功能未开启，若需使用该功能，请联系售后人员进行授权或开启该功能。</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <zorder>label_20</zorder>
   <zorder>tabWidget_all</zorder>
@@ -11976,12 +12221,13 @@ p, li { white-space: pre-wrap; }
   <zorder>widget_warn_gujian</zorder>
   <zorder>widget_warn_man_id</zorder>
   <zorder>widget_warn_update</zorder>
-  <zorder>frame_3</zorder>
   <zorder>pushButton_3</zorder>
   <zorder>label_2</zorder>
   <zorder>widget_warn_allclean</zorder>
   <zorder>widget_warn_ip_wrong</zorder>
   <zorder>pushButton_testnetwork</zorder>
+  <zorder>frame_3</zorder>
+  <zorder>frame_AuthorizeNo</zorder>
  </widget>
  <customwidgets>
   <customwidget>

@@ -1677,6 +1677,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	//isoosi添加重庆 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_cq(QString,QString,QString,QString,QString,QString,QString,QString,QString)),thread_isoosi_cq,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
+	//isoosi合肥添加
+	connect(uart_reoilgas,SIGNAL(refueling_gun_data_hefei(QString)),thread_isoosi_hefei,SLOT(send_gundata(QString)));
 	//myserver添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_myserver(QString,QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 

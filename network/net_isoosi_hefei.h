@@ -25,6 +25,7 @@ private:
 	void client_keep_ali(int sockfd);
 private slots:
 	void send_surround_message(QString YGYL,QString YZYL,QString YQWD);
+	void send_gundata(QString al);
 
 };
 

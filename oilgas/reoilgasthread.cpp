@@ -1952,7 +1952,7 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 		}
 		if(Flag_Network_Send_Version == 4) //湖南协议，与福建相同
 		{
-			emit Send_Oilgundata_HuNan(DATAID_POST,"date_kong",jyjid,jyqid,al,qls,qll,yls,yll,"NULL","NULL",yz);
+			emit Send_Oilgundata_HuNan(DATAID_POST,"date_kong",jyjid,jyqid,QString::number((al.toFloat()/100),'f',2),qls,qll,yls,yll,"NULL","NULL",yz);
 		}
 		if(Flag_Network_Send_Version == 5) //江门协议 与唐山协议，与福建相同
 		{
@@ -1980,6 +1980,27 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 									 qls,qll,yls,yll,"NULL","NULL",yz,"");
 		}
 
+		if(Flag_Network_Send_Version == 7) //合肥协议，只有这一个
+		{
+			float send_al = (al.toFloat())/100;
+			if(Flag_Shield_Network == 1)//屏蔽状态
+			{
+				if((send_al<=120)&&(send_al>=100))
+				{
+					refueling_gun_data_hefei(QString::number(send_al,'f',2));
+				}
+				else
+				{
+					int al_num = qrand()%(12000-10000);//用1.0~1.2之间的随机数代替
+					float al_xiuzheng = al_num+10000;
+					refueling_gun_data_hefei(QString::number((al_xiuzheng/10000),'f',2));
+				}
+			}
+			else
+			{
+				refueling_gun_data_hefei(QString::number(send_al,'f',2));
+			}
+		}
 		if(Flag_MyServerEn == 1)  //myserver协议
 		{
 			float send_al = al.toFloat();

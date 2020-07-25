@@ -34,6 +34,8 @@ private:
     QStandardItemModel *model_yingshe;
     bool IPLive(QString ip, int port);
 	void radar_area_set();
+
+	void systemset_AuthorizeCancel_and_show();
 private slots:
     bool eventFilter(QObject *, QEvent *);
 
@@ -501,6 +503,12 @@ private slots:
 	void on_pushButton_StationInfo_clicked();
 
 	void on_pushButton_testnetwork_clicked();
+
+	void on_pushButton_Authorize_clicked();
+
+	void on_pushButton_AuthorizeConfirm_clicked();
+
+	void on_pushButton_AuthorizeCancel_clicked();
 
 signals:
 

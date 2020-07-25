@@ -285,7 +285,7 @@ void post_webservice_hunan::Send_Oilgundata_HuNan(QString id,QString data,QStrin
 	{
 		if(Flag_Shield_Network == 1)//如果处在屏蔽状态
 		{
-			if((al.toFloat() <= 120)&&(al.toFloat() >= 100))//如果气液比合格正常上传
+			if((al.toFloat() <= 1.2)&&(al.toFloat() >= 1))//如果气液比合格正常上传
 			{
 				TYPE_POST_HUNAN = "03";
 				//获取当前时间，数据上传需要
@@ -305,7 +305,7 @@ void post_webservice_hunan::Send_Oilgundata_HuNan(QString id,QString data,QStrin
 				int al_num = qrand()%(120-100);//用1.0~1.2之间的随机数代替
 				float al_xiuzheng = al_num+100;
 				//qDebug()<<num+min;
-				al = QString::number(al_xiuzheng,'f',1);
+				al = QString::number(al_xiuzheng/100,'f',2);
 				qls = QString::number( yls.toFloat()*al_xiuzheng/100,'f',1);
 				qll = QString::number( yll.toFloat()*al_xiuzheng/100,'f',1); //对气体流速和流量进行修正
 

@@ -78,7 +78,7 @@ void creat_table()
     qry.prepare("CREATE TABLE IF NOT EXISTS history_crash (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),state VARCHAR(30)) ");
     qry.exec();
     //加油枪报警详情    表
-    qry.prepare("CREATE TABLE IF NOT EXISTS gunwarn_details (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),gunid VARCHAR(30),gunnum VARCHAR(30),state VARCHAR(30)) ");
+	qry.prepare("CREATE TABLE IF NOT EXISTS gunwarn_details (id INTEGER PRIMARY KEY AUTOINCREMENT,time VARCHAR(30),gunid VARCHAR(30),gunnum VARCHAR(30),state VARCHAR(100)) ");
     qry.exec();
 }
 
@@ -519,7 +519,7 @@ void add_value_gunwarn_details(QString whichone,QString state)
 	{
 		gunid = QString::number(which_dis+1).append("-").append(QString::number(which_gun+1));
 	}
-	qry.prepare(QString("INSERT INTO gunwarn_details (id,time,gunid,gunnum,state) values (NULL,'%1','%2','%3','%4')").arg(current_datetime_qstr).arg(gunid).arg(Mapping_OilNo[which_dis*8+which_gun]).arg(state));
+	qry.prepare(QString("INSERT INTO gunwarn_details (id,time,gunid,gunnum,state) values (NULL,'%1','%2','%3','%4')").arg(current_datetime_qstr).arg(gunid).arg(Mapping_Show[which_dis*8+which_gun]).arg(state));
     if(!qry.exec())
     {
         qDebug()<<qry.lastError();
