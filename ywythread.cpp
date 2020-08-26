@@ -21,9 +21,9 @@
 #include "mainwindow.h"
 
 #include "ywythread.h"
-#include"config.h"
 #include"file_op.h"
 #include"database_op.h"
+#include"ywy_yfy.h"
 
 int fd_uart_ywy;
 int len_uart_ywy, ret_uart_ywy;
@@ -81,7 +81,7 @@ void ywythread:: Data_Handle_YWY()
                         Flag_Communicate_YWY_Error[i_Tanggan_ADD] = 0;
                         if(i_alarm_record[i_Tanggan_ADD][0])
                         {
-                            emit Send_alarm_info(Tanggan_ADD[i_Tanggan_ADD],6);
+                            emit Send_alarm_info(i_Tanggan_ADD,6);
                             i_alarm_record[i_Tanggan_ADD][0] = 0;
                             add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"通讯正常");
                         }
@@ -113,6 +113,11 @@ void ywythread:: Data_Handle_YWY()
                         Dis_HeightData.strWater_Height   = QString::number(Dis_HeightData.Water_Height_float, 'f', 1);
                         Dis_HeightData.strTEMP           = QString::number(Dis_HeightData.TEMP_Height_float_1, 'f', 1);
 
+                        //云飞扬上传相关
+                        Reply_Data_OT[i_Tanggan_ADD][4].f = Dis_HeightData.OIL_Height_float;
+                        Reply_Data_OT[i_Tanggan_ADD][5].f = Dis_HeightData.Water_Height_float;
+                        Reply_Data_OT[i_Tanggan_ADD][6].f = Dis_HeightData.TEMP_Height_float_1;
+
                         //故障判断  报警判断   优先级 浮子故障 > 液位报警 >温度传感器故障
                         if(Flag_alarm_off_on)
                         {
@@ -127,7 +132,7 @@ void ywythread:: Data_Handle_YWY()
                                 if(i_alarm_record[i_Tanggan_ADD][4])
                                 {
                                     i_alarm_record[i_Tanggan_ADD][4] = 0;
-                                    emit Send_alarm_info(Tanggan_ADD[i_Tanggan_ADD],6);
+                                    emit Send_alarm_info(i_Tanggan_ADD,6);
                                     add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"温度传感器正常");
                                 }
                             }
@@ -139,6 +144,7 @@ void ywythread:: Data_Handle_YWY()
                                     emit Send_alarm_info(Ask_Tanggan[0],1);
                                     i_alarm_record[i_Tanggan_ADD][1] = 1;
                                     add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"油位过高");
+
                                 }
                             }
                             else if(Dis_HeightData.strOIL_Height.toFloat()   < OilTank_Set[i_Tanggan_ADD-1][2])
@@ -157,7 +163,7 @@ void ywythread:: Data_Handle_YWY()
                                     i_alarm_record[i_Tanggan_ADD][1] = 0;
                                     i_alarm_record[i_Tanggan_ADD][2] = 0;
                                     add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"油位正常");
-                                    emit Send_alarm_info(Tanggan_ADD[i_Tanggan_ADD],6);
+                                    emit Send_alarm_info(i_Tanggan_ADD,6);
                                 }
                             }
 
@@ -168,6 +174,7 @@ void ywythread:: Data_Handle_YWY()
                                     emit Send_alarm_info(Ask_Tanggan[0],5);
                                     i_alarm_record[i_Tanggan_ADD][5] = 1;
                                     add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"水位过高");
+                                    printf("%d  %f  %f \n",i_Tanggan_ADD,Dis_HeightData.strWater_Height.toFloat(),OilTank_Set[i_Tanggan_ADD-1][1]);fflush(stdout);
                                 }
                             }
                             else
@@ -176,28 +183,29 @@ void ywythread:: Data_Handle_YWY()
                                 {
                                     i_alarm_record[i_Tanggan_ADD][5] = 0;
                                     add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"水位正常");
-                                    emit Send_alarm_info(Tanggan_ADD[i_Tanggan_ADD],6);
+                                    emit Send_alarm_info(i_Tanggan_ADD,6);
+                                    printf("%d  %f  %f \n",i_Tanggan_ADD,Dis_HeightData.strWater_Height.toFloat(),OilTank_Set[i_Tanggan_ADD-1][1]);fflush(stdout);
                                 }
                             }
 
-                            if(Dis_HeightData.strOIL_Height == "E505" || Dis_HeightData.strWater_Height == "E505")
-                            {
-                                if(i_alarm_record[i_Tanggan_ADD][3] == 0)
-                                {
-                                    emit Send_alarm_info(Ask_Tanggan[0],3);
-                                    i_alarm_record[i_Tanggan_ADD][3] = 1;
-                                    add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"浮子故障");
-                                }
-                            }
-                            else
-                            {
-                                if(i_alarm_record[i_Tanggan_ADD][3])
-                                {
-                                    i_alarm_record[i_Tanggan_ADD][3] = 0;
-                                    add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"浮子正常");
-                                    emit Send_alarm_info(Tanggan_ADD[i_Tanggan_ADD],6);
-                                }
-                            }
+//                            if(Dis_HeightData.strOIL_Height == "E505" || Dis_HeightData.strWater_Height == "E505")
+//                            {
+//                                if(i_alarm_record[i_Tanggan_ADD][3] == 0)
+//                                {
+//                                    emit Send_alarm_info(Ask_Tanggan[0],3);
+//                                    i_alarm_record[i_Tanggan_ADD][3] = 1;
+//                                    add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"浮子故障");
+//                                }
+//                            }
+//                            else
+//                            {
+//                                if(i_alarm_record[i_Tanggan_ADD][3])
+//                                {
+//                                    i_alarm_record[i_Tanggan_ADD][3] = 0;
+//                                    add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"浮子正常");
+//                                    emit Send_alarm_info(Tanggan_ADD[i_Tanggan_ADD],6);
+//                                }
+//                            }
                         }
 
 
@@ -400,7 +408,7 @@ void ywythread:: Asking_Handle_YWY()
                        Flag_Communicate_YWY_Error[i] = 0;
                        if(i_alarm_record[i][0] == 0)
                        {
-                           emit Send_alarm_info(Tanggan_ADD[i],0);
+                           emit Send_alarm_info(i,0);
                            i_alarm_record[i][0] = 1;
                            add_yeweiyi_alarminfo(QString("%1 #罐").arg(i),"通讯故障");
                        }
@@ -766,7 +774,7 @@ void ywythread::run()
     ret_uart_ywy = set_port_attr (fd_uart_ywy,B9600,8,"1",'E',0,0);   //9600波特率 数据位8位 停止位1位 偶校验
     if (ret_uart_ywy<0)
     {
-           printf("set uart TTYMXC1 FAILED \n");
+           printf("set uart TTYMXC4 FAILED \n");
     }
 
     sleep(1);

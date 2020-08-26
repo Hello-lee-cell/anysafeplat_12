@@ -358,7 +358,7 @@ void add_value_netinfo(QString state)
     }
     else
     {
-        qDebug("Data Inserted!");
+        qDebug("netinfo Data Inserted!");
     }
 }
 //表：   history_radarinfo雷达记录
@@ -2055,7 +2055,7 @@ void add_yeweiyi_alarminfo(QString whichone, QString state)
     }
     else
     {
-        qDebug("Data Inserted!");
+        qDebug(" 10 Data Inserted!");
     }
 }
 

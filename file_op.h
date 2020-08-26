@@ -109,5 +109,6 @@ void config_Oil_Kind_Write();
 void config_OilTank_Table_Initialization(void);
 void config_OilTank_Table_Write();
 void config_OilTank_Table_Clear();
+
 #endif // FILE_OP_H
 

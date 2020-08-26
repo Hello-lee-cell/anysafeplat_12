@@ -1,4 +1,4 @@
-#ifndef FGA1000_485_H
+﻿#ifndef FGA1000_485_H
 #define FGA1000_485_H
 
 #include <QThread>
@@ -73,6 +73,14 @@ signals:
 	void Send_Wrongsdata_HuNan(QString id,QString type);       //发送故障数据报文
 	void Send_Closegunsdata_HuNan(QString id,QString jyjid,QString jyqid,QString operate,QString event);       //发送关枪数据报文
 	void Send_Stagundata_HuNan(QString id,QString status);      //发送油枪状态报文
+
+    void Send_Warndata_dg(QString id,QString al,QString mb,QString yz,QString ygyl,QString ygly,QString pvzt,QString pvljzt,QString hclzt,QString hclnd,QString xyhqg); //发送报警数据报文
+                       //(QString id,QString al,QString mb,QString yz,             QString ygly,QString pvzt,QString pvljzt,QString hclzt);
+    void Send_Surroundingsdata_dg(QString id,QString ygyl,QString yzyl,QString yqkj,QString xnd,QString hclnd,QString yqwd);    //发送环境数据报文
+    void Send_Wrongsdata_dg(QString id,QString type);       //发送故障数据报文
+    void Send_Stagundata_dg(QString id,QString status);      //发送油枪状态报文
+    void Send_Closegunsdata_dg(QString id,QString jyjid,QString jyqid,QString operate,QString event);//关枪数据
+    void Send_Configurationdata_dg(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString yzqh);   //发送配置数据报文,每天一次的那种
 	//佛山
 	void send_setinfo_foshan(QString DataId,QString Date,QString JYQS,QString PVZ,QString PVF,
 						 QString HCLK,QString HCLT,QString YZQH);

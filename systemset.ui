@@ -975,7 +975,7 @@
     </font>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_2">
     <attribute name="title">
@@ -8040,7 +8040,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
+        <y>-37</y>
         <width>945</width>
         <height>1000</height>
        </rect>
@@ -8065,6 +8065,12 @@ background-color: rgb(189,223,255);
          <width>411</width>
          <height>331</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#frame_ip
+{
+background-color: rgb(114, 159, 207);
+}</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
@@ -8366,6 +8372,12 @@ background-color: rgb(189,223,255);
          <width>461</width>
          <height>331</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#frame_fujian
+{
+background-color: rgb(114, 159, 207);
+}</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
@@ -8776,6 +8788,12 @@ background-color: rgb(189,223,255);
          <height>151</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">#frame_IFSF
+{
+background-color: rgb(114, 159, 207);
+}</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
@@ -8900,6 +8918,11 @@ background-color: rgb(189,223,255);
          <height>151</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">#frame_12
+{
+background-color: rgb(114, 159, 207);}</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
@@ -8979,6 +9002,11 @@ background-color: rgb(189,223,255);
         <item>
          <property name="text">
           <string>合肥油气回收上传协议</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>东莞油气回收上传协议</string>
          </property>
         </item>
         <item>
@@ -9082,6 +9110,12 @@ background-color: rgb(189,223,255);
          <width>461</width>
          <height>331</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#frame_guangzhou
+{
+background-color: rgb(114, 159, 207);
+}</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
@@ -9443,6 +9477,9 @@ background-color: rgb(189,223,255);
          <height>331</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(114, 159, 207);</string>
+       </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
        </property>
@@ -9479,6 +9516,12 @@ background-color: rgb(189,223,255);
          <width>411</width>
          <height>151</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#frame_hubei
+{
+	background-color: rgb(114, 159, 207);
+}</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
@@ -9588,6 +9631,11 @@ background-color: rgb(189,223,255);
          <width>411</width>
          <height>211</height>
         </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#frame_5
+{  
+background-color: rgb(114, 159, 207);}</string>
        </property>
        <property name="frameShape">
         <enum>QFrame::StyledPanel</enum>
@@ -9763,14 +9811,14 @@ background-color: rgb(189,223,255);
        </property>
       </widget>
       <zorder>frame_network_verselect</zorder>
-      <zorder>frame_ip</zorder>
-      <zorder>frame_IFSF</zorder>
-      <zorder>frame_12</zorder>
       <zorder>frame_guangzhou</zorder>
+      <zorder>frame_fujian</zorder>
       <zorder>frame_hubei</zorder>
+      <zorder>frame_ip</zorder>
+      <zorder>frame_12</zorder>
       <zorder>frame_5</zorder>
       <zorder>frame_8</zorder>
-      <zorder>frame_fujian</zorder>
+      <zorder>frame_IFSF</zorder>
      </widget>
     </widget>
    </widget>
@@ -12694,10 +12742,9 @@ border-image: url(:/picture/setbeijing.png);
   <zorder>pushButton_testnetwork</zorder>
   <zorder>frame_3</zorder>
   <zorder>tabWidget_all</zorder>
-  <zorder>pushButton_3</zorder>
   <zorder>widget_warn_allclean</zorder>
-  <zorder>widget_warn_histclr</zorder>
   <zorder>widget_warn_gujian</zorder>
+  <zorder>widget_warn_histclr</zorder>
   <zorder>widget_warn_inputerror</zorder>
   <zorder>widget_warn_ip_wrong</zorder>
   <zorder>widget_warn_man_id</zorder>
@@ -12708,6 +12755,7 @@ border-image: url(:/picture/setbeijing.png);
   <zorder>widget_warn_user_del</zorder>
   <zorder>widget_warn_user_noexist</zorder>
   <zorder>widget_warn_user_pw</zorder>
+  <zorder>pushButton_3</zorder>
  </widget>
  <customwidgets>
   <customwidget>

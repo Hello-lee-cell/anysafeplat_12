@@ -1330,7 +1330,7 @@ void history::on_toolButton_reoilgas_detail_clicked()
                 }
                 for(uchar i = 0;i<12;i++)
                 {
-                    for(uchar j = 0;j<6;j++)
+                    for(uchar j = 0;j<8;j++)
                     {
                         sum_flag_filter+=flag_filter[i][j];
                         if(sum_flag_filter > sum_flag_filter_temp)

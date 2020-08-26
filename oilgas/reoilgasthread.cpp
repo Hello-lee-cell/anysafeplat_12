@@ -402,7 +402,7 @@ void reoilgasthread::ReadDataReoilgas()
 					if(countofoil_e >= 15)
 					{
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+1),
-						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
+                                           QString::number((countofgas_e/countofoil_e)*1,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
 						                   QString::number(countofoil_e/oilgas_time*60,'f',1),QString::number(countofoil_e,'f',1),
 						                   QString::number(Pre[1]*1000,'f',1));
@@ -428,7 +428,7 @@ void reoilgasthread::ReadDataReoilgas()
 					if(countofoil_e >= 15)
 					{
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+2),
-						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
+                                           QString::number((countofgas_e/countofoil_e)*1,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
 						                   QString::number(countofoil_e/oilgas_time*60,'f',1),QString::number(countofoil_e,'f',1),
 						                   QString::number(Pre[1]*1000,'f',1));
@@ -889,7 +889,7 @@ void reoilgasthread::ReadDataReoilgas_v2()
 					if(countofoil_e >= 15)
 					{
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+1),
-						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
+                                           QString::number((countofgas_e/countofoil_e)*1,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
 						                   QString::number(countofoil_e/oilgas_time*60,'f',1),QString::number(countofoil_e,'f',1),
 						                   QString::number(Pre[1]*1000,'f',1));
@@ -928,7 +928,7 @@ void reoilgasthread::ReadDataReoilgas_v2()
 					if(countofoil_e >= 15)
 					{
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+2),
-						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
+                                           QString::number((countofgas_e/countofoil_e)*1,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
 						                   QString::number(countofoil_e/oilgas_time*60,'f',1),QString::number(countofoil_e,'f',1),
 						                   QString::number(Pre[1]*1000,'f',1));
@@ -1194,7 +1194,7 @@ void reoilgasthread::ask_fga1000()
 void reoilgasthread::ask_temperature()
 {
 	unsigned char Flag_AskTem_Over = 1;
-	unsigned char SendBuff_init[8] = {0x01,0x03,0x00,0x00,0x00,0x02,0x00,0x00};
+    unsigned char SendBuff_init[8] = {0x01,0x03,0x00,0x01,0x00,0x01,0x00,0x00};
 	unsigned char RecvBuff_init[9] = {0};
 	//写  //只问一个地址0x13
 	Temperature_AskNum = 1;//只有1个温度
@@ -1210,7 +1210,7 @@ void reoilgasthread::ask_temperature()
 			write(fd_uart_reoilgas,SendBuff_init,sizeof(SendBuff_init));
 			if(Flag_TankTem_Type == 1) //无线模式
 			{
-				msleep(1300);
+                msleep(1500);
 			}
 			else //有线模式
 			{
@@ -1224,8 +1224,8 @@ void reoilgasthread::ask_temperature()
 				ReoilgasTemSta[Temperature_AskNum-1] = 0;
 				Flag_TemUartWrong[Temperature_AskNum-1] = 0;
 				//温度读取
-				Tem[0] = 0;
-				Tem[1] = 0;
+                Tem[0] = (float)(RecvBuff_init[3]<<8 | RecvBuff_init[4])/10;
+                Tem[1] = 0;
 				//温度读取
 				Temperature_AskNum++;
 				Flag_AskTem_Over = 0;//结束。退出循环
@@ -1237,8 +1237,8 @@ void reoilgasthread::ask_temperature()
 				if(Flag_TemUartWrong[Temperature_AskNum-1] >= 3)
 				{
 					//温度读取
-					Tem[0] = 0;
-					Tem[1] = 0;
+                    Tem[0] = (float)(RecvBuff_init[3]<<8 | RecvBuff_init[4])/10;
+                    Tem[1] = 0;
 					//温度读取
 					Flag_TemUartWrong[Temperature_AskNum-1] = 0;
 					ReoilgasTemSta[Temperature_AskNum-1] = 0x04;//判断为通信故障
@@ -2001,6 +2001,14 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 				refueling_gun_data_hefei(QString::number(send_al,'f',2));
 			}
 		}
+        if(Flag_Network_Send_Version == 8) //东莞协议，只有这一个
+        {
+            QString hyqnd = "NULL";
+            QString hyqwd = "NULL";
+            emit Send_Oilgundata_dg(DATAID_POST,jyjid,jyqid,al,qls,qll,yls,yll,hyqnd,hyqwd,yz);
+        }
+
+
 		if(Flag_MyServerEn == 1)  //myserver协议
 		{
 			float send_al = al.toFloat();

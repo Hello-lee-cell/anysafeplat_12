@@ -676,8 +676,9 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 	//index = 2     雷达设置
 	//index = 3     人体静电设置  安全防护
 	//index = 4     可燃气体
-	//index = 5     网络设置
-    //index = 6     其他设置：用户管理  升级 时间设置
+    //index = 5     液位仪
+    //index = 6     网络设置
+    //index = 7     其他设置：用户管理  升级 时间设置
 	//emit closeing_touchkey();
 	if(index == 0) //post添加
 	{
@@ -824,7 +825,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
                                     "QScrollBar::handle:vertical{ background: #6c65c8; min-height: 80px ;width:18px }");
         ui->comboBox_burngas->setCurrentIndex(Num_Fga-2);
     }
-    if(index == 5)
+    if(index == 6)
     {
 		ui->frame_AuthorizeNo->setHidden(1);
 
@@ -832,12 +833,12 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 		get_local_ip(if_name,IP);
 		ui->label_14->setText(IP);
 
-		if(Flag_Network_Send_Version<=8)
+        if(Flag_Network_Send_Version<=9)
         {
             ui->comboBox_network_version->setCurrentIndex(Flag_Network_Send_Version);
         }
         else {
-			ui->comboBox_network_version->setCurrentIndex(8);
+            ui->comboBox_network_version->setCurrentIndex(9);
         }
 
 		//ui->comboBox_reoilgas_ver->setCurrentIndex(Flag_Reoilgas_Version-1);
@@ -919,7 +920,18 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->label_isoosi_name->setText("合肥油气回收上传");
 			ui->pushButton_StationInfo->setHidden(1);
 		}
-		if(Flag_Network_Send_Version >= 8)//其他
+        if(Flag_Network_Send_Version == 8) //东莞 与福州同一个界面
+        {
+          ui->label_post_name->setText("东莞油气回收上传");
+          ui->frame_hunan_login->setHidden(1);//湖南的登录信息
+          ui->frame_fujian->setHidden(0);
+          ui->frame_guangzhou->setHidden(1);
+          ui->frame_network_verselect->setHidden(1);
+          ui->pushButton_StationInfo->setHidden(1);
+        }
+
+
+        if(Flag_Network_Send_Version >= 9)//其他
 		{
 			ui->frame_fujian->setHidden(1);
 			ui->frame_guangzhou->setHidden(1);
@@ -1017,7 +1029,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 		}
 
     }
-    if(index == 6)
+    if(index == 7)
     {
 		ui->frame_AuthorizeNo->setHidden(1);
 		ui->widget_Authorize->setHidden(1);//授权界面不显示
@@ -5188,7 +5200,16 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->label_isoosi_name->setText("合肥油气回收上传");
 		ui->pushButton_StationInfo->setHidden(1);
 	}
-	if(Flag_Network_Send_Version >= 8)//其他
+    if(Flag_Network_Send_Version == 8) //东莞 与福州同一个界面
+    {
+      ui->label_post_name->setText("东莞油气回收上传");
+      ui->frame_hunan_login->setHidden(1);//湖南的登录信息
+      ui->frame_fujian->setHidden(0);
+      ui->frame_guangzhou->setHidden(1);
+      ui->frame_network_verselect->setHidden(1);
+      ui->pushButton_StationInfo->setHidden(1);
+    }
+    if(Flag_Network_Send_Version >= 9)//其他
 	{
 		ui->frame_fujian->setHidden(1);
 		ui->frame_guangzhou->setHidden(1);
@@ -5554,6 +5575,10 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		{
 			emit Send_Setinfo_Foshan(DATAID_POST,"1",jyqs,pvz,pvf,"0","0",yzqh);
 		}
+        if(Flag_Network_Send_Version == 8) //东莞协议
+        {
+            emit Send_Configurationdata_dg(DATAID_POST,jyqs,pvz,pvf,hclk,yzqh);
+        }
 
 		if(Flag_MyServerEn == 1) //myserver协议
 		{
@@ -5799,26 +5824,26 @@ void systemset::Set_OilTank_table(const QString &text)
 
 void systemset::Get_Info_ON_tableview_OilTank()
 {
-//    QModelIndex index;
-//    QVariant data;
+    QModelIndex index;
+    QVariant data;
 
-//    Amount_OilTank = ui->comboBox_OilTank_sumset->currentIndex();   //探杆数量
-//    for(unsigned char i = 0;i < 12;i++)    //第一列  int型
-//    {
-//        index = model_Oil_Tank->index(i,1);
-//        data = model_Oil_Tank->data(index);
-//        Tangan_Amount[i] = data.toInt();
-//    }
-//    for(unsigned char i = 0;i < 12;i++)    //后边  float型
-//    {
-//        for(unsigned char j = 0;j < 5;j++)
-//        {
-//            index = model_Oil_Tank->index(i,j+2);
-//            data = model_Oil_Tank->data(index);
-//            OilTank_Set[i][j] = data.toFloat();
-////            printf("%f    ",OilTank_Set[i][j]);fflush(stdout);
-//        }
-//    }
+    Amount_OilTank = ui->comboBox_OilTank_sumset->currentIndex();   //探杆数量
+    for(unsigned char i = 0;i < 12;i++)    //第一列  int型
+    {
+        index = model_Oil_Tank->index(i,1);
+        data = model_Oil_Tank->data(index);
+        Tangan_Amount[i] = data.toInt();
+    }
+    for(unsigned char i = 0;i < 12;i++)    //后边  float型
+    {
+        for(unsigned char j = 0;j < 5;j++)
+        {
+            index = model_Oil_Tank->index(i,j+2);
+            data = model_Oil_Tank->data(index);
+            OilTank_Set[i][j] = data.toFloat();
+//            printf("%f    ",OilTank_Set[i][j]);fflush(stdout);
+        }
+    }
 }
 
 void systemset::on_btn_save_OilTank_clicked()
@@ -6268,19 +6293,19 @@ void systemset::set_backspace_Oil_Tank_Table()
 
 void systemset::on_tableView_OilTank_Table_clicked(const QModelIndex &index)
 {
-    hang = index.row();
-    lie = index.column();
-    emit closeing_touchkey();
-    if(lie>0 && lie <10)
-    {
-        touchkey = new keyboard;
+//    hang = index.row();
+//    lie = index.column();
+//    emit closeing_touchkey();
+//    if(lie>0 && lie <10)
+//    {
+//        touchkey = new keyboard;
 
-        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
-        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Oil_Tank_Table()));
+//        connect(this,SIGNAL(closeing_touchkey()),touchkey,SLOT(onEnter()));
+//        connect(touchkey,SIGNAL(display_backspace()),this,SLOT(set_backspace_Oil_Tank_Table()));
 
-       connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Oil_Tank_Table(const QString&)));
-    }
-    touchkey->show();
+//       connect(touchkey->signalMapper,SIGNAL(mapped(const QString&)),this,SLOT(Set_Oil_Tank_Table(const QString&)));
+//    }
+//    touchkey->show();
 }
 
 //设置探杆地址

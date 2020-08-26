@@ -309,7 +309,7 @@
      <enum>QTabWidget::West</enum>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>0</number>
     </property>
     <property name="iconSize">
      <size>
@@ -17579,7 +17579,9 @@ border-image: url(:/picture/底板背景图片.png);
      <attribute name="icon">
       <iconset resource="picture_.qrc">
        <normaloff>:/picture/单个系统未选中按钮/油罐监测未选中.png</normaloff>
-       <normalon>:/picture/单个系统选中/油罐监测选中.png</normalon>:/picture/单个系统未选中按钮/油罐监测未选中.png</iconset>
+       <normalon>:/picture/单个系统选中/油罐监测选中.png</normalon>
+       <disabledoff>:/picture/touming.png</disabledoff>
+       <disabledon>:/picture/touming.png</disabledon>:/picture/单个系统未选中按钮/油罐监测未选中.png</iconset>
      </attribute>
      <attribute name="title">
       <string/>

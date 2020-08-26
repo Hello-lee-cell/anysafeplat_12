@@ -1,4 +1,5 @@
-﻿#include "mainwindow.h"
+﻿#include<QApplication>
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <unistd.h>
@@ -23,6 +24,7 @@
 #include "oilgas/one_click_sync.h"
 #include "ywythread.h"
 #include"database_op.h"
+#include"ywy_yfy.h"
 
 unsigned char Flag_Draw_Type = 0;       //1-12×8=96对应加油机 101油罐压力  102管线压力  103油罐温度  104油气浓度
 unsigned char flag_exchange_history = 0;
@@ -1662,6 +1664,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	//post 佛山
 	post_message_foshan = new post_foshan;
 	post_message_foshan->moveToThread(post_message_foshan);
+    //post 东莞
+    post_message_dg = new post_webservice_dongguan;
 	//oilgas线程
 	uart_reoilgas = new reoilgasthread();
 	//可燃气体线程
@@ -1686,12 +1690,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(uart_ywy,SIGNAL(Send_compensation_Signal(unsigned char,unsigned char,float)),SLOT(Send_compensation_slot(unsigned char,unsigned char,float)));
     connect(uart_ywy,SIGNAL(compensation_set_result(unsigned char,unsigned char,QString)),SLOT(compensation_set_result_slot(unsigned char,unsigned char,QString)));
 
-    uart_ywy->start();
+    if(!flag_place_hoider){uart_ywy->start();}
 
     ui->widget_add_oil->setHidden(1);
 
+    ywy_yfy_thread *yfythread = new ywy_yfy_thread();
 
-
+    if(!flag_place_hoider){yfythread->start();}
 
 
 //界面显示的一些数据
@@ -1722,6 +1727,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(this,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)));
 	connect(this,SIGNAL(Send_Wrongsdat_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)));
 	connect(this,SIGNAL(send_wrong_foshan(QString,QString,QString)),post_message_foshan,SLOT(send_wrong(QString,QString,QString)));
+    connect(this,SIGNAL(Send_Wrongsdat_dongguan(QString,QString)),post_message_dg,SLOT(Send_Wrongsdata(QString,QString)));
 	//isoosi添加 重庆
 	connect(this,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)));
 
@@ -1739,6 +1745,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data_myserver(QString,QString,QString,QString,QString,QString,QString)),myserver_thread,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
     //isoosi合肥添加
     connect(uart_reoilgas,SIGNAL(refueling_gun_data_hefei(QString)),thread_isoosi_hefei,SLOT(send_gundata(QString)));
+    //post东莞
+    connect(uart_reoilgas,SIGNAL(Send_Oilgundata_dg(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_dg,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 
 //post形式发送网络数据
 	//post添加 槽函数直连
@@ -1755,6 +1763,13 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(Send_Stagundata_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Stagundata_HuNan(QString,QString)));
 	connect(uart_fga,SIGNAL(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Closegunsdata_HuNan(QString,QString,QString,QString,QString)));
 	connect(uart_fga,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)));
+
+    connect(uart_fga,SIGNAL(Send_Configurationdata_dg(QString,QString,QString,QString,QString,QString)),post_message_dg,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Surroundingsdata_dg(QString,QString,QString,QString,QString,QString,QString)),post_message_dg,SLOT(Send_Surroundingsdata(QString,QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Wrongsdata_dg(QString,QString)),post_message_dg,SLOT(Send_Wrongsdata(QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Stagundata_dg(QString,QString)),post_message_dg,SLOT(Send_Stagundata(QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Closegunsdata_dg(QString,QString,QString,QString,QString)),post_message_dg,SLOT(Send_Closegunsdata(QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Warndata_dg(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_dg,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 
 	//post佛山
 	connect(uart_fga,SIGNAL(send_environment_foshan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_environment(QString,QString,QString,QString,QString,QString,QString,QString)));
@@ -1792,7 +1807,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	thread_isoosi->start();
 	thread_isoosi_hefei->start();
 	myserver_thread->start();
-//	uart_reoilgas->start(); //ywy 暂时占用
+    if(flag_place_hoider){uart_reoilgas->start(); }//ywy 暂时占用
 	uart_fga->start();
 	post_message_foshan->start();//佛山协议需要启动
 
@@ -1806,6 +1821,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->label_delay_data->setHidden(1);//数据分析中
     ui->widget_warn_zaixianjiance->setHidden(1);//弹窗
 	add_value_operateinfo("","系统已启动");
+
+//    printf(" Flag_screen_ywy  value:   %d   ",Flag_screen_ywy);fflush(stdout);
 }
 
 MainWindow::~MainWindow()
@@ -1901,6 +1918,7 @@ void MainWindow::login_enter_set(int t)
 	//post添加
 	connect(systemset_exec,SIGNAL(Send_Configurationdata(QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)));
 	connect(systemset_exec,SIGNAL(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Configurationdata_HuNan(QString,QString,QString,QString,QString,QString)));
+    connect(systemset_exec,SIGNAL(Send_Configurationdata_dg(QString,QString,QString,QString,QString,QString)),post_message_dg,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString)));
 	//post佛山
 	connect(systemset_exec,SIGNAL(Send_Setinfo_Foshan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_setinfo(QString,QString,QString,QString,QString,QString,QString,QString)));
 	connect(systemset_exec,SIGNAL(SendStationFoShan()),post_message_foshan,SLOT(send_station_message()));
@@ -13728,6 +13746,11 @@ void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络�
 			QString wrongdata_post = "0111";//post添加
 			emit send_wrong_foshan(DATAID_POST,"date",wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
 		}
+        if(Flag_Network_Send_Version == 8)//东莞协议
+        {
+            QString wrongdata_post = "0111";//post添加
+            emit Send_Wrongsdat_dongguan(DATAID_POST,wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0'))));
+        }
 
 	}
 }
@@ -13747,7 +13770,7 @@ void MainWindow::Initialization_label()
    ui->label_alarm_61->setHidden(1);
 }
 
-void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str2,QString str3)
+void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str2,QString str3) //1 油 2 水 3 温度
 {
     float volume,volumeused;
     unsigned int i_oil,i_water,r_table,g_diameter;
@@ -13768,8 +13791,22 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
         i_water = str2.toFloat()/10;
     }
 
-    volume = (OilTank_50[i_oil] - OilTank_50[i_water]) * 1000;
-    volumeused = (OilTank_50[280] - OilTank_50[i_oil]) * 1000;
+    if(i_oil>299 || i_water>299)  //屏蔽水位异常
+    {
+        return;
+    }
+
+    r_table = OilTank_Set[add-1][4];    //对应罐表
+    g_diameter = OilTank_Set[add-1][0] /10;    //对应罐直径  CM
+    volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+    volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+
+    //云飞扬上传相关
+    Reply_Data_OT[add][1].f = volume;
+    Reply_Data_OT[add][2].f = volume * 0.98;  //TC容积 温度补偿后的体积  0.98不准 需要改
+    Reply_Data_OT[add][3].f = volumeused;
+    Reply_Data_OT[add][7].f = Oil_Tank_Table[r_table][i_water] *1000 ;
+
     add_Oil_array[add][0] = str1.toFloat();
     add_Oil_array[add][1] = OilTank_50[i_oil] * 1000;
 
@@ -13882,7 +13919,6 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
 
 void MainWindow::Display_alarm_Tangan_Data(unsigned char add, unsigned char flag)   //0 通讯正常 1 通讯故障  2 油溢出  3 水过高  4 浮子故障  5 温度传感器故障
 {
-    add = add -0xD0;
     if(add == 1)
     {
         switch (flag)

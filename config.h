@@ -318,6 +318,8 @@ extern unsigned char Flag_MyServerEn;
 extern unsigned char Flag_WaitSync;//等待数据同步，阻断正常的问询进程，全局变量
 //液位仪 thread
 
+extern char flag_place_hoider;
+
 #define YWY_Read  0x03
 #define YWY_Write  0x06
 
@@ -357,6 +359,35 @@ extern unsigned char index_Oil_Tank_Table;
 
 extern float OilTank_50[300];
 extern float OilTank_40[300];
+
+//云飞扬
+#define SOH 0x01
+#define EME "&&"
+#define ETX 0x03
+
+#define oilcode92  0x01
+#define oilcode95  0x02
+#define oilcode98  0x03
+
+#define  Tank_High_Water_Alarm                  0x03
+#define  Tank_Overfill_Alarm                    0x04
+#define  Tank_Low_Product_Alarm                 0x05
+#define  Tank_Invalid_Fuel_Level_Alarm          0x08
+#define  Tank_Probe_Out_Alarm                   0x09
+#define  Tank_Delivery_Needed_Warning           0x11
+#define  Tank_Maximum_Product_Alarm             0x12
+#define  Tank_Gross_Leak_Test_Fail_Alarm        0x13
+#define  Tank_Periodic_Leak_Test_Fail_Alarm     0x14
+#define  Tank_Annual_Leak_Test_Fail_Alarm       0x15
+#define  Tank_Cold_Temperature_Warning          0x27
+
+extern char Reply_DataBuf_alarm[15][8];
+
+//东莞上传
+
+#define Log_File_Postdg  "/opt/postdg"
+#define Log_TXT_Postdg  "/opt/postdg_log/log_dataID.txt"
+
 #endif // CONFIG
 
 //传感器法  sensor   液媒法  liquid  压力法   pressure

@@ -76,7 +76,14 @@ SOURCES += main.cpp\
     network/net_isoosi_hefei.cpp \
     drawheight.cpp \
     ywythread.cpp \
-    oil_volume_table.cpp
+    oil_volume_table.cpp \
+    ywy_yfy.cpp \
+    network/gongguan_POST/sm4/util.cpp \
+    network/gongguan_POST/sm4/sm4.cpp \
+    network/gongguan_POST/sm4/sm3.cpp \
+    network/gongguan_POST/base64/base64.cpp \
+    network/gongguan_POST/sm4_uilt.cpp \
+    network/gongguan_POST/post_webservice_dongguan.cpp
 
 HEADERS  += mainwindow.h \
     keyboard.h \
@@ -146,7 +153,14 @@ HEADERS  += mainwindow.h \
     station_message.h \
     network/net_isoosi_hefei.h \
     drawheight.h \
-    ywythread.h
+    ywythread.h \
+    ywy_yfy.h \
+    network/gongguan_POST/sm4/util.h \
+    network/gongguan_POST/sm4/sm4.h \
+    network/gongguan_POST/sm4/sm3.h \
+    network/gongguan_POST/base64/base64.h \
+    network/gongguan_POST/sm4_uilt.h \
+    network/gongguan_POST/post_webservice_dongguan.h
 
 FORMS    += mainwindow.ui \
     keyboard.ui \
@@ -166,6 +180,7 @@ RESOURCES += \
     qrc.qrc
 
 DISTFILES += \
-    file_op.gcc
+    file_op.gcc \
+    README
 
 QMAKE_CXXFLAGS += -std=c++11

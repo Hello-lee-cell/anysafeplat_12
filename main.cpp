@@ -18,6 +18,7 @@
 #include<database_op.h>
 #include"myserver/myserver.h"
 #include"new_keyboard/SoftKeyBoardContext.h"
+#include"config.h"
 //char IP_DES[20] = {0};
 //main_main
 char IP_BRO[32] = {0};
@@ -150,7 +151,7 @@ QString VERSION_POST = "V1.1";   // 通信协议版本
 QString DATAID_POST = "000001";  //数据序号（6 位）
 QString USERID_POST = "3501040007";    // 区域代码标识（6 位）+ 加油站标识（4 位）
 QString TIME_POST = "";                //在线监控设备当前时间（年月日时分 14 位）
-QString SEC_POST = "0";                //加密标识（1 表示业务数据为密文传输，0 表示明文）
+QString SEC_POST = "1";                //加密标识（1 表示业务数据为密文传输，0 表示明文）
 QString POSTUSERNAME_HUNAN = "admin";
 QString POSTPASSWORD_HUNAN = "123456";
 unsigned char Flag_Shield_Network = 0;//屏蔽网络上传的报警信息，只上传正常数据 1屏蔽 0正常
@@ -237,7 +238,7 @@ int main(int argc, char *argv[])
     QObject::connect(securitys,SIGNAL(pump_run()),&w,SLOT(pump_run_s()));
     QObject::connect(securitys,SIGNAL(pump_stop()),&w,SLOT(pump_stop_s()));
     QObject::connect(securitys,SIGNAL(crash_column_stashow(unsigned char,unsigned char)),&w,SLOT(crash_column_stashow(unsigned char,unsigned char)));
-    securitys->start();
+    if(flag_place_hoider){securitys->start();}//yfy占用
 
     timer_pop *pop_ups = new timer_pop;
     QObject::connect(pop_ups,SIGNAL(show_reoilgas_pop(int)),&w,SLOT(show_pop_ups(int)));
