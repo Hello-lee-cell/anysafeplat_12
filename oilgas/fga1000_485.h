@@ -65,7 +65,7 @@ signals:
     void Send_Stagundata(QString id,QString status);      //发送油枪状态报文
     void Send_Closegunsdata(QString id,QString jyjid,QString jyqid,QString operate,QString event);//关枪数据
     void Send_Configurationdata(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString yzqh);   //发送配置数据报文,每天一次的那种
-
+	//湖南
 	void Send_Requestdata_HuNan(QString type,QString data);     //发送请求数据报文
 	void Send_Configurationdata_HuNan(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString yzqh);   //发送配置数据报文
 	void Send_Warndata_HuNan(QString id,QString data,QString al,QString mb,QString yz,QString ygyl,QString clzznd,QString pv,QString clzzqd,QString clzztz,QString xyhqg); //发送报警数据报文
@@ -73,6 +73,22 @@ signals:
 	void Send_Wrongsdata_HuNan(QString id,QString type);       //发送故障数据报文
 	void Send_Closegunsdata_HuNan(QString id,QString jyjid,QString jyqid,QString operate,QString event);       //发送关枪数据报文
 	void Send_Stagundata_HuNan(QString id,QString status);      //发送油枪状态报文
+
+	//廊坊
+	void Send_Configurationdata_LF(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString hclt,QString yzqh);   //发送配置数据报文
+	void Send_Warndata_LF(QString id,QString al,QString mb,QString yz,QString ygyl,QString ygly,QString pvzt,
+					   QString pvljzt,QString hclzt,QString hclnd,QString xyhqg); //发送报警数据报文
+	void Send_Surroundingsdata_LF(QString id,QString ygyl,QString yzyl,QString yqkj,
+							   QString xnd,QString hclnd,QString yqwd);    //发送环境数据报文
+	void Send_Wrongsdata_LF(QString id,QString type);       //发送故障数据报文
+	void Send_Closegunsdata_LF(QString id,QString jyjid,QString jyqid,QString operate,QString event);       //发送关枪数据报文
+	void Send_Stagundata_LF(QString id,QString status);      //发送油枪状态报文
+        //重庆渝北
+        void Send_Configurationdata_CQYB(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString hclt,QString yzqh);   //发送配置数据报文
+        void Send_Warndata_CQYB(QString id,QString al,QString mb,QString yz,QString ygyl,QString clzznd,
+                                      QString pv,QString clzzqd,QString clzztz,QString xyhqg);//发送报警数据报文
+        void Send_Surroundingsdata_CQYB(QString id,QString ygyl,QString yzyl, QString xnd,QString hclnd,QString yqwd,QString yqkj);    //发送环境数据报文
+        void Send_Wrongsdata_CQYB(QString id,QString type);       //发送故障数据报文
 	//佛山
 	void send_setinfo_foshan(QString DataId,QString Date,QString JYQS,QString PVZ,QString PVF,
 						 QString HCLK,QString HCLT,QString YZQH);

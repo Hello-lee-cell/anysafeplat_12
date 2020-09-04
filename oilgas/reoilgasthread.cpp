@@ -1225,6 +1225,7 @@ void reoilgasthread::ask_temperature()
 				Flag_TemUartWrong[Temperature_AskNum-1] = 0;
 				//温度读取
 				Tem[0] = 0;
+				Tem[0]=float(RecvBuff_init[3]*256+RecvBuff_init[4])/10;
 				Tem[1] = 0;
 				//温度读取
 				Temperature_AskNum++;
@@ -2001,6 +2002,28 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 				refueling_gun_data_hefei(QString::number(send_al,'f',2));
 			}
 		}
+		if(Flag_Network_Send_Version == 8) //重庆渝北
+		{
+            		id = id;//没有用，为了 一个警告，上传成功后请删除
+            		QString hyqwd = "NULL";
+            		//判断回收油气温度使能
+            	if(Tem_tank_en){
+                	hyqwd = Tem[0];
+            	}
+            		emit Send_Oilgundata_CQYB(DATAID_POST,jyjid,jyqid,QString::number((al.toFloat()/100),'f',2),qls,qll,yls,yll,"NULL",hyqwd,yz);
+		}
+		if(Flag_Network_Send_Version == 9) //廊坊
+		{
+            		QString hyqwd = "NULL";
+            		//判断回收油气温度使能
+            	if(Tem_tank_en){
+                	hyqwd = Tem[0];
+            	}
+           		 id = id;//没有用，为了 一个警告，上传成功后请删除
+            		emit Send_Oilgundata_LF(DATAID_POST,jyjid,jyqid,al,qls,qll,yls,yll,"NULL",hyqwd,yz);
+		}
+
+
 		if(Flag_MyServerEn == 1)  //myserver协议
 		{
 			float send_al = al.toFloat();

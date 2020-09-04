@@ -562,6 +562,11 @@ signals:
 	void Send_Configurationdata_HuNan(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString yzqh);   //发送配置数据报文
 	void Send_Setinfo_Foshan(QString DataId,QString Date,QString JYQS,QString PVZ,QString PVF,
 						 QString HCLK,QString HCLT,QString YZQH);
+
+	void Send_Configurationdata_LF(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString hclt,QString yzqh);
+ 	//重慶渝北
+        void Send_Configurationdata_CQYB(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString hclt,QString yzqh);   //发送配置数据报文
+	
 	//isoosi添加
     void setup_data(QString PVFrwPrs,QString PVRevPrs,QString TrOpenPrs,QString TrStopPrs);
 	//isoosi添加重庆

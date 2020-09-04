@@ -20,6 +20,8 @@
 #include "oilgas/fga1000_485.h"
 #include "network/post_foshan.h"
 #include "network/net_isoosi_hefei.h"
+#include "network/post_langfang.h"
+#include "network/post_cqyubei.h"
 
 class QLineEdit;
 namespace Ui {
@@ -68,6 +70,8 @@ private:
     post_webservice *post_message;
 	post_webservice_hunan *post_message_hunan;
 	post_foshan *post_message_foshan;
+    post_langfang *post_message_langfang;
+    post_CQyubei *post_message_cqyb;
     //isoosi添加
     net_isoosi *thread_isoosi;
 	net_isoosi_cq *thread_isoosi_cq;
@@ -309,6 +313,9 @@ signals:
     void Send_Wrongsdata(QString id,QString type);       //发送故障数据报文
 	void Send_Wrongsdat_HuNan(QString id,QString type);       //发送故障数据报文
 	void send_wrong_foshan(QString DataId,QString Date,QString TYPE);
+
+	void Send_Wrongsdata_LF(QString id,QString type);       //发送故障数据报文
+	void Send_Wrongsdata_CQYB(QString id,QString type);       //发送故障数据报文
 	//isoosi重庆
 	void refueling_wrongdata_cq(QString warn_data);
     //时间校准函数 每周

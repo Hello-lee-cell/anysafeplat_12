@@ -27,6 +27,7 @@
 #include <QTcpServer>
 #include <QHostAddress>
 
+int flag_send_huanjing = 0;//少发送几次环境数据
 
 QMutex wait_send_over_hefei;
 int nsockfd_tcp_hefei;        //tcp套接字
@@ -261,33 +262,38 @@ void net_isoosi_hefei::send_tcpclient_data(QString data)
  * *************************/
 void net_isoosi_hefei::send_surround_message(QString YGYL,QString YZYL,QString YQWD)
 {
-	 QString dataSegment = "";
-	 QString MN = "34012131UZAL01";
-	 QString PW = "123456";
-	 MN = IsoOis_MN;
-	 PW = IsoOis_PW;
+	flag_send_huanjing++;
+	if(flag_send_huanjing>=10) //5分钟发送一次
+	{
+		flag_send_huanjing = 0;
 
-	 QStringList contaminantLists;
-	 contaminantLists.append("Wq1");//油罐压力
-	 contaminantLists.append("Wq2");//液阻压力
-	 contaminantLists.append("Wq3");//油气温度
-	 QStringList dataNums;
-	 QString wq1 = YGYL;
-	 QString wq2 = YZYL;
-	 QString wq3 = YQWD;
-	 dataNums.append(wq1);//油罐压力
-	 dataNums.append(wq2);//液阻压力
-	 dataNums.append(wq3);//油气温度
-	 //构建数据区信息
-	 QString dataArea = buildRealtimeData(contaminantLists,"Rtd",dataNums);
-	 //构建数据段信息
-	 dataSegment = buildUploadDataSegment("31","2011",MN,PW,dataArea);
+		QString dataSegment = "";
+		QString MN = "34012131UZAL01";
+		QString PW = "123456";
+		MN = IsoOis_MN;
+		PW = IsoOis_PW;
 
-	//构建通用完整信息
-	QString data = buildNormalMsg(dataSegment);
-	//发送tcp信息(通用完整信息在tcpClient里构建)
-	send_tcpclient_data(data);
+		QStringList contaminantLists;
+		contaminantLists.append("Wq1");//油罐压力
+		contaminantLists.append("Wq2");//液阻压力
+		contaminantLists.append("Wq3");//油气温度
+		QStringList dataNums;
+		QString wq1 = YGYL;
+		QString wq2 = YZYL;
+		QString wq3 = YQWD;
+		dataNums.append(wq1);//油罐压力
+		dataNums.append(wq2);//液阻压力
+		dataNums.append(wq3);//油气温度
+		//构建数据区信息
+		QString dataArea = buildRealtimeData(contaminantLists,"Rtd",dataNums);
+		//构建数据段信息
+		dataSegment = buildUploadDataSegment("31","2011",MN,PW,dataArea);
 
+	   //构建通用完整信息
+	   QString data = buildNormalMsg(dataSegment);
+	   //发送tcp信息(通用完整信息在tcpClient里构建)
+	   send_tcpclient_data(data);
+	}
 }
 /************发送加油信息************
  * al  气液比

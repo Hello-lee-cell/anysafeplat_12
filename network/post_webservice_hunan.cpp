@@ -490,7 +490,7 @@ void post_webservice_hunan::Send_Stagundata_HuNan(QString id,QString status)
 TYPE  00、请求数据；01、配置数据；02、报警数据；03、加油枪数据；04、环境数据；05、故障数据；06、加油枪关停与启用；07、加油枪状态
 	  HMAC校验没有添加，如有需要，在此函数内添加即可
 ******************************************/
-QString CreatXml_HuNan(QString version,QString data_id,QString user_id,QString time,QString type,QString sec,QString bus_data)
+QString post_webservice_hunan::CreatXml_HuNan(QString version,QString data_id,QString user_id,QString time,QString type,QString sec,QString bus_data)
 {
 	QDomDocument doc;
 	//QFile file("test.xml");
@@ -611,7 +611,7 @@ QString CreatXml_HuNan(QString version,QString data_id,QString user_id,QString t
 
 }
 /***************读取xml格式数据****************/
-QString ReadXml_HuNan(QString read_xml)
+QString post_webservice_hunan::ReadXml_HuNan(QString read_xml)
 {
 	QString return_data;
 	QDomDocument doc;
@@ -639,7 +639,7 @@ QString ReadXml_HuNan(QString read_xml)
 TYPE 请求类型：''01''表示口令修改请求
 DATA 当TYPE 为"01"时，DATA表示修改后的口令值（字符串）
 **********************************************/
-QString XML_Requestdata_HuNan(QString type,QString data)
+QString post_webservice_hunan::XML_Requestdata_HuNan(QString type,QString data)
 {
 	QDomDocument doc;
 	QDomElement tagFileInforows = doc.createElement("rows");
@@ -674,7 +674,7 @@ SCT  后处理装置开启压力值
 YZQH 安装液阻传感器加油机
 如果不存在某项数据则在数据域中填写“NULL
 **********************************************/
-QString XML_Configurationdata_HuNan(QString id,QString data,QString jyqs,QString pvz,
+QString post_webservice_hunan::XML_Configurationdata_HuNan(QString id,QString data,QString jyqs,QString pvz,
                               QString pvf,QString hclk,QString yzqh)
 {
     QDomDocument doc;
@@ -740,7 +740,7 @@ XYHQG  卸油回气管状态
 
 如果不存在某项数据则在数据域中填写“NULL
 **********************************************/
-QString XML_Warndata_HuNan(QString id,QString data,QString al,QString mb,
+QString post_webservice_hunan::XML_Warndata_HuNan(QString id,QString data,QString al,QString mb,
                               QString yz,QString ygyl,QString clzznd,QString pv,QString clzzqd,QString clzztz,QString xyhqg)
 {
     QDomDocument doc;
@@ -817,7 +817,7 @@ YQWD   油气温度
 YZ     液阻，单位Pa
 如果不存在某项数据则在数据域中填写“NULL
 **********************************************/
-QString XML_Oilgundata_HuNan(QString id,QString data,QString jyjid,QString jyqid,QString al,
+QString post_webservice_hunan::XML_Oilgundata_HuNan(QString id,QString data,QString jyjid,QString jyqid,QString al,
                               QString qls,QString qll,QString yls,QString yll,QString yqnd,QString yqwd,QString yz )
 {
 	QDomDocument doc;
@@ -895,7 +895,7 @@ YQKJ   油气空间
 如果不存在某项数据则在数据域中填写“NULL
 数据要采集2~10分钟，该函数要重做
 **********************************************/
-QString XML_Surroundingsdata_HuNan(QString id,QString data,QString ygyl,QString yzyl,QString xnd,QString clnd,QString yqwd,QString yqkj)
+QString post_webservice_hunan::XML_Surroundingsdata_HuNan(QString id,QString data,QString ygyl,QString yzyl,QString xnd,QString clnd,QString yqwd,QString yqkj)
 {
 	QDomDocument doc;
 	QDomElement tagFileInforows = doc.createElement("rows\n");
@@ -952,7 +952,7 @@ ID     对象ID，在本次数据传输中唯一
 DATE   故障数据产生时间
 TYPE   故障码
 **********************************************/
-QString XML_Wrongsdata_HuNan(QString id,QString data,QString type)
+QString post_webservice_hunan::XML_Wrongsdata_HuNan(QString id,QString data,QString type)
 {
 	QDomDocument doc;
 	QDomElement tagFileInforows = doc.createElement("rows");
@@ -989,7 +989,7 @@ JYQID    加油枪标识
 OPERATE  操作类型 0-关停 1-启用
 EVENT    关停或启用事件类型关停事件类型：0 自动关停 1 手动关停 启用事件类型：0（预留） 1 手动启用未知事件类型用 N
 **********************************************/
-QString XML_Closegunsdata_HuNan(QString id,QString data,QString jyjid,QString jyqid,QString operate,QString event)
+QString post_webservice_hunan::XML_Closegunsdata_HuNan(QString id,QString data,QString jyjid,QString jyqid,QString operate,QString event)
 {
     QDomDocument doc;
     QDomElement tagFileInforows = doc.createElement("rows");
@@ -1035,7 +1035,7 @@ ID       对象ID，在本次数据传输中唯一
 DATE     状态采集时间
 STATUS   加油枪开关
 **********************************************/
-QString XML_Stagundata_HuNan(QString id,QString data,QString status)
+QString post_webservice_hunan::XML_Stagundata_HuNan(QString id,QString data,QString status)
 {
 	QDomDocument doc;
 	QDomElement tagFileInforows = doc.createElement("rows");

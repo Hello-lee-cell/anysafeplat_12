@@ -538,7 +538,7 @@ void post_webservice::Send_Stagundata(QString id,QString status)
 TYPE  00、请求数据；01、配置数据；02、报警数据；03、加油枪数据；04、环境数据；05、故障数据；06、加油枪关停与启用；07、加油枪状态
       HMAC校验没有添加，如有需要，在此函数内添加即可
 ******************************************/
-QString CreatXml(QString version,QString data_id,QString user_id,QString time,QString type,QString sec,QString bus_data)
+QString post_webservice::CreatXml(QString version,QString data_id,QString user_id,QString time,QString type,QString sec,QString bus_data)
 {
 	QDomDocument doc;
 	if(Flag_Network_Send_Version == 0) //福州协议
@@ -792,7 +792,7 @@ QString CreatXml(QString version,QString data_id,QString user_id,QString time,QS
 
 }
 /***************读取xml格式数据****************/
-QString ReadXml(QString read_xml)
+QString post_webservice::ReadXml(QString read_xml)
 {
     QString return_data;
     QDomDocument doc;
@@ -820,7 +820,7 @@ QString ReadXml(QString read_xml)
 TYPE 请求类型：''01''表示口令修改请求
 DATA 当TYPE 为"01"时，DATA表示修改后的口令值（字符串）
 **********************************************/
-QString XML_Requestdata(QString type,QString data)
+QString post_webservice::XML_Requestdata(QString type,QString data)
 {
     QDomDocument doc;
     QDomElement tagFileInforows = doc.createElement("rows");
@@ -855,7 +855,7 @@ SCT  后处理装置关闭压力值  ！！！！与SCK公用一个传入参数
 YZQH 安装液阻传感器加油机
 如果不存在某项数据则在数据域中填写“NULL
 **********************************************/
-QString XML_Configurationdata(QString id,QString data,QString jyqs,QString pvz,
+QString post_webservice::XML_Configurationdata(QString id,QString data,QString jyqs,QString pvz,
                               QString pvf,QString hclk,QString yzqh)
 {
     QDomDocument doc;
@@ -924,7 +924,7 @@ PVLJZT 压力/真空阀临界压力状态（0、1、2、N)
 HCLZT  后处理装置状态（0、1、2、N)
 如果不存在某项数据则在数据域中填写“NULL
 **********************************************/
-QString XML_Warndata(QString id,QString data,QString al,QString mb,
+QString post_webservice::XML_Warndata(QString id,QString data,QString al,QString mb,
                               QString yz,QString ygly,QString pvzt,QString pvljzt,QString hclzt)
 {
     QDomDocument doc;
@@ -991,7 +991,7 @@ YLL    燃油流量
 YZ     液阻，单位Pa
 如果不存在某项数据则在数据域中填写“NULL
 **********************************************/
-QString XML_Oilgundata(QString id,QString data,QString jyjid,QString jyqid,QString al,
+QString post_webservice::XML_Oilgundata(QString id,QString data,QString jyjid,QString jyqid,QString al,
                               QString qls,QString qll,QString yls,QString yll,QString yz )
 {
     QDomDocument doc;
@@ -1058,7 +1058,7 @@ YQKJ   油气空间，单位L
 如果不存在某项数据则在数据域中填写“NULL
 数据要采集2~10分钟，该函数要重做
 **********************************************/
-QString XML_Surroundingsdata(QString id,QString data,QString ygyl,QString yzyl,QString yqkj)
+QString post_webservice::XML_Surroundingsdata(QString id,QString data,QString ygyl,QString yzyl,QString yqkj)
 {
     QDomDocument doc;
     QDomElement tagFileInforows = doc.createElement("rows\n");
@@ -1101,7 +1101,7 @@ ID     对象ID，在本次数据传输中唯一
 DATE   故障数据产生时间
 TYPE   故障码
 **********************************************/
-QString XML_Wrongsdata(QString id,QString data,QString type)
+QString post_webservice::XML_Wrongsdata(QString id,QString data,QString type)
 {
     QDomDocument doc;
     QDomElement tagFileInforows = doc.createElement("rows");
@@ -1138,7 +1138,7 @@ JYQID    加油枪标识
 OPERATE  操作类型 0-关停 1-启用
 EVENT    关停或启用事件类型关停事件类型：0 自动关停 1 手动关停 启用事件类型：0（预留） 1 手动启用未知事件类型用 N
 **********************************************/
-QString XML_Closegunsdata(QString id,QString data,QString jyjid,QString jyqid,QString operate,QString event)
+QString post_webservice::XML_Closegunsdata(QString id,QString data,QString jyjid,QString jyqid,QString operate,QString event)
 {
     QDomDocument doc;
     QDomElement tagFileInforows = doc.createElement("rows");
@@ -1183,7 +1183,7 @@ ID       对象ID，在本次数据传输中唯一
 DATE     状态采集时间
 STATUS   加油枪开关
 **********************************************/
-QString XML_Stagundata(QString id,QString data,QString status)
+QString post_webservice::XML_Stagundata(QString id,QString data,QString status)
 {
     QDomDocument doc;
     QDomElement tagFileInforows = doc.createElement("rows");

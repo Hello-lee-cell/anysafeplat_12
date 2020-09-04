@@ -1631,6 +1631,10 @@ MainWindow::MainWindow(QWidget *parent) :
 	//post 佛山
 	post_message_foshan = new post_foshan;
 	post_message_foshan->moveToThread(post_message_foshan);
+        //post 廊坊
+        post_message_langfang = new post_langfang;
+        //post 重庆渝北
+        post_message_cqyb = new post_CQyubei;
 	//oilgas线程
 	uart_reoilgas = new reoilgasthread();
 	//可燃气体线程
@@ -1705,6 +1709,20 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(uart_fga,SIGNAL(send_setinfo_foshan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_setinfo(QString,QString,QString,QString,QString,QString,QString,QString)));
 	connect(uart_fga,SIGNAL(send_warninfo_foshan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_warninfo(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 	connect(uart_fga,SIGNAL(send_wrong_foshan(QString,QString,QString)),post_message_foshan,SLOT(send_wrong(QString,QString,QString)));
+ 	//post廊坊
+    connect(uart_fga,SIGNAL(Send_Surroundingsdata_LF(QString,QString,QString,QString,QString,QString,QString)),post_message_langfang,SLOT(Send_Surroundingsdata(QString,QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Closegunsdata_LF(QString,QString,QString,QString,QString)),post_message_langfang,SLOT(Send_Closegunsdata(QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Stagundata_LF(QString,QString)),post_message_langfang,SLOT(Send_Stagundata(QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Configurationdata_LF(QString,QString,QString,QString,QString,QString,QString)),post_message_langfang,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Warndata_LF(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_langfang,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Wrongsdata_LF(QString,QString)),post_message_langfang,SLOT(Send_Wrongsdata(QString,QString)));
+
+    	//post重庆渝北
+    connect(uart_fga,SIGNAL(Send_Surroundingsdata_CQYB(QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Surroundingsdata(QString,QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Configurationdata_CQYB(QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Warndata_CQYB(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+    connect(uart_fga,SIGNAL(Send_Wrongsdata_CQYB(QString,QString)),post_message_cqyb,SLOT(Send_Wrongsdata(QString,QString)));
+
 
 //isoosi形式发送网络数据
 	//isoosi添加  槽函数直连
@@ -1846,6 +1864,11 @@ void MainWindow::login_enter_set(int t)
 	//post佛山
 	connect(systemset_exec,SIGNAL(Send_Setinfo_Foshan(QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_setinfo(QString,QString,QString,QString,QString,QString,QString,QString)));
 	connect(systemset_exec,SIGNAL(SendStationFoShan()),post_message_foshan,SLOT(send_station_message()));
+	//post廊坊
+    connect(systemset_exec,SIGNAL(Send_Configurationdata_LF(QString,QString,QString,QString,QString,QString,QString)),post_message_langfang,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString,QString)));
+       //重庆渝北
+    connect(systemset_exec,SIGNAL(Send_Configurationdata_CQYB(QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString,QString)));
+    
 	//isoosi添加
 	connect(systemset_exec,SIGNAL(setup_data(QString,QString,QString,QString)),thread_isoosi,SLOT(setup_data(QString,QString,QString,QString)));
 	//isoosi添加重庆
@@ -13661,6 +13684,22 @@ void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络�
 		{
 			QString wrongdata_post = "0111";//post添加
 			emit send_wrong_foshan(DATAID_POST,"date",wrongdata_post.append(QString("%1").arg(whichone.toInt(), 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
+		}
+		if(Flag_Network_Send_Version == 7)//和合肥协议
+		{
+			//
+		}
+		if(Flag_Network_Send_Version == 8)//重庆渝北协议
+		{
+			QString wrongdata_post = "0111";//post添加
+            		emit Send_Wrongsdata_CQYB(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
+
+		}
+		if(Flag_Network_Send_Version == 9)//廊坊协议
+		{
+			QString wrongdata_post = "0111";//post添加
+           		emit Send_Wrongsdata_LF(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
+
 		}
 
 	}

@@ -37,6 +37,12 @@ signals:
 	void Send_Oilgundata_HuNan(QString id,QString data,QString jyjid,QString jyqid,QString al,QString qls,QString qll,QString yls,QString yll,QString yqnd,QString yqwd,QString yz); //发送油枪数据报文
 	void send_gundata_foshan(QString DataId,QString Date,QString JYJID,QString JYQID,QString AL,QString QLS,
 						 QString QLL,QString YLS,QString YLL,QString HYQND,QString HYQWD,QString YZ,QString STATE);
+
+	void Send_Oilgundata_LF(QString id,QString jyjid,QString jyqid,QString al,QString qls,QString qll,QString yls,QString yll,
+						 QString hyqnd,QString hyqwd,QString yz); //发送油枪数据报文
+    	void Send_Oilgundata_CQYB(QString id,QString jyjid,QString jyqid,QString al,QString qls,QString qll,QString yls,QString yll,
+                        	 QString hyqnd,QString hyqwd,QString yz); //发送油枪数据报文
+
 	//isoosi添加
     void refueling_gun_data(QString gun_num,QString AlvR,QString GasCur,QString GasFlow,QString FuelCur,QString FuelFlow,QString DynbPrs);
 	//isoosi重庆

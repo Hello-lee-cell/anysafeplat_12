@@ -47,6 +47,7 @@
 #define FGA_SERI    "/dev/ttymxc3"  //uart4  气体监测
 #define SAFTY_IIE "/dev/ttymxc1"  //uart2  IIE
 #define CRASH_COLUMN "/dev/ttymxc2"  //uart3  防撞柱
+#define CQYB_COLUMN "/dev/ttymxc8"  //未分配  重庆渝北区
 
 #define CONFIG_SENSORAMOUNT "/opt/config.txt"
 #define HISTORY_NET "/opt/net_info.txt"

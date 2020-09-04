@@ -20,6 +20,8 @@ INSTALLS += target
 SOURCES += main.cpp\
         mainwindow.cpp \
     keyboard.cpp \
+    network/post_cqyubei.cpp \
+    network/post_langfang.cpp \
     warn.cpp \
     login.cpp \
     history.cpp \
@@ -77,6 +79,8 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     keyboard.h \
+    network/post_cqyubei.h \
+    network/post_langfang.h \
     warn.h \
     login.h \
     history.h \
