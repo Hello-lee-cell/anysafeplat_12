@@ -1631,10 +1631,12 @@ MainWindow::MainWindow(QWidget *parent) :
 	//post 佛山
 	post_message_foshan = new post_foshan;
 	post_message_foshan->moveToThread(post_message_foshan);
-        //post 廊坊
-        post_message_langfang = new post_langfang;
-        //post 重庆渝北
-        post_message_cqyb = new post_CQyubei;
+	//post 廊坊
+	post_message_langfang = new post_langfang;
+	//post 重庆渝北
+	post_message_cqyb = new post_CQyubei;
+	//post南京
+	post_message_nanjing = new post_nanjing;
 	//oilgas线程
 	uart_reoilgas = new reoilgasthread();
 	//可燃气体线程
@@ -1668,6 +1670,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(this,SIGNAL(Send_Wrongsdata(QString,QString)),post_message,SLOT(Send_Wrongsdata(QString,QString)));
 	connect(this,SIGNAL(Send_Wrongsdat_HuNan(QString,QString)),post_message_hunan,SLOT(Send_Wrongsdata_HuNan(QString,QString)));
 	connect(this,SIGNAL(send_wrong_foshan(QString,QString,QString)),post_message_foshan,SLOT(send_wrong(QString,QString,QString)));
+	connect(this,SIGNAL(Send_Wrongsdata_CQYB(QString,QString)),post_message_cqyb,SLOT(Send_Wrongsdata(QString,QString)));
+	connect(this,SIGNAL(Send_Wrongsdata_LF(QString,QString)),post_message_langfang,SLOT(Send_Wrongsdata(QString,QString)));
+	connect(this,SIGNAL(Send_Wrongsdata_NJ(QString,QString)),post_message_nanjing,SLOT(Send_Wrongsdata(QString,QString)));
 	//isoosi添加 重庆
 	connect(this,SIGNAL(refueling_wrongdata_cq(QString)),thread_isoosi_cq,SLOT(refueling_wrongdata(QString)));
 
@@ -1675,8 +1680,14 @@ MainWindow::MainWindow(QWidget *parent) :
 	//post添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_hunan,SLOT(Send_Oilgundata_HuNan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	//post重庆渝北
+	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_CQYB(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	//post廊坊
+	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_LF(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_langfang,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 	//post佛山
 	connect(uart_reoilgas,SIGNAL(send_gundata_foshan(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_foshan,SLOT(send_gundata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	//post南京
+	connect(uart_reoilgas,SIGNAL(Send_Oilgundata_NJ(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_nanjing,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
 	//isoosi添加 槽函数直连
 	connect(uart_reoilgas,SIGNAL(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),thread_isoosi,SLOT(refueling_gun_data(QString,QString,QString,QString,QString,QString,QString)),Qt::DirectConnection);
 	//isoosi添加重庆 槽函数直连
@@ -1717,12 +1728,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(uart_fga,SIGNAL(Send_Warndata_LF(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_langfang,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
     connect(uart_fga,SIGNAL(Send_Wrongsdata_LF(QString,QString)),post_message_langfang,SLOT(Send_Wrongsdata(QString,QString)));
 
-    	//post重庆渝北
+	//post重庆渝北
     connect(uart_fga,SIGNAL(Send_Surroundingsdata_CQYB(QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Surroundingsdata(QString,QString,QString,QString,QString,QString,QString)));
     connect(uart_fga,SIGNAL(Send_Configurationdata_CQYB(QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Configurationdata(QString,QString,QString,QString,QString,QString,QString)));
     connect(uart_fga,SIGNAL(Send_Warndata_CQYB(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_cqyb,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
     connect(uart_fga,SIGNAL(Send_Wrongsdata_CQYB(QString,QString)),post_message_cqyb,SLOT(Send_Wrongsdata(QString,QString)));
-
+	//post南京
+	connect(uart_fga,SIGNAL(Send_Warndata_NJ(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_nanjing,SLOT(Send_Warndata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	//connect(uart_fga,SIGNAL(Send_Oilgundata_NJ(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)),post_message_nanjing,SLOT(Send_Oilgundata(QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Surroundingsdata_NJ(QString,QString,QString,QString,QString,QString,QString)),post_message_nanjing,SLOT(Send_Surroundingsdata(QString,QString,QString,QString,QString,QString,QString)));
+	connect(uart_fga,SIGNAL(Send_Wrongsdata_NJ(QString,QString)),post_message_nanjing,SLOT(Send_Wrongsdata(QString,QString)));
 
 //isoosi形式发送网络数据
 	//isoosi添加  槽函数直连
@@ -13699,6 +13714,12 @@ void MainWindow::network_Wrongsdata(QString id ,QString whichone)//报警网络�
 		{
 			QString wrongdata_post = "0111";//post添加
            		emit Send_Wrongsdata_LF(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
+
+		}
+		if(Flag_Network_Send_Version == 10)//南京协议
+		{
+			QString wrongdata_post = "0111";//post添加
+				emit Send_Wrongsdata_NJ(DATAID_POST,wrongdata_post.append(QString("%1").arg(Mapping[2*(whichone.toInt())-2], 2, 10, QLatin1Char('0')))); //只发送采集器第一把枪
 
 		}
 

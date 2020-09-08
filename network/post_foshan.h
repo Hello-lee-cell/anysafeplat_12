@@ -19,7 +19,7 @@ private:
 	QNetworkAccessManager *m_accessManager;
 protected:
 
-public:
+private:
 	//发送数据
 	void Post_Send_FoShan(unsigned char Flag_DataType,QString data);
 	//数据打包

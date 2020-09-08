@@ -8513,6 +8513,11 @@ background-color: rgb(189,223,255);
         </item>
         <item>
          <property name="text">
+          <string>南京油气回收上传协议</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
           <string>天津油气回收上传协议</string>
          </property>
         </item>
@@ -12165,7 +12170,7 @@ border-image: url(:/picture/window.png);
   <widget class="QPushButton" name="pushButton_testnetwork">
    <property name="geometry">
     <rect>
-     <x>1030</x>
+     <x>1020</x>
      <y>100</y>
      <width>89</width>
      <height>131</height>
@@ -12218,6 +12223,8 @@ border-image: url(:/picture/setbeijing.png);
     </property>
    </widget>
   </widget>
+  <zorder>pushButton_testnetwork</zorder>
+  <zorder>frame_AuthorizeNo</zorder>
   <zorder>label_20</zorder>
   <zorder>tabWidget_all</zorder>
   <zorder>widget_warn_user_del</zorder>
@@ -12235,9 +12242,7 @@ border-image: url(:/picture/setbeijing.png);
   <zorder>label_2</zorder>
   <zorder>widget_warn_allclean</zorder>
   <zorder>widget_warn_ip_wrong</zorder>
-  <zorder>pushButton_testnetwork</zorder>
   <zorder>frame_3</zorder>
-  <zorder>frame_AuthorizeNo</zorder>
  </widget>
  <customwidgets>
   <customwidget>

@@ -776,7 +776,7 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 		get_local_ip(if_name,IP);
 		ui->label_14->setText(IP);
 
-		if(Flag_Network_Send_Version<=9)
+		if(Flag_Network_Send_Version<=10)
         {
             ui->comboBox_network_version->setCurrentIndex(Flag_Network_Send_Version);
         }
@@ -881,7 +881,16 @@ void systemset::on_tabWidget_all_currentChanged(int index)
 			ui->label_post_name->setText("廊坊油气回收上传");
 			ui->pushButton_StationInfo->setHidden(1);
 		}
-		if(Flag_Network_Send_Version >= 10)//其他
+		if(Flag_Network_Send_Version == 10) //廊坊
+		{
+			ui->frame_fujian->setHidden(0);
+			ui->frame_guangzhou->setHidden(1);
+			ui->frame_network_verselect->setHidden(1);
+			ui->frame_hunan_login->setHidden(1);//湖南的登录信息
+			ui->label_post_name->setText("南京油气回收上传");
+			ui->pushButton_StationInfo->setHidden(1);
+		}
+		if(Flag_Network_Send_Version >= 11)//其他
 		{
 			ui->frame_fujian->setHidden(1);
 			ui->frame_guangzhou->setHidden(1);
@@ -5137,7 +5146,16 @@ void systemset::on_comboBox_network_version_currentIndexChanged(int index)
 		ui->label_post_name->setText("廊坊油气回收上传");
 		ui->pushButton_StationInfo->setHidden(1);
 	}
-	if(Flag_Network_Send_Version >= 10)//其他
+	if(Flag_Network_Send_Version == 10) //南京
+	{
+		ui->frame_fujian->setHidden(0);
+		ui->frame_guangzhou->setHidden(1);
+		ui->frame_network_verselect->setHidden(1);
+		ui->frame_hunan_login->setHidden(1);//湖南的登录信息
+		ui->label_post_name->setText("南京油气回收上传");
+		ui->pushButton_StationInfo->setHidden(1);
+	}
+	if(Flag_Network_Send_Version >= 11)//其他
 	{
 		ui->frame_fujian->setHidden(1);
 		ui->frame_guangzhou->setHidden(1);
@@ -5520,6 +5538,10 @@ void systemset::network_onfigurationdata(QString id, QString jyqs, QString pvz, 
 		            Amount_Gasgun[6]+Amount_Gasgun[7]+Amount_Gasgun[8]+Amount_Gasgun[9]+Amount_Gasgun[10]+Amount_Gasgun[11]);
 		    Send_Configurationdata_LF(DATAID_POST,jyqs,QString::number(Positive_Pres,'f',1),QString::number(Negative_Pres,'f',1),
 		                           "600.0","0",QString::number(Far_Dispener));
+		}
+		if(Flag_Network_Send_Version == 10) //南京没有
+		{
+
 		}
 		if(Flag_MyServerEn == 1) //myserver协议
 		{

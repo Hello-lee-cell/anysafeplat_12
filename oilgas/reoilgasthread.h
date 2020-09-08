@@ -40,8 +40,10 @@ signals:
 
 	void Send_Oilgundata_LF(QString id,QString jyjid,QString jyqid,QString al,QString qls,QString qll,QString yls,QString yll,
 						 QString hyqnd,QString hyqwd,QString yz); //发送油枪数据报文
-    	void Send_Oilgundata_CQYB(QString id,QString jyjid,QString jyqid,QString al,QString qls,QString qll,QString yls,QString yll,
+	void Send_Oilgundata_CQYB(QString id,QString jyjid,QString jyqid,QString al,QString qls,QString qll,QString yls,QString yll,
                         	 QString hyqnd,QString hyqwd,QString yz); //发送油枪数据报文
+	void Send_Oilgundata_NJ(QString id,QString jyjid,QString jyqid,QString al,QString qls,QString qll,QString yls,QString yll,
+							 QString yqnd,QString yqwd,QString yz,QString cxsc); //发送油枪数据报文
 
 	//isoosi添加
     void refueling_gun_data(QString gun_num,QString AlvR,QString GasCur,QString GasFlow,QString FuelCur,QString FuelFlow,QString DynbPrs);

@@ -22,6 +22,7 @@
 #include "network/net_isoosi_hefei.h"
 #include "network/post_langfang.h"
 #include "network/post_cqyubei.h"
+#include "network/post_nanjing.h"
 
 class QLineEdit;
 namespace Ui {
@@ -72,6 +73,7 @@ private:
 	post_foshan *post_message_foshan;
     post_langfang *post_message_langfang;
     post_CQyubei *post_message_cqyb;
+	post_nanjing *post_message_nanjing;
     //isoosi添加
     net_isoosi *thread_isoosi;
 	net_isoosi_cq *thread_isoosi_cq;
@@ -316,6 +318,7 @@ signals:
 
 	void Send_Wrongsdata_LF(QString id,QString type);       //发送故障数据报文
 	void Send_Wrongsdata_CQYB(QString id,QString type);       //发送故障数据报文
+	void Send_Wrongsdata_NJ(QString id,QString type);       //发送故障数据报文
 	//isoosi重庆
 	void refueling_wrongdata_cq(QString warn_data);
     //时间校准函数 每周

@@ -84,11 +84,12 @@ signals:
 	void Send_Closegunsdata_LF(QString id,QString jyjid,QString jyqid,QString operate,QString event);       //发送关枪数据报文
 	void Send_Stagundata_LF(QString id,QString status);      //发送油枪状态报文
         //重庆渝北
-        void Send_Configurationdata_CQYB(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString hclt,QString yzqh);   //发送配置数据报文
-        void Send_Warndata_CQYB(QString id,QString al,QString mb,QString yz,QString ygyl,QString clzznd,
+	void Send_Configurationdata_CQYB(QString id,QString jyqs,QString pvz,QString pvf,QString hclk,QString hclt,QString yzqh);   //发送配置数据报文
+	void Send_Warndata_CQYB(QString id,QString al,QString mb,QString yz,QString ygyl,QString clzznd,
                                       QString pv,QString clzzqd,QString clzztz,QString xyhqg);//发送报警数据报文
-        void Send_Surroundingsdata_CQYB(QString id,QString ygyl,QString yzyl, QString xnd,QString hclnd,QString yqwd,QString yqkj);    //发送环境数据报文
-        void Send_Wrongsdata_CQYB(QString id,QString type);       //发送故障数据报文
+	void Send_Surroundingsdata_CQYB(QString id,QString ygyl,QString yzyl, QString xnd,QString hclnd,QString yqwd,QString yqkj);    //发送环境数据报文
+	void Send_Wrongsdata_CQYB(QString id,QString type);       //发送故障数据报文
+
 	//佛山
 	void send_setinfo_foshan(QString DataId,QString Date,QString JYQS,QString PVZ,QString PVF,
 						 QString HCLK,QString HCLT,QString YZQH);
@@ -98,7 +99,12 @@ signals:
 	void send_wrong_foshan(QString DataId,QString Date,QString TYPE);
 	void send_gunoperate_foshan(QString DataId,QString Date,QString JYJID,QString JYQID,QString OPERATE,QString EVENT);
 	void send_gunsta_foshan(QString DataId,QString Date,QString STATUS);
-
+	//南京
+	void Send_Warndata_NJ(QString id,QString al,QString mb,QString yz,QString ygyl,QString clzznd,QString pv,
+					   QString clzzqd,QString clzztz,QString xyhqg); //发送报警数据报文
+	void Send_Surroundingsdata_NJ(QString id,QString ygyl,QString yzyl,QString yqkj,
+							   QString xnd,QString hclnd,QString yqwd);    //发送环境数据报文
+	void Send_Wrongsdata_NJ(QString id,QString type);       //发送故障数据报文
 
     //isoosi添加
     void environmental_data(QString dynbPress,QString tankPress,QString unloadgasCon,QString DevicegasCon,QString GasTemp,QString GasVolume);

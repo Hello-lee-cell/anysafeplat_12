@@ -44,6 +44,7 @@ float pressure_value[8] = {0};        //压力数值 源数据，转换后赋值
 float temperature_value[8] = {0};     //温度值 源数据，转换后赋值给Tem
 unsigned char Fga1000_Value[8] = {0}; //浓度值           与Fga1000_485共享
 
+float CXSC_NJ = 0;//南京上传协议中的加油时长
 
 //ask690 05.22
 unsigned char Address[16] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0xF,0x00};          //修改了16号地址为0x00
@@ -113,7 +114,7 @@ void reoilgasthread::run()
 				len_uart_reoilgas = 0;
 				memset(Refresh_Receivebuf,0,sizeof(char)*256);
 				//测试网络发送油枪数据是否正确
-				//network_oilgundata(DATAID_POST,"1","1","110","40","25","40","25","200");
+				//network_oilgundata(DATAID_POST,"1","1","112","40","25","40","25","200");
 				if(Flag_Controller_Version == 1)//压力表无线模式  且是新版控制器
 				{
 					Flag_ask_PreAndTem = 0;
@@ -401,6 +402,7 @@ void reoilgasthread::ReadDataReoilgas()
 					countofoil_e = Fueling_Factor[Which_Dispener_i][Which_GasCtrler_j*2]*oil_count/1000.0;
 					if(countofoil_e >= 15)
 					{
+						CXSC_NJ = oilgas_time;
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+1),
 						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
@@ -427,6 +429,7 @@ void reoilgasthread::ReadDataReoilgas()
 					countofoil_e = Fueling_Factor[Which_Dispener_i][Which_GasCtrler_j*2+1]*oil_count/1000.0;
 					if(countofoil_e >= 15)
 					{
+						CXSC_NJ = oilgas_time;
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+2),
 						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
@@ -888,6 +891,7 @@ void reoilgasthread::ReadDataReoilgas_v2()
 					countofoil_e = Fueling_Factor[Which_Dispener_i][Which_GasCtrler_j*2]*oil_count/1000.0;
 					if(countofoil_e >= 15)
 					{
+						CXSC_NJ = oilgas_time;
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+1),
 						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
@@ -927,6 +931,7 @@ void reoilgasthread::ReadDataReoilgas_v2()
 					countofoil_e = Fueling_Factor[Which_Dispener_i][Which_GasCtrler_j*2+1]*oil_count/1000.0;
 					if(countofoil_e >= 15)
 					{
+						CXSC_NJ = oilgas_time;
 						network_oilgundata(DATAID_POST,QString::number(Which_Dispener_i+1),QString::number(Which_GasCtrler_j*2+2),
 						                   QString::number((countofgas_e/countofoil_e)*100,'f',1),
 						                   QString::number(countofgas_e/oilgas_time*60,'f',1),QString::number(countofgas_e,'f',1),
@@ -2004,25 +2009,49 @@ void reoilgasthread::network_oilgundata(QString id, QString jyjid, QString jyqid
 		}
 		if(Flag_Network_Send_Version == 8) //重庆渝北
 		{
-            		id = id;//没有用，为了 一个警告，上传成功后请删除
-            		QString hyqwd = "NULL";
-            		//判断回收油气温度使能
-            	if(Tem_tank_en){
-                	hyqwd = Tem[0];
-            	}
-            		emit Send_Oilgundata_CQYB(DATAID_POST,jyjid,jyqid,QString::number((al.toFloat()/100),'f',2),qls,qll,yls,yll,"NULL",hyqwd,yz);
+			id = id;//没有用，为了 一个警告，上传成功后请删除
+			QString hyqwd = "NULL";
+			QString hyqnd = "NULL";
+			//判断回收油气温度使能
+			if(Tem_tank_en){
+				hyqwd = Tem[0];
+			}
+			if(Env_Gas_en){
+				hyqnd = QString::number( Gas_Concentration_Fga[1]);
+			}
+			emit Send_Oilgundata_CQYB(DATAID_POST,jyjid,jyqid,QString::number((al.toFloat()/100),'f',2),qls,qll,yls,yll,hyqnd,hyqwd,yz);
 		}
 		if(Flag_Network_Send_Version == 9) //廊坊
 		{
-            		QString hyqwd = "NULL";
-            		//判断回收油气温度使能
-            	if(Tem_tank_en){
-                	hyqwd = Tem[0];
-            	}
-           		 id = id;//没有用，为了 一个警告，上传成功后请删除
-            		emit Send_Oilgundata_LF(DATAID_POST,jyjid,jyqid,al,qls,qll,yls,yll,"NULL",hyqwd,yz);
+			QString hyqwd = "NULL";
+			QString hyqnd = "NULL";
+			//判断回收油气温度使能
+			if(Tem_tank_en){
+				hyqwd = Tem[0];
+			}
+			if(Env_Gas_en){
+				hyqnd = QString::number( Gas_Concentration_Fga[1]);
+			}
+			id = id;//没有用，为了 一个警告，上传成功后请删除
+			emit Send_Oilgundata_LF(DATAID_POST,jyjid,jyqid,al,qls,qll,yls,yll,hyqnd,hyqwd,yz);
 		}
-
+		if(Flag_Network_Send_Version == 10) //南京
+		{
+			QString hyqwd = "NULL";
+			QString hyqnd = "NULL";
+			//判断回收油气温度使能
+			if(Tem_tank_en){
+				hyqwd = QString::number( Tem[0]);
+			}
+			if(Env_Gas_en){
+				hyqnd = QString::number( Gas_Concentration_Fga[1]);
+			}
+			jyqid = QString::number(Mapping[(jyjid.toInt()-1)*8+(jyqid.toInt()-1)]);
+			id = id;//没有用，为了 一个警告，上传成功后请删除
+			emit Send_Oilgundata_NJ(DATAID_POST,(QString("%1").arg(jyjid.toInt(), 4, 10, QLatin1Char('0')))
+									,(QString("%1").arg(jyqid.toInt(), 4, 10, QLatin1Char('0'))),al,qls,qll,yls,yll,hyqnd,hyqwd,yz,QString::number(CXSC_NJ));
+			CXSC_NJ = 0;
+		}
 
 		if(Flag_MyServerEn == 1)  //myserver协议
 		{
