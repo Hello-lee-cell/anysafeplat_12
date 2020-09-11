@@ -12224,7 +12224,6 @@ border-image: url(:/picture/setbeijing.png);
    </widget>
   </widget>
   <zorder>pushButton_testnetwork</zorder>
-  <zorder>frame_AuthorizeNo</zorder>
   <zorder>label_20</zorder>
   <zorder>tabWidget_all</zorder>
   <zorder>widget_warn_user_del</zorder>
@@ -12243,6 +12242,7 @@ border-image: url(:/picture/setbeijing.png);
   <zorder>widget_warn_allclean</zorder>
   <zorder>widget_warn_ip_wrong</zorder>
   <zorder>frame_3</zorder>
+  <zorder>frame_AuthorizeNo</zorder>
  </widget>
  <customwidgets>
   <customwidget>

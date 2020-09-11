@@ -66,7 +66,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ver: V3.5.19&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <string>Ver: V3.5.19</string>
    </property>
   </widget>
  </widget>
