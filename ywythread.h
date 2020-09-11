@@ -17,6 +17,8 @@ signals:
     void Set_tangan_add_success(unsigned char add);
     void compensation_set_result(unsigned char command,unsigned char add,QString str);
 
+    void signal_close_fangyiyoufa(uchar add);
+
 private:
     void ConvertDexToIEE754(float fpointer,unsigned char *a);
     float ConvertIEE754ToDex(unsigned char *SpModRegister);
@@ -25,7 +27,12 @@ private slots:
     void Asking_Handle_YWY();
     void Data_Handle_YWY ();
     void Recving_Handle_YWY();
+
+    void slot_close_fangyiyoufa(uchar add);
+
 };
+
+void* close_fangyiyoufa(void*);
 
 struct Display_HeightData
 {

@@ -7988,6 +7988,27 @@ background-color: rgb(189,223,255);
        <string>关闭</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="btn_import_ywytable">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>30</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>18</pointsize>
+       </font>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="text">
+       <string>导入罐表</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_3">
@@ -8040,7 +8061,7 @@ background-color: rgb(189,223,255);
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-37</y>
+        <y>0</y>
         <width>945</width>
         <height>1000</height>
        </rect>
@@ -9810,7 +9831,6 @@ background-color: rgb(114, 159, 207);}</string>
         <enum>QFrame::Raised</enum>
        </property>
       </widget>
-      <zorder>frame_network_verselect</zorder>
       <zorder>frame_guangzhou</zorder>
       <zorder>frame_fujian</zorder>
       <zorder>frame_hubei</zorder>
@@ -9819,6 +9839,7 @@ background-color: rgb(114, 159, 207);}</string>
       <zorder>frame_5</zorder>
       <zorder>frame_8</zorder>
       <zorder>frame_IFSF</zorder>
+      <zorder>frame_network_verselect</zorder>
      </widget>
     </widget>
    </widget>

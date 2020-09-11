@@ -1924,7 +1924,15 @@ void init_tabwidget()
         }
         if(i == 6)
         {
-            Flag_screen_ywy = atoi(read_data);
+            if(QString(read_data) == NULL)
+            {
+                system("echo 1 >> /opt/config_tabwidget.txt");
+            }
+            else
+            {
+                Flag_screen_ywy = atoi(read_data);
+
+            }
         }
     }
     config_LR.close();
@@ -2670,7 +2678,10 @@ void config_OilTank_Table_Clear()
     close(fp);
 }
 
+void import_oil_tank_table(uchar num)
+{
 
+}
 
 
 

@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "sm4/sm4.h"
+#include "network/gongguan_POST/sm4/sm4.h"
 
 
 /* Implementation that should never be optimized out by the compiler */

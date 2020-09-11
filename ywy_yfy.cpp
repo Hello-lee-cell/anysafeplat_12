@@ -46,7 +46,7 @@ char Data_Buf_yfy[20] = {0};
 char Reply_DataBuf_yfy[300] = {0};
 char Reply_DataBuf_alarm[15][8] = {0};
 
-char flag_place_hoider = 1;  //0 ywy  1 anysafe
+char flag_place_hoider = 0;  //0 ywy  1 anysafe
 
 QMutex yfyRecv_Data_Lock;   //互斥锁
 
@@ -58,10 +58,10 @@ ywy_yfy_thread::ywy_yfy_thread(QObject *parent):
 
 void ywy_yfy_thread::run()
 {
-    fd_uart_yfy = open(CRASH_COLUMN, O_RDWR | O_NOCTTY);
+    fd_uart_yfy = open(FGA_SERI, O_RDWR | O_NOCTTY);
     if (fd_uart_yfy<0)
     {
-        perror(CRASH_COLUMN);
+        perror(FGA_SERI);
     }
     ret_uart_yfy = set_port_attr (fd_uart_yfy,B9600,8,"1",'N',0,0);   //9600波特率 数据位8位 停止位1位 无校验
     if (ret_uart_yfy<0)

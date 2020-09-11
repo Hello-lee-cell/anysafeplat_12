@@ -20,7 +20,7 @@ DrawHeight::DrawHeight(QWidget *parent)
 
     //波浪
     m_timer = new QTimer(this);
-    m_timer->setInterval(100);
+    m_timer->setInterval(200);
 
     connect(m_timer, SIGNAL(timeout()), this, SLOT(update()));
 

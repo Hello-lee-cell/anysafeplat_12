@@ -573,6 +573,8 @@ private slots:
 
     void on_btn_get_compension_clicked();
 
+    void on_btn_import_ywytable_clicked();
+
 signals:
 
     void amount_basin_reset(int t);

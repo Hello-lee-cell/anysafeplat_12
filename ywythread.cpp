@@ -28,6 +28,9 @@
 int fd_uart_ywy;
 int len_uart_ywy, ret_uart_ywy;
 
+int len_uart_yyf;
+int fd_uart_close_yyf,ret_uart_close_yyf;
+
 QMutex Recv_Data_Lock;   //互斥锁
 
 unsigned char Ask_Tanggan[30] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0X00,0x00,0x00,0x00};//询问探杆液位
@@ -58,9 +61,24 @@ float Compension[12][2] = {0};
 float Oil_Tank_Table[12][300] = {0};  //罐表
 unsigned char index_Oil_Tank_Table = 0;
 
+uchar close_fyy_arr[8] = {0x0a,6,0,5,0,0x51,0,0}; //关闭防溢油阀数组
+
 ywythread::ywythread(QObject *parent):
     QThread(parent)
 {
+    //串口初始化
+    fd_uart_close_yyf = open(SAFTY_IIE,O_RDWR|O_NOCTTY);
+    if (fd_uart_close_yyf<0)
+    {
+           perror(SAFTY_IIE);
+    }
+    ret_uart_close_yyf = set_port_attr(fd_uart_close_yyf,B9600,8,"1",'N',0,0);  //非阻塞模式
+    if (ret_uart_close_yyf<0)
+    {
+           printf("set uart uart fangyiyoufa FAILED \n");
+    }
+
+    connect(this,SIGNAL(signal_close_fangyiyoufa(uchar)),this,SLOT(slot_close_fangyiyoufa(uchar)));
 
 }
 
@@ -109,6 +127,11 @@ void ywythread:: Data_Handle_YWY()
                             Dis_HeightData.TEMP_Height_float_1 = (float)Dis_HeightData.TEMP_Height_int_1 / 16;
                         }
 
+                        if(Dis_HeightData.Water_Height_float > 299) //屏蔽浮子盲区
+                        {
+                            Dis_HeightData.Water_Height_float = 0;
+                        }
+
                         Dis_HeightData.strOIL_Height     = QString::number(Dis_HeightData.OIL_Height_float, 'f', 1);
                         Dis_HeightData.strWater_Height   = QString::number(Dis_HeightData.Water_Height_float, 'f', 1);
                         Dis_HeightData.strTEMP           = QString::number(Dis_HeightData.TEMP_Height_float_1, 'f', 1);
@@ -142,6 +165,7 @@ void ywythread:: Data_Handle_YWY()
                                 if(i_alarm_record[i_Tanggan_ADD][1] == 0)
                                 {
                                     emit Send_alarm_info(Ask_Tanggan[0],1);
+                                    emit signal_close_fangyiyoufa(i_Tanggan_ADD);
                                     i_alarm_record[i_Tanggan_ADD][1] = 1;
                                     add_yeweiyi_alarminfo(QString("%1 #罐").arg(i_Tanggan_ADD),"油位过高");
 
@@ -787,7 +811,47 @@ void ywythread::run()
             msleep(1000);
             Recving_Handle_YWY();
         }
-
+//        emit signal_close_fangyiyoufa(i_Tanggan_ADD);
         Flag_carry_the_produce =1;
     }
 }
+
+void ywythread::slot_close_fangyiyoufa(uchar add)
+{
+   close_fyy_arr[5] = add + 0x50;
+
+   pthread_t id_close_yyf;
+   long t_cyy = 0;
+   int ret_cyy = pthread_create(&id_close_yyf, NULL, close_fangyiyoufa, (void*)t_cyy);
+   if(ret_cyy != 0)
+   {
+       printf("Can not create thread to close fangyiyoufa!");
+       exit(1);
+   }
+}
+
+
+void* close_fangyiyoufa(void*)
+{
+    uchar flag_enable = 1;
+    unsigned int SCRC = 0;
+
+    sleep(1);
+    while(flag_enable)
+    {
+        SCRC = CRC_Test(close_fyy_arr,8);
+        close_fyy_arr[6] = (SCRC & 0xff00) >> 8;
+        close_fyy_arr[7] = (SCRC & 0x00ff);
+
+        len_uart_yyf = write(fd_uart_close_yyf, close_fyy_arr, 8);
+        if (len_uart_yyf<0)
+        {
+            printf("write ask fangyiyoufa data failed \n");
+        }
+        sleep(1);
+        qDebug()<<"fangyiyoufa output !!!!!!!!";
+
+        flag_enable = 0;
+    }
+}
+

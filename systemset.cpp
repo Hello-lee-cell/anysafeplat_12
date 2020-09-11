@@ -6446,3 +6446,86 @@ void systemset::on_btn_get_compension_clicked()
         Flag_Communicate_YWY_Error[i] = 0;
     }
 }
+
+
+
+void systemset::on_btn_import_ywytable_clicked()
+{
+    int table_num_imported = 0;
+    for(int i=0;i<6;i++)
+    {
+      int table_index = 0;
+      QString pathstr = QString("/media/sda4/table%1.csv").arg(i);
+      QFileInfo fileInfo(pathstr);
+      if(fileInfo.isFile())
+      {
+          QFile inFile(pathstr);
+          QStringList lines; /*行数据*/
+          if (inFile.open(QIODevice::ReadOnly | QIODevice::Text))
+          {
+              QTextStream stream_text(&inFile);
+
+              while (!stream_text.atEnd())
+              {
+                  lines.push_back(stream_text.readLine());
+              }
+              for (int j = 0; j < lines.size(); j++)
+              {
+                  QString line = lines.at(j);
+                  QStringList split = line.split(",");/*列数据*/
+
+                  for (int col = 0; col < split.size(); col++)
+                  {
+                      table_index++;
+                      Oil_Tank_Table[i][table_index] = split.at(col).toFloat() ;
+                  }
+              }
+          }
+          inFile.close();
+          table_num_imported++;
+      }
+      else
+      {
+
+      }
+    }
+    if(table_num_imported)
+    {
+        config_OilTank_Table_Write();
+        tableView_OilTank_Table_Replay(index_Oil_Tank_Table);
+       QMessageBox::about(this,"Information",QString("成功导入%１个罐表").arg(table_num_imported));
+    }
+    else
+    {
+        QMessageBox::about(this,"Information","导入罐表失败");
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

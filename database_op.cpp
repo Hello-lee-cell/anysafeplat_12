@@ -2055,7 +2055,7 @@ void add_yeweiyi_alarminfo(QString whichone, QString state)
     }
     else
     {
-        qDebug(" 10 Data Inserted!");
+        qDebug("  Data Inserted  yeweiyi_alarminfo!");
     }
 }
 
@@ -2073,6 +2073,21 @@ void add_yeweiyi_addOil_Record_Write(QString start_time,QString whichone, QStrin
     }
     else
     {
-        qDebug("Data Inserted!");
+        qDebug("Data Inserted addoil sum!");
+    }
+}
+
+void add_yeweiyi_addOil_Auto_Record_Write(QString start_time,QString end_time,QString whichone, QString sumall)
+{
+    QSqlQuery qry;
+    qry.prepare(QString("INSERT INTO yeweiyi_addOil_Record (id,start_time,end_time,whichone,sumall) values (NULL,'%1','%2','%3','%4')").arg(start_time).arg(end_time).arg(whichone).arg(sumall));
+
+    if(!qry.exec())
+    {
+        qDebug()<<qry.lastError();
+    }
+    else
+    {
+        qDebug("Data Inserted addoil sum!");
     }
 }

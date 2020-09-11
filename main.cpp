@@ -155,7 +155,7 @@ QString SEC_POST = "1";                //加密标识（1 表示业务数据为�
 QString POSTUSERNAME_HUNAN = "admin";
 QString POSTPASSWORD_HUNAN = "123456";
 unsigned char Flag_Shield_Network = 0;//屏蔽网络上传的报警信息，只上传正常数据 1屏蔽 0正常
-unsigned char Flag_Postsend_Enable = 1;//网络上传使能位，1 上传  0不上传
+unsigned char Flag_Postsend_Enable = 0;//网络上传使能位，1 上传  0不上传
 //isoosi
 QString IsoOis_MN = "440111301A52TWUF73000001";//"440111301A52TWUF73000001";
 QString IsoOis_PW = "758534";//"758534";
@@ -193,7 +193,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.setWindowFlags(Qt::FramelessWindowHint);
 
-
 	init_xielou_network();//初始化泄漏网络上传
 	if(Flag_XieLou_Version == 0)
 	{
@@ -225,7 +224,8 @@ int main(int argc, char *argv[])
 	}
 
 	IIE_thread *ask_safty = new IIE_thread;
-	ask_safty->start();
+    //ask_safty->start();
+    if(flag_place_hoider){ask_safty->start(); }//ywy 暂时占用
 
     warn_sound_thread *write_sound = new warn_sound_thread;
 	write_sound->start();

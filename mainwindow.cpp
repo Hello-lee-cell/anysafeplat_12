@@ -74,10 +74,34 @@ struct add_oil
 {
    QString height_str;
    QString volume_str;
+
+   float start_oil_height;
+   float start_water_height;
+   float end_oil_height;
+   float end_water_height;
+   float start_oil_volume;
+   float start_water_volume;
+   float end_oil_volume;
+   float end_water_volume;
+   float start_temp;
+   float end_temp;
+   float netvolume;
+
+   int count = 0;
+   uchar average[50] = {0};
+   uchar size = 20;
+   uchar sum = 0;
+   uchar flag_entering = 1;
+   bool enable = true;
+   bool finish = false;
+
+   QDateTime begin_time;
+   QDateTime end_time;
 };
 
 struct add_oil add_oil_start;
 struct add_oil add_oil_end;
+struct add_oil add_oil_all[12];// 0 空
 
 QString start_datetime_str;
 QString end_datetime_str;
@@ -93,6 +117,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->centralWidget->installEventFilter(this);    //主屏幕安装触摸事件唤醒
+
+//    setWindowIcon(QIcon(":/picture/jinggao.png"));
+
     beep_none();
     err_none();
 	system("touch /opt/TouchCalibration");
@@ -1394,7 +1421,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	//Uart线程:雷达
 	uart_run = new uartthread();
 	connect(uart_run,SIGNAL(warn_to_mainwindowstatelabel()),this,SLOT(label_state_setted()));
-	uart_run->start();
+    uart_run->start();
 	on_toolButton_radar1_clicked(); //待完善，需删除
 //************************************added for radar*************************************/<-
 
@@ -1424,7 +1451,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	{
 		Flag_Postsend_Enable = 0;
 	}
-	Flag_Postsend_Enable = 1;//默认开启
+//	Flag_Postsend_Enable = 1;//默认开启
 
     ui->widget_dispen_details->setHidden(1);
 	//*********油气回收界面初始化
@@ -1693,6 +1720,16 @@ MainWindow::MainWindow(QWidget *parent) :
     if(!flag_place_hoider){uart_ywy->start();}
 
     ui->widget_add_oil->setHidden(1);
+    ui->widget_add_oil_auto->setHidden(1);
+
+    timer_open_addoil = new QTimer(this);
+    timer_open_addoil->setInterval(1000*3);
+    connect(timer_open_addoil,SIGNAL(timeout()),SLOT(open_addoil_windows()));
+
+    timer_close_addoil = new QTimer(this);
+    timer_close_addoil->setInterval(1000*60);
+    connect(timer_close_addoil,SIGNAL(timeout()),SLOT(close_addoil_windows()));
+    connect(this,SIGNAL(signal_Display_addoil_data(uchar)),SLOT(slot_Display_addoil_data(uchar)));
 
     ywy_yfy_thread *yfythread = new ywy_yfy_thread();
 
@@ -1808,7 +1845,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	thread_isoosi_hefei->start();
 	myserver_thread->start();
     if(flag_place_hoider){uart_reoilgas->start(); }//ywy 暂时占用
-	uart_fga->start();
+//	uart_fga->start();
+    if(flag_place_hoider){uart_fga->start(); }//ywy 暂时占用
 	post_message_foshan->start();//佛山协议需要启动
 
 	timer_thread *delay_time = new timer_thread;
@@ -13774,6 +13812,8 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
 {
     float volume,volumeused;
     unsigned int i_oil,i_water,r_table,g_diameter;
+    QDateTime start_add_oil_time  = QDateTime::currentDateTime();
+
     if(((int)(str1.toFloat())%10) >= 5)
     {
         i_oil = str1.toFloat()/10 + 1;
@@ -13801,6 +13841,78 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
     volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
     volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
 
+
+    //自动进油相关
+    if(add_oil_all[add].enable) //重新上电时获取一下高度值
+    {
+        add_oil_all[add].start_oil_height = str1.toFloat();
+        add_oil_all[add].enable = false;
+    }
+    if(str1.toFloat() > add_oil_all[add].start_oil_height +2)// 2为波动值 add_oil_all[add].begin_time.secsTo(end_add_oil_time)> 20)  //自动进油　高度单位:ｍｍ
+    {
+        add_oil_all[add].average[add_oil_all[add].count++] = 1;
+    }
+    else
+    {
+       add_oil_all[add].average[add_oil_all[add].count++] = 0;
+    }
+
+
+    if(add_oil_all[add].count > add_oil_all[add].size)
+    {
+      for(int i=0;i<add_oil_all[add].size;i++)
+      {
+         add_oil_all[add].sum =  add_oil_all[add].average[i] + add_oil_all[add].sum;
+      }
+      if(add_oil_all[add].sum > 15) //正在卸油
+      {
+         if(add_oil_all[add].flag_entering)
+         {
+            add_oil_all[add].flag_entering = 0;
+            add_oil_all[add].begin_time =  start_add_oil_time;
+
+         }
+      }
+      else if(add_oil_all[add].sum < 5) //液面稳定
+      {
+          if(add_oil_all[add].flag_entering == 0) //卸油结束后的稳定
+          {
+              add_oil_all[add].flag_entering = 1;
+              if(str1.toFloat() - add_oil_all[add].start_oil_height >10)  //屏蔽最小卸油量 10mm
+              {
+                 add_oil_all[add].end_oil_height = str1.toFloat();
+                 add_oil_all[add].end_water_height = str2.toFloat();
+                 add_oil_all[add].end_oil_volume = volume;
+                 add_oil_all[add].end_water_volume = Oil_Tank_Table[r_table][i_water] *1000;
+                 add_oil_all[add].end_temp = str3.toFloat();
+                 add_oil_all[add].end_time = QDateTime::currentDateTime();
+                 emit signal_Display_addoil_data(add);
+                 timer_open_addoil->start();
+              }
+
+          }
+          else  //下降或者非卸油后的稳定
+          {
+              add_oil_all[add].start_oil_height = str1.toFloat();
+              add_oil_all[add].start_water_height = str2.toFloat();
+              add_oil_all[add].start_oil_volume = volume;
+              add_oil_all[add].start_temp = str3.toFloat();
+              add_oil_all[add].start_water_volume = Oil_Tank_Table[r_table][i_water] *1000;
+              start_add_oil_time  = QDateTime::currentDateTime();
+          }
+
+      }
+      qDebug()<<"油罐　"<<add <<" sum "<<add_oil_all[add].sum;
+      qDebug()<<"begin_time　"<<add_oil_all[add].begin_time.toString("yyyy-MM-dd  hh:mm:ss")<<"  start_oil_height "<<add_oil_all[add].start_oil_height;
+      qDebug()<<"end_time　  "<<add_oil_all[add].end_time.toString("yyyy-MM-dd  hh:mm:ss")<<  "  end_oil_height   "<<add_oil_all[add].end_oil_height;
+
+      add_oil_all[add].sum = 0;
+      add_oil_all[add].count = 0;
+    }
+
+
+
+
     //云飞扬上传相关
     Reply_Data_OT[add][1].f = volume;
     Reply_Data_OT[add][2].f = volume * 0.98;  //TC容积 温度补偿后的体积  0.98不准 需要改
@@ -13808,7 +13920,6 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
     Reply_Data_OT[add][7].f = Oil_Tank_Table[r_table][i_water] *1000 ;
 
     add_Oil_array[add][0] = str1.toFloat();
-    add_Oil_array[add][1] = OilTank_50[i_oil] * 1000;
 
 //    QString strvolume = QString::number(volume, 'f', 1);//限制 float 小数位数
 //    QString strvolume = QString("%1").arg(volume);
@@ -13817,10 +13928,10 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
     switch (add)
     {
         case 1:
-            r_table = OilTank_Set[0][4];    //对应罐表
-            g_diameter = OilTank_Set[0][0] /10;    //对应罐直径  CM
-            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
-            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+//            r_table = OilTank_Set[0][4];    //对应罐表
+//            g_diameter = OilTank_Set[0][0] /10;    //对应罐直径  CM
+//            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+//            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
 
             add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
 
@@ -13833,10 +13944,10 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
             ui->label_volumeused_11->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
             break;
         case 2:
-            r_table = OilTank_Set[1][4];    //对应罐表
-            g_diameter = OilTank_Set[1][0] /10;    //对应罐直径  CM
-            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
-            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+//            r_table = OilTank_Set[1][4];    //对应罐表
+//            g_diameter = OilTank_Set[1][0] /10;    //对应罐直径  CM
+//            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+//            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
 
             add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
 
@@ -13849,10 +13960,10 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
             ui->label_volumeused_21->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
             break;
         case 3:
-            r_table = OilTank_Set[2][4];    //对应罐表
-            g_diameter = OilTank_Set[2][0] /10;    //对应罐直径  CM
-            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
-            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+//            r_table = OilTank_Set[2][4];    //对应罐表
+//            g_diameter = OilTank_Set[2][0] /10;    //对应罐直径  CM
+//            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+//            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
 
             add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
 
@@ -13865,10 +13976,10 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
             ui->label_volumeused_31->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
             break;
         case 4:
-            r_table = OilTank_Set[3][4];    //对应罐表
-            g_diameter = OilTank_Set[3][0] /10;    //对应罐直径  CM
-            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
-            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+//            r_table = OilTank_Set[3][4];    //对应罐表
+//            g_diameter = OilTank_Set[3][0] /10;    //对应罐直径  CM
+//            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+//            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
 
             add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
 
@@ -13881,10 +13992,10 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
             ui->label_volumeused_41->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
             break;
         case 5:
-            r_table = OilTank_Set[4][4];    //对应罐表
-            g_diameter = OilTank_Set[4][0] /10;    //对应罐直径  CM
-            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
-            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+//            r_table = OilTank_Set[4][4];    //对应罐表
+//            g_diameter = OilTank_Set[4][0] /10;    //对应罐直径  CM
+//            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+//            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
 
             add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
 
@@ -13897,10 +14008,10 @@ void MainWindow::Display_Height_Data(unsigned char add, QString str1,QString str
             ui->label_volumeused_51->setText(QString(" 可卸量：%1%2").arg(volumeused).arg(" L"));
             break;
         case 6:
-            r_table = OilTank_Set[5][4];    //对应罐表
-            g_diameter = OilTank_Set[5][0] /10;    //对应罐直径  CM
-            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
-            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
+//            r_table = OilTank_Set[5][4];    //对应罐表
+//            g_diameter = OilTank_Set[5][0] /10;    //对应罐直径  CM
+//            volume = (Oil_Tank_Table[r_table][i_oil] - Oil_Tank_Table[r_table][i_water]) *1000;
+//            volumeused = (Oil_Tank_Table[r_table][g_diameter] - Oil_Tank_Table[r_table][i_oil]) *1000;
 
             add_Oil_array[add][1] = Oil_Tank_Table[r_table][i_oil] * 1000;
 
@@ -14377,4 +14488,122 @@ void MainWindow::on_toolbtn_addoil_close_clicked()
 {
     ui->widget_add_oil->setHidden(1);
     ui->btn_enter_add_Oil->setEnabled(1);
+}
+
+//自动进油
+void MainWindow::open_addoil_windows()
+{
+    timer_open_addoil->stop();
+    timer_close_addoil->start();
+
+}
+
+void MainWindow::close_addoil_windows()
+{
+    char add;
+    QString addstr = ui->label_ao_num_2->text();
+    add_yeweiyi_addOil_Auto_Record_Write(add_oil_all[addstr.toInt()].begin_time.toString(),add_oil_all[addstr.toInt()].end_time.toString(),addstr,QString::number(add_oil_all[addstr.toInt()].netvolume, 'f', 1));
+    add_oil_all[addstr.toInt()].finish = false;
+    for(int i=0;i<6;i++)
+    {
+        if(add_oil_all[i+1].finish)
+        {
+           add = i+1;
+           i=10;
+        }
+    }
+
+    timer_close_addoil->stop();
+
+    if(add)
+    {
+        emit signal_Display_addoil_data(add);
+        timer_close_addoil->start();
+    }
+    else
+    {
+        ui->widget_add_oil_auto->setHidden(1);
+    }
+}
+
+void MainWindow::slot_Display_addoil_data(uchar add)
+{
+    ui->widget_add_oil_auto->setHidden(0);
+
+    ui->label_ao_num_2->setText(QString("%1").arg(add));
+    ui->label_ao_ok->setText(QString("油品：%1＃").arg(Oil_Kind[add-1][0]));
+
+    ui->label_aos_time->setText(add_oil_all[add].begin_time.toString());
+    ui->label_aos_oh->setText("油位高度："+QString::number(add_oil_all[add].start_oil_height, 'f', 1)+" mm");
+    ui->label_aos_ov->setText("油品体积："+QString::number(add_oil_all[add].start_oil_volume, 'f', 1)+" L");
+    ui->label_aos_wh->setText("水位高度："+QString::number(add_oil_all[add].start_water_height, 'f', 1)+" mm");
+    ui->label_aos_wv->setText("水体积：  "+QString::number(add_oil_all[add].start_water_volume, 'f', 1)+" L");
+    ui->label_aos_tempure->setText("油品温度："+QString::number(add_oil_all[add].start_temp, 'f', 1)+"       ℃");
+
+    ui->label_aoe_time->setText(add_oil_all[add].begin_time.toString());
+    ui->label_aoe_oh->setText("油位高度："+QString::number(add_oil_all[add].end_oil_height, 'f', 1)+" mm");
+    ui->label_aoe_ov->setText("油品体积："+QString::number(add_oil_all[add].end_oil_volume, 'f', 1)+" L");
+    ui->label_aoe_wh->setText("水位高度："+QString::number(add_oil_all[add].end_water_height, 'f', 1)+" mm");
+    ui->label_aoe_wv->setText("水体积：  "+QString::number(add_oil_all[add].end_water_volume, 'f', 1)+" L");
+    ui->label_aoe_tempure->setText("油品温度："+QString::number(add_oil_all[add].end_temp, 'f', 1)+"       ℃");
+
+    add_oil_all[add].netvolume = add_oil_all[add].end_oil_volume - add_oil_all[add].start_oil_volume;
+    ui->label_ao_auto_av->setText(QString::number(add_oil_all[add].netvolume, 'f', 1));
+
+    add_oil_all[add].finish = true;
+}
+
+void MainWindow::on_btn_addoil_auto_confirm_clicked()
+{
+    char add;
+    QString addstr = ui->label_ao_num_2->text();
+    add_yeweiyi_addOil_Auto_Record_Write(add_oil_all[addstr.toInt()].begin_time.toString(),add_oil_all[addstr.toInt()].end_time.toString(),addstr,QString::number(add_oil_all[addstr.toInt()].netvolume, 'f', 1));
+    add_oil_all[addstr.toInt()].finish = false;
+    for(int i=0;i<6;i++)
+    {
+        if(add_oil_all[i+1].finish)
+        {
+           add = i+1;
+           i=10;
+        }
+    }
+
+    timer_close_addoil->stop();
+
+    if(add)
+    {
+        emit signal_Display_addoil_data(add);
+        timer_close_addoil->start();
+    }
+    else
+    {
+        ui->widget_add_oil_auto->setHidden(1);
+    }
+}
+
+void MainWindow::on_btn_addoil_auto_quit_clicked()
+{
+    char add;
+    QString addstr = ui->label_ao_num_2->text();
+    add_oil_all[addstr.toInt()].finish = false;
+    for(int i=0;i<6;i++)
+    {
+        if(add_oil_all[i+1].finish)
+        {
+           add = i+1;
+           i=10;
+        }
+    }
+
+    timer_close_addoil->stop();
+
+    if(add)
+    {
+        emit signal_Display_addoil_data(add);
+        timer_close_addoil->start();
+    }
+    else
+    {
+        ui->widget_add_oil_auto->setHidden(1);
+    }
 }

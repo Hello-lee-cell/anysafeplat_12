@@ -1845,6 +1845,8 @@ void FGA1000_485::time_time()
 						Flag_StaPre_Temp[i] = sta_pre[i];
 						emit alarm_tem_warn();
 						add_value_reoilgaswarn("油气温度传感器","通信故障");
+                        //post添加
+                        network_Wrongsdata("0","051000");
 					}
 					flag_timeto_temp+=sta_pre[i];
 
@@ -3294,61 +3296,61 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
                 {
                     if(sta_yg == "0")
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","N","N","N");
                     }
                     if(sta_yg == "1")//油罐零压预警
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","1","0","0","N","N","N");
                     }
                     if(sta_yg == "2")//油罐零压报警
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","2","0","0","N","N","N");
                     }
                     if(sta_yg == "3")//压力真空阀临界预警
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","1","N","N","N");
                     }
                     if(sta_yg == "4")//压力真空阀临界报警
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","2","N","N","N");
                     }
                     if(sta_yg == "5")//压力真空阀预警
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","1","0","N","N","N");
                     }
                     if(sta_yg == "6")//压力真空阀报警
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","2","0","N","N","N");
                     }
                 }
                 if(sta_yz != "N")//发送液阻报警
                 {
                     if(sta_yz == "0")
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","0","N","N","N","N","N","N","N");
                     }
                     if(sta_yz == "1")
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","1","N","N","N","N","N","N","N");
                     }
                     if(sta_yz == "2")
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","0","2","N","N","N","N","N","N","N");
                     }
                 }
                 if(hclzt != "N")//浓度报警
                 {
                     if(hclzt == "0")
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","N","N","N","N","N","N","0","N","N");
                     }
                     if(hclzt == "1")
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","N","N","N","N","N","N","1","N","N");
                     }
                     if(hclzt == "2")
                     {
-                        Send_Warndata_dg(DATAID_POST,"N","0","N","N","0","0","0","0","N","N");
+                        Send_Warndata_dg(DATAID_POST,"N","N","N","N","N","N","N","2","N","N");
                     }
                 }
             }
@@ -3461,7 +3463,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
                     }
                 }
                 num_gun = 0;
-                Send_Warndata_dg(DATAID_POST,al_post,"0",STA_YZ,"N",STA_YGLY,STA_PVZT,STA_PVLJZT,"N","N","N");
+                Send_Warndata_dg(DATAID_POST,al_post,"0",STA_YZ,"N",STA_YGLY,STA_PVZT,STA_PVLJZT,"0","N","N");
                 /**************end***网络报警数据*******************/
             }
         }
@@ -3647,7 +3649,7 @@ void FGA1000_485:: network_Warndata(QString id,QString sta_yg,QString sta_yz,QSt
  * ************************************/
 void FGA1000_485:: network_Surroundingsdata(QString id,QString ygyl,QString yzyl,QString yqkj,QString xynd,QString hclnd,QString yqwd)    //发送环境数据报文
 {
-	if(1)
+    if(Flag_Postsend_Enable)
 	{
 		id = id;
 		yqkj = yqkj;

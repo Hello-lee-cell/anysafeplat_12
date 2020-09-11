@@ -86,6 +86,8 @@ uartthread *uart_run;
     QTimer *timer;//定时器
     QTimer *timer_lcd;//时间显示倒计时
     QTimer *timer_drw;//区域刷新计时
+    QTimer *timer_open_addoil;//卸油完成静待计时
+    QTimer *timer_close_addoil;//关闭进油界面计时
 
     QStandardItemModel *model;
 private slots:
@@ -321,6 +323,14 @@ private slots:
 
     void on_toolbtn_addoil_close_clicked();
 
+    void open_addoil_windows();
+    void close_addoil_windows();
+    void slot_Display_addoil_data(uchar add);
+
+    void on_btn_addoil_auto_confirm_clicked();
+
+    void on_btn_addoil_auto_quit_clicked();
+
 signals:
     void config_sensoramount();
     void closeing_connect();
@@ -355,6 +365,7 @@ signals:
     void compensation_set_result_Signal(unsigned char command,unsigned char add,QString str);
     void amount_Oil_Tank_draw(int t);
     void amount_Tangan_draw();
+    void signal_Display_addoil_data(uchar add);
 };
 
 #endif // MAINWINDOW_H
